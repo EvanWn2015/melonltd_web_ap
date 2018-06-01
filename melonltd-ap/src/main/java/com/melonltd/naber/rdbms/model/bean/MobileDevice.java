@@ -1,14 +1,9 @@
 package com.melonltd.naber.rdbms.model.bean;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -17,25 +12,46 @@ import javax.persistence.Table;
 public class MobileDevice implements Serializable {
 	private static final long serialVersionUID = 4703671514270687285L;
 
-	public enum CATEGORY {
-		IOS, ANDROID
-	}
+	private String pushToken;
+	private String accountUUID;
+	private String category;
+	private String createDate;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", unique = true, nullable = false)
-	private Integer id;
+	@Column(name = "push_token", unique = true, nullable = false)
+	public String getPushToken() {
+		return pushToken;
+	}
 
-	@Column(name = "account_id")
-	private Integer accountId;
+	@Column(name = "account_uuid")
+	public String getAccountUUID() {
+		return accountUUID;
+	}
 
-	@Enumerated(EnumType.STRING)
-	private CATEGORY category;
-
-	@Column(name = "push_token", length = 180)
-	private String pushToken;
+	@Column(name = "category")
+	public String getCategory() {
+		return category;
+	}
 
 	@Column(name = "create_date")
-	private Date createDate;
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setPushToken(String pushToken) {
+		this.pushToken = pushToken;
+	}
+
+	public void setAccountUUID(String accountUUID) {
+		this.accountUUID = accountUUID;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
 
 }
