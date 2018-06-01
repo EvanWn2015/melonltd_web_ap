@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.google.common.base.MoreObjects;
+
 @Entity
 @Table(name = "verify_phone_log")
 public class VerifyPhoneLog implements Serializable {
@@ -16,6 +18,7 @@ public class VerifyPhoneLog implements Serializable {
 	private String verifyCode;
 	private String verifyCount;
 	private String verifyDate;
+	private String batchId;
 
 	@Id
 	@Column(name = "phone", unique = true, nullable = false)
@@ -37,6 +40,11 @@ public class VerifyPhoneLog implements Serializable {
 	public String getVerifyDate() {
 		return verifyDate;
 	}
+	
+	@Column(name = "batch_id")
+	public String getBatchId() {
+		return batchId;
+	}
 
 	public void setPhone(String phone) {
 		this.phone = phone;
@@ -52,6 +60,22 @@ public class VerifyPhoneLog implements Serializable {
 
 	public void setVerifyDate(String verifyDate) {
 		this.verifyDate = verifyDate;
+	}
+	
+	public void setBatchId(String batchId) {
+		this.batchId = batchId;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return MoreObjects
+				.toStringHelper(this.getClass())
+				.add("phone",phone)
+				.add("verifyCode",verifyCode)
+				.add("verifyCount",verifyCount)
+				.add("verifyDate",verifyDate)
+				.toString();
 	}
 
 }

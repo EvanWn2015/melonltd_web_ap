@@ -22,6 +22,8 @@
 	<context:component-scan base-package="com.melonltd.naber">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
+	
+	<context:property-placeholder location="classpath:/config.properties" file-encoding="UTF-8" ignore-unresolvable="true" />
 
 	<jpa:repositories base-package="com.melonltd.naber.rdbms.model"
 		entity-manager-factory-ref="naberEm" transaction-manager-ref="naberTx">
@@ -34,7 +36,8 @@
 	<bean id="naberDs" class="org.springframework.jndi.JndiObjectFactoryBean">
 	<!-- <property name="jndiName" value="java:comp/env/jdbc/melonltd_naber" 
 		/> -->
-		<property name="jndiName" value="java:comp/env/jdbc/melonltd_nabercDB" />
+		<!-- <property name="jndiName" value="java:comp/env/jdbc/melonltd_nabercDB" /> -->
+		<property name="jndiName" value="java:comp/env/jdbc/${db.jndi.name}" />
 	</bean>
 	
 	<bean id="naberTx" class="org.springframework.orm.jpa.JpaTransactionManager">
