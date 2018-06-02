@@ -31,15 +31,15 @@ public class LogingController {
 
 	@Autowired
 	AccountInfoService accountInfoService;
-	
+
 	@ResponseBody
 	@PostMapping(value = "login")
 	public ResponseEntity<String> login(@RequestParam(value = "data", required = false) String req) {
-		
+
 		String request = Base64Service.decode(req);
 		AccountInfoVo vo = JsonHelper.json(request, AccountInfoVo.class);
 		vo = accountInfoService.findByPhoneAndPassword(vo.getPhone(), vo.getPassword());
-		LinkedHashMap<String, Object> map = ResponseData.of(Status.TRUE, null, null, vo);
+		LinkedHashMap<String, Object> map = ResponseData.of(Status.TRUE, null, vo);
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
@@ -49,7 +49,7 @@ public class LogingController {
 	public ResponseEntity<String> logout(@RequestParam(value = "data", required = false) String req) {
 		String uuid = Base64Service.decode(req);
 		accountInfoService.refreshLoginStatus(uuid);
-		LinkedHashMap<String, Object> map = ResponseData.of(Status.TRUE, null, null, "");
+		LinkedHashMap<String, Object> map = ResponseData.of(Status.TRUE, null, "");
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}

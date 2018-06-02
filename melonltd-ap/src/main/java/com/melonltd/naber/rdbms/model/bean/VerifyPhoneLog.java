@@ -12,16 +12,20 @@ import com.google.common.base.MoreObjects;
 @Entity
 @Table(name = "verify_phone_log")
 public class VerifyPhoneLog implements Serializable {
-	private static final long serialVersionUID = -4488549616513079570L;
-
+	private static final long serialVersionUID = -6605828460073292074L;
+	
+	private String batchId;
 	private String phone;
 	private String verifyCode;
-	private String verifyCount;
 	private String verifyDate;
-	private String batchId;
 
 	@Id
-	@Column(name = "phone", unique = true, nullable = false)
+	@Column(name = "batch_id", unique = true, nullable = false)
+	public String getBatchId() {
+		return batchId;
+	}
+
+	@Column(name = "phone")
 	public String getPhone() {
 		return phone;
 	}
@@ -31,19 +35,13 @@ public class VerifyPhoneLog implements Serializable {
 		return verifyCode;
 	}
 
-	@Column(name = "verify_count")
-	public String getVerifyCount() {
-		return verifyCount;
-	}
-
 	@Column(name = "verify_date")
 	public String getVerifyDate() {
 		return verifyDate;
 	}
-	
-	@Column(name = "batch_id")
-	public String getBatchId() {
-		return batchId;
+
+	public void setBatchId(String batchId) {
+		this.batchId = batchId;
 	}
 
 	public void setPhone(String phone) {
@@ -54,28 +52,14 @@ public class VerifyPhoneLog implements Serializable {
 		this.verifyCode = verifyCode;
 	}
 
-	public void setVerifyCount(String verifyCount) {
-		this.verifyCount = verifyCount;
-	}
-
 	public void setVerifyDate(String verifyDate) {
 		this.verifyDate = verifyDate;
 	}
-	
-	public void setBatchId(String batchId) {
-		this.batchId = batchId;
-	}
-	
-	
+
 	@Override
 	public String toString() {
-		return MoreObjects
-				.toStringHelper(this.getClass())
-				.add("phone",phone)
-				.add("verifyCode",verifyCode)
-				.add("verifyCount",verifyCount)
-				.add("verifyDate",verifyDate)
-				.toString();
+		return MoreObjects.toStringHelper(this.getClass()).add("batchId", batchId).add("phone", phone)
+				.add("verifyCode", verifyCode).add("verifyDate", verifyDate).toString();
 	}
 
 }

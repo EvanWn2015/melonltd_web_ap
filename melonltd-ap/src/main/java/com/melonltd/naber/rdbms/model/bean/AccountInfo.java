@@ -1,7 +1,6 @@
 package com.melonltd.naber.rdbms.model.bean;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.Maps;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 
 @Entity
@@ -36,8 +34,6 @@ public class AccountInfo implements Serializable {
 	@Id
 	@Column(name = "account_uuid", unique = true, nullable = false)
 	public String getAccountUUID() {
-	
-		
 		return accountUUID;
 	}
 

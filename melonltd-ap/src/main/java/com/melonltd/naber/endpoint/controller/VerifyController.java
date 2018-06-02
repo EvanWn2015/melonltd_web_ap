@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
-import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.service.VerifyPhoneLogService;
 import com.melonltd.naber.rdbms.model.vo.ResponseData;
+import com.melonltd.naber.rdbms.model.vo.ResponseData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.ResponseData.Status;
 import com.melonltd.naber.rdbms.model.vo.VerifyPhoneLogVo;
 
@@ -34,13 +34,9 @@ public class VerifyController {
 	public ResponseEntity<String> sendSMSGetVerifyCode(@RequestParam(value = "data", required = false) String req) {
 		String request = Base64Service.decode(req);
 		VerifyPhoneLogVo vo = JsonHelper.json(request, VerifyPhoneLogVo.class);
-		boolean status = verifyPhoneLogService.sendSMS(vo.getPhone_number());
 		LinkedHashMap<String, Object> map = null;
-		if (status) {
-			map = ResponseData.of(Status.TRUE, null, null, "");
-		} else {
-			map = ResponseData.of(Status.FALSE, "0", "發送失敗", "");
-		}
+		ErrorType error = verifyPhoneLogService.sendSMS(vo.getPhone_number());
+		map = ResponseData.of(error == null ? Status.TRUE : Status.FALSE, error, "");
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
@@ -52,14 +48,10 @@ public class VerifyController {
 		VerifyPhoneLogVo vo = JsonHelper.json(request, VerifyPhoneLogVo.class);
 		LinkedHashMap<String, Object> map = null;
 		if (StringUtils.isBlank(vo.getCode()) || vo.getCode().length() != 6) {
-			map = ResponseData.of(Status.FALSE, "0", "驗證碼長度錯誤", "");
+			map = ResponseData.of(Status.FALSE, ErrorType.VERIFY_CODE_FAIL, "");
 		} else {
-			boolean status = verifyPhoneLogService.verifyCode(vo.getPhone_number(), vo.getCode());
-			if (status) {
-				map = ResponseData.of(Status.TRUE, null, null, "");
-			} else {
-				map = ResponseData.of(Status.FALSE, "0", "驗證失敗", "");
-			}
+			ErrorType error = verifyPhoneLogService.verifyCode(vo.getBatch_id(), vo.getCode());
+			map = ResponseData.of(error == null ? Status.TRUE : Status.FALSE, error, "");
 		}
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);

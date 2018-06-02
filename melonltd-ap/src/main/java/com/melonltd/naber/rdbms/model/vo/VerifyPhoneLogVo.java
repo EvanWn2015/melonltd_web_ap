@@ -7,8 +7,17 @@ import com.google.common.base.MoreObjects;
 public class VerifyPhoneLogVo implements Serializable {
 	private static final long serialVersionUID = 6764817969371558834L;
 
+	private String batch_id;
 	private String phone_number;
 	private String code;
+
+	public String getBatch_id() {
+		return batch_id;
+	}
+
+	public void setBatch_id(String batch_id) {
+		this.batch_id = batch_id;
+	}
 
 	public String getPhone_number() {
 		return phone_number;
