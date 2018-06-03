@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.melonltd.naber.constant.RegexConstant;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools.AccountType;
@@ -46,13 +47,12 @@ public class RegisteredController {
 		if (error == null) {
 			AccountInfo info = accountInfoService.save(vo,AccountType.USER);
 			if (ObjectUtils.allNotNull(info)) {
-				vo.setAccountUUID(info.getAccountUUID());
-				map = ResponseData.of(Status.TRUE, null, vo);
+				map = ResponseData.of(Status.TRUE, null, "");
 			}else {
-				map = ResponseData.of(Status.FALSE, ErrorType.SAVE_ERROR, vo);
+				map = ResponseData.of(Status.FALSE, ErrorType.SAVE_ERROR, "");
 			}
 		}else {
-			map = ResponseData.of(Status.FALSE, error, vo);
+			map = ResponseData.of(Status.FALSE, error, "");
 		}
 		
 		System.out.println(JsonHelper.toJson(map));
@@ -78,10 +78,13 @@ public class RegisteredController {
 		if (vo.getPassword().length() < 6 || vo.getPassword().length() > 20) {
 			return ErrorType.INVALID_PASSWORD;
 		}
-		if (!vo.getPassword().matches("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$")) {
+		if (!vo.getPassword().matches(RegexConstant.REGEX_PASSWORD)) {
 			return ErrorType.INVALID_PASSWORD;
 		}
 		if (!ObjectUtils.allNotNull(vo.getEmail())) {
+			return ErrorType.INVALID_EMAIL;
+		}
+		if (!vo.getEmail().matches(RegexConstant.REGEX_EMAIL)) {
 			return ErrorType.INVALID_EMAIL;
 		}
 		if (!ObjectUtils.allNotNull(vo.getAddress())) {

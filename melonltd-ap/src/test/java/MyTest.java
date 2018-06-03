@@ -38,10 +38,17 @@ public class MyTest {
 		vo.setAddress("桃園市龍潭區悅華路100號");
 		vo.setIdentity(Identity.JUNOR.name());
 		vo.setSchoolName("奔奔中學");
+		System.out.println(JsonHelper.toJson(vo));
 		String result = Base64Service.encode(JsonHelper.toJson(vo));
 		
 		System.out.println(result);
 		
+	}
+	
+	@Test
+	public void matches () {
+		boolean status = "11_232.dffd@we.ewe".matches("^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z]+$");
+		System.out.println(status);
 	}
 
 	@Test

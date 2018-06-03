@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.melonltd.naber.endpoint.controller.LogingController;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.AccountType;
 import com.melonltd.naber.rdbms.model.bean.AccountInfo;
