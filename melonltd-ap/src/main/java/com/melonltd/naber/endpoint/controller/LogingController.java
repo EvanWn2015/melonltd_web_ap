@@ -5,8 +5,6 @@ import java.util.LinkedHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
-import com.melonltd.naber.endpoint.util.SMSHttpService;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.ResponseData;

@@ -27,8 +27,20 @@
 	
 	<!-- <mvc:resources mapping="/assets/**" location="/assets/" /> -->
 		
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+		
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <mvc:exclude-mapping path="/sms/**" />
+            <mvc:exclude-mapping path="/login/**" />
+            <mvc:exclude-mapping path="/registered/**" />
+            <bean class="com.melonltd.naber.endpoint.interceptor.CheckAccountHandlerInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>	
+		
+		
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+	
 	<mvc:annotation-driven />
 
 </beans>

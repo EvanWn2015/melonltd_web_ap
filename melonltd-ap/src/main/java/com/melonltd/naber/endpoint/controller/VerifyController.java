@@ -35,8 +35,13 @@ public class VerifyController {
 		String request = Base64Service.decode(req);
 		VerifyPhoneLogVo vo = JsonHelper.json(request, VerifyPhoneLogVo.class);
 		LinkedHashMap<String, Object> map = null;
-		ErrorType error = verifyPhoneLogService.sendSMS(vo.getPhone_number());
-		map = ResponseData.of(error == null ? Status.TRUE : Status.FALSE, error, "");
+		String batchId = verifyPhoneLogService.sendSMS(vo.getPhone_number());
+		if (batchId != null) {
+			vo.setBatch_id(batchId);
+			map = ResponseData.of(Status.TRUE, null, vo);
+		} else {
+			map = ResponseData.of(Status.FALSE, ErrorType.SEND_SMS_FAIL, null);
+		}
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}

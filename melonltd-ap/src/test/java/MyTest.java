@@ -8,6 +8,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.Test;
@@ -18,6 +20,7 @@ import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.SMSHttpService;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.VerifyPhoneLog;
+import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.RequestData;
 import com.melonltd.naber.rdbms.model.vo.VerifyPhoneLogVo;
@@ -27,17 +30,18 @@ public class MyTest {
 
 	@Test
 	public void myTest() {
-		Date now = new Date();
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd");
-		String date = format.format(now);
-		System.out.println(date);
-		long day = 1000 * 60 * 60 * 24L;
-		now.setTime(now.getTime() + day);
-		date = format.format(now);
-		System.out.println(date);
-		now.setTime(now.getTime() + day);
-		date = format.format(now);
-		System.out.println(date);
+		AccountInfoVo vo = new AccountInfoVo();
+		vo.setName("AAA");
+		vo.setPassword("123456a");
+		vo.setPhone("0987654321");
+		vo.setEmail("sdsd@sds.com");
+		vo.setAddress("桃園市龍潭區悅華路100號");
+		vo.setIdentity(Identity.JUNOR.name());
+		vo.setSchoolName("奔奔中學");
+		String result = Base64Service.encode(JsonHelper.toJson(vo));
+		
+		System.out.println(result);
+		
 	}
 
 	@Test

@@ -27,7 +27,7 @@ public class VerifyPhoneLogService {
 
 	// 產生驗證碼 6碼，並檢查一天內是否超過兩次驗證
 	@Transactional(readOnly = false, rollbackFor = HibernateException.class)
-	public ErrorType sendSMS(String phoneNumber) {
+	public String sendSMS(String phoneNumber) {
 		String code = "";
 		while (code.length() != 6) {
 			code += (int) (Math.random() * 10);
@@ -44,7 +44,7 @@ public class VerifyPhoneLogService {
 		} else if (logs.size() < 2) {
 			return sendPhoneSMS(code, content, phoneNumber);
 		} else {
-			return ErrorType.EXCEED;
+			return null;
 		}
 	}
 
@@ -66,7 +66,7 @@ public class VerifyPhoneLogService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = HibernateException.class)
-	private ErrorType sendPhoneSMS(String code, String content, String phoneNumber) {
+	private String sendPhoneSMS(String code, String content, String phoneNumber) {
 		String batchId = smsHttpService.sendSMS("", content, phoneNumber, "");
 		if (!Strings.isNullOrEmpty(batchId)) {
 			VerifyPhoneLog log = new VerifyPhoneLog();
@@ -75,9 +75,9 @@ public class VerifyPhoneLogService {
 			log.setVerifyDate(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
 			log.setVerifyCode(code);
 			verifyPhoneLogDao.save(log);
-			return null;
+			return batchId;
 		}
-		return ErrorType.SEND_SMS_FAIL;
+		return null;
 	}
 
 }

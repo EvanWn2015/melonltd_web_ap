@@ -32,7 +32,12 @@ public class AccountInfo implements Serializable {
 	private String photoType;
 
 	@Id
-	@Column(name = "account_uuid", unique = true, nullable = false)
+	@Column(name = "phone", unique = true, nullable = false)
+	public String getPhone() {
+		return phone;
+	}
+
+	@Column(name = "account_uuid")
 	public String getAccountUUID() {
 		return accountUUID;
 	}
@@ -50,11 +55,6 @@ public class AccountInfo implements Serializable {
 	@Column(name = "email")
 	public String getEmail() {
 		return email;
-	}
-
-	@Column(name = "phone")
-	public String getPhone() {
-		return phone;
 	}
 
 	@Column(name = "address")
@@ -166,34 +166,19 @@ public class AccountInfo implements Serializable {
 	public void setPhotoType(String photoType) {
 		this.photoType = photoType;
 	}
-	
-	
+
 	@Override
 	public String toString() {
-		return MoreObjects
-				.toStringHelper(this.getClass())
-				.add("accountUUID",accountUUID)
-				.add("name",name)
-				.add("password",password)
-				.add("email",email)
-				.add("phone",phone)
-				.add("address",address)
-				.add("identity",identity)
-				.add("schoolName",schoolName)
-				.add("bonus",bonus)
-				.add("level",level)
-				.add("enable",enable)
-				.add("isLogin",isLogin)
-				.add("loginDate",loginDate)
-				.add("photo",photo)
-				.add("photoType",photoType)
-				.toString();
+		return MoreObjects.toStringHelper(this.getClass()).add("accountUUID", accountUUID).add("name", name)
+				.add("password", password).add("email", email).add("phone", phone).add("address", address)
+				.add("identity", identity).add("schoolName", schoolName).add("bonus", bonus).add("level", level)
+				.add("enable", enable).add("isLogin", isLogin).add("loginDate", loginDate).add("photo", photo)
+				.add("photoType", photoType).toString();
 	}
-	
-	
-	public static AccountInfo of (AccountInfoVo vo) {
+
+	public static AccountInfo of(AccountInfoVo vo) {
 		AccountInfo data = new AccountInfo();
-		return data ;
+		return data;
 	}
 
 }
