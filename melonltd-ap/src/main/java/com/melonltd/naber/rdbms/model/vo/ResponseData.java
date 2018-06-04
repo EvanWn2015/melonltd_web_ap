@@ -23,6 +23,7 @@ public class ResponseData {
 		SAVE_ERROR("0001", "儲存資料失敗"),
 		UPDATE_ERROR("0002", "服務器錯誤"),
 		DELETE_ERROR("0003", "服務器錯誤"),
+		HEADESR_ERROR("0004", "帳戶 token 認證失敗"),
 		INVALID("1001", "無效參數"),
 		INVALID_PASSWORD("1002", "無效參數，密碼長度不6~20碼範圍內或非英數組合"),
 		INVALID_EMAIL("1003", "無效參數，Email格式錯誤"),

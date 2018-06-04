@@ -4,6 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,53 +21,83 @@ import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools.AccountType;
 import com.melonltd.naber.rdbms.model.bean.AccountInfo;
+import com.melonltd.naber.rdbms.model.bean.SellerRegistered;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
+import com.melonltd.naber.rdbms.model.service.SellerRegisteredService;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.ResponseData;
 import com.melonltd.naber.rdbms.model.vo.ResponseData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.ResponseData.Status;
+import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 
 @Controller
 @RequestMapping(value = { "" }, produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 public class RegisteredController {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(RegisteredController.class);
 	private static List<Identity> needSchoolName = Identity.getNeedSchoolEnumValues();
 
 	@Autowired
 	AccountInfoService accountInfoService;
-	
-	
+
+	@Autowired
+	SellerRegisteredService sellerRegisteredService;
+
 	@ResponseBody
 	@PostMapping(value = "registered/user")
 	public ResponseEntity<String> registeredUser(@RequestParam(value = "data", required = false) String req) {
 		String request = Base64Service.decode(req);
 		AccountInfoVo vo = JsonHelper.json(request, AccountInfoVo.class);
 
-		ErrorType error = verify(vo);
+		ErrorType error = verifyUser(vo);
 		LinkedHashMap<String, Object> map = null;
 		if (error == null) {
-			AccountInfo info = accountInfoService.save(vo,AccountType.USER);
+			AccountInfo info = accountInfoService.save(vo, AccountType.USER);
 			if (ObjectUtils.allNotNull(info)) {
 				map = ResponseData.of(Status.TRUE, null, "");
-			}else {
+			} else {
+				LOGGER.error("save user error : phone: {}, name: {}", vo.getPhone(), vo.getName());
 				map = ResponseData.of(Status.FALSE, ErrorType.SAVE_ERROR, "");
 			}
-		}else {
+		} else {
 			map = ResponseData.of(Status.FALSE, error, "");
 		}
+
+		System.out.println(JsonHelper.toJson(map));
+		String result = Base64Service.encode(JsonHelper.toJson(map));
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+
+	@ResponseBody
+	@PostMapping(value = "registered/seller")
+	public ResponseEntity<String> registeredSeller(@RequestParam(value = "data", required = false) String req) {
+		String request = Base64Service.decode(req);
+		SellerRegisteredVo vo = JsonHelper.json(request, SellerRegisteredVo.class);
 		
+		ErrorType error = verifySeller(vo);
+		LinkedHashMap<String, Object> map = null;
+
+		if (error == null) {
+			SellerRegistered info = sellerRegisteredService.save(vo);
+			if (ObjectUtils.allNotNull(info)) {
+				map = ResponseData.of(Status.TRUE, null, "");
+			} else {
+				LOGGER.error("save seller error, seller name : {}, device id : {}", vo.getSeller_name(), vo.getDevice_id());
+				map = ResponseData.of(Status.FALSE, ErrorType.SAVE_ERROR, "");
+			}
+		} else {
+			map = ResponseData.of(Status.FALSE, error, "");
+		}
 		System.out.println(JsonHelper.toJson(map));
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
 	/**
-	 * 
 	 * @param vo
 	 * @return verify name, email, password, phone, address, identity, school_name
 	 */
-	private static ErrorType verify(AccountInfoVo vo) {
+	private static ErrorType verifyUser(AccountInfoVo vo) {
 		if (!ObjectUtils.allNotNull(vo)) {
 			return ErrorType.INVALID;
 		}
@@ -94,9 +126,34 @@ public class RegisteredController {
 			return ErrorType.INVALID;
 		}
 		if (needSchoolName.contains(Identity.of(vo.getIdentity()))) {
-			if (!ObjectUtils.allNotNull(vo.getSchoolName())) {
+			if (!ObjectUtils.allNotNull(vo.getSchool_name())) {
 				return ErrorType.INVALID_SCHOOL;
 			}
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @param vo
+	 * @return verify name, sellerName, phone, address
+	 */
+	private ErrorType verifySeller(SellerRegisteredVo vo) {
+
+		if (!ObjectUtils.allNotNull(vo)) {
+			return ErrorType.INVALID;
+		}
+		if (!ObjectUtils.allNotNull(vo.getName())) {
+			return ErrorType.INVALID;
+		}
+		if (!ObjectUtils.allNotNull(vo.getSeller_name())) {
+			return ErrorType.INVALID;
+		}
+		if (!ObjectUtils.allNotNull(vo.getPhone())) {
+			return ErrorType.INVALID;
+		}
+		if (!ObjectUtils.allNotNull(vo.getAddress())) {
+			return ErrorType.INVALID;
 		}
 		return null;
 	}

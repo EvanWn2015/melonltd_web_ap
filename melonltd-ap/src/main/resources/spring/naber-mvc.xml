@@ -27,7 +27,6 @@
 	
 	<!-- <mvc:resources mapping="/assets/**" location="/assets/" /> -->
 		
-		
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**" />
@@ -37,7 +36,6 @@
             <bean class="com.melonltd.naber.endpoint.interceptor.CheckAccountHandlerInterceptor"></bean>
         </mvc:interceptor>
     </mvc:interceptors>	
-		
 		
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 	

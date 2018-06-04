@@ -8,30 +8,33 @@ import com.melonltd.naber.rdbms.model.bean.AccountInfo;
 public class AccountInfoVo implements Serializable{
 	private static final long serialVersionUID = 7659391411455993337L;
 	
-	private String accountUUID;
+	private String account_uuid;
 	private String password;
 	private String name;
 	private String email;
 	private String phone;
 	private String address;
 	private String identity;
-	private String schoolName;
+	private String school_name;
 	private String bonus;
 	private String level;
 	private String enable;
-	private String isLogin;
-	private String loginDate;
+	private String is_login;
+	private String login_date;
 	private String photo;
-	private String photoType;
-
-	public String getAccountUUID() {
-		return accountUUID;
-	}
-
-	public void setAccountUUID(String accountUUID) {
-		this.accountUUID = accountUUID;
-	}
+	private String photo_type;
 	
+	private String device_token;
+	private String device_category;
+
+	public String getAccount_uuid() {
+		return account_uuid;
+	}
+
+	public void setAccount_uuid(String account_uuid) {
+		this.account_uuid = account_uuid;
+	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -80,12 +83,12 @@ public class AccountInfoVo implements Serializable{
 		this.identity = identity;
 	}
 
-	public String getSchoolName() {
-		return schoolName;
+	public String getSchool_name() {
+		return school_name;
 	}
 
-	public void setSchoolName(String schoolName) {
-		this.schoolName = schoolName;
+	public void setSchool_name(String school_name) {
+		this.school_name = school_name;
 	}
 
 	public String getBonus() {
@@ -112,20 +115,20 @@ public class AccountInfoVo implements Serializable{
 		this.enable = enable;
 	}
 
-	public String getIsLogin() {
-		return isLogin;
+	public String getIs_login() {
+		return is_login;
 	}
 
-	public void setIsLogin(String isLogin) {
-		this.isLogin = isLogin;
+	public void setIs_login(String is_login) {
+		this.is_login = is_login;
 	}
 
-	public String getLoginDate() {
-		return loginDate;
+	public String getLogin_date() {
+		return login_date;
 	}
 
-	public void setLoginDate(String loginDate) {
-		this.loginDate = loginDate;
+	public void setLogin_date(String login_date) {
+		this.login_date = login_date;
 	}
 
 	public String getPhoto() {
@@ -136,52 +139,70 @@ public class AccountInfoVo implements Serializable{
 		this.photo = photo;
 	}
 
-	public String getPhotoType() {
-		return photoType;
+	public String getPhoto_type() {
+		return photo_type;
 	}
 
-	public void setPhotoType(String photoType) {
-		this.photoType = photoType;
+	public void setPhoto_type(String photo_type) {
+		this.photo_type = photo_type;
 	}
-	
+
+	public String getDevice_token() {
+		return device_token;
+	}
+
+	public void setDevice_token(String device_token) {
+		this.device_token = device_token;
+	}
+
+	public String getDevice_category() {
+		return device_category;
+	}
+
+	public void setDevice_category(String device_category) {
+		this.device_category = device_category;
+	}
+
 	@Override
 	public String toString() {
 		return MoreObjects
 				.toStringHelper(this.getClass())
-				.add("accountUUID",accountUUID)
+				.add("account_uuid",account_uuid)
 				.add("name",name)
 				.add("password",password)
 				.add("email",email)
 				.add("phone",phone)
 				.add("address",address)
 				.add("identity",identity)
-				.add("schoolName",schoolName)
+				.add("school_name",school_name)
 				.add("bonus",bonus)
 				.add("level",level)
 				.add("enable",enable)
-				.add("isLogin",isLogin)
-				.add("loginDate",loginDate)
+				.add("is_login",is_login)
+				.add("login_date",login_date)
 				.add("photo",photo)
-				.add("photoType",photoType)
+				.add("photo_type",photo_type)
+				.add("devlcie_token",device_token)
+				.add("device_category",device_category)
 				.toString();
 	}
 
 	public static AccountInfoVo of(AccountInfo info) {
 		AccountInfoVo vo = new AccountInfoVo();
-		vo.accountUUID = info.getAccountUUID();
+		vo.account_uuid = info.getAccountUUID();
 		vo.name = info.getName();
 		vo.email = info.getEmail();
 		vo.phone = info.getPhone();
 		vo.address = info.getAddress();
 		vo.identity = info.getIdentity();
-		vo.schoolName = info.getSchoolName();
+		vo.school_name = info.getSchoolName();
 		vo.bonus = info.getBonus();
 		vo.level = info.getLevel();
 		vo.enable = info.getEnable();
-		vo.isLogin = info.getIsLogin();
-		vo.loginDate = info.getLoginDate();
+		vo.is_login = info.getIsLogin();
+		vo.login_date = info.getLoginDate();
 		vo.photo = info.getPhoto();
-		vo.photoType = info.getPhotoType();
+		vo.photo_type = info.getPhotoType();
 		return vo;
 	}
 

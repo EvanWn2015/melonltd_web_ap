@@ -12,15 +12,15 @@ import javax.persistence.Table;
 public class MobileDevice implements Serializable {
 	private static final long serialVersionUID = 4703671514270687285L;
 
-	private String pushToken;
+	private String deviceToken;
 	private String accountUUID;
-	private String category;
+	private String deviceCategory;
 	private String createDate;
 
 	@Id
-	@Column(name = "push_token", unique = true, nullable = false)
-	public String getPushToken() {
-		return pushToken;
+	@Column(name = "device_token", unique = true, nullable = false)
+	public String getDeviceToken() {
+		return deviceToken;
 	}
 
 	@Column(name = "account_uuid")
@@ -28,9 +28,9 @@ public class MobileDevice implements Serializable {
 		return accountUUID;
 	}
 
-	@Column(name = "category")
-	public String getCategory() {
-		return category;
+	@Column(name = "device_category")
+	public String getDeviceCategory() {
+		return deviceCategory;
 	}
 
 	@Column(name = "create_date")
@@ -38,16 +38,16 @@ public class MobileDevice implements Serializable {
 		return createDate;
 	}
 
-	public void setPushToken(String pushToken) {
-		this.pushToken = pushToken;
+	public void setDeviceToken(String deviceToken) {
+		this.deviceToken = deviceToken;
 	}
 
 	public void setAccountUUID(String accountUUID) {
 		this.accountUUID = accountUUID;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setDeviceCategory(String deviceCategory) {
+		this.deviceCategory = deviceCategory;
 	}
 
 	public void setCreateDate(String createDate) {

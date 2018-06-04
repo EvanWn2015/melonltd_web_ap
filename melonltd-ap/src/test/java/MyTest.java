@@ -1,17 +1,11 @@
 
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.UUID;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.junit.Test;
 import org.springframework.context.annotation.PropertySource;
 
@@ -19,29 +13,31 @@ import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.SMSHttpService;
 import com.melonltd.naber.endpoint.util.Tools;
-import com.melonltd.naber.rdbms.model.bean.VerifyPhoneLog;
-import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
-import com.melonltd.naber.rdbms.model.vo.RequestData;
-import com.melonltd.naber.rdbms.model.vo.VerifyPhoneLogVo;
+import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 
 @PropertySource("classpath:/config.properties")
 public class MyTest {
 
 	@Test
 	public void myTest() {
-		AccountInfoVo vo = new AccountInfoVo();
-		vo.setName("AAA");
-		vo.setPassword("123456a");
+		SellerRegisteredVo vo = new SellerRegisteredVo();
+		vo.setName("SELLER");
 		vo.setPhone("0987654321");
-		vo.setEmail("sdsd@sds.com");
+		vo.setSeller_name("Coco");
+		vo.setDevice_id( UUID.randomUUID().toString());
 		vo.setAddress("桃園市龍潭區悅華路100號");
-		vo.setIdentity(Identity.JUNOR.name());
-		vo.setSchoolName("奔奔中學");
 		System.out.println(JsonHelper.toJson(vo));
 		String result = Base64Service.encode(JsonHelper.toJson(vo));
 		
 		System.out.println(result);
+		
+		AccountInfoVo aVo = new AccountInfoVo();
+		aVo.setPhone("0987654321");
+		aVo.setPassword("123456a");
+		System.out.println(JsonHelper.toJson(aVo));
+		System.out.println(Base64Service.encode(JsonHelper.toJson(aVo)));
+	
 		
 	}
 	
@@ -117,5 +113,11 @@ public class MyTest {
 				DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
 
 		System.out.println(localDate.getDayOfYear());
+	}
+	
+	@Test
+	public void decode () {
+		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIyZmFsc2UlMjIlMkMlMjJlcnJfY29kZSUyMiUzQSUyMjAwMDQlMjIlMkMlMjJlcnJfbXNnJTIyJTNBJTIyJUU1JUI4JUIzJUU2JTg4JUI2K3Rva2VuKyVFOCVBQSU4RCVFOCVBRCU4OSVFNSVBNCVCMSVFNiU5NSU5NyUyMiUyQyUyMmRhdGElMjIlM0ElMjIlMjIlN0Q=";
+		System.out.println(Base64Service.decode(code));
 	}
 }

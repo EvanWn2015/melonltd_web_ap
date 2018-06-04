@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
-import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 
 @Entity
 @Table(name = "account_info")
@@ -169,16 +168,28 @@ public class AccountInfo implements Serializable {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass()).add("accountUUID", accountUUID).add("name", name)
-				.add("password", password).add("email", email).add("phone", phone).add("address", address)
-				.add("identity", identity).add("schoolName", schoolName).add("bonus", bonus).add("level", level)
-				.add("enable", enable).add("isLogin", isLogin).add("loginDate", loginDate).add("photo", photo)
-				.add("photoType", photoType).toString();
+		return MoreObjects.toStringHelper(this.getClass())
+				.add("accountUUID", accountUUID)
+				.add("name", name)
+				.add("password", password)
+				.add("email", email)
+				.add("phone", phone)
+				.add("address", address)
+				.add("identity", identity)
+				.add("schoolName", schoolName)
+				.add("bonus", bonus)
+				.add("level", level)
+				.add("enable", enable)
+				.add("isLogin", isLogin)
+				.add("loginDate", loginDate)
+				.add("photo", photo)
+				.add("photoType", photoType)
+				.toString();
 	}
 
-	public static AccountInfo of(AccountInfoVo vo) {
-		AccountInfo data = new AccountInfo();
-		return data;
-	}
+//	public static AccountInfo of(AccountInfoVo vo) {
+//		AccountInfo data = new AccountInfo();
+//		return data;
+//	}
 
 }

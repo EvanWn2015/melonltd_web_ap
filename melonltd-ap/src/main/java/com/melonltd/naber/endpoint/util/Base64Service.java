@@ -6,6 +6,9 @@ import java.net.URLEncoder;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
+
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,7 +26,7 @@ public class Base64Service {
 		}
 	}
 
-	public static String decode(String key) {
+	public static String decode(@NotNull String key) {
 		try {
 			String decode = new String(Base64.getDecoder().decode(key));
 			return URLDecoder.decode(new String(Base64.getDecoder().decode(key), "UTF-8"), "UTF-8");

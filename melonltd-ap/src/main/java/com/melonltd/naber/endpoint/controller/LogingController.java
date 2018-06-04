@@ -2,6 +2,7 @@ package com.melonltd.naber.endpoint.controller;
 
 import java.util.LinkedHashMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,18 +33,24 @@ public class LogingController {
 	@ResponseBody
 	@PostMapping(value = "login")
 	public ResponseEntity<String> login(@RequestParam(value = "data", required = false) String req) {
-
 		String request = Base64Service.decode(req);
 		AccountInfoVo vo = JsonHelper.json(request, AccountInfoVo.class);
+		
 		vo = accountInfoService.findByPhoneAndPassword(vo.getPhone(), vo.getPassword());
 		LinkedHashMap<String, Object> map = ResponseData.of(Status.TRUE, null, vo);
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
+	
+	
 	@ResponseBody
 	@PostMapping(value = "logout")
 	public ResponseEntity<String> logout(@RequestParam(value = "data", required = false) String req) {
+		if (StringUtils.isBlank(req)) {
+			return new ResponseEntity<String>("", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 		String uuid = Base64Service.decode(req);
 		accountInfoService.refreshLoginStatus(uuid);
 		LinkedHashMap<String, Object> map = ResponseData.of(Status.TRUE, null, "");

@@ -36,9 +36,7 @@ public class VerifyPhoneLogService {
 		String content = "驗證碼為：" + code + "，請在三分鐘內驗證完成。";
 		String date = Tools.getGMTDate("yyyy-MM-dd'T'");
 		// 2018-06-02T18:23:12.7410Z
-		List<VerifyPhoneLog> logs = verifyPhoneLogDao.findByPhoneNumberAndBetweenDates(phoneNumber,
-				date + "00:00:00.0000Z", date + "23:59:59.9999Z");
-
+		List<VerifyPhoneLog> logs = verifyPhoneLogDao.findByPhoneNumberAndBetweenDates(phoneNumber, date + "00:00:00.0000Z", date + "23:59:59.9999Z");
 		if (logs == null) {
 			return sendPhoneSMS(code, content, phoneNumber);
 		} else if (logs.size() < 2) {

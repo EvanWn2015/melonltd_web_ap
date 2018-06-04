@@ -4,19 +4,19 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.google.common.base.MoreObjects;
+import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 
 @Entity
 @Table(name = "seller_registered")
 public class SellerRegistered implements Serializable {
 	private static final long serialVersionUID = -7285367027000323478L;
 
-	private Integer id;
-	private String sellerName;
 	private String phone;
+	private String sellerName;
 	private String address;
 	private String name;
 	private String createDate;
@@ -24,20 +24,19 @@ public class SellerRegistered implements Serializable {
 	private String status;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", unique = true, nullable = false)
-	public Integer getId() {
-		return id;
+	@Column(name = "phone", unique = true, nullable = false)
+	public String getPhone() {
+		return phone;
+	}
+
+	@Column(name = "device_id")
+	public String getDeviceId() {
+		return deviceId;
 	}
 
 	@Column(name = "seller_name")
 	public String getSellerName() {
 		return sellerName;
-	}
-
-	@Column(name = "phone")
-	public String getPhone() {
-		return phone;
 	}
 
 	@Column(name = "address")
@@ -55,26 +54,17 @@ public class SellerRegistered implements Serializable {
 		return createDate;
 	}
 
-	@Column(name = "device_id")
-	public String getDeviceId() {
-		return deviceId;
-	}
-
 	@Column(name = "status")
 	public String getStatus() {
 		return status;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public void setSellerName(String sellerName) {
 		this.sellerName = sellerName;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
 	}
 
 	public void setAddress(String address) {
@@ -95,6 +85,25 @@ public class SellerRegistered implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this.getClass()).add("sellerName", sellerName).add("phone", phone)
+				.add("name", name).add("createDate", createDate).add("deviceId", deviceId).add("status", status)
+				.toString();
+	}
+
+	public static SellerRegistered valueOf(SellerRegisteredVo vo) {
+		SellerRegistered info = new SellerRegistered();
+		info.sellerName = vo.getName();
+		info.phone = vo.getPhone();
+		info.address = vo.getAddress();
+		info.name = vo.getName();
+		info.createDate = vo.getCreate_date();
+		info.deviceId = vo.getDevice_id();
+		info.status = vo.getStatus();
+		return info;
 	}
 
 }
