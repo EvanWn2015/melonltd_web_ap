@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.google.common.base.MoreObjects;
+
 @Entity
 @Table(name = "restaurant_info")
 public class RestaurantInfo implements Serializable {
@@ -26,6 +28,8 @@ public class RestaurantInfo implements Serializable {
 	private String photo;
 	private String photoType;
 	private String enable;
+	private String top;
+
 
 	@Id
 	@Column(name = "restaurant_uuid", unique = true, nullable = false)
@@ -97,6 +101,11 @@ public class RestaurantInfo implements Serializable {
 	public String getEnable() {
 		return enable;
 	}
+	
+	@Column(name = "top")
+	public String getTop() {
+		return top;
+	}
 
 	public void setRestaurantUUID(String restaurantUUID) {
 		this.restaurantUUID = restaurantUUID;
@@ -152,6 +161,32 @@ public class RestaurantInfo implements Serializable {
 
 	public void setEnable(String enable) {
 		this.enable = enable;
+	}
+	
+	public void setTop(String top) {
+		this.top = top;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this.getClass())
+				.add("restaurantUUID",restaurantUUID)
+				.add("accountUUID",accountUUID)
+				.add("name",name)
+				.add("address",address)
+				.add("storeStart",storeStart)
+				.add("storeEnd",storeEnd)
+				.add("notBusiness",notBusiness)
+				.add("canStoreRange",canStoreRange)
+				.add("latitude",latitude)
+				.add("longitude",longitude)
+				.add("bulletin",bulletin)
+				.add("photo",photo)
+				.add("photoType",photoType)
+				.add("enable",enable)
+				.add("top",top)
+				.toString();
 	}
 
 }

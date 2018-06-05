@@ -17,7 +17,7 @@ import com.google.common.collect.Maps;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
-import com.melonltd.naber.endpoint.util.Tools.AccountType;
+import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.dao.AccountInfoDao;
 
 @Controller
@@ -36,7 +36,7 @@ public class UserInfoController {
 
 //		List<AccountInfo> users = dao.findByPhoneAndPassword("0987654321", "123456");
 //		List<AccountInfo> uuidusers = dao.findByAccountUUID("USER_20180601_97cb451b-6db1-45fd-a92d-9ee3271de286");
-		System.out.println(Tools.buildAccountUUID(AccountType.USER));
+		System.out.println(Tools.buildAccountUUID(UUIDType.USER));
 
 		LinkedHashMap<String, Object> map = Maps.newLinkedHashMap();
 		map.put("status", "true");

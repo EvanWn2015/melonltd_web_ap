@@ -3,18 +3,16 @@ package com.melonltd.naber.rdbms.model.service;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.melonltd.naber.endpoint.util.Tools;
-import com.melonltd.naber.endpoint.util.Tools.AccountType;
+import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.bean.AccountInfo;
 import com.melonltd.naber.rdbms.model.dao.AccountInfoDao;
 import com.melonltd.naber.rdbms.model.dao.stored.procedure.LoginDao;
@@ -76,7 +74,7 @@ public class AccountInfoService {
 	}
 	
 //	@Transactional(readOnly = false, rollbackFor = HibernateException.class)
-	public AccountInfo save(AccountInfoVo vo, AccountType type) {
+	public AccountInfo save(AccountInfoVo vo, UUIDType type) {
 		AccountInfo oldInfo = accountInfoDao.findByPhone(vo.getPhone());
 		if (ObjectUtils.allNotNull(oldInfo)) {
 			return null;

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.melonltd.naber.constant.RegexConstant;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
-import com.melonltd.naber.endpoint.util.Tools.AccountType;
+import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.bean.AccountInfo;
 import com.melonltd.naber.rdbms.model.bean.SellerRegistered;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
@@ -52,7 +52,7 @@ public class RegisteredController {
 		ErrorType error = verifyUser(vo);
 		LinkedHashMap<String, Object> map = null;
 		if (error == null) {
-			AccountInfo info = accountInfoService.save(vo, AccountType.USER);
+			AccountInfo info = accountInfoService.save(vo, UUIDType.USER);
 			if (ObjectUtils.allNotNull(info)) {
 				map = ResponseData.of(Status.TRUE, null, "");
 			} else {

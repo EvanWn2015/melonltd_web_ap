@@ -36,5 +36,9 @@ public enum Identity {
 	public static List<Identity> getNeedSchoolEnumValues() {
 		return Lists.newArrayList(SENOR, JUNOR, UNIVERSITY);
 	}
+	
+	public static List<Identity> getUserEnumValues() {
+		return Lists.newArrayList(ELEMENTARY, SENOR, JUNOR,UNIVERSITY,NON_STUDENT);
+	}
 
 }

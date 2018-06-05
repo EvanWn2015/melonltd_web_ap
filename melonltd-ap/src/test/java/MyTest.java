@@ -11,8 +11,9 @@ import org.springframework.context.annotation.PropertySource;
 
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
-import com.melonltd.naber.endpoint.util.SMSHttpService;
 import com.melonltd.naber.endpoint.util.Tools;
+import com.melonltd.naber.endpoint.util.Tools.UUIDType;
+import com.melonltd.naber.rdbms.model.service.push.SMSHttpService;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 
@@ -20,30 +21,44 @@ import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 public class MyTest {
 
 	@Test
+	public void buildUUID() {
+		int i = 5;
+		while (i != 0) {
+			System.out.println(Tools.buildUUID(UUIDType.NABER_BULLETIN));
+			i--;
+		}
+	}
+	
+	@Test
+	public void getDate() {
+		System.out.println(Instant.now());
+	}
+
+	@Test
 	public void myTest() {
 		SellerRegisteredVo vo = new SellerRegisteredVo();
 		vo.setName("SELLER");
 		vo.setPhone("0987654321");
 		vo.setSeller_name("Coco");
-		vo.setDevice_id( UUID.randomUUID().toString());
+		vo.setDevice_id(UUID.randomUUID().toString());
 		vo.setAddress("桃園市龍潭區悅華路100號");
 		System.out.println(JsonHelper.toJson(vo));
 		String result = Base64Service.encode(JsonHelper.toJson(vo));
-		
+
 		System.out.println(result);
-		
+
 		AccountInfoVo aVo = new AccountInfoVo();
 		aVo.setPhone("0987654321");
 		aVo.setPassword("123456a");
 		System.out.println(JsonHelper.toJson(aVo));
 		System.out.println(Base64Service.encode(JsonHelper.toJson(aVo)));
-	
-		
+
 	}
-	
+
 	@Test
-	public void matches () {
-		boolean status = "11_232.dffd@we.ewe".matches("^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z]+$");
+	public void matches() {
+		boolean status = "11_232.dffd@we.ewe"
+				.matches("^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z]+$");
 		System.out.println(status);
 	}
 
@@ -114,9 +129,9 @@ public class MyTest {
 
 		System.out.println(localDate.getDayOfYear());
 	}
-	
+
 	@Test
-	public void decode () {
+	public void decode() {
 		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIyZmFsc2UlMjIlMkMlMjJlcnJfY29kZSUyMiUzQSUyMjAwMDQlMjIlMkMlMjJlcnJfbXNnJTIyJTNBJTIyJUU1JUI4JUIzJUU2JTg4JUI2K3Rva2VuKyVFOCVBQSU4RCVFOCVBRCU4OSVFNSVBNCVCMSVFNiU5NSU5NyUyMiUyQyUyMmRhdGElMjIlM0ElMjIlMjIlN0Q=";
 		System.out.println(Base64Service.decode(code));
 	}

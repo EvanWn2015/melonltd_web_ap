@@ -20,6 +20,7 @@ public class AccountInfo implements Serializable {
 	private String email;
 	private String phone;
 	private String address;
+	private String birthDay;
 	private String identity;
 	private String schoolName;
 	private String bonus;
@@ -61,6 +62,11 @@ public class AccountInfo implements Serializable {
 		return address;
 	}
 
+	@Column(name = "birth_day")
+	public String getBirthDay() {
+		return birthDay;
+	}
+	
 	@Column(name = "identity")
 	public String getIdentity() {
 		return identity;
@@ -129,7 +135,11 @@ public class AccountInfo implements Serializable {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-
+	
+	public void setBirthDay(String birthDay) {
+		this.birthDay = birthDay;
+	}
+	
 	public void setIdentity(String identity) {
 		this.identity = identity;
 	}

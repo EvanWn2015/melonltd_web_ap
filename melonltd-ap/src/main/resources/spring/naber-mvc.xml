@@ -32,6 +32,7 @@
             <mvc:mapping path="/**" />
             <mvc:exclude-mapping path="/sms/**" />
             <mvc:exclude-mapping path="/login/**" />
+            <mvc:exclude-mapping path="/test/**" />
             <mvc:exclude-mapping path="/registered/**" />
             <bean class="com.melonltd.naber.endpoint.interceptor.CheckAccountHandlerInterceptor"></bean>
         </mvc:interceptor>

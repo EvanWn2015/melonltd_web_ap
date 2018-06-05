@@ -1,4 +1,4 @@
-package com.melonltd.naber.endpoint.util;
+package com.melonltd.naber.rdbms.model.service.push;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -21,9 +21,9 @@ public class SMSHttpService {
 	private double credit = 0;
 
 	@Value("${every8d.account}")
-	private String account;
+	private String E8D_ACCOUNT;
 	@Value("${every8d.password}")
-	private String password;
+	private String E8D_PWD;
 
 	public SMSHttpService() {
 
@@ -33,8 +33,8 @@ public class SMSHttpService {
 		boolean success = false;
 		try {
 			StringBuilder postDataSb = new StringBuilder();
-			postDataSb.append("UID=").append(this.account);
-			postDataSb.append("&PWD=").append(this.password);
+			postDataSb.append("UID=").append(this.E8D_ACCOUNT);
+			postDataSb.append("&PWD=").append(this.E8D_PWD);
 
 			String resultString = this.httpPost(this.getCreditUrl, postDataSb.toString());
 			if (!resultString.startsWith("-")) {
@@ -54,8 +54,8 @@ public class SMSHttpService {
 		String batchID ="";
 		try {
 			StringBuilder postDataSb = new StringBuilder();
-			postDataSb.append("UID=").append(this.account);
-			postDataSb.append("&PWD=").append(this.password);
+			postDataSb.append("UID=").append(this.E8D_ACCOUNT);
+			postDataSb.append("&PWD=").append(this.E8D_PWD);
 			postDataSb.append("&SB=").append(subject);
 			postDataSb.append("&MSG=").append(content);
 			postDataSb.append("&DEST=").append(mobile);

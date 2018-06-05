@@ -10,9 +10,8 @@ import java.util.UUID;
 
 public class Tools {
 
-	public static enum AccountType {
-		ADMIN, USER, SELLER
-
+	public static enum UUIDType {
+		ADMIN, USER, SELLER, NABER_BULLETIN
 	}
 
 	/**
@@ -38,8 +37,15 @@ public class Tools {
 		Instant instant = Instant.parse(date);
 		return Date.from(instant).getTime();
 	}
+	
+	public static String buildUUID(UUIDType type) {
+		UUID uuid = UUID.randomUUID();
+		String uu = type.name() + "_" + uuid.toString();
+		return uu;
+	}
+	
 
-	public static String buildAccountUUID(AccountType type) {
+	public static String buildAccountUUID(UUIDType type) {
 		UUID uuid = UUID.randomUUID();
 		String uu = type.name() + "_" + getGMTDate("yyyyMMdd") + "_" + uuid.toString();
 		return uu;

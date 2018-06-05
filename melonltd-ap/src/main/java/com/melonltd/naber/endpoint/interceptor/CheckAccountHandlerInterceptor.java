@@ -1,9 +1,9 @@
 package com.melonltd.naber.endpoint.interceptor;
 
-import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.common.base.Strings;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
-import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
+import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.ResponseData;
 import com.melonltd.naber.rdbms.model.vo.ResponseData.ErrorType;
@@ -29,40 +28,45 @@ import com.melonltd.naber.rdbms.model.vo.ResponseData.Status;
 
 public class CheckAccountHandlerInterceptor implements HandlerInterceptor {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CheckAccountHandlerInterceptor.class);
-
+	
+	private static List<Identity> userIdentitys = Identity.getUserEnumValues();
+	
 	@Autowired
 	private AccountInfoService accountInfoService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		
+		// 如果限制的 RESTful API 沒帶入header
 		String uuid = request.getHeader("Authorization");
 		if (StringUtils.isAllBlank(uuid)) {
 			return false;
 		}
+		
 		AccountInfoVo infoVo = accountInfoService.getCacheBuilderByKey(uuid);
 
-		// 如果沒有登入過
+		// 如果沒有登入過使用API
 		if (!ObjectUtils.allNotNull(infoVo)) {
 			sendError(response);
 			return false;
 		}
 
 		// 如果已經登入過未登出。
-		if ("1".equals(infoVo.getIs_login())) {
+		if ("1".equals(infoVo.getIs_login()) && userIdentitys.contains(Identity.of(infoVo.getIdentity()))) {
 			sendError(response);
 			return false;
 		}
-		
-		long now = Tools.getMinutes(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
-		long loginDate = Tools.getMinutes(infoVo.getLogin_date());
-		long day_7 = 1000* 60* 60* 24* 7L;
-		
-		if (now - loginDate > day_7) {
-			sendError(response);
-			return false;
-		}
-		
+
+		// 如果登入時間超過7天
+//		long now = Tools.getMinutes(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+//		long loginDate = Tools.getMinutes(infoVo.getLogin_date());
+//		long day_7 = 1000 * 60 * 60 * 24 * 7L;
+//		if (now - loginDate > day_7) {
+//			sendError(response);
+//			return false;
+//		}
+
 		return true;
 	}
 
