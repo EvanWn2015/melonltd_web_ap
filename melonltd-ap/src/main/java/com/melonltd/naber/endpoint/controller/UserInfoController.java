@@ -21,7 +21,7 @@ import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.dao.AccountInfoDao;
 
 @Controller
-@RequestMapping({ "" })
+@RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class UserInfoController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserInfoController.class);
 	private static final int PAGE_SIZE = 10;

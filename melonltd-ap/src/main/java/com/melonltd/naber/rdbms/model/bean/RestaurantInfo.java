@@ -15,13 +15,13 @@ public class RestaurantInfo implements Serializable {
 	private static final long serialVersionUID = -3292539927161071406L;
 
 	private String restaurantUUID;
-	private String accountUUID;
 	private String name;
 	private String address;
 	private String storeStart;
 	private String storeEnd;
 	private String notBusiness;
 	private String canStoreRange;
+	private String restaurantCategory;
 	private String latitude;
 	private String longitude;
 	private String bulletin;
@@ -30,16 +30,10 @@ public class RestaurantInfo implements Serializable {
 	private String enable;
 	private String top;
 
-
 	@Id
 	@Column(name = "restaurant_uuid", unique = true, nullable = false)
 	public String getRestaurantUUID() {
 		return restaurantUUID;
-	}
-
-	@Column(name = "account_uuid")
-	public String getAccountUUID() {
-		return accountUUID;
 	}
 
 	@Column(name = "name")
@@ -72,6 +66,12 @@ public class RestaurantInfo implements Serializable {
 		return canStoreRange;
 	}
 
+
+	@Column(name = "restaurant_category")
+	public String getRestaurantCategory() {
+		return restaurantCategory;
+	}
+	
 	@Column(name = "latitude")
 	public String getLatitude() {
 		return latitude;
@@ -111,10 +111,6 @@ public class RestaurantInfo implements Serializable {
 		this.restaurantUUID = restaurantUUID;
 	}
 
-	public void setAccountUUID(String accountUUID) {
-		this.accountUUID = accountUUID;
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -137,6 +133,10 @@ public class RestaurantInfo implements Serializable {
 
 	public void setCanStoreRange(String canStoreRange) {
 		this.canStoreRange = canStoreRange;
+	}
+	
+	public void setRestaurantCategory(String restaurantCategory) {
+		this.restaurantCategory = restaurantCategory;
 	}
 
 	public void setLatitude(String latitude) {
@@ -172,13 +172,13 @@ public class RestaurantInfo implements Serializable {
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())
 				.add("restaurantUUID",restaurantUUID)
-				.add("accountUUID",accountUUID)
 				.add("name",name)
 				.add("address",address)
 				.add("storeStart",storeStart)
 				.add("storeEnd",storeEnd)
 				.add("notBusiness",notBusiness)
 				.add("canStoreRange",canStoreRange)
+				.add("restaurantCategory", restaurantCategory)
 				.add("latitude",latitude)
 				.add("longitude",longitude)
 				.add("bulletin",bulletin)

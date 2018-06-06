@@ -14,24 +14,50 @@ import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.service.push.SMSHttpService;
+import com.melonltd.naber.rdbms.model.type.Identity;
+import com.melonltd.naber.rdbms.model.type.Level;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
+import com.melonltd.naber.rdbms.model.vo.VerifyPhoneLogVo;
 
 @PropertySource("classpath:/config.properties")
 public class MyTest {
 
+	
+	@Test
+	public void getDate() {
+		System.out.println(Instant.now());
+	}
+	
 	@Test
 	public void buildUUID() {
 		int i = 5;
 		while (i != 0) {
-			System.out.println(Tools.buildUUID(UUIDType.NABER_BULLETIN));
+			System.out.println(Tools.buildUUID(UUIDType.AD));
 			i--;
 		}
 	}
 	
 	@Test
-	public void getDate() {
-		System.out.println(Instant.now());
+	public void buildAccount() {
+		AccountInfoVo vo = new AccountInfoVo();
+//		vo.setAccount_uuid(Tools.buildAccountUUID(UUIDType.SELLER));
+//		vo.setName("test_seller");
+		vo.setPhone("0987654321");
+		vo.setPassword("a123456");
+		vo.setDevice_category("ANDRID");
+		vo.setDevice_token("test token");
+//		vo.setAddress("桃園市平鎮區文化街217號");
+//		vo.setBirth_day("1988/04/06");
+//		vo.setEnable("Y");
+//		vo.setEmail("evan.wang@melonltd.com.tw");
+//		vo.setIdentity(Identity.SELLERS.name());
+//		vo.setLevel(Level.MANAGE.name());
+		
+		
+		System.out.println(JsonHelper.toJson(vo));
+		System.out.println(Base64Service.encode(JsonHelper.toJson(vo)));
+		
 	}
 
 	@Test
@@ -132,7 +158,7 @@ public class MyTest {
 
 	@Test
 	public void decode() {
-		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIyZmFsc2UlMjIlMkMlMjJlcnJfY29kZSUyMiUzQSUyMjAwMDQlMjIlMkMlMjJlcnJfbXNnJTIyJTNBJTIyJUU1JUI4JUIzJUU2JTg4JUI2K3Rva2VuKyVFOCVBQSU4RCVFOCVBRCU4OSVFNSVBNCVCMSVFNiU5NSU5NyUyMiUyQyUyMmRhdGElMjIlM0ElMjIlMjIlN0Q=";
+		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIydHJ1ZSUyMiUyQyUyMmRhdGElMjIlM0ElNUIlN0IlMjJ0aXRsZSUyMiUzQSUyMnRpdGxlJTIyJTJDJTIyY29udGVudF90ZXh0JTIyJTNBJTIydGV4dCUyMiUyQyUyMnBob3RvJTIyJTNBJTIyaHR0cHMlM0ElMkYlMkZ3d3cudGhlbG9jYWwuaXQlMkZ1c2VyZGF0YSUyRmltYWdlcyUyRmFydGljbGUlMkY2OTUyMzgzNmIwMTkxNjA4YzQxZDY0MGZlZWFkOGRhMmJlNTQ2MjAzOGQzNDA5ZTFlMzkwMGZhZDAzOWM3ZmM4LmpwZyUyMiU3RCUyQyU3QiUyMnRpdGxlJTIyJTNBJTIydGl0bGUlMjIlMkMlMjJjb250ZW50X3RleHQlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIycGhvdG8lMjIlM0ElMjJodHRwcyUzQSUyRiUyRmhpcHMuaGVhcnN0YXBwcy5jb20lMkZobWctcHJvZC5zMy5hbWF6b25hd3MuY29tJTJGaW1hZ2VzJTJGYnJ1bmNoLWZyaWVuZHMtZm9vZC0xNTI0MDg4MTA2LmpwZyUyMiU3RCUyQyU3QiUyMnRpdGxlJTIyJTNBJTIydGl0bGUlMjIlMkMlMjJjb250ZW50X3RleHQlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIycGhvdG8lMjIlM0ElMjJodHRwcyUzQSUyRiUyRnd3dy5tY2RvbmFsZHMuY29tJTJGY29udGVudCUyRmRhbSUyRnVzYSUyRmRvY3VtZW50cyUyRm1jZGVsaXZlcnklMkZtY2RlbGl2ZXJ5X25ldzExLmpwZyUyMiU3RCUyQyU3QiUyMnRpdGxlJTIyJTNBJTIydGl0bGUlMjIlMkMlMjJjb250ZW50X3RleHQlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIycGhvdG8lMjIlM0ElMjJodHRwcyUzQSUyRiUyRm1lZGlhMy5zLW5iY25ld3MuY29tJTJGaiUyRk1TTkJDJTJGQ29tcG9uZW50cyUyRlZpZGVvJTJGMjAxODAzJTJGdGR5X21rX2pveV9oZWFsdGh5X2Zvb2RfMTgwMzE5XzE5MjB4MTA4MC50b2RheS1pbmxpbmUtdmlkLWZlYXR1cmVkLWRlc2t0b3AuanBnJTIyJTdEJTJDJTdCJTIydGl0bGUlMjIlM0ElMjJ0aXRsZSUyMiUyQyUyMmNvbnRlbnRfdGV4dCUyMiUzQSUyMnRleHQlMjIlMkMlMjJwaG90byUyMiUzQSUyMmh0dHBzJTNBJTJGJTJGY2RuLWEud2lsbGlhbS1yZWVkLmNvbSUyRnZhciUyRndyYm1fZ2JfZm9vZF9waGFybWElMkZzdG9yYWdlJTJGaW1hZ2VzJTJGMyUyRjElMkY4JTJGNCUyRjE0NDgxMy0xLWVuZy1HQiUyRkZyb250LmpwZyUyMiU3RCU1RCU3RA==";
 		System.out.println(Base64Service.decode(code));
 	}
 }

@@ -1,7 +1,9 @@
 package com.melonltd.naber.rdbms.model.service.push;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +17,7 @@ public class AndroidPushService {
 	@Value("${google.fcm.server.key}")
 	private static String SERVER_KEY;
     
-    private static void push(String title, String message, String device_token) throws Exception {
+    public static void push(String title, String message, String device_token) throws IOException {
         String pushMessage = "{\"data\":{\"title\":\"" + title + "\",\"message\":\"" + message + "\"},\"to\":\"" + device_token + "\"}";
         
         // Create connection to send FCM Message request.

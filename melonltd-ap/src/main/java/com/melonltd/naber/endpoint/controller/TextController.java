@@ -5,9 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.service.push.AnpsPushServcie;
 
 @Controller
@@ -20,8 +23,18 @@ public class TextController {
 	@ResponseBody
 	@GetMapping(value = "test/push")
 	public ResponseEntity<String> textPush() {
+		
+		
 		anpsPushServcie.push("A946C4AE9F0C7EDF27AA75D49FE617C1304F921BBFCEE87793CB0BE28C41A442", "", "");
 		return new ResponseEntity<String>("", HttpStatus.OK);
+	}
+	
+	
+	@ResponseBody
+	@PostMapping(value = "restaurant/list")
+	public ResponseEntity<String> login(@RequestParam(value = "data", required = false) String req) {
+		
+		return new ResponseEntity<String>(JsonHelper.toJson(""), HttpStatus.OK);
 	}
 
 }

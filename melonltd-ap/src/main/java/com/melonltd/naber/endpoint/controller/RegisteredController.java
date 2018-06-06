@@ -32,7 +32,7 @@ import com.melonltd.naber.rdbms.model.vo.ResponseData.Status;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 
 @Controller
-@RequestMapping(value = { "" }, produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+@RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class RegisteredController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegisteredController.class);
 	private static List<Identity> needSchoolName = Identity.getNeedSchoolEnumValues();

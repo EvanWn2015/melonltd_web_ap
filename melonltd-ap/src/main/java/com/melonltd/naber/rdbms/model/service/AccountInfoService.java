@@ -15,19 +15,18 @@ import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.bean.AccountInfo;
 import com.melonltd.naber.rdbms.model.dao.AccountInfoDao;
-import com.melonltd.naber.rdbms.model.dao.stored.procedure.LoginDao;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 
 @Service("accountInfoService")
-//@Transactional(readOnly = true)
+// @Transactional(readOnly = true)
 public class AccountInfoService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountInfoService.class);
 
 	@Autowired
 	AccountInfoDao accountInfoDao;
-	
-	@Autowired
-	LoginDao loginDao;
+
+//	@Autowired
+//	LoginDao loginDao;
 
 	LoadingCache<String, AccountInfo> cacheBuilder = CacheBuilder.newBuilder()
 			.build(new CacheLoader<String, AccountInfo>() {
@@ -37,10 +36,6 @@ public class AccountInfoService {
 					return info;
 				}
 			});
-
-	public void clearCacheBuilderByKey(String uuid) {
-		cacheBuilder.invalidate(uuid);
-	}
 
 	public AccountInfoVo getCacheBuilderByKey(String uuid) {
 		AccountInfo info = null;
@@ -53,17 +48,17 @@ public class AccountInfoService {
 		}
 	}
 
-	public AccountInfoVo findByPhoneAndPassword(String phone, String password) {
-		AccountInfo info = loginDao.checkLogin(phone, password,Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
-		if (ObjectUtils.anyNotNull(info)) {
-			info.setIsLogin("1");
-			info.setLoginDate(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
-			cacheBuilder.put(info.getAccountUUID(), info);
-			return AccountInfoVo.of(info);
-		}
-		return null;
-	}
-	
+//	public AccountInfoVo findByPhoneAndPassword(String phone, String password) {
+//		AccountInfo info = loginDao.checkLogin(phone, password, Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+//		if (ObjectUtils.anyNotNull(info)) {
+//			info.setIsLogin("1");
+//			info.setLoginDate(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+//			cacheBuilder.put(info.getAccountUUID(), info);
+//			return AccountInfoVo.of(info);
+//		}
+//		return null;
+//	}
+
 	public AccountInfoVo findByAccountUUID(String uuid) {
 		AccountInfo info = accountInfoDao.findByAccountUUID(uuid);
 		if (ObjectUtils.anyNotNull(info)) {
@@ -72,20 +67,21 @@ public class AccountInfoService {
 		}
 		return null;
 	}
-	
-//	@Transactional(readOnly = false, rollbackFor = HibernateException.class)
+
+	// @Transactional(readOnly = false, rollbackFor = HibernateException.class)
 	public AccountInfo save(AccountInfoVo vo, UUIDType type) {
 		AccountInfo oldInfo = accountInfoDao.findByPhone(vo.getPhone());
 		if (ObjectUtils.allNotNull(oldInfo)) {
 			return null;
 		}
-		
+
 		AccountInfo info = new AccountInfo();
 		info.setAccountUUID(Tools.buildAccountUUID(type));
 		info.setName(vo.getName());
 		info.setPassword(vo.getPassword());
 		info.setPhone(vo.getPhone());
 		info.setEmail(vo.getEmail());
+		info.setBirthDay(vo.getBirth_day());
 		info.setAddress(vo.getAddress());
 		info.setIdentity(vo.getIdentity());
 		info.setSchoolName(vo.getSchool_name());
@@ -96,7 +92,7 @@ public class AccountInfoService {
 		return accountInfoDao.save(info);
 	}
 
-//	@Transactional(readOnly = false, rollbackFor = HibernateException.class)
+	// @Transactional(readOnly = false, rollbackFor = HibernateException.class)
 	public void refreshLoginStatus(String uuid) {
 		AccountInfo info = accountInfoDao.findByAccountUUID(uuid);
 		if (ObjectUtils.anyNotNull(info)) {
@@ -106,4 +102,11 @@ public class AccountInfoService {
 		}
 	}
 
+	public void putCache(AccountInfo info) {
+		cacheBuilder.put(info.getAccountUUID(), info);
+	}
+
+	public void clearCacheBuilderByKey(String uuid) {
+		cacheBuilder.invalidate(uuid);
+	}
 }

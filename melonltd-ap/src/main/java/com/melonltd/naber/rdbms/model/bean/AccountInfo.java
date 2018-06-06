@@ -22,6 +22,7 @@ public class AccountInfo implements Serializable {
 	private String address;
 	private String birthDay;
 	private String identity;
+	private String restaurantUUID;
 	private String schoolName;
 	private String bonus;
 	private String level;
@@ -71,7 +72,12 @@ public class AccountInfo implements Serializable {
 	public String getIdentity() {
 		return identity;
 	}
-
+	
+	@Column(name = "restaurant_uuid")
+	public String getRestaurantUUID() {
+		return restaurantUUID;
+	}
+	
 	@Column(name = "school_name")
 	public String getSchoolName() {
 		return schoolName;
@@ -142,6 +148,10 @@ public class AccountInfo implements Serializable {
 	
 	public void setIdentity(String identity) {
 		this.identity = identity;
+	}
+	
+	public void setRestaurantUUID(String restaurantUUID) {
+		this.restaurantUUID = restaurantUUID;
 	}
 
 	public void setSchoolName(String schoolName) {

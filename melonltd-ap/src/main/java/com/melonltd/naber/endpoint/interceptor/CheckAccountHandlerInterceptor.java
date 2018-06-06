@@ -41,6 +41,7 @@ public class CheckAccountHandlerInterceptor implements HandlerInterceptor {
 		// 如果限制的 RESTful API 沒帶入header
 		String uuid = request.getHeader("Authorization");
 		if (StringUtils.isAllBlank(uuid)) {
+			sendError(response);
 			return false;
 		}
 		

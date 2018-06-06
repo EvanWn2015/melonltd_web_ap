@@ -9,6 +9,7 @@ public class AccountInfoVo implements Serializable{
 	private static final long serialVersionUID = 7659391411455993337L;
 	
 	private String account_uuid;
+	private String restaurant_uuid;
 	private String password;
 	private String name;
 	private String email;
@@ -42,6 +43,14 @@ public class AccountInfoVo implements Serializable{
 
 	public void setAccount_uuid(String account_uuid) {
 		this.account_uuid = account_uuid;
+	}
+
+	public String getRestaurant_uuid() {
+		return restaurant_uuid;
+	}
+
+	public void setRestaurant_uuid(String restaurant_uuid) {
+		this.restaurant_uuid = restaurant_uuid;
 	}
 
 	public String getPassword() {
@@ -177,6 +186,7 @@ public class AccountInfoVo implements Serializable{
 		return MoreObjects
 				.toStringHelper(this.getClass())
 				.add("account_uuid",account_uuid)
+				.add("restaurant_uuid",restaurant_uuid)
 				.add("name",name)
 				.add("password",password)
 				.add("email",email)
@@ -200,6 +210,7 @@ public class AccountInfoVo implements Serializable{
 	public static AccountInfoVo of(AccountInfo info) {
 		AccountInfoVo vo = new AccountInfoVo();
 		vo.account_uuid = info.getAccountUUID();
+		vo.restaurant_uuid = info.getRestaurantUUID();
 		vo.name = info.getName();
 		vo.email = info.getEmail();
 		vo.phone = info.getPhone();

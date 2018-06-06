@@ -11,7 +11,7 @@ import java.util.UUID;
 public class Tools {
 
 	public static enum UUIDType {
-		ADMIN, USER, SELLER, NABER_BULLETIN
+		ADMIN, USER, SELLER, NABER_BULLETIN, RESTAURANT, DEVICE, AD
 	}
 
 	/**

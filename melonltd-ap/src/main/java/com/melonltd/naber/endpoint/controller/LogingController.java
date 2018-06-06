@@ -18,31 +18,35 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
+import com.melonltd.naber.rdbms.model.service.facade.LoginService;
+import com.melonltd.naber.rdbms.model.type.DeviceCategory;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.ResponseData;
 import com.melonltd.naber.rdbms.model.vo.ResponseData.Status;
 
 @Controller
-@RequestMapping(value = { "" }, produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+@RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class LogingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LogingController.class);
 
 	@Autowired
 	AccountInfoService accountInfoService;
+	
+	@Autowired
+	LoginService loginService;
 
 	@ResponseBody
 	@PostMapping(value = "login")
 	public ResponseEntity<String> login(@RequestParam(value = "data", required = false) String req) {
 		String request = Base64Service.decode(req);
 		AccountInfoVo vo = JsonHelper.json(request, AccountInfoVo.class);
-		
-		vo = accountInfoService.findByPhoneAndPassword(vo.getPhone(), vo.getPassword());
+		DeviceCategory category = DeviceCategory.of(vo.getDevice_category());
+		vo = loginService.checkLoginAndChangeStatusAndIntoDeviceToken(vo.getPhone(), vo.getPassword(),vo.getDevice_token(), category);
 		LinkedHashMap<String, Object> map = ResponseData.of(Status.TRUE, null, vo);
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
-	
 	
 	@ResponseBody
 	@PostMapping(value = "logout")

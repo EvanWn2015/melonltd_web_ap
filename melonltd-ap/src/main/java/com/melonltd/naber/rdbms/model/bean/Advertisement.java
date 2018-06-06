@@ -10,21 +10,22 @@ import javax.persistence.Table;
 import com.google.common.base.MoreObjects;
 
 @Entity
-@Table(name = "naber_bulletin")
-public class NaberBulletin implements Serializable {
-	private static final long serialVersionUID = 6082665371149846602L;
-
-	private String bulletinUUID;
+@Table(name = "advertisement")
+public class Advertisement implements Serializable{ 
+	private static final long serialVersionUID = -8066578462454308401L;
+	
+	private String adUUID;
 	private String title;
 	private String contentText;
-	private String bulletinCategory;
+	private String photo;
+	private String photoType;
 	private String enable;
 	private String createDate;
 	
 	@Id
-	@Column(name = "bulletin_uuid", unique = true, nullable = false)
-	public String getBulletinUUID() {
-		return bulletinUUID;
+	@Column(name = "ad_uuid", unique = true, nullable = false)
+	public String getAdUUID() {
+		return adUUID;
 	}
 	
 	@Column(name = "title")
@@ -37,9 +38,14 @@ public class NaberBulletin implements Serializable {
 		return contentText;
 	}
 	
-	@Column(name = "bulletin_category")
-	public String getBulletinCategory() {
-		return bulletinCategory;
+	@Column(name = "photo")
+	public String getPhoto() {
+		return photo;
+	}
+	
+	@Column(name = "photo_type")
+	public String getPhotoType() {
+		return photoType;
 	}
 	
 	@Column(name = "enable")
@@ -52,8 +58,8 @@ public class NaberBulletin implements Serializable {
 		return createDate;
 	}
 	
-	public void setBulletinUUID(String bulletinUUID) {
-		this.bulletinUUID = bulletinUUID;
+	public void setAdUUID(String adUUID) {
+		this.adUUID = adUUID;
 	}
 
 	public void setTitle(String title) {
@@ -64,8 +70,12 @@ public class NaberBulletin implements Serializable {
 		this.contentText = contentText;
 	}
 
-	public void setBulletinCategory(String bulletinCategory) {
-		this.bulletinCategory = bulletinCategory;
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+	public void setPhotoType(String photoType) {
+		this.photoType = photoType;
 	}
 
 	public void setEnable(String enable) {
@@ -79,14 +89,14 @@ public class NaberBulletin implements Serializable {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())
-				.add("bulletinUUID",bulletinUUID)
-				.add("title",title)
-				.add("contentText",contentText)
-				.add("bulletinCategory",bulletinCategory)
-				.add("enable",enable)
-				.add("createDate",createDate)
+				.add("adUUID", adUUID)
+				.add("title", title)
+				.add("contentText", contentText)
+				.add("photo", photo)
+				.add("photoType", photoType)
+				.add("createDate", createDate)
+				.add("enable", enable)
 				.toString();
 	}
 	
-
 }

@@ -32,22 +32,6 @@ public class AnpsPushServcie {
 		return SERVICE;
 	}
 
-//	public static void main(String[] args) {
-		//
-		// ApnsService service =
-		// APNS.newService()
-		// .withCert(PATH_TO_P12_CERT, CERT_PASSWORD)
-		// .withSandboxDestination()
-		// .build();
-
-		// String payload = APNS.newPayload()
-		// .alertBody("My first notification\nHello, I'm push notification")
-		// .sound("default")
-		// .build();
-		// service.push(DEVICE_TOKEN, payload)
-		// System.out.println("The message has been hopefully sent...");
-//	}
-
 	public void push(String device_token, String title, String message) {
 		
 		String payload = APNS.newPayload().alertBody("My first notification\nHello, I'm push notification"+ Instant.now())
@@ -56,12 +40,5 @@ public class AnpsPushServcie {
 		ApnsNotification notify = getInstance().push(device_token.getBytes(), payload.getBytes());
 		System.out.println("The message has been hopefully sent...");
 		
-		
-		// String payload = APNS.newPayload()
-		// .alertBody("My first notification\nHello, I'm push notification")
-		// .sound("default").build();
-		//
-		// getInstance().push(device_token, payload);
-		// System.out.println("The message has been hopefully sent...");
 	}
 }
