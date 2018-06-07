@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.service.VerifyPhoneLogService;
-import com.melonltd.naber.rdbms.model.vo.ResponseData;
-import com.melonltd.naber.rdbms.model.vo.ResponseData.ErrorType;
-import com.melonltd.naber.rdbms.model.vo.ResponseData.Status;
+import com.melonltd.naber.rdbms.model.vo.RespData;
+import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
+import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 import com.melonltd.naber.rdbms.model.vo.VerifyPhoneLogVo;
 
 @Controller
@@ -38,9 +38,9 @@ public class VerifyController {
 		String batchId = verifyPhoneLogService.sendSMS(vo.getPhone_number());
 		if (batchId != null) {
 			vo.setBatch_id(batchId);
-			map = ResponseData.of(Status.TRUE, null, vo);
+			map = RespData.of(Status.TRUE, null, vo);
 		} else {
-			map = ResponseData.of(Status.FALSE, ErrorType.SEND_SMS_FAIL, null);
+			map = RespData.of(Status.FALSE, ErrorType.SEND_SMS_FAIL, null);
 		}
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
@@ -53,10 +53,10 @@ public class VerifyController {
 		VerifyPhoneLogVo vo = JsonHelper.json(request, VerifyPhoneLogVo.class);
 		LinkedHashMap<String, Object> map = null;
 		if (StringUtils.isBlank(vo.getCode()) || vo.getCode().length() != 6) {
-			map = ResponseData.of(Status.FALSE, ErrorType.VERIFY_CODE_FAIL, "");
+			map = RespData.of(Status.FALSE, ErrorType.VERIFY_CODE_FAIL, "");
 		} else {
 			ErrorType error = verifyPhoneLogService.verifyCode(vo.getBatch_id(), vo.getCode());
-			map = ResponseData.of(error == null ? Status.TRUE : Status.FALSE, error, "");
+			map = RespData.of(error == null ? Status.TRUE : Status.FALSE, error, "");
 		}
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);

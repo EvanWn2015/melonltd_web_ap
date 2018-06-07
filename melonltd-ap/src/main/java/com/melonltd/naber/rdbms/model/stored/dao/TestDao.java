@@ -1,4 +1,4 @@
-package com.melonltd.naber.rdbms.model.dao.stored.procedure;
+package com.melonltd.naber.rdbms.model.stored.dao;
 
 import java.util.List;
 

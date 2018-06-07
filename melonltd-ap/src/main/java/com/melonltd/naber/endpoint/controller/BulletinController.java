@@ -17,8 +17,8 @@ import com.melonltd.naber.rdbms.model.service.AdvertisementService;
 import com.melonltd.naber.rdbms.model.service.NaberBulletinService;
 import com.melonltd.naber.rdbms.model.vo.AdvertisementVo;
 import com.melonltd.naber.rdbms.model.vo.NaberBulletinVo;
-import com.melonltd.naber.rdbms.model.vo.ResponseData;
-import com.melonltd.naber.rdbms.model.vo.ResponseData.Status;
+import com.melonltd.naber.rdbms.model.vo.RespData;
+import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
@@ -34,7 +34,7 @@ public class BulletinController {
 	@PostMapping(value = "naber/bulletin")
 	public ResponseEntity<String> naberBulletin() {
 		List<NaberBulletinVo> list = naberBulletinService.findAll();
-		LinkedHashMap<String, Object> map = ResponseData.of(Status.TRUE, null, list);
+		LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, list);
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
@@ -43,7 +43,7 @@ public class BulletinController {
 	@PostMapping(value = "naber/advertisement")
 	public ResponseEntity<String> naberAdvertisement() {
 		List<AdvertisementVo> list = advertisementService.findAll();
-		LinkedHashMap<String, Object> map = ResponseData.of(Status.TRUE, null, list);
+		LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, list);
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}

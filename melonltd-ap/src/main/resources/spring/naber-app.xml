@@ -43,10 +43,11 @@
 	<bean id="naberTx" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="naberEm" />
 	</bean>
-	
+	<!-- <property name="persistenceUnitName" value="vodPersistenceUnit" /> -->
 	<bean id="naberEm"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="naberDs" />
+		
 		<property name="packagesToScan">
 			<list>
 				<value>com.melonltd.naber.rdbms.model</value>

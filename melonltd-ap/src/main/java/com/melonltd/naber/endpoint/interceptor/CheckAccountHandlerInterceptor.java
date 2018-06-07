@@ -22,9 +22,9 @@ import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
-import com.melonltd.naber.rdbms.model.vo.ResponseData;
-import com.melonltd.naber.rdbms.model.vo.ResponseData.ErrorType;
-import com.melonltd.naber.rdbms.model.vo.ResponseData.Status;
+import com.melonltd.naber.rdbms.model.vo.RespData;
+import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
+import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 
 public class CheckAccountHandlerInterceptor implements HandlerInterceptor {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CheckAccountHandlerInterceptor.class);
@@ -91,7 +91,7 @@ public class CheckAccountHandlerInterceptor implements HandlerInterceptor {
 		response.setHeader("content-type", "text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		LinkedHashMap<String, Object> map = null;
-		map = ResponseData.of(Status.FALSE, ErrorType.HEADESR_ERROR, "");
+		map = RespData.of(Status.FALSE, ErrorType.HEADESR_ERROR, "");
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		response.getWriter().write(result);
 	}

@@ -26,9 +26,9 @@ import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.SellerRegisteredService;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
-import com.melonltd.naber.rdbms.model.vo.ResponseData;
-import com.melonltd.naber.rdbms.model.vo.ResponseData.ErrorType;
-import com.melonltd.naber.rdbms.model.vo.ResponseData.Status;
+import com.melonltd.naber.rdbms.model.vo.RespData;
+import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
+import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 
 @Controller
@@ -54,13 +54,13 @@ public class RegisteredController {
 		if (error == null) {
 			AccountInfo info = accountInfoService.save(vo, UUIDType.USER);
 			if (ObjectUtils.allNotNull(info)) {
-				map = ResponseData.of(Status.TRUE, null, "");
+				map = RespData.of(Status.TRUE, null, "");
 			} else {
 				LOGGER.error("save user error : phone: {}, name: {}", vo.getPhone(), vo.getName());
-				map = ResponseData.of(Status.FALSE, ErrorType.SAVE_ERROR, "");
+				map = RespData.of(Status.FALSE, ErrorType.SAVE_ERROR, "");
 			}
 		} else {
-			map = ResponseData.of(Status.FALSE, error, "");
+			map = RespData.of(Status.FALSE, error, "");
 		}
 
 		System.out.println(JsonHelper.toJson(map));
@@ -80,13 +80,13 @@ public class RegisteredController {
 		if (error == null) {
 			SellerRegistered info = sellerRegisteredService.save(vo);
 			if (ObjectUtils.allNotNull(info)) {
-				map = ResponseData.of(Status.TRUE, null, "");
+				map = RespData.of(Status.TRUE, null, "");
 			} else {
 				LOGGER.error("save seller error, seller name : {}, device id : {}", vo.getSeller_name(), vo.getDevice_id());
-				map = ResponseData.of(Status.FALSE, ErrorType.SAVE_ERROR, "");
+				map = RespData.of(Status.FALSE, ErrorType.SAVE_ERROR, "");
 			}
 		} else {
-			map = ResponseData.of(Status.FALSE, error, "");
+			map = RespData.of(Status.FALSE, error, "");
 		}
 		System.out.println(JsonHelper.toJson(map));
 		String result = Base64Service.encode(JsonHelper.toJson(map));

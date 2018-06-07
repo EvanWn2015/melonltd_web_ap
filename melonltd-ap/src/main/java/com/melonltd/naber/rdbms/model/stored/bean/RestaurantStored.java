@@ -1,19 +1,39 @@
-package com.melonltd.naber.rdbms.model.bean;
+package com.melonltd.naber.rdbms.model.stored.bean;
 
 import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
 
 @Entity
-@Table(name = "restaurant_info")
-public class RestaurantInfo implements Serializable {
-	private static final long serialVersionUID = -3292539927161071406L;
+//@Table(name = "RestaurantStored")
+//@NamedStoredProcedureQueries({
+//   @NamedStoredProcedureQuery(name = "getRestaurantDistanceByLatlng", 
+//                              procedureName = "get_restaurant_distance_by_latlng",
+//                              parameters = {
+//                                 @StoredProcedureParameter(mode = ParameterMode.IN, name = "in_latitude", type = String.class),
+//                                 @StoredProcedureParameter(mode = ParameterMode.IN, name = "", type = String.class)
+////                                 @StoredProcedureParameter(mode = ParameterMode.OUT, name = "out_longitude", type = RestaurantInfoVo.class),
+////                                 @StoredProcedureParameter(mode = ParameterMode.OUT, name = "in_longitude", type = String.class),
+//                              },
+//                              resultClasses = RestaurantStored.class)
+//})
 
+//@NamedStoredProcedureQuery(
+//        name="get_restaurant_distance_by_latlng",
+//        procedureName="get_restaurant_distance_by_latlng",
+//        resultClasses = { RestaurantStored.class },
+//        parameters={
+//            @StoredProcedureParameter(name="in_latitude", type=String.class, mode=ParameterMode.IN),
+//            @StoredProcedureParameter(name="in_longitude", type=String.class, mode=ParameterMode.IN)
+//        }
+//)
+public class RestaurantStored implements Serializable{
+	private static final long serialVersionUID = -3325633702432906952L;
+	
 	private String restaurantUUID;
 	private String name;
 	private String address;
@@ -30,6 +50,7 @@ public class RestaurantInfo implements Serializable {
 	private String photoType;
 	private String enable;
 	private String top;
+	private String distance;
 
 	@Id
 	@Column(name = "restaurant_uuid", unique = true, nullable = false)
@@ -66,7 +87,7 @@ public class RestaurantInfo implements Serializable {
 	public String getCanStoreRange() {
 		return canStoreRange;
 	}
-
+	
 
 	@Column(name = "restaurant_category")
 	public String getRestaurantCategory() {
@@ -92,7 +113,7 @@ public class RestaurantInfo implements Serializable {
 	public String getPhoto() {
 		return photo;
 	}
-
+	
 	@Column(name = "background_photo")
 	public String getBackgroundPhoto() {
 		return backgroundPhoto;
@@ -111,6 +132,15 @@ public class RestaurantInfo implements Serializable {
 	@Column(name = "top")
 	public String getTop() {
 		return top;
+	}
+
+	@Column(name = "distance")
+	public String getDistance() {
+		return distance;
+	}
+
+	public void setDistance(String distance) {
+		this.distance = distance;
 	}
 
 	public void setRestaurantUUID(String restaurantUUID) {
@@ -164,7 +194,7 @@ public class RestaurantInfo implements Serializable {
 	public void setBackgroundPhoto(String backgroundPhoto) {
 		this.backgroundPhoto = backgroundPhoto;
 	}
-	
+
 	public void setPhotoType(String photoType) {
 		this.photoType = photoType;
 	}
@@ -193,10 +223,13 @@ public class RestaurantInfo implements Serializable {
 				.add("longitude",longitude)
 				.add("bulletin",bulletin)
 				.add("photo",photo)
+				.add("backgroundPhoto", backgroundPhoto)
 				.add("photoType",photoType)
 				.add("enable",enable)
 				.add("top",top)
 				.toString();
 	}
-
+	
+	
+	
 }

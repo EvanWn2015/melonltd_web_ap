@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 
 import com.google.common.collect.Maps;
 
-public class ResponseData {
+public class RespData {
 	public enum Status {
 		TRUE("true"), FALSE("false");
 		private String name;
