@@ -17,21 +17,28 @@ public class CategoryFoodRel implements Serializable {
 	private String foodUUID;
 	private String categoryUUID;
 	private String foodName;
+	private String defaultPrice;
 	private String photo;
 	private String photoType;
 	private String foodData;
 	private String status;
 	private String enable;
+	private String createDate;
 
 	@Id
 	@Column(name = "food_uuid", unique = true, nullable = false)
 	public String getFoodUUID() {
 		return foodUUID;
 	}
-
+	
 	@Column(name = "category_uuid")
 	public String getCategoryUUID() {
 		return categoryUUID;
+	}
+
+	@Column(name = "default_price")
+	public String getDefaultPrice() {
+		return defaultPrice;
 	}
 
 	@Column(name = "food_name")
@@ -64,6 +71,12 @@ public class CategoryFoodRel implements Serializable {
 		return enable;
 	}
 
+	@Column(name = "create_date")
+	public String getCreateDate() {
+		return createDate;
+	}
+	
+	
 	public void setFoodUUID(String foodUUID) {
 		this.foodUUID = foodUUID;
 	}
@@ -74,6 +87,10 @@ public class CategoryFoodRel implements Serializable {
 
 	public void setFoodName(String foodName) {
 		this.foodName = foodName;
+	}
+
+	public void setDefaultPrice(String defaultPrice) {
+		this.defaultPrice = defaultPrice;
 	}
 
 	public void setPhoto(String photo) {
@@ -95,7 +112,11 @@ public class CategoryFoodRel implements Serializable {
 	public void setEnable(String enable) {
 		this.enable = enable;
 	}
-	
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
 	@Override
 	public String toString() {
 		return MoreObjects
@@ -103,11 +124,13 @@ public class CategoryFoodRel implements Serializable {
 				.add("foodUUID",foodUUID)
 				.add("categoryUUID",categoryUUID)
 				.add("foodName",foodName)
+				.add("defaultPrice", defaultPrice)
 				.add("photo",photo)
 				.add("photoType",photoType)
 				.add("foodData",foodData)
 				.add("status",status)
 				.add("enable",enable)
+				.add("createDa", createDate)
 				.toString();
 	}
 

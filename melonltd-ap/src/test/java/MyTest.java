@@ -16,17 +16,20 @@ import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
-import com.melonltd.naber.rdbms.model.service.push.SMSHttpService;
+import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
 import com.melonltd.naber.rdbms.model.vo.ReqData;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
+import com.melonltd.naber.rdbms.model.vo.food.FoodItemVo;
 
 @PropertySource("classpath:/config.properties")
 public class MyTest {
 
 	@Test
 	public void mytest() {
+		
+		System.out.println(true && true && true);
 		ReqData data = new ReqData();
 		data.setSearch_type("TOP");
 		data.setTop(30);
@@ -55,8 +58,8 @@ public class MyTest {
 		System.out.println(Instant.now());
 		System.out.println(Tools.getGMTDate("HH:mm"));
 
-		String start = "23:00";
-		String end = "02:00";
+		String start = "09:30";
+		String end = "17:30";
 		// String now = Tools.getGMTDate("HH:mm");
 		String now = "02:10";
 
@@ -74,10 +77,12 @@ public class MyTest {
 
 	}
 	
+	
 	@Test
 	public void myBu() {
-		String store_start = "23:00";
-		String store_end = "12:00";
+		
+		String store_start = "09:00";
+		String store_end = "17:30";
 		Integer start = Integer.parseInt(new StringBuffer(store_start).deleteCharAt(2).toString());
 		Integer end = Integer.parseInt(new StringBuffer(store_end).deleteCharAt(2).toString());
 		List<DateRangeVo> list = Lists.<DateRangeVo>newArrayList();
@@ -86,10 +91,22 @@ public class MyTest {
 		}else {
 			list = buildDateRangeReverse(start,end);
 		}
-		boolean status = buildRanges(list);
+//		boolean status = buildRanges(list);
+//		System.out.println(list);
+//		
+//		System.out.println(JsonHelper.toJson(list));
+		
+		System.out.println("---->");
+		System.out.println(list);
+		System.out.println("---->");
+		System.out.println(JsonHelper.toJson(list));
+		System.out.println("---->");
+		System.out.println(JsonHelper.jsonArray(JsonHelper.toJson(list), DateRangeVo[].class));
+		System.out.println("<----");
+		
 		
 //		System.out.println(org.apache.commons.lang3.Range.<String>between("23:31", "24:00").contains("13:30"));
-		System.out.println(status);
+//		System.out.println(status);
 
 	}
 	
@@ -166,7 +183,7 @@ public class MyTest {
 	public void buildUUID() {
 		int i = 5;
 		while (i != 0) {
-			System.out.println(Tools.buildUUID(UUIDType.AD));
+			System.out.println(Tools.buildUUID(UUIDType.FOOD));
 			i--;
 		}
 	}
@@ -290,7 +307,15 @@ public class MyTest {
 
 	@Test
 	public void decode() {
-		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIydHJ1ZSUyMiUyQyUyMmRhdGElMjIlM0ElNUIlN0IlMjJ0aXRsZSUyMiUzQSUyMnRpdGxlJTIyJTJDJTIyY29udGVudF90ZXh0JTIyJTNBJTIydGV4dCUyMiUyQyUyMnBob3RvJTIyJTNBJTIyaHR0cHMlM0ElMkYlMkZ3d3cudGhlbG9jYWwuaXQlMkZ1c2VyZGF0YSUyRmltYWdlcyUyRmFydGljbGUlMkY2OTUyMzgzNmIwMTkxNjA4YzQxZDY0MGZlZWFkOGRhMmJlNTQ2MjAzOGQzNDA5ZTFlMzkwMGZhZDAzOWM3ZmM4LmpwZyUyMiU3RCUyQyU3QiUyMnRpdGxlJTIyJTNBJTIydGl0bGUlMjIlMkMlMjJjb250ZW50X3RleHQlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIycGhvdG8lMjIlM0ElMjJodHRwcyUzQSUyRiUyRmhpcHMuaGVhcnN0YXBwcy5jb20lMkZobWctcHJvZC5zMy5hbWF6b25hd3MuY29tJTJGaW1hZ2VzJTJGYnJ1bmNoLWZyaWVuZHMtZm9vZC0xNTI0MDg4MTA2LmpwZyUyMiU3RCUyQyU3QiUyMnRpdGxlJTIyJTNBJTIydGl0bGUlMjIlMkMlMjJjb250ZW50X3RleHQlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIycGhvdG8lMjIlM0ElMjJodHRwcyUzQSUyRiUyRnd3dy5tY2RvbmFsZHMuY29tJTJGY29udGVudCUyRmRhbSUyRnVzYSUyRmRvY3VtZW50cyUyRm1jZGVsaXZlcnklMkZtY2RlbGl2ZXJ5X25ldzExLmpwZyUyMiU3RCUyQyU3QiUyMnRpdGxlJTIyJTNBJTIydGl0bGUlMjIlMkMlMjJjb250ZW50X3RleHQlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIycGhvdG8lMjIlM0ElMjJodHRwcyUzQSUyRiUyRm1lZGlhMy5zLW5iY25ld3MuY29tJTJGaiUyRk1TTkJDJTJGQ29tcG9uZW50cyUyRlZpZGVvJTJGMjAxODAzJTJGdGR5X21rX2pveV9oZWFsdGh5X2Zvb2RfMTgwMzE5XzE5MjB4MTA4MC50b2RheS1pbmxpbmUtdmlkLWZlYXR1cmVkLWRlc2t0b3AuanBnJTIyJTdEJTJDJTdCJTIydGl0bGUlMjIlM0ElMjJ0aXRsZSUyMiUyQyUyMmNvbnRlbnRfdGV4dCUyMiUzQSUyMnRleHQlMjIlMkMlMjJwaG90byUyMiUzQSUyMmh0dHBzJTNBJTJGJTJGY2RuLWEud2lsbGlhbS1yZWVkLmNvbSUyRnZhciUyRndyYm1fZ2JfZm9vZF9waGFybWElMkZzdG9yYWdlJTJGaW1hZ2VzJTJGMyUyRjElMkY4JTJGNCUyRjE0NDgxMy0xLWVuZy1HQiUyRkZyb250LmpwZyUyMiU3RCU1RCU3RA==";
+		String json = "{\"food_name\":\"奶茶\",\"price\":\"2323\",\"opts\":[{\"name\":\"布丁\",\"price\":\"5\"},{\"name\":\"仙草\",\"price\":\"15\"}],\"scopes\":[{\"name\":\"超大杯\",\"price\":\"15\"},{\"name\":\"大杯\",\"price\":\"15\"},{\"name\":\"中杯\",\"price\":\"5\"},{\"name\":\"小杯\",\"price\":\"5\"}],\"demands\":[{\"name\":\"甜度\",\"datas\":[{\"name\":\"全糖\"},{\"name\":\"8分糖\"},{\"name\":\"無糖\"}]},{\"name\":\"冰塊\",\"datas\":[{\"name\":\"正常\"},{\"name\":\"少冰\"},{\"name\":\"微冰\"},{\"name\":\"去冰\"}]}]}";
+		
+		FoodItemVo vo = JsonHelper.json(json, FoodItemVo.class);
+		System.out.println(vo);
+		String encode = "{\"uuid\":\"RESTAURANT_4045aaa1-380c-4f6d-a44f-6b411ba8311c\"}";
+		System.out.println(Base64Service.encode(encode));
+		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIydHJ1ZSUyMiUyQyUyMmRhdGElMjIlM0ElNUIlN0IlMjJjYXRlZ29yX3V1aWQlMjIlM0ElMjJSRVNUQVVSQU5UX0NBVEVHT1JZXzJlNzQxMmQ2LTMxMDYtNDMyYy04OGI5LTdkNzgxN2NjODg1NyUyMiUyQyUyMnJlc3RhdXJhbnRfdXVpZCUyMiUzQSUyMlJFU1RBVVJBTlRfNDA0NWFhYTEtMzgwYy00ZjZkLWE0NGYtNmI0MTFiYTgzMTFjJTIyJTJDJTIyY2F0ZWdvcnlfbmFtZSUyMiUzQSUyMiVFNyU4NiU5RiVFOSVBMyU5RiUyMiUyQyUyMnN0YXR1cyUyMiUzQSUyMk9QRU4lMjIlN0QlMkMlN0IlMjJjYXRlZ29yX3V1aWQlMjIlM0ElMjJSRVNUQVVSQU5UX0NBVEVHT1JZXzkwNjY2ZGM5LThmMGYtNGQ0Ni1iOTk2LWE3NGE2NjVmYjVhNSUyMiUyQyUyMnJlc3RhdXJhbnRfdXVpZCUyMiUzQSUyMlJFU1RBVVJBTlRfNDA0NWFhYTEtMzgwYy00ZjZkLWE0NGYtNmI0MTFiYTgzMTFjJTIyJTJDJTIyY2F0ZWdvcnlfbmFtZSUyMiUzQSUyMiVFNSU4NiVCNyVFOSVBMyVCMiUyMiUyQyUyMnN0YXR1cyUyMiUzQSUyMk9QRU4lMjIlN0QlMkMlN0IlMjJjYXRlZ29yX3V1aWQlMjIlM0ElMjJSRVNUQVVSQU5UX0NBVEVHT1JZX2MwZDE3ZjI0LTdiN2YtNGUxMy1hZGRkLWMyOTkwZjQzNTRmOCUyMiUyQyUyMnJlc3RhdXJhbnRfdXVpZCUyMiUzQSUyMlJFU1RBVVJBTlRfNDA0NWFhYTEtMzgwYy00ZjZkLWE0NGYtNmI0MTFiYTgzMTFjJTIyJTJDJTIyY2F0ZWdvcnlfbmFtZSUyMiUzQSUyMiVFNyU4NiVCMSVFOSVBMyVCMiUyMiUyQyUyMnN0YXR1cyUyMiUzQSUyMk9QRU4lMjIlN0QlNUQlN0Q=";
 		System.out.println(Base64Service.decode(code));
 	}
+	
+	
 }

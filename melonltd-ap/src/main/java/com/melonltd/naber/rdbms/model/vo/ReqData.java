@@ -1,6 +1,8 @@
 package com.melonltd.naber.rdbms.model.vo;
 
 public class ReqData {
+	
+	private String uuid;
 	private String search_type;
 	private String area;
 	private int page;
@@ -9,7 +11,12 @@ public class ReqData {
 	private String latitude;
 	private String category;
 	
-	
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
 	public String getSearch_type() {
 		return search_type;
 	}

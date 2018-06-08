@@ -9,8 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.google.common.collect.Lists;
@@ -22,7 +22,7 @@ public class Tools {
 	private static DecimalFormat DF = new DecimalFormat();
 	
 	public static enum UUIDType {
-		ADMIN, USER, SELLER, NABER_BULLETIN, RESTAURANT, DEVICE, AD
+		ADMIN, USER, SELLER, NABER_BULLETIN, RESTAURANT, RESTAURANT_CATEGORY, DEVICE, AD, FOOD
 	}
 
 	/**
@@ -54,7 +54,6 @@ public class Tools {
 		String uu = type.name() + "_" + uuid.toString();
 		return uu;
 	}
-	
 
 	public static String buildAccountUUID(UUIDType type) {
 		UUID uuid = UUID.randomUUID();
@@ -71,26 +70,24 @@ public class Tools {
 		return"";
 	}	
 	
-	
-	public static boolean checkOpenStore(String start, String end) {
+	// 檢查每日營業時間範圍
+	public static boolean checkOpenStore(String start, String end, String now) {
 		boolean status = false;
-		String now = Tools.getGMTDate("HH:mm");
 		if (start.compareTo(end) >= 1) {
 			status = start.compareTo(now) < 1 || now.compareTo(end) < 1;
 		}else {
-			Range<String> range = Range.open(start, end);
-			status = range.contains(now);
+			status = org.apache.commons.lang3.Range.<String>between(start, end).contains(now);
 		}
 		return status;
 	}
 	
-	public boolean checkOpenStoreByRanges (List<DateRangeVo> list){
-		String now = Tools.getGMTDate("HH:mm");
-		long count = 0;
-		count = list.stream()
-				.filter(f -> "Y".equals(f.getStatus()) && org.apache.commons.lang3.Range.<String>between(f.getDate().substring(0, 5), f.getDate().substring(6, 11)).contains(now))
-				.count();
-		return count < 1 ? false : true ;
+	// 檢查接單開關時間範圍
+	public static List<DateRangeVo> checkOpenStoreByRanges (String canStoreRange, String now){
+		
+		List<DateRangeVo> list = JsonHelper.jsonArray(canStoreRange, DateRangeVo[].class);
+		return list.stream()
+				.filter(f -> "N".equals(f.getStatus()) && org.apache.commons.lang3.Range.<String>between(f.getDate().substring(0, 5), f.getDate().substring(6, 11)).contains(now))
+				.collect(Collectors.toList());
 	}
 	
 	

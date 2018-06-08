@@ -1,9 +1,8 @@
-package com.melonltd.naber.rdbms.model.service.push;
+package com.melonltd.naber.rdbms.model.push.service;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Value;

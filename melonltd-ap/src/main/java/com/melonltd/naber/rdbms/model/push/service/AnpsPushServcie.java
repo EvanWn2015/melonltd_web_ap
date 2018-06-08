@@ -1,4 +1,4 @@
-package com.melonltd.naber.rdbms.model.service.push;
+package com.melonltd.naber.rdbms.model.push.service;
 
 import java.time.Instant;
 

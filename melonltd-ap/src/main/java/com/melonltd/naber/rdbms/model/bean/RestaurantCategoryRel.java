@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.google.common.base.MoreObjects;
+
 @Entity
 @Table(name = "restaurant_category_rel")
 public class RestaurantCategoryRel implements Serializable {
@@ -17,6 +19,7 @@ public class RestaurantCategoryRel implements Serializable {
 	private String categoryName;
 	private String status;
 	private String enable;
+	private String createDate;
 
 	@Id
 	@Column(name = "category_uui", unique = true, nullable = false)
@@ -44,6 +47,11 @@ public class RestaurantCategoryRel implements Serializable {
 		return enable;
 	}
 
+	@Column(name = "create_date")
+	public String getCreateDate() {
+		return createDate;
+	}
+	
 	public void setCategorUUID(String categorUUID) {
 		this.categorUUID = categorUUID;
 	}
@@ -62,6 +70,22 @@ public class RestaurantCategoryRel implements Serializable {
 
 	public void setEnable(String enable) {
 		this.enable = enable;
+	}
+	
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this.getClass())
+				.add("categorUUID",categorUUID)
+				.add("restaurantUUID",restaurantUUID)
+				.add("categoryName",categoryName)
+				.add("status",status)
+				.add("enable",enable)
+				.add("createDate",createDate)
+				.toString();
 	}
 
 }

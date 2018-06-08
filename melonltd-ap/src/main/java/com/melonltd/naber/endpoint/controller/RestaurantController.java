@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
+import com.melonltd.naber.rdbms.model.service.RestaurantCategoryRelService;
 import com.melonltd.naber.rdbms.model.stored.service.RestaurantStoredService;
 import com.melonltd.naber.rdbms.model.stored.vo.RestaurantStoredVo;
 import com.melonltd.naber.rdbms.model.vo.ReqData;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
+import com.melonltd.naber.rdbms.model.vo.RestaurantCategoryRelVo;
 
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
@@ -30,6 +32,8 @@ public class RestaurantController {
 
 	@Autowired
 	private RestaurantStoredService restaurantStoredService;
+	@Autowired
+	private RestaurantCategoryRelService restaurantCategoryRelService;
 
 	private enum SearchType {
 		TOP("TOP"), AREA("AREA"), CATEGORY("CATEGORY"), DISTANCE("DISTANCE"), NUKNOWN("NUKNOWN");
@@ -51,11 +55,11 @@ public class RestaurantController {
 
 	@ResponseBody
 	@PostMapping(value = "restaurant/list")
-	public ResponseEntity<String> login(@RequestParam(value = "data", required = false) String data) {
-//		String request = Base64Service.decode(data);
-		ReqData req = JsonHelper.json(data, ReqData.class);
+	public ResponseEntity<String> getRestaurantList(@RequestParam(value = "data", required = false) String data) {
+		String request = Base64Service.decode(data);
+		ReqData req = JsonHelper.json(request, ReqData.class);
 
-		LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, null);
+		LinkedHashMap<String, Object> map = null;
 
 		ErrorType errorType = checkRequest(req);
 		if (ObjectUtils.anyNotNull(errorType)) {
@@ -64,10 +68,29 @@ public class RestaurantController {
 			List<RestaurantStoredVo> list = getRestaurantsByType(req);
 			map = RespData.of(Status.TRUE, null, list);
 		}
-
-//		String result = Base64Service.encode(JsonHelper.toJson(map));
-		return new ResponseEntity<String>(JsonHelper.toJson(map), HttpStatus.OK);
+		String result = Base64Service.encode(JsonHelper.toJson(map));
+		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
+	
+	
+	@ResponseBody
+	@PostMapping(value = "restaurant/detail")
+	public ResponseEntity<String> getRestaurantDetail(@RequestParam(value = "data", required = false) String data) {
+		String request = Base64Service.decode(data);
+		ReqData req = JsonHelper.json(request, ReqData.class);
+
+		LinkedHashMap<String, Object> map = null;
+		if (StringUtils.isBlank(req.getUuid())) {
+			map = RespData.of(Status.FALSE, ErrorType.INVALID, null);
+		}else {
+			List<RestaurantCategoryRelVo> list = restaurantCategoryRelService.findByUUID(req.getUuid());
+			map = RespData.of(Status.TRUE, null, list);
+		}
+
+		String result = Base64Service.encode(JsonHelper.toJson(map));
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
 
 	private List<RestaurantStoredVo> getRestaurantsByType(ReqData req) {
 		switch (SearchType.of(req.getSearch_type())) {

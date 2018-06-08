@@ -13,7 +13,7 @@ import com.google.common.base.Strings;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.VerifyPhoneLog;
 import com.melonltd.naber.rdbms.model.dao.VerifyPhoneLogDao;
-import com.melonltd.naber.rdbms.model.service.push.SMSHttpService;
+import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 
 @Service("verifyPhoneLogService")

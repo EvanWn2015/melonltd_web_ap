@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import com.melonltd.naber.rdbms.model.service.push.AndroidPushService;
+import com.melonltd.naber.rdbms.model.push.service.AndroidPushService;
 
 public class OrderJob implements Job {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OrderJob.class);

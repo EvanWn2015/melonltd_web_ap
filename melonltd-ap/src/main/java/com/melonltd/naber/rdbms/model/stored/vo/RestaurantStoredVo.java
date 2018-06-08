@@ -1,22 +1,18 @@
 package com.melonltd.naber.rdbms.model.stored.vo;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Range;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.stored.bean.RestaurantStored;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
-
-
-
 
 
 public class RestaurantStoredVo implements Serializable {
@@ -27,8 +23,8 @@ public class RestaurantStoredVo implements Serializable {
 	private String address;
 	private String store_start;
 	private String store_end;
-	private String is_store_open;
-	private List<DateRangeVo> not_business;
+	private String is_store_now_open;
+	private List<String> not_business;
 	private List<DateRangeVo> can_store_range;
 	private String restaurant_category;
 	private String latitude;
@@ -81,19 +77,19 @@ public class RestaurantStoredVo implements Serializable {
 		this.store_end = store_end;
 	}
 
-	public String getIs_store_open() {
-		return is_store_open;
+	public String getIs_store_now_open() {
+		return is_store_now_open;
 	}
 
-	public void setIs_store_open(String is_store_open) {
-		this.is_store_open = is_store_open;
+	public void setIs_store_now_open(String is_store_now_open) {
+		this.is_store_now_open = is_store_now_open;
 	}
 
-	public List<DateRangeVo> getNot_business() {
+	public List<String> getNot_business() {
 		return not_business;
 	}
 
-	public void setNot_business(List<DateRangeVo> not_business) {
+	public void setNot_business(List<String> not_business) {
 		this.not_business = not_business;
 	}
 
@@ -187,7 +183,7 @@ public class RestaurantStoredVo implements Serializable {
 				.add("store_start", store_start)
 				.add("store_end", store_end)
 				.add("not_business", not_business)
-				.add("is_store_open", is_store_open)
+				.add("is_store_now_open", is_store_now_open)
 				.add("can_store_range", can_store_range)
 				.add("restaurant_category", restaurant_category)
 				.add("latitude", latitude)
@@ -201,15 +197,15 @@ public class RestaurantStoredVo implements Serializable {
 	}
 
 	public static RestaurantStoredVo valueOf(RestaurantStored info) {
-		RestaurantStoredVo vo = new RestaurantStoredVo();
+		RestaurantStoredVo vo = checkIsStoreOpen(info);
 		vo.restaurant_uuid = info.getRestaurantUUID();
 		vo.name = info.getName();
 		vo.address = info.getAddress();
 		vo.store_start = info.getStoreStart();
 		vo.store_end = info.getStoreEnd();
-		vo.is_store_open = Tools.checkOpenStore(vo.store_start, vo.store_end) + "";
-		vo.not_business = JsonHelper.jsonArray(info.getNotBusiness(), DateRangeVo.class);
-		vo.can_store_range = JsonHelper.jsonArray(info.getCanStoreRange(), DateRangeVo.class);
+//		vo.is_store_now_open =  checkIsStoreOpen(info) + "";
+//		vo.not_business = JsonHelper.jsonArray(info.getNotBusiness(), String[].class);
+//		vo.can_store_range = JsonHelper.jsonArray(info.getCanStoreRange(),DateRangeVo[].class);
 		vo.restaurant_category = info.getRestaurantCategory();
 		vo.latitude = info.getLatitude();
 		vo.longitude = info.getLongitude();
@@ -218,6 +214,31 @@ public class RestaurantStoredVo implements Serializable {
 		vo.background_photo = info.getBackgroundPhoto();
 		vo.top = info.getTop();
 		vo.distance = conversionFrom(info.getDistance());
+		return vo;
+	}
+	
+	
+	private static RestaurantStoredVo checkIsStoreOpen ( RestaurantStored info) {
+		RestaurantStoredVo vo = new RestaurantStoredVo ();
+		String now = Tools.getGMTDate("HH:mm");
+		System.out.println("seller name :" +info.getName() + "::: " + info.getStoreStart() + "----" + info.getStoreEnd());
+		
+		boolean c1 =Tools.checkOpenStore(info.getStoreStart(), info.getStoreEnd(),now); 
+		System.out.println("每日營業時段："+  info.getStoreStart() + "~" + info.getStoreEnd() + ": "+ (c1) + "");
+		
+		int nowUTC = Tools.getDayOfYear(Instant.now().toString(), "yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
+		List<String> notBusiness = JsonHelper.jsonArray(info.getNotBusiness(), String[].class).stream().filter(a -> {
+							return Tools.getDayOfYear(a, "yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'") == nowUTC;
+						}).collect(Collectors.toList());
+		System.out.println("三日可控開關有無營業：" + (notBusiness.size() == 0) + "" + notBusiness);
+		
+		List<DateRangeVo> canStoreRange = Tools.checkOpenStoreByRanges(info.getCanStoreRange() ,now);
+		System.out.println("接單開關每日時間範圍：" + (canStoreRange.size() == 0) + "" + canStoreRange);
+		System.out.println("");
+		
+		vo.not_business = notBusiness;
+		vo.can_store_range = canStoreRange;
+		vo.is_store_now_open = (c1 && canStoreRange.size() == 0 && notBusiness.size() == 0) +"";
 		return vo;
 	}
 	

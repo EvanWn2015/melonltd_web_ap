@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.melonltd.naber.endpoint.util.JsonHelper;
-import com.melonltd.naber.rdbms.model.service.push.AnpsPushServcie;
+import com.melonltd.naber.rdbms.model.push.service.AnpsPushServcie;
 import com.melonltd.naber.rdbms.model.stored.bean.RestaurantStored;
 import com.melonltd.naber.rdbms.model.stored.service.RestaurantStoredService;
 import com.melonltd.naber.rdbms.model.stored.vo.RestaurantStoredVo;

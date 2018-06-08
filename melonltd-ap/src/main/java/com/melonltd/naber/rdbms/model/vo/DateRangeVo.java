@@ -1,11 +1,14 @@
 package com.melonltd.naber.rdbms.model.vo;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.MoreObjects;
 
 
-public class DateRangeVo {
+public class DateRangeVo implements Serializable{
+	private static final long serialVersionUID = -7509315033343182791L;
 	
 	private String status;
 	private String date;
