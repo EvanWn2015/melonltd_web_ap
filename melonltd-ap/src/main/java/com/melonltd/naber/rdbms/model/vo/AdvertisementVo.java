@@ -75,7 +75,7 @@ public class AdvertisementVo implements Serializable{
 				.toString();
 	}
 	
-	public static AdvertisementVo vslueOf (Advertisement info) {
+	public static AdvertisementVo valueOf (Advertisement info) {
 		AdvertisementVo vo = new AdvertisementVo ();
 //		vo.ad_uuid = info.getAdUUID();
 		vo.title = info.getTitle();
@@ -87,9 +87,9 @@ public class AdvertisementVo implements Serializable{
 		return vo;
 	}
 	
-	public static List<AdvertisementVo> vslueOfArray (List<Advertisement> infos) {
+	public static List<AdvertisementVo> valueOfArray (List<Advertisement> infos) {
 		List<AdvertisementVo> vos = Lists.<AdvertisementVo>newArrayList();
-		vos.addAll(infos.stream().map(a -> vslueOf(a)).collect(Collectors.toList()));
+		vos.addAll(infos.stream().map(a -> valueOf(a)).collect(Collectors.toList()));
 		return vos;
 	}
 	

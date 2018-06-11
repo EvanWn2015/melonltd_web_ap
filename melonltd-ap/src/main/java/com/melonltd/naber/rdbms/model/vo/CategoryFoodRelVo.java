@@ -8,7 +8,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.bean.CategoryFoodRel;
-import com.melonltd.naber.rdbms.model.vo.food.FoodItemVo;
+import com.melonltd.naber.rdbms.model.vo.json.data.FoodItemVo;
 
 public class CategoryFoodRelVo implements Serializable{
 	private static final long serialVersionUID = -1682202184306433042L;
@@ -111,23 +111,30 @@ public class CategoryFoodRelVo implements Serializable{
 				.toString();
 	}
 	
-	public static CategoryFoodRelVo valueOf (CategoryFoodRel info) {
+	public static CategoryFoodRelVo valueOf(CategoryFoodRel info, boolean isDetail ) {
 		CategoryFoodRelVo vo = new CategoryFoodRelVo();
 		vo.food_uuid = info.getFoodUUID();
 		vo.category_uuid = info.getCategoryUUID();
 		vo.food_name = info.getFoodName();
 		vo.default_price = info.getDefaultPrice();
 		vo.photo = info.getPhoto();
-		vo.photo_type = info.getPhotoType();
-		vo.food_data =JsonHelper.json(info.getFoodData(), FoodItemVo.class);
-		vo.status = info.getStatus();
-		vo.enable = info.getEnable();
+//		vo.photo_type = info.getPhotoType();
+		
+		if (isDetail) {
+			vo.food_data =JsonHelper.json(info.getFoodData(), FoodItemVo.class);
+			vo.food_uuid = vo.food_data.getFood_uuid();
+			vo.food_name = vo.food_data.getFood_name();
+			vo.default_price = vo.food_data.getPrice();	
+		}
+		
+//		vo.status = info.getStatus();
+//		vo.enable = info.getEnable();
 		return vo;
 	}
 	
-	public static List<CategoryFoodRelVo> valueOfArray(List<CategoryFoodRel> infos) {
+	public static List<CategoryFoodRelVo> valueOfArray(List<CategoryFoodRel> infos, boolean isDetail) {
 		List<CategoryFoodRelVo> vos = Lists.<CategoryFoodRelVo>newArrayList();
-		vos.addAll(infos.stream().map(a -> valueOf(a)).collect(Collectors.toList()));
+		vos.addAll(infos.stream().map(a -> valueOf(a,isDetail)).collect(Collectors.toList()));
 		return vos;
 	}
 }

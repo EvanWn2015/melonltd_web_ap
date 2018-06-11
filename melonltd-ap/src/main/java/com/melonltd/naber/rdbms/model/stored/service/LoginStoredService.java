@@ -10,7 +10,6 @@ import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.bean.AccountInfo;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
-import com.melonltd.naber.rdbms.model.stored.bean.AccountInfoStored;
 import com.melonltd.naber.rdbms.model.stored.dao.LoginStoredDao;
 import com.melonltd.naber.rdbms.model.type.DeviceCategory;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;

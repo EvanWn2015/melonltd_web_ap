@@ -17,11 +17,11 @@ public class CategoryFoodRelSerice {
 	
 	public List<CategoryFoodRelVo> findByStatusAndCategoryUUID(String status, String categoryUUID){
 		List<CategoryFoodRel> list = categoryFoodRelDao.findByStatus(status, categoryUUID);
-		return CategoryFoodRelVo.valueOfArray(list);
+		return CategoryFoodRelVo.valueOfArray(list, false);
 	}
 	
 	public CategoryFoodRelVo findByFoodUUID(String foodUUID){
 		CategoryFoodRel info = categoryFoodRelDao.findByFoodUUID(foodUUID);
-		return CategoryFoodRelVo.valueOf(info);
+		return CategoryFoodRelVo.valueOf(info, true);
 	}
 }

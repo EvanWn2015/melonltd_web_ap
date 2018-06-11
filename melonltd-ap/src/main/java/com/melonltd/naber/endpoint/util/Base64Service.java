@@ -4,8 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Base64;
-import java.util.Base64.Decoder;
-import java.util.Base64.Encoder;
 
 import javax.validation.constraints.NotNull;
 
@@ -28,7 +26,7 @@ public class Base64Service {
 
 	public static String decode(@NotNull String key) {
 		try {
-			String decode = new String(Base64.getDecoder().decode(key));
+//			String decode = new String(Base64.getDecoder().decode(key));
 			return URLDecoder.decode(new String(Base64.getDecoder().decode(key), "UTF-8"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			LOGGER.error("", e);

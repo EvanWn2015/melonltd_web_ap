@@ -1,10 +1,14 @@
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -19,16 +23,16 @@ import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
-import com.melonltd.naber.rdbms.model.vo.ReqData;
-import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
-import com.melonltd.naber.rdbms.model.vo.food.FoodItemVo;
+import com.melonltd.naber.rdbms.model.vo.json.data.FoodItemVo;
+import com.melonltd.naber.rdbms.model.vo.json.data.ReqData;
+import com.melonltd.naber.rdbms.model.vo.json.data.SellerRegisteredVo;
 
 @PropertySource("classpath:/config.properties")
 public class MyTest {
 
 	@Test
 	public void mytest() {
-		
+
 		System.out.println(true && true && true);
 		ReqData data = new ReqData();
 		data.setSearch_type("TOP");
@@ -76,26 +80,25 @@ public class MyTest {
 		DateRangeVo vow = new DateRangeVo();
 
 	}
-	
-	
+
 	@Test
 	public void myBu() {
-		
+
 		String store_start = "09:00";
 		String store_end = "17:30";
 		Integer start = Integer.parseInt(new StringBuffer(store_start).deleteCharAt(2).toString());
 		Integer end = Integer.parseInt(new StringBuffer(store_end).deleteCharAt(2).toString());
 		List<DateRangeVo> list = Lists.<DateRangeVo>newArrayList();
 		if (start < end) {
-			list = buildDateRange(start,end);
-		}else {
-			list = buildDateRangeReverse(start,end);
+			list = buildDateRange(start, end);
+		} else {
+			list = buildDateRangeReverse(start, end);
 		}
-//		boolean status = buildRanges(list);
-//		System.out.println(list);
-//		
-//		System.out.println(JsonHelper.toJson(list));
-		
+		// boolean status = buildRanges(list);
+		// System.out.println(list);
+		//
+		// System.out.println(JsonHelper.toJson(list));
+
 		System.out.println("---->");
 		System.out.println(list);
 		System.out.println("---->");
@@ -103,27 +106,29 @@ public class MyTest {
 		System.out.println("---->");
 		System.out.println(JsonHelper.jsonArray(JsonHelper.toJson(list), DateRangeVo[].class));
 		System.out.println("<----");
-		
-		
-//		System.out.println(org.apache.commons.lang3.Range.<String>between("23:31", "24:00").contains("13:30"));
-//		System.out.println(status);
+
+		// System.out.println(org.apache.commons.lang3.Range.<String>between("23:31",
+		// "24:00").contains("13:30"));
+		// System.out.println(status);
 
 	}
-	
-	public boolean buildRanges (List<DateRangeVo> list){
-//		List<DateRangeVo> list = JsonHelper.<DateRangeVo>jsonArray(data, DateRangeVo.class);
+
+	public boolean buildRanges(List<DateRangeVo> list) {
+		// List<DateRangeVo> list = JsonHelper.<DateRangeVo>jsonArray(data,
+		// DateRangeVo.class);
 		String now = Tools.getGMTDate("HH:mm");
 		long count = 0;
 		count = list.stream()
-				.filter(f -> "Y".equals(f.getStatus()) && org.apache.commons.lang3.Range.<String>between(f.getDate().substring(0, 5), f.getDate().substring(6, 11)).contains(now))
+				.filter(f -> "Y".equals(f.getStatus()) && org.apache.commons.lang3.Range
+						.<String>between(f.getDate().substring(0, 5), f.getDate().substring(6, 11)).contains(now))
 				.count();
-		
+
 		System.out.println(count);
-//		return false;
-		return count < 1 ? false : true ;
+		// return false;
+		return count < 1 ? false : true;
 	}
-	
-	public List<DateRangeVo> buildDateRange(Integer start , Integer end) {
+
+	public List<DateRangeVo> buildDateRange(Integer start, Integer end) {
 		start++;
 		Range<Integer> timeR = Range.open(start, start + 29);
 		List<DateRangeVo> list = Lists.<DateRangeVo>newArrayList();
@@ -145,10 +150,10 @@ public class MyTest {
 		}
 		return list;
 	}
-	
-	public List<DateRangeVo> buildDateRangeReverse(Integer start , Integer end) {
+
+	public List<DateRangeVo> buildDateRangeReverse(Integer start, Integer end) {
 		start++;
-		
+
 		Range<Integer> timeR = Range.open(start, start + 29);
 		List<DateRangeVo> list = Lists.<DateRangeVo>newArrayList();
 
@@ -162,28 +167,26 @@ public class MyTest {
 				dd = 70;
 			}
 			timeR = Range.open(timeR.upperEndpoint() + 1, timeR.upperEndpoint() + dd);
-			
+
 			if (timeR.upperEndpoint().intValue() == 2400) {
 				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), 2400, "Y"));
-				timeR = Range.open(0 + 1,  30);
+				timeR = Range.open(0 + 1, 30);
 			}
-			
-			if(timeR.upperEndpoint().intValue() == end) {
+
+			if (timeR.upperEndpoint().intValue() == end) {
 				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), "Y"));
 				status = false;
 			}
 		}
-		
+
 		return list;
 	}
-
-	
 
 	@Test
 	public void buildUUID() {
 		int i = 5;
 		while (i != 0) {
-			System.out.println(Tools.buildUUID(UUIDType.FOOD));
+			System.out.println(Tools.buildUUID(UUIDType.ORDER));
 			i--;
 		}
 	}
@@ -308,14 +311,29 @@ public class MyTest {
 	@Test
 	public void decode() {
 		String json = "{\"food_name\":\"奶茶\",\"price\":\"2323\",\"opts\":[{\"name\":\"布丁\",\"price\":\"5\"},{\"name\":\"仙草\",\"price\":\"15\"}],\"scopes\":[{\"name\":\"超大杯\",\"price\":\"15\"},{\"name\":\"大杯\",\"price\":\"15\"},{\"name\":\"中杯\",\"price\":\"5\"},{\"name\":\"小杯\",\"price\":\"5\"}],\"demands\":[{\"name\":\"甜度\",\"datas\":[{\"name\":\"全糖\"},{\"name\":\"8分糖\"},{\"name\":\"無糖\"}]},{\"name\":\"冰塊\",\"datas\":[{\"name\":\"正常\"},{\"name\":\"少冰\"},{\"name\":\"微冰\"},{\"name\":\"去冰\"}]}]}";
-		
+
 		FoodItemVo vo = JsonHelper.json(json, FoodItemVo.class);
 		System.out.println(vo);
-		String encode = "{\"uuid\":\"RESTAURANT_4045aaa1-380c-4f6d-a44f-6b411ba8311c\"}";
+		String encode = "{\"uuid\":\"RESTAURANT_CATEGORY_90666dc9-8f0f-4d46-b996-a74a665fb5a5\"}";
 		System.out.println(Base64Service.encode(encode));
-		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIydHJ1ZSUyMiUyQyUyMmRhdGElMjIlM0ElNUIlN0IlMjJjYXRlZ29yX3V1aWQlMjIlM0ElMjJSRVNUQVVSQU5UX0NBVEVHT1JZXzJlNzQxMmQ2LTMxMDYtNDMyYy04OGI5LTdkNzgxN2NjODg1NyUyMiUyQyUyMnJlc3RhdXJhbnRfdXVpZCUyMiUzQSUyMlJFU1RBVVJBTlRfNDA0NWFhYTEtMzgwYy00ZjZkLWE0NGYtNmI0MTFiYTgzMTFjJTIyJTJDJTIyY2F0ZWdvcnlfbmFtZSUyMiUzQSUyMiVFNyU4NiU5RiVFOSVBMyU5RiUyMiUyQyUyMnN0YXR1cyUyMiUzQSUyMk9QRU4lMjIlN0QlMkMlN0IlMjJjYXRlZ29yX3V1aWQlMjIlM0ElMjJSRVNUQVVSQU5UX0NBVEVHT1JZXzkwNjY2ZGM5LThmMGYtNGQ0Ni1iOTk2LWE3NGE2NjVmYjVhNSUyMiUyQyUyMnJlc3RhdXJhbnRfdXVpZCUyMiUzQSUyMlJFU1RBVVJBTlRfNDA0NWFhYTEtMzgwYy00ZjZkLWE0NGYtNmI0MTFiYTgzMTFjJTIyJTJDJTIyY2F0ZWdvcnlfbmFtZSUyMiUzQSUyMiVFNSU4NiVCNyVFOSVBMyVCMiUyMiUyQyUyMnN0YXR1cyUyMiUzQSUyMk9QRU4lMjIlN0QlMkMlN0IlMjJjYXRlZ29yX3V1aWQlMjIlM0ElMjJSRVNUQVVSQU5UX0NBVEVHT1JZX2MwZDE3ZjI0LTdiN2YtNGUxMy1hZGRkLWMyOTkwZjQzNTRmOCUyMiUyQyUyMnJlc3RhdXJhbnRfdXVpZCUyMiUzQSUyMlJFU1RBVVJBTlRfNDA0NWFhYTEtMzgwYy00ZjZkLWE0NGYtNmI0MTFiYTgzMTFjJTIyJTJDJTIyY2F0ZWdvcnlfbmFtZSUyMiUzQSUyMiVFNyU4NiVCMSVFOSVBMyVCMiUyMiUyQyUyMnN0YXR1cyUyMiUzQSUyMk9QRU4lMjIlN0QlNUQlN0Q=";
+		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIyZmFsc2UlMjIlMkMlMjJlcnJfY29kZSUyMiUzQSUyMjAwMDQlMjIlMkMlMjJlcnJfbXNnJTIyJTNBJTIyJUU1JUI4JUIzJUU2JTg4JUI2K3Rva2VuKyVFOCVBQSU4RCVFOCVBRCU4OSVFNSVBNCVCMSVFNiU5NSU5NyUyMiUyQyUyMmRhdGElMjIlM0ElMjIlMjIlN0Q=";
 		System.out.println(Base64Service.decode(code));
 	}
-	
-	
+
+	@Test
+	public void fDate() {
+		
+		
+		int i = 679;
+		double j = i/10d;
+		System.out.println(j);
+		double k = Math.floor(j);
+		System.out.println((int)k);
+		
+		String data = "2018-02-05T02:30:14.837Z";
+//		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+//		System.out.println(df.format(data));
+
+	}
+
 }

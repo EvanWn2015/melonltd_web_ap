@@ -22,7 +22,7 @@ public class Tools {
 	private static DecimalFormat DF = new DecimalFormat();
 	
 	public static enum UUIDType {
-		ADMIN, USER, SELLER, NABER_BULLETIN, RESTAURANT, RESTAURANT_CATEGORY, DEVICE, AD, FOOD
+		ADMIN, USER, SELLER, NABER_BULLETIN, RESTAURANT, RESTAURANT_CATEGORY, DEVICE, AD, FOOD,ORDER
 	}
 
 	/**
@@ -31,6 +31,14 @@ public class Tools {
 	public static String getGMTDate(String pattern) {
 		ZonedDateTime zonedDateTime = Instant.now().atZone(ZoneId.of("Asia/Kuala_Lumpur"));
 		return DateTimeFormatter.ofPattern(pattern).format(zonedDateTime);
+	}
+	
+	public static String fromatUTCToGMT(String pattern, String utcDate) {
+		return DateTimeFormatter.ofPattern(pattern).format(Instant.parse(utcDate).atZone(ZoneId.of("Asia/Kuala_Lumpur")));
+	}
+	
+	public static String getNowUTC () {
+		return Instant.now().toString();
 	}
 
 	/**
@@ -70,7 +78,13 @@ public class Tools {
 		return"";
 	}	
 	
-	// 檢查每日營業時間範圍
+	/**
+	 * 檢查每日營業時間範圍
+	 * @param start
+	 * @param end
+	 * @param now format GMT "HH:mm"
+	 * @return
+	 */
 	public static boolean checkOpenStore(String start, String end, String now) {
 		boolean status = false;
 		if (start.compareTo(end) >= 1) {

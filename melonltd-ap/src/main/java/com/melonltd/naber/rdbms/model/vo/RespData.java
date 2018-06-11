@@ -23,7 +23,8 @@ public class RespData {
 		SAVE_ERROR("0001", "儲存資料失敗"),
 		UPDATE_ERROR("0002", "服務器錯誤"),
 		DELETE_ERROR("0003", "服務器錯誤"),
-		HEADESR_ERROR("0004", "帳戶 token 認證失敗"),
+		HEADESR_ERROR("0004", "headers 帳戶 token 認證失敗"),
+		DATABASE_NULL("0005", "查無此資料"),
 		INVALID("1001", "無效參數"),
 		INVALID_PASSWORD("1002", "無效參數，密碼長度不6~20碼範圍內或非英數組合"),
 		INVALID_EMAIL("1003", "無效參數，Email格式錯誤"),
@@ -31,7 +32,9 @@ public class RespData {
 		EXCEED("2001", "超過可用次數"), 
 		SEND_SMS_FAIL("2002", "取得驗證碼失敗"), 
 		VERIFY_CODE_FAIL("2003","驗證失敗"), 
-		EXCEED_TIME("2004", "超過驗證時效");
+		EXCEED_TIME("2004", "超過驗證時效"),
+		STORE_IS_CLOSE("3001", "目前時間不可接單"),
+		STATUS_IS_CLOSE("3002", "目前品項處於關閉狀態");
 
 		ErrorType(String code, String msg) {
 			this.code = code;

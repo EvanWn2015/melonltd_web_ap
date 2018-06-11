@@ -1,7 +1,6 @@
 package com.melonltd.naber.rdbms.model.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,7 @@ import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.SellerRegistered;
 import com.melonltd.naber.rdbms.model.dao.SellerRegisteredDao;
 import com.melonltd.naber.rdbms.model.stored.dao.TestDao;
-import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
+import com.melonltd.naber.rdbms.model.vo.json.data.SellerRegisteredVo;
 
 @Service("sellerRegisteredService")
 public class SellerRegisteredService {

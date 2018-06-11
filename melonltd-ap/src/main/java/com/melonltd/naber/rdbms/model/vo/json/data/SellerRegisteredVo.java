@@ -1,4 +1,4 @@
-package com.melonltd.naber.rdbms.model.vo;
+package com.melonltd.naber.rdbms.model.vo.json.data;
 
 import java.io.Serializable;
 

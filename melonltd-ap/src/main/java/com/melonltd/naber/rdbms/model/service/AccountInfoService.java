@@ -1,6 +1,6 @@
 package com.melonltd.naber.rdbms.model.service;
 
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
@@ -29,6 +29,8 @@ public class AccountInfoService {
 //	LoginDao loginDao;
 
 	LoadingCache<String, AccountInfo> cacheBuilder = CacheBuilder.newBuilder()
+			.expireAfterAccess(7, TimeUnit.DAYS)
+			.maximumSize(1000)
 			.build(new CacheLoader<String, AccountInfo>() {
 				@Override
 				public AccountInfo load(String uuid) throws Exception {
@@ -42,7 +44,7 @@ public class AccountInfoService {
 		try {
 			info = cacheBuilder.get(uuid);
 			return AccountInfoVo.of(info);
-		} catch (ExecutionException e) {
+		} catch (Exception e) {
 			LOGGER.error("The {} does not exist in the cache", uuid);
 			return null;
 		}

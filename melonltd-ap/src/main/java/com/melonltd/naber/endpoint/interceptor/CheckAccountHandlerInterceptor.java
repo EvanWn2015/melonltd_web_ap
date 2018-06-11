@@ -1,10 +1,7 @@
 package com.melonltd.naber.endpoint.interceptor;
 
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -96,15 +93,15 @@ public class CheckAccountHandlerInterceptor implements HandlerInterceptor {
 		response.getWriter().write(result);
 	}
 
-	private static Map<String, String> getHeadersInfo(HttpServletRequest request) {
-		Map<String, String> map = new HashMap<String, String>();
-		Enumeration headerNames = request.getHeaderNames();
-		while (headerNames.hasMoreElements()) {
-			String key = (String) headerNames.nextElement();
-			String value = request.getHeader(key);
-			map.put(key, value);
-		}
-		return map;
-	}
+//	private static Map<String, String> getHeadersInfo(HttpServletRequest request) {
+//		Map<String, String> map = new HashMap<String, String>();
+//		Enumeration headerNames = request.getHeaderNames();
+//		while (headerNames.hasMoreElements()) {
+//			String key = (String) headerNames.nextElement();
+//			String value = request.getHeader(key);
+//			map.put(key, value);
+//		}
+//		return map;
+//	}
 
 }

@@ -1,7 +1,5 @@
 package com.melonltd.naber.rdbms.model.push.service;
 
-import java.time.Instant;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -34,8 +32,10 @@ public class AnpsPushServcie {
 
 	public void push(String device_token, String title, String message) {
 		
-		String payload = APNS.newPayload().alertBody("My first notification\nHello, I'm push notification"+ Instant.now())
-				.sound("default").build();
+		String payload = APNS.newPayload()
+							.alertBody(title)
+							.sound(message)
+							.build();
 		getInstance().push(device_token, payload);
 		ApnsNotification notify = getInstance().push(device_token.getBytes(), payload.getBytes());
 		System.out.println("The message has been hopefully sent...");

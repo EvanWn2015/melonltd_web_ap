@@ -20,7 +20,7 @@ public class AdvertisementService {
 	public List<AdvertisementVo> findAll (){
 		List<Advertisement> list = advertisementDao.findAllByEnable();
 		if (CollectionUtils.isNotEmpty(list)) {
-			return AdvertisementVo.vslueOfArray(list);
+			return AdvertisementVo.valueOfArray(list);
 		}
 		return Lists.<AdvertisementVo>newArrayList();
 	}

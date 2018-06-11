@@ -25,11 +25,7 @@ public class OrderJob implements Job {
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 		LOGGER.info("Do Order Job : --> " + Instant.now(Clock.system(ZoneId.of("Asia/Kuala_Lumpur"))));
-		try {
-			androidPushService.push("執行背景程式", "時間" + Instant.now(), "fG2lkHazsrc:APA91bHEmarRP8uUT7ibkFaUwvsTXjLjlx2BYoO9cHnXdhFo4GKwPgaTYZfBUVAZNIBU1aU-TrFUrduZU222_w0asfx7SlQ6NZ2IH3SejYXwDRRQOcSgHmMYHDGuhv0e9f-6U3GDVJyJ");
-		} catch (IOException e) {
-			LOGGER.error("push android fcm error :{}", e.getMessage());
-		}
+		androidPushService.push("fG2lkHazsrc:APA91bHEmarRP8uUT7ibkFaUwvsTXjLjlx2BYoO9cHnXdhFo4GKwPgaTYZfBUVAZNIBU1aU-TrFUrduZU222_w0asfx7SlQ6NZ2IH3SejYXwDRRQOcSgHmMYHDGuhv0e9f-6U3GDVJyJ", "執行背景程式", "時間" + Instant.now());
 		// TODO 更新訂單狀態
 	}
 }

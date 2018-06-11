@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.melonltd.naber.rdbms.model.bean.MobileDevice;
+import com.melonltd.naber.rdbms.model.stored.bean.MobileDeviceStordVo;
+import com.melonltd.naber.rdbms.model.stored.dao.MobileDeviceStord;
 import com.melonltd.naber.rdbms.model.stored.dao.MobileTokenStoredDao;
-import com.melonltd.naber.rdbms.model.vo.MobileDeviceVo;
 
 
 @Service("mobileTokenStoredService")
@@ -18,10 +18,19 @@ public class MobileTokenStoredService {
 	@Autowired
 	private MobileTokenStoredDao mobileTokenStoredDao;
 	
-	public MobileDeviceVo findByAccountUUID (String accountUUID) {
-		MobileDevice info =  mobileTokenStoredDao.findLimtOneByAccountUUID(accountUUID);
+	public MobileDeviceStordVo findByAccountUUID (String accountUUID) {
+		MobileDeviceStord info =  mobileTokenStoredDao.findByAccountUUID(accountUUID);
 		if (ObjectUtils.anyNotNull(info)) {
-			return MobileDeviceVo.valueOf(info);
+			return MobileDeviceStordVo.valueOf(info);
+		}
+		return null;
+	}
+	
+	
+	public MobileDeviceStordVo findByRestaurantUUID (String restaurantUUID) {
+		MobileDeviceStord info =  mobileTokenStoredDao.findByRestaurantUUID(restaurantUUID);
+		if (ObjectUtils.anyNotNull(info)) {
+			return MobileDeviceStordVo.valueOf(info);
 		}
 		return null;
 	}

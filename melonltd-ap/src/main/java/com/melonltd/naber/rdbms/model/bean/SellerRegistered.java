@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
-import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
+import com.melonltd.naber.rdbms.model.vo.json.data.SellerRegisteredVo;
 
 @Entity
 @Table(name = "seller_registered")
