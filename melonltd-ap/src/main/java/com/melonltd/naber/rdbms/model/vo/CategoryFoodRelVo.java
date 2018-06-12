@@ -8,7 +8,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.bean.CategoryFoodRel;
-import com.melonltd.naber.rdbms.model.vo.json.data.FoodItemVo;
+import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
 
 public class CategoryFoodRelVo implements Serializable{
 	private static final long serialVersionUID = -1682202184306433042L;

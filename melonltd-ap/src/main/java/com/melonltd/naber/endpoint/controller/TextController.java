@@ -1,6 +1,9 @@
 package com.melonltd.naber.endpoint.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.melonltd.naber.endpoint.util.JsonHelper;
+import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.push.service.AnpsPushServcie;
 import com.melonltd.naber.rdbms.model.push.service.MailSendService;
 import com.melonltd.naber.rdbms.model.stored.service.RestaurantStoredService;
@@ -31,7 +35,12 @@ public class TextController {
 	@GetMapping(value = "test/push")
 	public ResponseEntity<String> textPush() {
 		
-		mailSendService.sendEmail("jnswcy@gmail.com", "修改", "new password is 990900");
+		try {
+			mailSendService.sendEmail("abdias.yang@melonltd.com.tw", "修改", "new password is : " + Tools.getRandomPassword(8));
+		} catch (UnsupportedEncodingException | MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 //		anpsPushServcie.push("anpsPushServcie", "XXXX", "my test");
 //		List<RestaurantStoredVo> list = restaurantStoredService.findByLatlng("24.9543881","121.2019457",1);

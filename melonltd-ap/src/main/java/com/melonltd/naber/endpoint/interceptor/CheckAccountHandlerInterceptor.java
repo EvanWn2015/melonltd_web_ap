@@ -42,7 +42,7 @@ public class CheckAccountHandlerInterceptor implements HandlerInterceptor {
 			return false;
 		}
 		
-		AccountInfoVo infoVo = accountInfoService.getCacheBuilderByKey(uuid);
+		AccountInfoVo infoVo = accountInfoService.getCacheBuilderByKey(uuid,true);
 
 		// 如果沒有登入過使用API
 		if (!ObjectUtils.allNotNull(infoVo)) {

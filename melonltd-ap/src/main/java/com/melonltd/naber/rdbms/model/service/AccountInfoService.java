@@ -39,33 +39,30 @@ public class AccountInfoService {
 				}
 			});
 
-	public AccountInfoVo getCacheBuilderByKey(String uuid) {
+	public AccountInfoVo getCacheBuilderByKey(String uuid, boolean hasPassword) {
 		AccountInfo info = null;
 		try {
 			info = cacheBuilder.get(uuid);
-			return AccountInfoVo.of(info);
+			return AccountInfoVo.of(info,hasPassword);
 		} catch (Exception e) {
 			LOGGER.error("The {} does not exist in the cache", uuid);
 			return null;
 		}
 	}
 
-//	public AccountInfoVo findByPhoneAndPassword(String phone, String password) {
-//		AccountInfo info = loginDao.checkLogin(phone, password, Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
-//		if (ObjectUtils.anyNotNull(info)) {
-//			info.setIsLogin("1");
-//			info.setLoginDate(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
-//			cacheBuilder.put(info.getAccountUUID(), info);
-//			return AccountInfoVo.of(info);
-//		}
-//		return null;
-//	}
+	public AccountInfoVo findByPhone(String phone) {
+		AccountInfo info = accountInfoDao.findByPhone(phone);
+		if (!ObjectUtils.anyNotNull(info)) {
+			return null;
+		}
+		return AccountInfoVo.of(info, true);
+	}
 
 	public AccountInfoVo findByAccountUUID(String uuid) {
 		AccountInfo info = accountInfoDao.findByAccountUUID(uuid);
 		if (ObjectUtils.anyNotNull(info)) {
 			info.getIsLogin();
-			return AccountInfoVo.of(info);
+			return AccountInfoVo.of(info,true);
 		}
 		return null;
 	}
@@ -92,6 +89,18 @@ public class AccountInfoService {
 		info.setEnable("Y");
 		info.setIsLogin("0");
 		return accountInfoDao.save(info);
+	}
+	
+	
+	public boolean update(AccountInfoVo vo) {
+		try {
+			accountInfoDao.updatePasswordByPhoneAndUUID(vo.getPassword(), vo.getPhone(),vo.getAccount_uuid());
+			clearCacheBuilderByKey(vo.getAccount_uuid());
+			return true;
+		}catch (Exception e) {
+			LOGGER.error("update password fail account: {}, msg:{}",vo.getAccount_uuid(),e.getMessage());
+			return false;
+		}
 	}
 
 	// @Transactional(readOnly = false, rollbackFor = HibernateException.class)

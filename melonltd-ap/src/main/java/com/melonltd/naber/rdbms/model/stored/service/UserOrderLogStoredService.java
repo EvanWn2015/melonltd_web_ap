@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.melonltd.naber.endpoint.util.Tools;
+import com.melonltd.naber.rdbms.model.req.vo.OredeSubimtReq;
 import com.melonltd.naber.rdbms.model.stored.bean.UserOrderLogStored;
 import com.melonltd.naber.rdbms.model.stored.dao.UserOrderLogStoredDao;
 import com.melonltd.naber.rdbms.model.stored.vo.UserOrderLogStoredVo;
 import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
-import com.melonltd.naber.rdbms.model.vo.json.data.OredeSubimtReq;
 
 @Service("userOrderLogStoredService")
 public class UserOrderLogStoredService {

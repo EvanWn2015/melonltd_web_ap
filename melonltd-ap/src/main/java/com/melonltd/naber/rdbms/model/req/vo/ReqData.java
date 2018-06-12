@@ -1,4 +1,4 @@
-package com.melonltd.naber.rdbms.model.vo.json.data;
+package com.melonltd.naber.rdbms.model.req.vo;
 
 public class ReqData {
 

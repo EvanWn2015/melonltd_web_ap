@@ -21,11 +21,11 @@ import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
+import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
+import com.melonltd.naber.rdbms.model.req.vo.ReqData;
+import com.melonltd.naber.rdbms.model.req.vo.SellerRegisteredVo;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
-import com.melonltd.naber.rdbms.model.vo.json.data.FoodItemVo;
-import com.melonltd.naber.rdbms.model.vo.json.data.ReqData;
-import com.melonltd.naber.rdbms.model.vo.json.data.SellerRegisteredVo;
 
 @PropertySource("classpath:/config.properties")
 public class MyTest {
@@ -314,7 +314,7 @@ public class MyTest {
 
 		FoodItemVo vo = JsonHelper.json(json, FoodItemVo.class);
 		System.out.println(vo);
-		String encode = "{\"uuid\":\"RESTAURANT_CATEGORY_90666dc9-8f0f-4d46-b996-a74a665fb5a5\"}";
+		String encode = "{\"phone\":\"0987654321\"}";
 		System.out.println(Base64Service.encode(encode));
 		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIyZmFsc2UlMjIlMkMlMjJlcnJfY29kZSUyMiUzQSUyMjAwMDQlMjIlMkMlMjJlcnJfbXNnJTIyJTNBJTIyJUU1JUI4JUIzJUU2JTg4JUI2K3Rva2VuKyVFOCVBQSU4RCVFOCVBRCU4OSVFNSVBNCVCMSVFNiU5NSU5NyUyMiUyQyUyMmRhdGElMjIlM0ElMjIlMjIlN0Q=";
 		System.out.println(Base64Service.decode(code));

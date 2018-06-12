@@ -24,6 +24,8 @@ import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.push.service.PudhSellerService;
+import com.melonltd.naber.rdbms.model.req.vo.OredeSubimtReq;
+import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.stored.service.UserOrderLogStoredService;
 import com.melonltd.naber.rdbms.model.stored.vo.UserOrderLogStoredVo;
@@ -33,8 +35,6 @@ import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
-import com.melonltd.naber.rdbms.model.vo.json.data.OredeSubimtReq;
-import com.melonltd.naber.rdbms.model.vo.json.data.ReqData;
 
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")

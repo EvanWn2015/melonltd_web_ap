@@ -158,5 +158,17 @@ public class Tools {
 	}
 	
 	
-	
+	/**
+	 * 隨機亂數密碼產生
+	 * @param len 所需產生長度
+	 */
+	public static String getRandomPassword(int len) {
+		String str = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; 
+		StringBuffer sb = new StringBuffer(); 
+		for (int i = 0; i < len; i++) { 
+			int idx = (int) (Math.random() * str.length()); 
+		sb.append(str.charAt(idx)); 
+		} 
+		return sb.toString(); 
+	}
 }

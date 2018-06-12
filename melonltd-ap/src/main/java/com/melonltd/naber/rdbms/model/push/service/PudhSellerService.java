@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Maps;
 import com.melonltd.naber.endpoint.util.JsonHelper;
+import com.melonltd.naber.rdbms.model.req.vo.OredeSubimtReq;
 import com.melonltd.naber.rdbms.model.stored.bean.MobileDeviceStordVo;
 import com.melonltd.naber.rdbms.model.stored.service.MobileTokenStoredService;
 import com.melonltd.naber.rdbms.model.type.DeviceCategory;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
-import com.melonltd.naber.rdbms.model.vo.json.data.OredeSubimtReq;
 
 @Service("pudhSellerService")
 public class PudhSellerService {

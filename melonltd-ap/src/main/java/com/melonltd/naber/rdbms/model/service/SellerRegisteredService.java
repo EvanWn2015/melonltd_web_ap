@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.SellerRegistered;
 import com.melonltd.naber.rdbms.model.dao.SellerRegisteredDao;
+import com.melonltd.naber.rdbms.model.req.vo.SellerRegisteredVo;
 import com.melonltd.naber.rdbms.model.stored.dao.TestDao;
-import com.melonltd.naber.rdbms.model.vo.json.data.SellerRegisteredVo;
 
 @Service("sellerRegisteredService")
 public class SellerRegisteredService {

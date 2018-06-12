@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
+import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.RestaurantCategoryRelService;
 import com.melonltd.naber.rdbms.model.stored.service.RestaurantStoredService;
 import com.melonltd.naber.rdbms.model.stored.vo.RestaurantStoredVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
-import com.melonltd.naber.rdbms.model.vo.json.data.ReqData;
 import com.melonltd.naber.rdbms.model.vo.RestaurantCategoryRelVo;
 
 @Controller

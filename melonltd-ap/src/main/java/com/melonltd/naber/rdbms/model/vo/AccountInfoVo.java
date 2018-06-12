@@ -207,8 +207,9 @@ public class AccountInfoVo implements Serializable{
 				.toString();
 	}
 
-	public static AccountInfoVo of(AccountInfo info) {
+	public static AccountInfoVo of(AccountInfo info , boolean hasPassword) {
 		AccountInfoVo vo = new AccountInfoVo();
+
 		vo.account_uuid = info.getAccountUUID();
 		vo.restaurant_uuid = info.getRestaurantUUID();
 		vo.name = info.getName();
@@ -225,6 +226,28 @@ public class AccountInfoVo implements Serializable{
 		vo.login_date = info.getLoginDate();
 		vo.photo = info.getPhoto();
 		vo.photo_type = info.getPhotoType();
+		if (hasPassword) {
+			vo.password = info.getPassword();	
+		}
+		
+		
+//		vo.account_uuid = info.getAccountUUID();
+//		vo.restaurant_uuid = info.getRestaurantUUID();
+//		vo.name = info.getName();
+//		vo.email = info.getEmail();
+//		vo.phone = info.getPhone();
+//		vo.address = info.getAddress();
+//		vo.birth_day = info.getBirthDay();
+//		vo.identity = info.getIdentity();
+//		vo.school_name = info.getSchoolName();
+//		vo.bonus = info.getBonus();
+//		vo.level = info.getLevel();
+//		vo.enable = info.getEnable();
+//		vo.is_login = info.getIsLogin();
+//		vo.login_date = info.getLoginDate();
+//		vo.photo = info.getPhoto();
+//		vo.photo_type = info.getPhotoType();
+//		vo.password = info.getPassword();
 		return vo;
 	}
 

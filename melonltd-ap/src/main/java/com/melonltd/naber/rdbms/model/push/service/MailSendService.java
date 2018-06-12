@@ -1,10 +1,11 @@
 package com.melonltd.naber.rdbms.model.push.service;
 
-import java.util.Date;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -16,8 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
-
-import com.melonltd.naber.endpoint.util.Tools;
 
 @Service("mailSendService")
 @PropertySource("classpath:/config.properties")
@@ -59,9 +58,9 @@ public class MailSendService {
 		return SESSION;
 	}
 
-	public void sendEmail(String toEmail, String subject, String body) {
-		try {
-			
+	public void sendEmail(String toEmail, String subject, String body) throws MessagingException, UnsupportedEncodingException {
+//		try {
+//			
 			MimeMessage msg = new MimeMessage(getSession());
 			// set message headers
 			msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
@@ -76,9 +75,9 @@ public class MailSendService {
 			System.out.println("Message is ready");
 			Transport.send(msg);
 			System.out.println("EMail Sent Successfully!!");
-		} catch (Exception e) {
-			LOGGERO.error("send mail fail to mail : {}", toEmail);
-		}
+//		} catch (Exception e) {
+//			LOGGERO.error("send mail fail to mail : {}", toEmail);
+//		}
 	}
 
 }

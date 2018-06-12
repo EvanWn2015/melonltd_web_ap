@@ -33,7 +33,7 @@ public class LoginStoredService {
 			info.setIsLogin("1");
 			info.setLoginDate(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
 			accountInfoService.putCache(info);
-			return AccountInfoVo.of(info);
+			return AccountInfoVo.of(info ,false);
 		}
 		return null;
 	}
