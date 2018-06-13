@@ -39,7 +39,8 @@ public class RespData {
 		EXCEED_TIME("2004", "超過驗證時效"),
 		STORE_IS_CLOSE("3001", "目前時間不可接單"),
 		STATUS_IS_CLOSE("3002", "目前品項處於關閉狀態"),
-		LOGIN_FAIL("4001", "查無此帳戶 或 帳戶已失效");
+		LOGIN_FAIL("4001", "查無此帳戶 或 帳戶已失效"),
+		ORDER_MAX_PRICE("5001", "訂單種金額超過 5000");
 
 		ErrorType(String code, String msg) {
 			this.code = code;

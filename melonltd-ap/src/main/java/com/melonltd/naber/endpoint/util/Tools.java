@@ -3,7 +3,10 @@ package com.melonltd.naber.endpoint.util;
 import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -34,12 +37,67 @@ public class Tools {
 		return DateTimeFormatter.ofPattern(pattern).format(zonedDateTime);
 	}
 	
+	
+	public static String getNowGMT() {
+		return LocalDateTime.now(ZoneId.of("Asia/Kuala_Lumpur")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+	}
+	
+	public static String getNowStartOfDayGMT() {
+		return LocalDateTime.now(ZoneId.of("Asia/Kuala_Lumpur")).with(LocalTime.MIN).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+	}
+	
+	public static String getNowEndOfDayGMT() {
+		return LocalDateTime.now(ZoneId.of("Asia/Kuala_Lumpur")).with(LocalTime.MAX).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+	}
+	
 	public static String fromatUTCToGMT(String pattern, String utcDate) {
-		return DateTimeFormatter.ofPattern(pattern).format(Instant.parse(utcDate).atZone(ZoneId.of("Asia/Kuala_Lumpur")));
+		return Instant.parse(utcDate).atZone(ZoneId.of("Asia/Kuala_Lumpur")).format(DateTimeFormatter.ofPattern(pattern));
+//		return DateTimeFormatter.ofPattern(pattern).format();
+	}
+	
+	public static String fromatGMTtoUTC(String pattern, String gmtDate) {
+		return Instant.parse(gmtDate).atZone(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern(pattern));
+//		return DateTimeFormatter.ofPattern(pattern).format(Instant.parse(gmtDate).atZone(ZoneOffset.UTC));
+	}
+	
+	public static String getNowEndOfDayGMTtoUTC(String gmtDate,int minusDay, int plusHours) {
+		DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
+		return LocalDateTime.parse(gmtDate,formatter).with(LocalTime.MAX).minusDays(minusDay).plusHours(plusHours).format(formatter);
+	}
+	
+	public static String getStartOfDayGMTtoUTC(String gmtDate, int minusDay, int plusHours) {
+		DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
+		return LocalDateTime.parse(gmtDate,formatter).with(LocalTime.MIN).minusDays(minusDay).plusHours(plusHours).format(formatter);
 	}
 	
 	public static String getNowUTC () {
-		return Instant.now().toString();
+		return LocalDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+	}
+	
+	public static String getNowStartOfDayUTC() {
+		return LocalDateTime.now(ZoneOffset.UTC).with(LocalTime.MIN).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+	}
+	
+	public static String getNowEndOfDayUTC() {
+		return LocalDateTime.now(ZoneOffset.UTC).with(LocalTime.MAX).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+	}
+	
+	public static String getNowStartOfDayUTC(String date) {
+		DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
+		return LocalDateTime.parse(date,formatter).with(LocalTime.MIN).format(formatter);
+	}
+	
+	public static String getNowEndOfDayUTC(String date) {
+		DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
+		return LocalDateTime.parse(date,formatter).with(LocalTime.MAX).format(formatter);
+	}
+	
+	public static String getNowEndOfDayUTC(int minusDay, int plusHours) {
+		return LocalDateTime.now(ZoneOffset.UTC).with(LocalTime.MAX).minusDays(minusDay).plusHours(plusHours).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+	}
+	
+	public static String getStartOfDayUTC(int minusDay, int plusHours) {
+		return LocalDateTime.now(ZoneOffset.UTC).with(LocalTime.MIN).minusDays(minusDay).plusHours(plusHours).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
 	}
 
 	/**

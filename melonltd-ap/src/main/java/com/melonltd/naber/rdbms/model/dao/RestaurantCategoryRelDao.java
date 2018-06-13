@@ -12,4 +12,7 @@ public interface RestaurantCategoryRelDao extends JpaRepository<RestaurantCatego
 	
 	@Query("SELECT a FROM RestaurantCategoryRel a WHERE a.restaurantUUID = ?1 AND a.enable = 'Y' AND a.status = 'OPEN'")	
 	public List<RestaurantCategoryRel> findByRestaurantUUID (String uuid);
+	
+	@Query("SELECT a FROM RestaurantCategoryRel a WHERE a.categoryUUID IN (?1) AND a.enable = 'Y' AND a.status = 'OPEN'")	
+	public List<RestaurantCategoryRel> findByCategoryUUIDs (List<String> uuids);
 }

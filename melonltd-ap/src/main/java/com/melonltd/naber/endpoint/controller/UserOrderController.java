@@ -32,6 +32,7 @@ import com.melonltd.naber.rdbms.model.push.service.PudhSellerService;
 import com.melonltd.naber.rdbms.model.req.vo.OredeSubimtReq;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.CategoryFoodRelSerice;
+import com.melonltd.naber.rdbms.model.service.RestaurantCategoryRelService;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.service.UserOrderLogService;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
@@ -56,12 +57,12 @@ public class UserOrderController {
 	private UserOrderLogService userOrderLogService;
 	@Autowired
 	private SubmitOrderService submitOrderService;
-	
 	@Autowired 
 	private RestaurantInfoService restaurantInfoService;
-	
 	@Autowired
 	private PudhSellerService pudhSellerService;
+	@Autowired
+	private RestaurantCategoryRelService restaurantCategoryRelService;
 
 	@ResponseBody
 	@PostMapping(value = "user/order/subimt")
@@ -78,30 +79,37 @@ public class UserOrderController {
 		}else {
 			String accountUUID = httpRequest.getHeader("Authorization");
 			RestaurantInfoVo vo = restaurantInfoService.findByUUID(req.getRestaurant_uuid());
-			if (!ObjectUtils.anyNotNull(vo, accountUUID)) {
+			if (!ObjectUtils.allNotNull(vo, accountUUID)) {
 				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);	
 			}else {
 				boolean isOpen = checkIsStoreOpen(req, vo);
 				List<String> foodUUIDs = req.getOrders().stream().map(a -> a.getFood_uuid()).collect(Collectors.toList());
+				List<String> categoryUUIDs = req.getOrders().stream().map(a -> a.getCategory_uuid()).distinct().collect(Collectors.toList());
 				int foodOpens = categoryFoodRelSerice.getFoodStatusOpenByUUIDs(foodUUIDs);
+				int categoryOpens = restaurantCategoryRelService.getStatusByCategoryUUIDs(categoryUUIDs);
 				if (!isOpen) {
 					LOGGER.info("Store is close account : {}, uuid:{} ",accountUUID, req.getRestaurant_uuid());
 					map = RespData.of(Status.FALSE, errorType.STORE_IS_CLOSE, null);
-				}else if (foodUUIDs.size() != foodOpens) {
+				}else if (foodUUIDs.size() != foodOpens || categoryUUIDs.size() != categoryOpens) {
 					LOGGER.info("food item or category status is close account : {}, food_uuid:{} ",accountUUID, foodUUIDs);
 					map = RespData.of(Status.FALSE, errorType.STATUS_IS_CLOSE, null);	
 				}else {
 					int price = getPrice(req);
-					String bonus = ((int)Math.floor(price / 10d) + "");
-					String orders = JsonHelper.toJson(OredeSubimtReq.ofOrders(req.getOrders()));
-					OrderVo result = submitOrderService.submitOrder(accountUUID , Tools.buildUUID(UUIDType.ORDER),  vo,  req,  String.valueOf(price),  bonus,  orders);
-					if (!ObjectUtils.anyNotNull(result)) {
-						LOGGER.error("submit order save fail account : {}, uuid:{} ",accountUUID, req.getRestaurant_uuid());
-						map = RespData.of(Status.FALSE, ErrorType.SAVE_ERROR, null);	
+					// 限制單筆訂單不可超過 5000
+					if (price > 5000) {
+						map = RespData.of(Status.FALSE, ErrorType.ORDER_MAX_PRICE, null);
 					}else {
-						// push to seller 
-						pudhSellerService.pushOrderToSeller(result.getRestaurant_uuid(), OredeSubimtReq.ofOrders(req.getOrders()) ,OrderStatus.UNFINISH);
-						map = RespData.of(Status.TRUE, null, result);
+						String bonus = ((int)Math.floor(price / 10d) + "");
+						String orders = JsonHelper.toJson(OredeSubimtReq.ofOrders(req.getOrders()));
+						OrderVo result = submitOrderService.submitOrder(accountUUID , Tools.buildUUID(UUIDType.ORDER),  vo,  req,  String.valueOf(price),  bonus,  orders);
+						if (!ObjectUtils.anyNotNull(result)) {
+							LOGGER.error("submit order save fail account : {}, uuid:{} ",accountUUID, req.getRestaurant_uuid());
+							map = RespData.of(Status.FALSE, ErrorType.SAVE_ERROR, null);	
+						}else {
+							// push to seller 
+							pudhSellerService.pushOrderToSeller(result.getRestaurant_uuid(), OredeSubimtReq.ofOrders(req.getOrders()) ,OrderStatus.UNFINISH);
+							map = RespData.of(Status.TRUE, null, result);
+						}
 					}
 				}
 			}

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.melonltd.naber.rdbms.model.bean.OrderInfo;
 import com.melonltd.naber.rdbms.model.bean.UserOrderLog;
 import com.melonltd.naber.rdbms.model.dao.UserOrderLogDao;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
@@ -26,6 +27,14 @@ public class UserOrderLogService {
 		}
 		return null;
 	}
+	
+	public UserOrderLog findOne(String uuid) {
+		UserOrderLog o = userOrderLogDao.findOne(uuid);
+		if (ObjectUtils.anyNotNull(o)) {
+			return o;
+		}
+		return null;
+	}
 
 	public List<OrderVo> findByAccountUUIDAndPage(String accountUUID, Pageable pageable) {
 		Page<UserOrderLog> page = userOrderLogDao.findByAccountUUIDAndPage(accountUUID, pageable);
@@ -33,5 +42,11 @@ public class UserOrderLogService {
 			return OrderVo.valueOfArray(page.getContent());
 		}
 		return Lists.newArrayList();
+	}
+	
+	
+	public int findByOrderStatusAccountUUID(String accountUUID) {
+		List<UserOrderLog> list = userOrderLogDao.findByOrderStatusAccountUUID(accountUUID);
+		return list.size();
 	}
 }

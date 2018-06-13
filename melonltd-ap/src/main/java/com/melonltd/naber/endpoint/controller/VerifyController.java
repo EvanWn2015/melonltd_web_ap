@@ -61,7 +61,7 @@ public class VerifyController {
 			map = RespData.of(Status.FALSE, ErrorType.VERIFY_CODE_FAIL, "");
 		} else {
 			ErrorType error = verifyPhoneLogService.verifyCode(req.getBatch_id(), req.getCode());
-			map = RespData.of(error == null ? Status.TRUE : Status.FALSE, error, "");
+			map = RespData.of(error == null ? Status.TRUE : Status.FALSE, error, null);
 		}
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);

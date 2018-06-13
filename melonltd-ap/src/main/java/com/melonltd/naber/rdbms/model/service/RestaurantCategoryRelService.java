@@ -19,4 +19,10 @@ public class RestaurantCategoryRelService {
 		List<RestaurantCategoryRel> list = restaurantCategoryRelDao.findByRestaurantUUID(uuid);
 		return RestaurantCategoryRelVo.valueOfArray(list);
 	}
+	
+	
+	public int getStatusByCategoryUUIDs(List<String> uuids) {
+		List<RestaurantCategoryRel> list = restaurantCategoryRelDao.findByCategoryUUIDs(uuids);
+		return list.size();
+	}
 }

@@ -51,7 +51,7 @@ public class AccountInfoService {
 		AccountInfo info = accountInfoDao.findByPhoneAndPassword(phone, password);
 		if (ObjectUtils.allNotNull(info)) {
 			putCache(info);
-			AccountInfoVo.of(info, false);
+			return AccountInfoVo.of(info, false);
 		}
 		return null;
 	}
@@ -84,7 +84,7 @@ public class AccountInfoService {
 		info.setLevel(vo.getLevel());
 		info.setBonus("0");
 		info.setEnable("Y");
-		info.setIsLogin("0");
+		info.setIsLogin("N");
 		return accountInfoDao.save(info);
 	}
 	

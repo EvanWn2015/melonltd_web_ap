@@ -33,9 +33,11 @@ public class VerifyPhoneLogService {
 		}
 
 		String content = "驗證碼為：" + code + "，請在三分鐘內驗證完成。";
-		String date = Tools.getGMTDate("yyyy-MM-dd'T'");
+//		String date = Tools.getGMTDate("yyyy-MM-dd'T'");
+		String start = Tools.getNowStartOfDayGMT();
+		String end = Tools.getNowEndOfDayGMT();
 		// 2018-06-02T18:23:12.7410Z
-		List<VerifyPhoneLog> logs = verifyPhoneLogDao.findByPhoneNumberAndBetweenDates(phoneNumber, date + "00:00:00.0000Z", date + "23:59:59.9999Z");
+		List<VerifyPhoneLog> logs = verifyPhoneLogDao.findByPhoneNumberAndBetweenDates(phoneNumber, start, end);
 		if (logs == null) {
 			return sendPhoneSMS(code, content, phoneNumber);
 		} else if (logs.size() < 2) {
@@ -49,7 +51,7 @@ public class VerifyPhoneLogService {
 	@Transactional(readOnly = true)
 	public ErrorType verifyCode(String batchId, String code) {
 		VerifyPhoneLog log = verifyPhoneLogDao.findByBatchIdAndCode(batchId, code);
-		String date = Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
+		String date = Tools.getNowGMT();
 		long old = Tools.getMinutes(log.getVerifyDate());
 		long now = Tools.getMinutes(date);
 		long range = 1000 * 60 * 3L;

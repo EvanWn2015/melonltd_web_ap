@@ -200,6 +200,12 @@ public class OrderVo {
 		return vos;
 	}
 	
+	public static List<OrderVo> valueInfoOfArray(List<OrderInfo> infos){
+		List<OrderVo> vos = Lists.newArrayList();
+		vos.addAll(infos.stream().map(a -> valueOf(a)).collect(Collectors.toList()));
+		return vos;
+	}
+	
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())

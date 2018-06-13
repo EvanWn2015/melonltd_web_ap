@@ -59,7 +59,7 @@ public class RegisteredController {
 				map = RespData.of(Status.FALSE, ErrorType.SAVE_ERROR, "");
 			}
 		} else {
-			map = RespData.of(Status.FALSE, error, "");
+			map = RespData.of(Status.FALSE, error, null);
 		}
 
 		System.out.println(JsonHelper.toJson(map));
@@ -85,7 +85,7 @@ public class RegisteredController {
 				map = RespData.of(Status.FALSE, ErrorType.SAVE_ERROR, "");
 			}
 		} else {
-			map = RespData.of(Status.FALSE, error, "");
+			map = RespData.of(Status.FALSE, error, null);
 		}
 		System.out.println(JsonHelper.toJson(map));
 		String result = Base64Service.encode(JsonHelper.toJson(map));

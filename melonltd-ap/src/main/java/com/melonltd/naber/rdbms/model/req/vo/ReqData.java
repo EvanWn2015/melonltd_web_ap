@@ -16,6 +16,15 @@ public class ReqData {
 	private String json_data;
 	private String date;
 	private String message;
+	private String type;
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public String getUuid() {
 		return uuid;

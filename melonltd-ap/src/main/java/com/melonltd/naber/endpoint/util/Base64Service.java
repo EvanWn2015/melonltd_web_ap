@@ -29,7 +29,7 @@ public class Base64Service {
 			throw new Base64Exception("Encryption error !", e);
 		}
 	}
-
+	
 	public static String decode(@NotNull String key) {
 		try {
 			if (NaberConstant.IS_DEBUG) {
@@ -37,6 +37,27 @@ public class Base64Service {
 			}else {
 				return URLDecoder.decode(new String(Base64.getDecoder().decode(key), "UTF-8"), "UTF-8");	
 			}
+//			String decode = new String(Base64.getDecoder().decode(key));
+		} catch (UnsupportedEncodingException e) {
+			LOGGER.error("", e);
+			throw new Base64Exception("Decryption error or The Cookie was tampered with !", e);
+		}
+	}
+	
+	public static String testEncode(String key) {
+		try {
+			return Base64.getEncoder().encodeToString(URLEncoder.encode(key, "UTF-8").getBytes("UTF-8"));	
+		} catch (UnsupportedEncodingException e) {
+			LOGGER.error("", e);
+			throw new Base64Exception("Encryption error !", e);
+		}
+	}
+
+	
+	
+	public static String testDecode(@NotNull String key) {
+		try {
+			return URLDecoder.decode(new String(Base64.getDecoder().decode(key), "UTF-8"), "UTF-8");	
 //			String decode = new String(Base64.getDecoder().decode(key));
 		} catch (UnsupportedEncodingException e) {
 			LOGGER.error("", e);

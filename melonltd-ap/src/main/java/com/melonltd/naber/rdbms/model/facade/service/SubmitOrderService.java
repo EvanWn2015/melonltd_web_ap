@@ -26,22 +26,22 @@ public class SubmitOrderService {
 	@Autowired
 	private OrderLogService orderLogService;
 
-	public void findByAccountUUIDAndPage(String accountUUID, int page) {
-
-	}
-
-	public void getFoodStatusOpenByUUIDs(String[] foodUUIDs) {
-
-	}
 	
 	public OrderVo submitOrder(String accountUUID, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req, String price, String bonus, String orders) {
-		String date = Tools.getNowUTC();
-		OrderInfo orderInfo = newOrderInfo(accountUUID, orderUUID, vo, req, price, bonus, orders, date);
-		UserOrderLog userOrderLog = newUserOrderLog(accountUUID, orderUUID, vo, req, price, bonus, orders, date);
-		OrderLog orderLog = newOrderLog(accountUUID, orderUUID, vo, req, price, bonus, orders, date);
-		orderInfoService.save(orderInfo);
-		orderLogService.save(orderLog);
-		return userOrderLogService.save(userOrderLog);
+		int unfinish_count = userOrderLogService.findByOrderStatusAccountUUID(accountUUID);
+		// 限制未完成訂單數量三筆，不可再提交訂單 
+		if (unfinish_count >= 3) {
+			return null;
+		}else {
+			String date = Tools.getNowUTC();
+			OrderInfo orderInfo = newOrderInfo(accountUUID, orderUUID, vo, req, price, bonus, orders, date);
+			UserOrderLog userOrderLog = newUserOrderLog(accountUUID, orderUUID, vo, req, price, bonus, orders, date);
+			OrderLog orderLog = newOrderLog(accountUUID, orderUUID, vo, req, price, bonus, orders, date);
+			orderInfoService.save(orderInfo);
+			orderLogService.save(orderLog);
+			OrderVo orderVo = userOrderLogService.save(userOrderLog); 
+			return orderVo;
+		}
 	}
 	
 
