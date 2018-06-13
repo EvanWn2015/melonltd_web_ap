@@ -1,8 +1,11 @@
 package com.melonltd.naber.rdbms.model.req.vo;
 
+import java.util.List;
+
 public class ReqData {
 
 	private String uuid;
+	private List<String> uuids;
 	private String search_type;
 	private String area;
 	private int page;
@@ -20,6 +23,14 @@ public class ReqData {
 
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
+	}
+
+	public List<String> getUuids() {
+		return uuids;
+	}
+
+	public void setUuids(List<String> uuids) {
+		this.uuids = uuids;
 	}
 
 	public String getSearch_type() {
@@ -101,7 +112,5 @@ public class ReqData {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
 
 }

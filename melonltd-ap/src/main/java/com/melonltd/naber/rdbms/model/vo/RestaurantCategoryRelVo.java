@@ -11,18 +11,18 @@ import com.melonltd.naber.rdbms.model.bean.RestaurantCategoryRel;
 public class RestaurantCategoryRelVo implements Serializable{
 	private static final long serialVersionUID = 1978459295957706702L;
 	
-	private String categor_uuid;
+	private String category_uuid;
 	private String restaurant_uuid;
 	private String category_name;
 	private String status;
 	private String enable;
 	private String create_date;
 	
-	public String getCategor_uuid() {
-		return categor_uuid;
+	public String getCategory_uuid() {
+		return category_uuid;
 	}
-	public void setCategor_uuid(String categor_uuid) {
-		this.categor_uuid = categor_uuid;
+	public void setCategory_uuid(String category_uuid) {
+		this.category_uuid = category_uuid;
 	}
 	public String getRestaurant_uuid() {
 		return restaurant_uuid;
@@ -59,7 +59,7 @@ public class RestaurantCategoryRelVo implements Serializable{
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())
-				.add("categor_uuid", categor_uuid)
+				.add("category_uuid", category_uuid)
 				.add("restaurant_uuid", restaurant_uuid)
 				.add("category_name", category_name)
 				.add("status", status)
@@ -71,7 +71,7 @@ public class RestaurantCategoryRelVo implements Serializable{
 	
 	public static RestaurantCategoryRelVo valueOf(RestaurantCategoryRel info) {
 		RestaurantCategoryRelVo vo = new RestaurantCategoryRelVo ();
-		vo.categor_uuid = info.getCategorUUID();
+		vo.category_uuid = info.getCategoryUUID();
 		vo.restaurant_uuid = info.getRestaurantUUID();
 		vo.category_name = info.getCategoryName();
 		vo.status = info.getStatus();

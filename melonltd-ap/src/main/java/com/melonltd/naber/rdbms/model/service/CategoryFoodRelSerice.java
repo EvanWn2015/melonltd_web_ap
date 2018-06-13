@@ -1,5 +1,6 @@
 package com.melonltd.naber.rdbms.model.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,11 @@ public class CategoryFoodRelSerice {
 	public CategoryFoodRelVo findByFoodUUID(String foodUUID){
 		CategoryFoodRel info = categoryFoodRelDao.findByFoodUUID(foodUUID);
 		return CategoryFoodRelVo.valueOf(info, true);
+	}
+	
+	
+	public int getFoodStatusOpenByUUIDs(List<String> foodUUIDs) {
+		List<CategoryFoodRel> list = categoryFoodRelDao.findStatusByFoodUUIDs(foodUUIDs);
+		return list.size();
 	}
 }

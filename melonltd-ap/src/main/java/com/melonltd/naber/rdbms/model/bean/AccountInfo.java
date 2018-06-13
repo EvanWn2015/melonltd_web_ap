@@ -206,10 +206,4 @@ public class AccountInfo implements Serializable {
 				.add("photoType", photoType)
 				.toString();
 	}
-
-//	public static AccountInfo of(AccountInfoVo vo) {
-//		AccountInfo data = new AccountInfo();
-//		return data;
-//	}
-
 }

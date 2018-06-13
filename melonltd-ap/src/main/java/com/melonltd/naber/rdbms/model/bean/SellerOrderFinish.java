@@ -1,23 +1,23 @@
-package com.melonltd.naber.rdbms.model.stored.bean;
+package com.melonltd.naber.rdbms.model.bean;
 
 import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
 
 
 @Entity
-public class UserOrderLogStored implements Serializable {
-	private static final long serialVersionUID = 7919660417636314613L;
-
-	private String orderUUId;
+@Table(name = "seller_order_finish")
+public class SellerOrderFinish implements Serializable {
+	private static final long serialVersionUID = -7662206313159475007L;
+	
+	private String orderUUID;
 	private String accountUUID;
 	private String restaurantUUID;
-	private String restaurantName;
-	private String restaurantAddress;
 	private String userMessage;
 	private String createDate;
 	private String updateDate;
@@ -30,8 +30,8 @@ public class UserOrderLogStored implements Serializable {
 
 	@Id
 	@Column(name = "order_uuid", unique = true, nullable = false)
-	public String getOrderUUId() {
-		return orderUUId;
+	public String getOrderUUID() {
+		return orderUUID;
 	}
 
 	@Column(name = "account_uuid")
@@ -42,16 +42,6 @@ public class UserOrderLogStored implements Serializable {
 	@Column(name = "restaurant_uuid")
 	public String getRestaurantUUID() {
 		return restaurantUUID;
-	}
-
-	@Column(name = "restaurant_name")
-	public String getRestaurantName() {
-		return restaurantName;
-	}
-
-	@Column(name = "restaurant_address")
-	public String getRestaurantAddress() {
-		return restaurantAddress;
 	}
 
 	@Column(name = "user_message")
@@ -83,7 +73,7 @@ public class UserOrderLogStored implements Serializable {
 	public String getFetchDate() {
 		return fetchDate;
 	}
-	
+
 	@Column(name = "order_data")
 	public String getOrderData() {
 		return orderData;
@@ -99,8 +89,8 @@ public class UserOrderLogStored implements Serializable {
 		return enable;
 	}
 
-	public void setOrderUUId(String orderUUId) {
-		this.orderUUId = orderUUId;
+	public void setOrderUUID(String orderUUID) {
+		this.orderUUID = orderUUID;
 	}
 
 	public void setAccountUUID(String accountUUID) {
@@ -109,14 +99,6 @@ public class UserOrderLogStored implements Serializable {
 
 	public void setRestaurantUUID(String restaurantUUID) {
 		this.restaurantUUID = restaurantUUID;
-	}
-
-	public void setRestaurantName(String restaurantName) {
-		this.restaurantName = restaurantName;
-	}
-
-	public void setRestaurantAddress(String restaurantAddress) {
-		this.restaurantAddress = restaurantAddress;
 	}
 
 	public void setUserMessage(String userMessage) {
@@ -142,7 +124,7 @@ public class UserOrderLogStored implements Serializable {
 	public void setFetchDate(String fetchDate) {
 		this.fetchDate = fetchDate;
 	}
-	
+
 	public void setOrderData(String orderData) {
 		this.orderData = orderData;
 	}
@@ -154,24 +136,13 @@ public class UserOrderLogStored implements Serializable {
 	public void setEnable(String enable) {
 		this.enable = enable;
 	}
-	
-	
+
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass())
-				.add("orderUUId",orderUUId)
-				.add("accountUUID",accountUUID)
-				.add("restaurantUUID",restaurantUUID)
-				.add("restaurantName",restaurantName)
-				.add("restaurantAddress",restaurantAddress)
-				.add("userMessage",userMessage)
-				.add("createDate",createDate)
-				.add("updateDate",updateDate)
-				.add("orderPrice",orderPrice)
-				.add("orderBonus",orderBonus)
-				.add("fetchDate",fetchDate)
-				.add("status",status)
-				.add("enable",enable)
+		return MoreObjects.toStringHelper(this.getClass()).add("orderUUID", orderUUID).add("accountUUID", accountUUID)
+				.add("restaurantUUID", restaurantUUID).add("userMessage", userMessage).add("createDate", createDate)
+				.add("updateDate", updateDate).add("orderPrice", orderPrice).add("orderBonus", orderBonus)
+				.add("fetchDate", fetchDate).add("orderData", orderData).add("status", status).add("enable", enable)
 				.toString();
 	}
 

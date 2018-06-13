@@ -16,6 +16,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
+import com.melonltd.naber.rdbms.model.vo.LatLngVo;
 
 public class Tools {
 
@@ -104,6 +105,11 @@ public class Tools {
 				.collect(Collectors.toList());
 	}
 	
+	public static List<DateRangeVo> checkOpenStoreByRanges (	List<DateRangeVo> list, String now){
+		return list.stream()
+				.filter(f -> "N".equals(f.getStatus()) && org.apache.commons.lang3.Range.<String>between(f.getDate().substring(0, 5), f.getDate().substring(6, 11)).contains(now))
+				.collect(Collectors.toList());
+	}
 	
 	public static List<DateRangeVo> buildDateRange(Integer start , Integer end) {
 		start++;
@@ -171,4 +177,22 @@ public class Tools {
 		} 
 		return sb.toString(); 
 	}
+	
+	
+	public static double getGoogleDistance(LatLngVo start, LatLngVo end) {  
+	     double lat1 = (Math.PI / 180) * start.getLatitude();  
+	     double lat2 = (Math.PI / 180) * end.getLatitude();  
+	     double lon1 = (Math.PI / 180) * start.getLongitude();  
+	     double lon2 = (Math.PI / 180) * end.getLongitude();  
+	  
+	     double R = 6371;//地球半径  
+	     double d = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2)  
+	             * Math.cos(lon2 - lon1))  * R;  
+	     return d * 1000;  
+	 }  
+	
+//	class LatLng{
+//		double latitude;
+//		double longitude;
+//	}
 }

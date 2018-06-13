@@ -26,6 +26,7 @@ public class RestaurantInfo implements Serializable {
 	private String longitude;
 	private String bulletin;
 	private String photo;
+	private String createDate;
 	private String backgroundPhoto;
 	private String photoType;
 	private String enable;
@@ -67,7 +68,6 @@ public class RestaurantInfo implements Serializable {
 		return canStoreRange;
 	}
 
-
 	@Column(name = "restaurant_category")
 	public String getRestaurantCategory() {
 		return restaurantCategory;
@@ -102,6 +102,13 @@ public class RestaurantInfo implements Serializable {
 	public String getPhotoType() {
 		return photoType;
 	}
+
+	@Column(name = "create_date")
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	
 
 	@Column(name = "enable")
 	public String getEnable() {
@@ -168,6 +175,10 @@ public class RestaurantInfo implements Serializable {
 	public void setPhotoType(String photoType) {
 		this.photoType = photoType;
 	}
+	
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
 
 	public void setEnable(String enable) {
 		this.enable = enable;
@@ -193,6 +204,7 @@ public class RestaurantInfo implements Serializable {
 				.add("longitude",longitude)
 				.add("bulletin",bulletin)
 				.add("photo",photo)
+				.add("createDate", createDate)
 				.add("photoType",photoType)
 				.add("enable",enable)
 				.add("top",top)

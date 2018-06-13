@@ -4,20 +4,23 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
 
-import javax.persistence.Id;
 
 @Entity
-@Table(name = "order_info")
-public class OrderInfo implements Serializable {
-	private static final long serialVersionUID = 8319503394494022131L;
+@Table(name = "user_order_log")
+public class UserOrderLog implements Serializable {
 
+	private static final long serialVersionUID = -7484434525019743183L;
+	
 	private String orderUUID;
 	private String accountUUID;
 	private String restaurantUUID;
+	private String restaurantName;
+	private String restaurantAddress;
 	private String userMessage;
 	private String createDate;
 	private String updateDate;
@@ -42,6 +45,16 @@ public class OrderInfo implements Serializable {
 	@Column(name = "restaurant_uuid")
 	public String getRestaurantUUID() {
 		return restaurantUUID;
+	}
+	
+	@Column(name = "restaurant_name")
+	public String getRestaurantName() {
+		return restaurantName;
+	}
+
+	@Column(name = "restaurant_address")
+	public String getRestaurantAddress() {
+		return restaurantAddress;
 	}
 
 	@Column(name = "user_message")
@@ -100,6 +113,14 @@ public class OrderInfo implements Serializable {
 	public void setRestaurantUUID(String restaurantUUID) {
 		this.restaurantUUID = restaurantUUID;
 	}
+	
+	public void setRestaurantName(String restaurantName) {
+		this.restaurantName = restaurantName;
+	}
+
+	public void setRestaurantAddress(String restaurantAddress) {
+		this.restaurantAddress = restaurantAddress;
+	}
 
 	public void setUserMessage(String userMessage) {
 		this.userMessage = userMessage;
@@ -136,14 +157,26 @@ public class OrderInfo implements Serializable {
 	public void setEnable(String enable) {
 		this.enable = enable;
 	}
-
+	
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass()).add("orderUUID", orderUUID).add("accountUUID", accountUUID)
-				.add("restaurantUUID", restaurantUUID).add("userMessage", userMessage).add("createDate", createDate)
-				.add("updateDate", updateDate).add("orderPrice", orderPrice).add("orderBonus", orderBonus)
-				.add("fetchDate", fetchDate).add("orderData", orderData).add("status", status).add("enable", enable)
+		return MoreObjects.toStringHelper(this.getClass())
+				.add("orderUUID", orderUUID)
+				.add("accountUUID", accountUUID)
+				.add("restaurantUUID", restaurantUUID)
+				.add("restaurantName", restaurantName)
+				.add("restaurantAddress", restaurantAddress)
+				.add("userMessage", userMessage)
+				.add("createDate", createDate)
+				.add("updateDate", updateDate)
+				.add("orderPrice", orderPrice)
+				.add("orderBonus", orderBonus)
+				.add("fetchDate", fetchDate)
+				.add("orderData", orderData)
+				.add("status", status)
+				.add("enable", enable)
 				.toString();
 	}
 
 }
+

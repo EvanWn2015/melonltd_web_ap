@@ -14,7 +14,7 @@ import com.google.common.base.MoreObjects;
 public class RestaurantCategoryRel implements Serializable {
 	private static final long serialVersionUID = 6997247221789078230L;
 
-	private String categorUUID;
+	private String categoryUUID;
 	private String restaurantUUID;
 	private String categoryName;
 	private String status;
@@ -22,9 +22,9 @@ public class RestaurantCategoryRel implements Serializable {
 	private String createDate;
 
 	@Id
-	@Column(name = "category_uui", unique = true, nullable = false)
-	public String getCategorUUID() {
-		return categorUUID;
+	@Column(name = "category_uuid", unique = true, nullable = false)
+	public String getCategoryUUID() {
+		return categoryUUID;
 	}
 
 	@Column(name = "restaurant_uuid")
@@ -52,8 +52,8 @@ public class RestaurantCategoryRel implements Serializable {
 		return createDate;
 	}
 	
-	public void setCategorUUID(String categorUUID) {
-		this.categorUUID = categorUUID;
+	public void setCategoryUUID(String categoryUUID) {
+		this.categoryUUID = categoryUUID;
 	}
 
 	public void setRestaurantUUID(String restaurantUUID) {
@@ -79,7 +79,7 @@ public class RestaurantCategoryRel implements Serializable {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())
-				.add("categorUUID",categorUUID)
+				.add("categoryUUID",categoryUUID)
 				.add("restaurantUUID",restaurantUUID)
 				.add("categoryName",categoryName)
 				.add("status",status)

@@ -23,8 +23,4 @@ public interface AccountInfoDao extends JpaRepository<AccountInfo, String> {
 	@Query("UPDATE AccountInfo a SET a.password = ?1 WHERE a.phone = ?2 AND a.accountUUID= ?3")	
 	public void updatePasswordByPhoneAndUUID(String password, String phone,  String accountUUID);
 	
-//	@Modifying(clearAutomatically = true)
-//	@Query("UPDATE AccountInfo a SET a.accountUUID = ?1 WHERE a.accountUUID = ?2")	
-//	public void update(String newUUID, String oldUUID );
-	
 }

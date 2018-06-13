@@ -13,6 +13,6 @@ public class MainDomainController {
 			org.springframework.web.bind.annotation.RequestMethod.POST })
 	@ResponseBody
 	public ResponseEntity<String> getMainDomain() {
-		return new ResponseEntity("", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
 	}
 }

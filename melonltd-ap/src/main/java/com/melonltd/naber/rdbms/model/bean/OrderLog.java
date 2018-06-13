@@ -4,17 +4,16 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
 
-import javax.persistence.Id;
-
 @Entity
-@Table(name = "order_info")
-public class OrderInfo implements Serializable {
-	private static final long serialVersionUID = 8319503394494022131L;
-
+@Table(name = "order_log")
+public class OrderLog implements Serializable {
+	private static final long serialVersionUID = 2088198035040888362L;
+	
 	private String orderUUID;
 	private String accountUUID;
 	private String restaurantUUID;

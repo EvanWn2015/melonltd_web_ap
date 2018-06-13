@@ -1,5 +1,6 @@
 package com.melonltd.naber.rdbms.model.service;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -18,15 +19,11 @@ import com.melonltd.naber.rdbms.model.dao.AccountInfoDao;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 
 @Service("accountInfoService")
-// @Transactional(readOnly = true)
 public class AccountInfoService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountInfoService.class);
 
 	@Autowired
 	AccountInfoDao accountInfoDao;
-
-//	@Autowired
-//	LoginDao loginDao;
 
 	LoadingCache<String, AccountInfo> cacheBuilder = CacheBuilder.newBuilder()
 			.expireAfterAccess(7, TimeUnit.DAYS)
@@ -39,16 +36,7 @@ public class AccountInfoService {
 				}
 			});
 
-	public AccountInfoVo getCacheBuilderByKey(String uuid, boolean hasPassword) {
-		AccountInfo info = null;
-		try {
-			info = cacheBuilder.get(uuid);
-			return AccountInfoVo.of(info,hasPassword);
-		} catch (Exception e) {
-			LOGGER.error("The {} does not exist in the cache", uuid);
-			return null;
-		}
-	}
+	
 
 	public AccountInfoVo findByPhone(String phone) {
 		AccountInfo info = accountInfoDao.findByPhone(phone);
@@ -56,6 +44,16 @@ public class AccountInfoService {
 			return null;
 		}
 		return AccountInfoVo.of(info, true);
+	}
+	
+	
+	public AccountInfoVo findByPhoneAndPassword (String phone, String password) {
+		AccountInfo info = accountInfoDao.findByPhoneAndPassword(phone, password);
+		if (ObjectUtils.allNotNull(info)) {
+			putCache(info);
+			AccountInfoVo.of(info, false);
+		}
+		return null;
 	}
 
 	public AccountInfoVo findByAccountUUID(String uuid) {
@@ -67,7 +65,6 @@ public class AccountInfoService {
 		return null;
 	}
 
-	// @Transactional(readOnly = false, rollbackFor = HibernateException.class)
 	public AccountInfo save(AccountInfoVo vo, UUIDType type) {
 		AccountInfo oldInfo = accountInfoDao.findByPhone(vo.getPhone());
 		if (ObjectUtils.allNotNull(oldInfo)) {
@@ -103,16 +100,40 @@ public class AccountInfoService {
 		}
 	}
 
-	// @Transactional(readOnly = false, rollbackFor = HibernateException.class)
 	public void refreshLoginStatus(String uuid) {
 		AccountInfo info = accountInfoDao.findByAccountUUID(uuid);
 		if (ObjectUtils.anyNotNull(info)) {
-			info.setLoginDate("");
-			info.setIsLogin("0");
+			info.setLoginDate(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+			info.setIsLogin("N");
 			accountInfoDao.save(info);
 		}
 	}
+	
+	public void changeLoginStatus(String uuid) {
+		try {
+			AccountInfo info = cacheBuilder.get(uuid);
+			if (ObjectUtils.anyNotNull(info)) {
+				info.setLoginDate(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+				info.setIsLogin("Y");
+				accountInfoDao.save(info);
+				clearCacheBuilderByKey(info.getAccountUUID());
+			}
+		} catch (ExecutionException e) {
+			LOGGER.error("The {} does not exist in the cache", uuid);
+		}
+	}
 
+	
+	public AccountInfoVo getCacheBuilderByKey(String uuid, boolean hasPassword) {
+		AccountInfo info = null;
+		try {
+			info = cacheBuilder.get(uuid);
+			return AccountInfoVo.of(info,hasPassword);
+		} catch (Exception e) {
+			LOGGER.error("The {} does not exist in the cache", uuid);
+			return null;
+		}
+	}
 	public void putCache(AccountInfo info) {
 		cacheBuilder.put(info.getAccountUUID(), info);
 	}

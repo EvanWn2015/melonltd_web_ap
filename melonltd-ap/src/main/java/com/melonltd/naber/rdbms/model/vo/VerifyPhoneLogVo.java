@@ -1,4 +1,4 @@
-package com.melonltd.naber.rdbms.model.req.vo;
+package com.melonltd.naber.rdbms.model.vo;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ public class VerifyPhoneLogVo implements Serializable {
 	private static final long serialVersionUID = 6764817969371558834L;
 
 	private String batch_id;
-	private String phone_number;
+	private String phone;
 	private String code;
 
 	public String getBatch_id() {
@@ -19,12 +19,12 @@ public class VerifyPhoneLogVo implements Serializable {
 		this.batch_id = batch_id;
 	}
 
-	public String getPhone_number() {
-		return phone_number;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setPhone_number(String phone_number) {
-		this.phone_number = phone_number;
+	public void setPhon(String phone) {
+		this.phone = phone;
 	}
 
 	public String getCode() {
@@ -37,7 +37,7 @@ public class VerifyPhoneLogVo implements Serializable {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass()).add("phone_number", phone_number).add("code", code)
+		return MoreObjects.toStringHelper(this.getClass()).add("phone", phone).add("code", code)
 				.toString();
 	}
 

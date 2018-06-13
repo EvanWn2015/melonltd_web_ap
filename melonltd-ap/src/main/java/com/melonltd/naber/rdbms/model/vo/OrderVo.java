@@ -1,17 +1,17 @@
-package com.melonltd.naber.rdbms.model.stored.vo;
+package com.melonltd.naber.rdbms.model.vo;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.ObjectUtils;
+import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
-import com.melonltd.naber.rdbms.model.stored.bean.UserOrderLogStored;
+import com.melonltd.naber.rdbms.model.bean.OrderInfo;
+import com.melonltd.naber.rdbms.model.bean.OrderLog;
+import com.melonltd.naber.rdbms.model.bean.UserOrderLog;
 
-public class UserOrderLogStoredVo implements Serializable {
-	private static final long serialVersionUID = 2517446496177933253L;
+public class OrderVo {
 
 	private String order_uuid;
 	private String account_uuid;
@@ -141,17 +141,11 @@ public class UserOrderLogStoredVo implements Serializable {
 	}
 	
 	
-	
-	public static UserOrderLogStoredVo valueOf (UserOrderLogStored info) {
-		if (!ObjectUtils.anyNotNull(info)) {
-			return null;
-		}
-		UserOrderLogStoredVo vo = new UserOrderLogStoredVo();
-		vo.order_uuid = info.getOrderUUId();
+	public static OrderVo valueOf(OrderInfo info){
+		OrderVo vo = new OrderVo();
+		vo.order_uuid = info.getOrderUUID();
 		vo.account_uuid = info.getAccountUUID();
 		vo.restaurant_uuid = info.getRestaurantUUID();
-		vo.restaurant_name = info.getRestaurantName();
-		vo.restaurant_address = info.getRestaurantAddress();
 		vo.user_message = info.getUserMessage();
 		vo.create_date = info.getCreateDate();
 		vo.update_date = info.getUpdateDate();
@@ -164,14 +158,48 @@ public class UserOrderLogStoredVo implements Serializable {
 		return vo;
 	}
 	
-	public static List<UserOrderLogStoredVo> valueOfArray (List<UserOrderLogStored> infos) {
-		List<UserOrderLogStoredVo> vos = Lists.<UserOrderLogStoredVo>newArrayList();
+	public static OrderVo valueOf(OrderLog info){
+		OrderVo vo = new OrderVo();
+		vo.order_uuid = info.getOrderUUID();
+		vo.account_uuid = info.getAccountUUID();
+		vo.restaurant_uuid = info.getRestaurantUUID();
+		vo.user_message = info.getUserMessage();
+		vo.create_date = info.getCreateDate();
+		vo.update_date = info.getUpdateDate();
+		vo.order_price = info.getOrderPrice();
+		vo.order_bonus = info.getOrderBonus();
+		vo.fetch_date = info.getFetchDate();
+		vo.order_data = info.getOrderData();
+		vo.status = info.getStatus();
+		vo.enable = info.getEnable();
+		return vo;
+	}
+	
+	public static OrderVo valueOf(UserOrderLog info){
+		OrderVo vo = new OrderVo();
+		vo.order_uuid = info.getOrderUUID();
+		vo.account_uuid = info.getAccountUUID();
+		vo.restaurant_name = info.getRestaurantName();
+		vo.restaurant_address = info.getRestaurantAddress();
+		vo.restaurant_uuid = info.getRestaurantUUID();
+		vo.user_message = info.getUserMessage();
+		vo.create_date = info.getCreateDate();
+		vo.update_date = info.getUpdateDate();
+		vo.order_price = info.getOrderPrice();
+		vo.order_bonus = info.getOrderBonus();
+		vo.fetch_date = info.getFetchDate();
+		vo.order_data = info.getOrderData();
+		vo.status = info.getStatus();
+		vo.enable = info.getEnable();
+		return vo;
+	}
+	
+	public static List<OrderVo> valueOfArray(List<UserOrderLog> infos){
+		List<OrderVo> vos = Lists.newArrayList();
 		vos.addAll(infos.stream().map(a -> valueOf(a)).collect(Collectors.toList()));
 		return vos;
 	}
 	
-	
-
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())
@@ -186,7 +214,7 @@ public class UserOrderLogStoredVo implements Serializable {
 				.add("order_price", order_price)
 				.add("order_bonus", order_bonus)
 				.add("fetch_date", fetch_date)
-				.add("order_data",order_data)
+				.add("order_data", order_data)
 				.add("status", status)
 				.add("enable", enable)
 				.toString();

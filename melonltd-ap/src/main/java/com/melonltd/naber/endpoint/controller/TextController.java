@@ -1,7 +1,6 @@
 package com.melonltd.naber.endpoint.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 import javax.mail.MessagingException;
 
@@ -13,12 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.push.service.AnpsPushServcie;
 import com.melonltd.naber.rdbms.model.push.service.MailSendService;
-import com.melonltd.naber.rdbms.model.stored.service.RestaurantStoredService;
-import com.melonltd.naber.rdbms.model.stored.vo.RestaurantStoredVo;
 
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
@@ -26,8 +22,7 @@ public class TextController {
 	
 	@Autowired
 	private AnpsPushServcie anpsPushServcie;
-	@Autowired
-	private RestaurantStoredService restaurantStoredService;
+	
 	@Autowired
 	private MailSendService mailSendService;
 	

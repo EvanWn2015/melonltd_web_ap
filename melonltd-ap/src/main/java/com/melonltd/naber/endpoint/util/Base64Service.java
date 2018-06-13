@@ -11,13 +11,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.melonltd.naber.constant.NaberConstant;
+
 @Service
 public class Base64Service {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Base64Service.class);
 
 	public static String encode(String key) {
 		try {
-			return Base64.getEncoder().encodeToString(URLEncoder.encode(key, "UTF-8").getBytes("UTF-8"));
+			if (NaberConstant.IS_DEBUG) {
+				return key;
+			}else {
+				return Base64.getEncoder().encodeToString(URLEncoder.encode(key, "UTF-8").getBytes("UTF-8"));	
+			}
 		} catch (UnsupportedEncodingException e) {
 			LOGGER.error("", e);
 			throw new Base64Exception("Encryption error !", e);
@@ -26,8 +32,12 @@ public class Base64Service {
 
 	public static String decode(@NotNull String key) {
 		try {
+			if (NaberConstant.IS_DEBUG) {
+				return key;
+			}else {
+				return URLDecoder.decode(new String(Base64.getDecoder().decode(key), "UTF-8"), "UTF-8");	
+			}
 //			String decode = new String(Base64.getDecoder().decode(key));
-			return URLDecoder.decode(new String(Base64.getDecoder().decode(key), "UTF-8"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			LOGGER.error("", e);
 			throw new Base64Exception("Decryption error or The Cookie was tampered with !", e);

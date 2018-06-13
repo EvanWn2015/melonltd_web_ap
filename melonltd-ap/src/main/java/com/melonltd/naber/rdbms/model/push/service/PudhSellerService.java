@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Maps;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.req.vo.OredeSubimtReq;
-import com.melonltd.naber.rdbms.model.stored.bean.MobileDeviceStordVo;
-import com.melonltd.naber.rdbms.model.stored.service.MobileTokenStoredService;
+import com.melonltd.naber.rdbms.model.service.MobileDeviceService;
 import com.melonltd.naber.rdbms.model.type.DeviceCategory;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
+import com.melonltd.naber.rdbms.model.vo.MobileDeviceVo;
 
 @Service("pudhSellerService")
 public class PudhSellerService {
 	
 	@Autowired
-	private MobileTokenStoredService mobileTokenStoredService;
+	private MobileDeviceService mobileDeviceService;
 	
 	@Autowired
 	private AndroidPushService androidPushService;
@@ -31,12 +31,12 @@ public class PudhSellerService {
 	}
 	
 	public void pushOrderToSeller(String restaurantUUID , OredeSubimtReq data, OrderStatus status ) {
-		MobileDeviceStordVo mobile =  mobileTokenStoredService.findByRestaurantUUID(restaurantUUID);
+		MobileDeviceVo mobile =  mobileDeviceService.findByRestaurantUUID(restaurantUUID);
 		LinkedHashMap<String, Object> map = Maps.newLinkedHashMap();
 		map.put("notify_type", PushType.NEW_ORDER.name());
 		map.put("data",JsonHelper.toJson(data));
 		
-		if (!ObjectUtils.anyNotNull(mobile)) {
+		if (ObjectUtils.anyNotNull(mobile)) {
 			switch (DeviceCategory.of(mobile.getDevice_category())) {
 			case IOS:
 				anpsPushServcie.push(mobile.getDevice_token(), "", JsonHelper.toJson(map));

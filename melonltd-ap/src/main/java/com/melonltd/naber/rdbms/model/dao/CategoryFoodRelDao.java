@@ -12,12 +12,10 @@ public interface CategoryFoodRelDao extends JpaRepository<CategoryFoodRel, Strin
 	@Query("SELECT a FROM CategoryFoodRel a WHERE a.enable='Y' AND a.status = ?1 AND a.categoryUUID = ?2")
 	public List<CategoryFoodRel> findByStatus(String status, String categoryUUID);
 	
-	
 	@Query("SELECT a FROM CategoryFoodRel a WHERE a.enable='Y' AND a.status = 'OPEN' AND a.foodUUID = ?1 ORDER BY a.createDate DESC")
 	public CategoryFoodRel findByFoodUUID(String foodUUID);
-//	
-//	
-//	@Query("SELECT a FROM CategoryFoodRel a, RestaurantCategoryRel r WHERE a.enable='Y' AND a.status = 'OPEN' AND a.foodUUID IN(?1) AND r.enable='Y' AND r.status = 'OPEN' AND a.categoryUUID = r.categoryUUID")
-//	public List<CategoryFoodRel> findByFoodUUID(String[] foodUUIDs);
+
+	@Query("SELECT f FROM CategoryFoodRel f, RestaurantCategoryRel r WHERE f.foodUUID IN(?1) AND f.status='OPEN' AND f.enable='Y' AND r.status='OPEN' AND r.enable='Y' AND f.categoryUUID=r.categoryUUID")
+	public List<CategoryFoodRel> findStatusByFoodUUIDs(List<String> foodUUIDs);
 	
 }

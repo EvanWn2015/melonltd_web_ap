@@ -11,6 +11,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,14 +27,16 @@ import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
+import com.melonltd.naber.rdbms.model.facade.service.SubmitOrderService;
 import com.melonltd.naber.rdbms.model.push.service.PudhSellerService;
 import com.melonltd.naber.rdbms.model.req.vo.OredeSubimtReq;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
+import com.melonltd.naber.rdbms.model.service.CategoryFoodRelSerice;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
-import com.melonltd.naber.rdbms.model.stored.service.UserOrderLogStoredService;
-import com.melonltd.naber.rdbms.model.stored.vo.UserOrderLogStoredVo;
+import com.melonltd.naber.rdbms.model.service.UserOrderLogService;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
+import com.melonltd.naber.rdbms.model.vo.OrderVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
@@ -40,9 +46,16 @@ import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class UserOrderController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserOrderController.class);
+//	
+//	@Autowired
+//	private UserOrderLogStoredService userOrderLogStoredService;
 	
 	@Autowired
-	private UserOrderLogStoredService userOrderLogStoredService;
+	private CategoryFoodRelSerice categoryFoodRelSerice;
+	@Autowired
+	private UserOrderLogService userOrderLogService;
+	@Autowired
+	private SubmitOrderService submitOrderService;
 	
 	@Autowired 
 	private RestaurantInfoService restaurantInfoService;
@@ -69,19 +82,19 @@ public class UserOrderController {
 				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);	
 			}else {
 				boolean isOpen = checkIsStoreOpen(req, vo);
-				String[] foodUUIDs = req.getOrders().stream().map(a -> a.getFood_uuid()).toArray(String[] :: new);
-				String [] foodOpens = userOrderLogStoredService.getFoodStatusOpenByUUIDs(foodUUIDs);
+				List<String> foodUUIDs = req.getOrders().stream().map(a -> a.getFood_uuid()).collect(Collectors.toList());
+				int foodOpens = categoryFoodRelSerice.getFoodStatusOpenByUUIDs(foodUUIDs);
 				if (!isOpen) {
 					LOGGER.info("Store is close account : {}, uuid:{} ",accountUUID, req.getRestaurant_uuid());
 					map = RespData.of(Status.FALSE, errorType.STORE_IS_CLOSE, null);
-				}else if (foodUUIDs.length != foodOpens.length) {
+				}else if (foodUUIDs.size() != foodOpens) {
 					LOGGER.info("food item or category status is close account : {}, food_uuid:{} ",accountUUID, foodUUIDs);
 					map = RespData.of(Status.FALSE, errorType.STATUS_IS_CLOSE, null);	
 				}else {
 					int price = getPrice(req);
 					String bonus = ((int)Math.floor(price / 10d) + "");
 					String orders = JsonHelper.toJson(OredeSubimtReq.ofOrders(req.getOrders()));
-					UserOrderLogStoredVo result = userOrderLogStoredService.submitOrder(accountUUID , Tools.buildUUID(UUIDType.ORDER),  vo,  req,  String.valueOf(price),  bonus,  orders);
+					OrderVo result = submitOrderService.submitOrder(accountUUID , Tools.buildUUID(UUIDType.ORDER),  vo,  req,  String.valueOf(price),  bonus,  orders);
 					if (!ObjectUtils.anyNotNull(result)) {
 						LOGGER.error("submit order save fail account : {}, uuid:{} ",accountUUID, req.getRestaurant_uuid());
 						map = RespData.of(Status.FALSE, ErrorType.SAVE_ERROR, null);	
@@ -125,7 +138,13 @@ public class UserOrderController {
 		if (StringUtils.isAllBlank(uuid)) {
 			map = RespData.of(Status.FALSE, ErrorType.HEADESR_ERROR, null);
 		} else {
-			List<UserOrderLogStoredVo> list = userOrderLogStoredService.findByAccountUUIDAndPage(uuid, req.getPage());
+			int page = req.getPage();
+			if (page > 0) {
+				page = page - 1;
+			}
+			Sort sort = new Sort(Direction.ASC, "fetchDate");
+			Pageable pageable = new PageRequest(page, 10, sort);
+			List<OrderVo> list = userOrderLogService.findByAccountUUIDAndPage(uuid, pageable);
 			map = RespData.of(Status.TRUE, null, list);
 		}
 		String result = Base64Service.encode(JsonHelper.toJson(map));
@@ -141,7 +160,7 @@ public class UserOrderController {
 		List<DateRangeVo> canStoreRange = Tools.checkOpenStoreByRanges(vo.getCan_store_range(), fetch_date);
 		
 		int nowUTC = Tools.getDayOfYear(req.getFetch_date(),"yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
-		List<String> notBusiness = JsonHelper.jsonArray(vo.getNot_business(), String[].class).stream().filter(a -> {
+		List<String> notBusiness = vo.getNot_business().stream().filter(a -> {
 			return Tools.getDayOfYear(a, "yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'") == nowUTC;
 		}).collect(Collectors.toList());
 		

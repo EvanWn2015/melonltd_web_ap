@@ -23,9 +23,9 @@ import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
 import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
-import com.melonltd.naber.rdbms.model.req.vo.SellerRegisteredVo;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
+import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 
 @PropertySource("classpath:/config.properties")
 public class MyTest {
@@ -316,7 +316,7 @@ public class MyTest {
 		System.out.println(vo);
 		String encode = "{\"phone\":\"0987654321\"}";
 		System.out.println(Base64Service.encode(encode));
-		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIyZmFsc2UlMjIlMkMlMjJlcnJfY29kZSUyMiUzQSUyMjAwMDQlMjIlMkMlMjJlcnJfbXNnJTIyJTNBJTIyJUU1JUI4JUIzJUU2JTg4JUI2K3Rva2VuKyVFOCVBQSU4RCVFOCVBRCU4OSVFNSVBNCVCMSVFNiU5NSU5NyUyMiUyQyUyMmRhdGElMjIlM0ElMjIlMjIlN0Q=";
+		String code = "JTdCJTIycGhvbmVfbnVtYmVyJTIyJTNBJTIyMDkyODI5NzA3NiUyMiU3RA==";
 		System.out.println(Base64Service.decode(code));
 	}
 
