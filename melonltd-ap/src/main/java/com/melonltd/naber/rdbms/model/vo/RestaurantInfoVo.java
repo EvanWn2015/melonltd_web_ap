@@ -32,13 +32,21 @@ public class RestaurantInfoVo implements Serializable {
 	private String photo;
 	private String background_photo;
 	private String photo_type;
+	private String create_date;
 	private String enable;
 	private String top;
 	
 	private String distance;
-	
 
 	
+	public String getCreate_date() {
+		return create_date;
+	}
+
+	public void setCreate_date(String create_date) {
+		this.create_date = create_date;
+	}
+
 	public String getIs_store_now_open() {
 		return is_store_now_open;
 	}
@@ -219,9 +227,11 @@ public class RestaurantInfoVo implements Serializable {
 		vo.longitude = info.getLongitude();
 		vo.bulletin = info.getBulletin();
 		vo.photo = info.getPhoto();
+		vo.enable = info.getEnable();
 		vo.background_photo = info.getBackgroundPhoto();
+		vo.create_date = info.getCreateDate();
 		vo.top = info.getTop();
-		if (ObjectUtils.anyNotNull(start)) {
+		if (ObjectUtils.allNotNull(start)) {
 			double distance = Tools.getGoogleDistance(start, LatLngVo.of(info.getLatitude(), info.getLongitude()));
 			vo.distance = conversionFrom(distance);
 		}

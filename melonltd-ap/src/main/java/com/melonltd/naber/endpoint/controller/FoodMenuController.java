@@ -17,6 +17,7 @@ import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.CategoryFoodRelSerice;
+import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.CategoryFoodRelVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
@@ -39,7 +40,7 @@ public class FoodMenuController {
 		if (StringUtils.isBlank(req.getUuid())) {
 			map = RespData.of(Status.FALSE, ErrorType.INVALID, null);
 		} else {
-			List<CategoryFoodRelVo> list = categoryFoodRelSerice.findByStatusAndCategoryUUID("OPEN", req.getUuid());
+			List<CategoryFoodRelVo> list = categoryFoodRelSerice.findByStatusAndCategoryUUID(SwitchStatus.OPEN.name(), req.getUuid());
 			map = RespData.of(Status.TRUE, null, list);
 		}
 

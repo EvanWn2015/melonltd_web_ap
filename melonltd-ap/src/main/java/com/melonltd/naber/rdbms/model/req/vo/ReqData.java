@@ -17,6 +17,24 @@ public class ReqData {
 	private String date;
 	private String message;
 	private String type;
+	private String name;
+	private String status;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getType() {
 		return type;

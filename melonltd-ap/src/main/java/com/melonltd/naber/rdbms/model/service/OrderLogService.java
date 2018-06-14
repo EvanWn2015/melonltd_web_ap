@@ -21,5 +21,17 @@ public class OrderLogService {
 		}
 		return null;
 	}
+	
+	public OrderVo findOne(String uuid) {
+		OrderLog o = orderLogDao.findOne(uuid);
+		if (ObjectUtils.anyNotNull(o)) {
+			if (o.getEnable().equals("N")) {
+				return null;
+			}else {
+				return OrderVo.valueOf(o);	
+			}
+		}
+		return null;
+	}
 
 }

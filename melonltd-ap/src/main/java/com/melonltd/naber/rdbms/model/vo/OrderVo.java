@@ -9,12 +9,15 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.rdbms.model.bean.OrderInfo;
 import com.melonltd.naber.rdbms.model.bean.OrderLog;
+import com.melonltd.naber.rdbms.model.bean.SellerOrderFinish;
 import com.melonltd.naber.rdbms.model.bean.UserOrderLog;
 
 public class OrderVo {
 
 	private String order_uuid;
 	private String account_uuid;
+	private String account_name;
+	private String account_phone;
 	private String restaurant_uuid;
 	private String restaurant_name;
 	private String restaurant_address;
@@ -27,6 +30,7 @@ public class OrderVo {
 	private String order_data;
 	private String status;
 	private String enable;
+
 
 	public String getOrder_uuid() {
 		return order_uuid;
@@ -42,6 +46,22 @@ public class OrderVo {
 
 	public void setAccount_uuid(String account_uuid) {
 		this.account_uuid = account_uuid;
+	}
+
+	public String getAccount_name() {
+		return account_name;
+	}
+
+	public void setAccount_name(String account_name) {
+		this.account_name = account_name;
+	}
+
+	public String getAccount_phone() {
+		return account_phone;
+	}
+
+	public void setAccount_phone(String account_phone) {
+		this.account_phone = account_phone;
 	}
 
 	public String getRestaurant_uuid() {
@@ -139,7 +159,25 @@ public class OrderVo {
 	public void setEnable(String enable) {
 		this.enable = enable;
 	}
-	
+
+	public static OrderVo valueOf(SellerOrderFinish info){
+		OrderVo vo = new OrderVo();
+		vo.order_uuid = info.getOrderUUID();
+		vo.account_uuid = info.getAccountUUID();
+		vo.account_name = info.getAccountName();
+		vo.account_phone = info.getAccountPhone();
+		vo.restaurant_uuid = info.getRestaurantUUID();
+		vo.user_message = info.getUserMessage();
+		vo.create_date = info.getCreateDate();
+		vo.update_date = info.getUpdateDate();
+		vo.order_price = info.getOrderPrice();
+		vo.order_bonus = info.getOrderBonus();
+		vo.fetch_date = info.getFetchDate();
+		vo.order_data = info.getOrderData();
+		vo.status = info.getStatus();
+		vo.enable = info.getEnable();
+		return vo;
+	}
 	
 	public static OrderVo valueOf(OrderInfo info){
 		OrderVo vo = new OrderVo();

@@ -9,8 +9,8 @@ import com.melonltd.naber.rdbms.model.bean.MobileDevice;
 
 public interface MobileDeviceDao extends JpaRepository<MobileDevice, String> {
 
-	@Query("SELECT a FROM MobileDevice a WHERE a.accountUUID = ?1 ORDER BY a.createDate DESC")	
-	public MobileDevice findByAccountUUID(String accountUUID);
+	@Query("SELECT a FROM MobileDevice a WHERE a.accountUUID = ?1")	
+	public Page<MobileDevice> findByAccountUUID(String accountUUID,Pageable pageable);
 	
 	
 	@Query("SELECT m FROM MobileDevice m, AccountInfo a WHERE a.restaurantUUID = ?1 AND a.accountUUID = m.accountUUID")	

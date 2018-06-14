@@ -28,10 +28,14 @@ public class UserOrderLogService {
 		return null;
 	}
 	
-	public UserOrderLog findOne(String uuid) {
+	public OrderVo findOne(String uuid) {
 		UserOrderLog o = userOrderLogDao.findOne(uuid);
 		if (ObjectUtils.anyNotNull(o)) {
-			return o;
+			if (o.getEnable().equals("N")) {
+				return null;
+			}else {
+				return OrderVo.valueOf(o);	
+			}
 		}
 		return null;
 	}

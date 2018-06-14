@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
+import com.melonltd.naber.rdbms.model.vo.OrderVo;
 
 
 @Entity
@@ -17,6 +18,8 @@ public class SellerOrderFinish implements Serializable {
 	
 	private String orderUUID;
 	private String accountUUID;
+	private String accountName;
+	private String accountPhone;
 	private String restaurantUUID;
 	private String userMessage;
 	private String createDate;
@@ -37,6 +40,16 @@ public class SellerOrderFinish implements Serializable {
 	@Column(name = "account_uuid")
 	public String getAccountUUID() {
 		return accountUUID;
+	}
+	
+	@Column(name = "account_name")
+	public String getAccountName() {
+		return accountName;
+	}
+	
+	@Column(name = "account_phone")
+	public String getAccountPhone() {
+		return accountName;
 	}
 
 	@Column(name = "restaurant_uuid")
@@ -96,6 +109,14 @@ public class SellerOrderFinish implements Serializable {
 	public void setAccountUUID(String accountUUID) {
 		this.accountUUID = accountUUID;
 	}
+	
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+	
+	public void setAccountPhone(String accountPhone) {
+		this.accountPhone = accountPhone;
+	}
 
 	public void setRestaurantUUID(String restaurantUUID) {
 		this.restaurantUUID = restaurantUUID;
@@ -136,10 +157,30 @@ public class SellerOrderFinish implements Serializable {
 	public void setEnable(String enable) {
 		this.enable = enable;
 	}
+	
+	public static SellerOrderFinish valueOf(OrderVo vo) {
+		SellerOrderFinish info = new SellerOrderFinish();
+		info.orderUUID = vo.getOrder_uuid();
+		info.accountUUID = vo.getAccount_uuid();
+		info.restaurantUUID = vo.getRestaurant_uuid();
+		info.userMessage = vo.getUser_message();
+		info.createDate = vo.getCreate_date();
+		info.updateDate = vo.getUpdate_date();
+		info.orderPrice = vo.getOrder_price();
+		info.orderBonus = vo.getOrder_bonus();
+		info.fetchDate = vo.getFetch_date();
+		info.orderData = vo.getOrder_data();
+		info.status = vo.getStatus();
+		info.enable = vo.getEnable();
+		return info;
+	}
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass()).add("orderUUID", orderUUID).add("accountUUID", accountUUID)
+		return MoreObjects.toStringHelper(this.getClass()).add("orderUUID", orderUUID)
+				.add("accountUUID", accountUUID)
+				.add("accountName", accountName)
+				.add("accountPhone", accountPhone)
 				.add("restaurantUUID", restaurantUUID).add("userMessage", userMessage).add("createDate", createDate)
 				.add("updateDate", updateDate).add("orderPrice", orderPrice).add("orderBonus", orderBonus)
 				.add("fetchDate", fetchDate).add("orderData", orderData).add("status", status).add("enable", enable)

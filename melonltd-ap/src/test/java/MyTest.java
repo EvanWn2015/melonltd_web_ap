@@ -10,6 +10,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.collections4.bag.SynchronizedSortedBag;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
 import org.springframework.context.annotation.PropertySource;
 
@@ -22,6 +25,7 @@ import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
 import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
+import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
@@ -135,7 +139,7 @@ public class MyTest {
 
 		boolean status = true;
 		while (status) {
-			list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), "Y"));
+			list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
 			int dd = 30;
 			if (timeR.upperEndpoint() % 100 == 0) {
 				dd = 30;
@@ -145,7 +149,7 @@ public class MyTest {
 			timeR = Range.open(timeR.upperEndpoint() + 1, timeR.upperEndpoint() + dd);
 			status = timeR.upperEndpoint().intValue() < end;
 			if (!status) {
-				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), "Y"));
+				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
 			}
 		}
 		return list;
@@ -159,7 +163,7 @@ public class MyTest {
 
 		boolean status = true;
 		while (status) {
-			list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), "Y"));
+			list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
 			int dd = 30;
 			if (timeR.upperEndpoint() % 100 == 0) {
 				dd = 30;
@@ -169,12 +173,12 @@ public class MyTest {
 			timeR = Range.open(timeR.upperEndpoint() + 1, timeR.upperEndpoint() + dd);
 
 			if (timeR.upperEndpoint().intValue() == 2400) {
-				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), 2400, "Y"));
+				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), 2400, SwitchStatus.OPEN));
 				timeR = Range.open(0 + 1, 30);
 			}
 
 			if (timeR.upperEndpoint().intValue() == end) {
-				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), "Y"));
+				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
 				status = false;
 			}
 		}
@@ -324,12 +328,33 @@ public class MyTest {
 	public void fDate() {
 //		System.out.println();
 		
-		System.out.println(Tools.getNowEndOfDayGMTtoUTC(Instant.now().toString(), 0, -8));
-		System.out.println(Tools.getStartOfDayGMTtoUTC(Instant.now().toString(), 0, -8));
+//		org.apache.commons.lang3.Range<String> month = org.apache.commons.lang3.Range.between(Tools.getNowStartOfMonthUTC(-1), Tools.getNowEndOfMonthUTC(-1));
+//		org.apache.commons.lang3.Range<String> year = org.apache.commons.lang3.Range.between(Tools.getStartOfYearUTC(0, 0), Tools.getNowEndOfMonthUTC(-1));
+//		org.apache.commons.lang3.Range<String> month = org.apache.commons.lang3.Range.between(Tools.getNowStartOfMonthUTC(-1), Tools.getNowEndOfMonthUTC(-1));
+//		org.apache.commons.lang3.Range<String> day = org.apache.commons.lang3.Range.between(Tools.getNowStartOfDayUTC(), Tools.getNowUTC());
+//		
+//		
+//		System.out.println(year);
+//		System.out.println(month);
+//		
+//		System.out.println(NumberUtils.isCreatable("0l"));
+		
+		System.out.println(String.valueOf(121L));
+//		System.out.println(Tools.getStartOfYearUTC(0, 0));
+//		System.out.println(Tools.getNowUTC());
+//		
+//		System.out.println(Tools.getNowStartOfDayUTC());
+//		
+//		System.out.println(Tools.getNowStartOfMonthUTC(1));
+//		System.out.println(Tools.getNowEndOfMonthUTC(1));
+//		System.out.println(ObjectUtils.allNotNull("", ""));
+//		System.out.println(ObjectUtils.anyNotNull(null, null));
+//		System.out.println(Tools.getNowEndOfDayGMTtoUTC(Instant.now().toString(), 0, -8));
+//		System.out.println(Tools.getStartOfDayGMTtoUTC(Instant.now().toString(), 0, -8));
 		
 //		LocalDateTime lo = LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC);
 //		LocalDateTime.now(ZoneOffset.UTC).with(LocalTime.MAX).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
-		System.out.println(LocalDateTime.now(ZoneOffset.UTC).with(LocalTime.MAX).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'")));
+//		System.out.println(LocalDateTime.now(ZoneOffset.UTC).with(LocalTime.MAX).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'")));
 //		System.out.println(lo.with(LocalTime.MIN).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'")));
 		
 //		int i = 679;

@@ -88,7 +88,7 @@ public class RestaurantController {
 		if (StringUtils.isBlank(req.getUuid())) {
 			map = RespData.of(Status.FALSE, ErrorType.INVALID, null);
 		}else {
-			List<RestaurantCategoryRelVo> list = restaurantCategoryRelService.findByUUID(req.getUuid());
+			List<RestaurantCategoryRelVo> list = restaurantCategoryRelService.findByRestaurantUUID(req.getUuid());
 			map = RespData.of(Status.TRUE, null, list);
 		}
 

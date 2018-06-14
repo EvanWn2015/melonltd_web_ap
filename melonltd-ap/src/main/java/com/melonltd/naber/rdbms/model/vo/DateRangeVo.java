@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.MoreObjects;
+import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 
 
 public class DateRangeVo implements Serializable{
@@ -37,11 +38,11 @@ public class DateRangeVo implements Serializable{
 				.toString();
 	}
 	
-	public static DateRangeVo of(Integer start, Integer end, String status) {
+	public static DateRangeVo of(Integer start, Integer end, SwitchStatus status) {
 		DateRangeVo vo = new DateRangeVo();
 		vo.date = new StringBuffer(StringUtils.leftPad(start.toString(), 4, "0")).insert(2, ":").toString() + "-"
 				+ new StringBuffer(StringUtils.leftPad(end.toString(), 4, "0")).insert(2, ":").toString();
-		vo.status = status;
+		vo.status = status.name();
 		return vo;
 	}
 }

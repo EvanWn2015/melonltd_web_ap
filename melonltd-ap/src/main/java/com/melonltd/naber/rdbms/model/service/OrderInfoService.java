@@ -31,18 +31,22 @@ public class OrderInfoService {
 		return null;
 	}
 	
-	public OrderInfo findOne(String uuid) {
+	public OrderVo findOne(String uuid) {
 		OrderInfo o = orderInfoDao.findOne(uuid);
 		if (ObjectUtils.anyNotNull(o)) {
-			return o;
+			if (o.getEnable().equals("N")) {
+				return null;
+			}else {
+				return OrderVo.valueOf(o);	
+			}
 		}
 		return null;
 	}
 	
-	public List<OrderVo> findQuickSearchByPhone(String phone){
+	public List<OrderVo> findQuickSearchByPhone(String restaurantUUID ,String phone){
 		String startDate = Tools.getStartOfDayUTC(2,8);
 		String endDate = Tools.getNowEndOfDayUTC(0,8);
-		List<OrderInfo> list = orderInfoDao.findByPhoneAndBetweenDate(phone, startDate, endDate);
+		List<OrderInfo> list = orderInfoDao.findByPhoneAndBetweenDate(phone, startDate, endDate, restaurantUUID);
 		return OrderVo.valueInfoOfArray(list);
 	}
 	

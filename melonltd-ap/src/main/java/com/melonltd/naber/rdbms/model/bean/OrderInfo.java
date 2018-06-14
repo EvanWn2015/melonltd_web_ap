@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
+import com.melonltd.naber.rdbms.model.vo.OrderVo;
 
 import javax.persistence.Id;
 
@@ -135,6 +136,23 @@ public class OrderInfo implements Serializable {
 
 	public void setEnable(String enable) {
 		this.enable = enable;
+	}
+	
+	public static OrderInfo of (OrderVo vo) {
+		OrderInfo info = new OrderInfo();
+		info.orderUUID = vo.getOrder_uuid();
+		info.accountUUID = vo.getAccount_uuid();
+		info.restaurantUUID = vo.getRestaurant_uuid();
+		info.userMessage = vo.getUser_message();
+		info.createDate = vo.getCreate_date();
+		info.updateDate = vo.getUpdate_date();
+		info.orderPrice = vo.getOrder_price();
+		info.orderBonus = vo.getOrder_bonus();
+		info.fetchDate = vo.getFetch_date();
+		info.orderData = vo.getOrder_data();
+		info.status = vo.getStatus();
+		info.enable = vo.getEnable();
+		return info;
 	}
 
 	@Override

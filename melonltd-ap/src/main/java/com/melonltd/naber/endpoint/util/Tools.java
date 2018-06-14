@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -18,6 +19,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
+import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
 import com.melonltd.naber.rdbms.model.vo.LatLngVo;
 
@@ -78,6 +80,15 @@ public class Tools {
 		return LocalDateTime.now(ZoneOffset.UTC).with(LocalTime.MIN).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
 	}
 	
+	public static String getNowStartOfMonthUTC(int minus) {
+		return LocalDateTime.now(ZoneOffset.UTC).withDayOfMonth(1).plusMonths(minus).with(LocalTime.MIN).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+	}
+	
+	public static String getNowEndOfMonthUTC(int minus) {
+		LocalDateTime localDateTime = LocalDateTime.now(ZoneOffset.UTC);
+		return localDateTime.withDayOfMonth(localDateTime.getMonth().maxLength()).plusMonths(minus).with(LocalTime.MAX).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+	}
+	
 	public static String getNowEndOfDayUTC() {
 		return LocalDateTime.now(ZoneOffset.UTC).with(LocalTime.MAX).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
 	}
@@ -90,6 +101,14 @@ public class Tools {
 	public static String getNowEndOfDayUTC(String date) {
 		DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
 		return LocalDateTime.parse(date,formatter).with(LocalTime.MAX).format(formatter);
+	}
+	
+//	public static String getNowEndOfDayUTC(int minusDay, int plusHours) {
+//		return LocalDateTime.now(ZoneOffset.UTC).with(LocalTime.MAX).minusDays(minusDay).plusHours(plusHours).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+//	}
+	
+	public static String getStartOfYearUTC(int minusDay, int plusHours) {
+		return LocalDateTime.now(ZoneOffset.UTC).withDayOfYear(1).with(LocalTime.MIN).minusDays(minusDay).plusHours(plusHours).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
 	}
 	
 	public static String getNowEndOfDayUTC(int minusDay, int plusHours) {
@@ -159,13 +178,13 @@ public class Tools {
 		
 		List<DateRangeVo> list = JsonHelper.jsonArray(canStoreRange, DateRangeVo[].class);
 		return list.stream()
-				.filter(f -> "N".equals(f.getStatus()) && org.apache.commons.lang3.Range.<String>between(f.getDate().substring(0, 5), f.getDate().substring(6, 11)).contains(now))
+				.filter(f -> SwitchStatus.CLOSE.name().equals(f.getStatus()) && org.apache.commons.lang3.Range.<String>between(f.getDate().substring(0, 5), f.getDate().substring(6, 11)).contains(now))
 				.collect(Collectors.toList());
 	}
 	
 	public static List<DateRangeVo> checkOpenStoreByRanges (	List<DateRangeVo> list, String now){
 		return list.stream()
-				.filter(f -> "N".equals(f.getStatus()) && org.apache.commons.lang3.Range.<String>between(f.getDate().substring(0, 5), f.getDate().substring(6, 11)).contains(now))
+				.filter(f -> SwitchStatus.CLOSE.name().equals(f.getStatus()) && org.apache.commons.lang3.Range.<String>between(f.getDate().substring(0, 5), f.getDate().substring(6, 11)).contains(now))
 				.collect(Collectors.toList());
 	}
 	
@@ -176,7 +195,7 @@ public class Tools {
 
 		boolean status = true;
 		while (status) {
-			list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), "Y"));
+			list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
 			int dd = 30;
 			if (timeR.upperEndpoint() % 100 == 0) {
 				dd = 30;
@@ -186,7 +205,7 @@ public class Tools {
 			timeR = Range.open(timeR.upperEndpoint() + 1, timeR.upperEndpoint() + dd);
 			status = timeR.upperEndpoint().intValue() < end;
 			if (!status) {
-				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), "Y"));
+				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
 			}
 		}
 		return list;
@@ -199,7 +218,7 @@ public class Tools {
 		boolean status = true;
 		
 		while (status) {
-			list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), "Y"));
+			list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
 			int dd = 30;
 			if (timeR.upperEndpoint() % 100 == 0) {
 				dd = 30;
@@ -209,12 +228,12 @@ public class Tools {
 			timeR = Range.open(timeR.upperEndpoint() + 1, timeR.upperEndpoint() + dd);
 			
 			if (timeR.upperEndpoint().intValue() == 2400) {
-				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), 2400, "Y"));
+				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), 2400, SwitchStatus.OPEN));
 				timeR = Range.open(0 + 1,  30);
 			}
 			
 			if(timeR.upperEndpoint().intValue() == end) {
-				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), "Y"));
+				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
 				status = false;
 			}
 		}

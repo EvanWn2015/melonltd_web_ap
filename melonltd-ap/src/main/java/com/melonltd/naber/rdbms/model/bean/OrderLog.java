@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
+import com.melonltd.naber.rdbms.model.vo.OrderVo;
 
 @Entity
 @Table(name = "order_log")
@@ -136,6 +137,23 @@ public class OrderLog implements Serializable {
 		this.enable = enable;
 	}
 
+	public static OrderLog of (OrderVo vo) {
+		OrderLog info = new OrderLog();
+		info.orderUUID = vo.getOrder_uuid();
+		info.accountUUID = vo.getAccount_uuid();
+		info.restaurantUUID = vo.getRestaurant_uuid();
+		info.userMessage = vo.getUser_message();
+		info.createDate = vo.getCreate_date();
+		info.updateDate = vo.getUpdate_date();
+		info.orderPrice = vo.getOrder_price();
+		info.orderBonus = vo.getOrder_bonus();
+		info.fetchDate = vo.getFetch_date();
+		info.orderData = vo.getOrder_data();
+		info.status = vo.getStatus();
+		info.enable = vo.getEnable();
+		return info;
+	}
+	
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass()).add("orderUUID", orderUUID).add("accountUUID", accountUUID)

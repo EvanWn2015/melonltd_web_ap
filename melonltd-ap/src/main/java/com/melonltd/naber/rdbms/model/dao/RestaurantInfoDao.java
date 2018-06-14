@@ -14,6 +14,9 @@ public interface RestaurantInfoDao extends JpaRepository<RestaurantInfo, String>
 	@Query("SELECT a FROM RestaurantInfo a WHERE a.restaurantUUID = ?1 AND a.enable = 'Y'")
 	public RestaurantInfo findUUID(String uuid);
 	
+	@Query("SELECT r FROM RestaurantInfo r, AccountInfo a WHERE r.restaurantUUID=a.restaurantUUID AND a.accountUUID=?1 AND r.enable ='Y' AND a.enable ='Y' ")
+	public RestaurantInfo findByAccountUUID(String accountUUID);
+	
 	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable = 'Y' AND a.restaurantUUID IN (?1)")
 	public List<RestaurantInfo> findUUIDs(List<String> uuids);
 	

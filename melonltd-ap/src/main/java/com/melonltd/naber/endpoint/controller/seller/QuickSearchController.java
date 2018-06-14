@@ -23,11 +23,13 @@ import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.req.vo.AccountReq;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.OrderInfoService;
+import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
+import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
@@ -36,12 +38,15 @@ public class QuickSearchController {
 
 	@Autowired
 	private OrderInfoService orderInfoService;
-
+	@Autowired
+	private RestaurantInfoService restaurantInfoService;
+	
 	private static List<OrderStatus> SELLER_SEARCH_TYPE = OrderStatus.getSellerSearchType();
 
 	@ResponseBody
 	@PostMapping(value = "seller/quick/search")
-	public ResponseEntity<String> quickSearch(@RequestParam(value = "data", required = false) String data) {
+	public ResponseEntity<String> quickSearch(HttpServletRequest httpRequest,
+			@RequestParam(value = "data", required = false) String data) {
 		String request = Base64Service.decode(data);
 		AccountReq req = JsonHelper.json(request, AccountReq.class);
 
@@ -50,8 +55,14 @@ public class QuickSearchController {
 		if (ObjectUtils.allNotNull(errorType)) {
 			map = RespData.of(Status.FALSE, errorType, null);
 		} else {
-			List<OrderVo> list = orderInfoService.findQuickSearchByPhone(req.getPhone());
-			map = RespData.of(Status.TRUE, null, list);
+			String accountUUID = httpRequest.getHeader("Authorization");
+			RestaurantInfoVo rVo = restaurantInfoService.findByAccountUUID(accountUUID);
+			if (ObjectUtils.allNotNull(rVo)) {
+				List<OrderVo> list = orderInfoService.findQuickSearchByPhone(rVo.getRestaurant_uuid(), req.getPhone());
+				map = RespData.of(Status.TRUE, null, list);
+			}else {
+				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
+			}
 		}
 
 		String result = Base64Service.encode(JsonHelper.toJson(map));

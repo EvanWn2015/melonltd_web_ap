@@ -44,8 +44,8 @@ public class RegisteredController {
 
 	@ResponseBody
 	@PostMapping(value = "registered/user")
-	public ResponseEntity<String> registeredUser(@RequestParam(value = "data", required = false) String req) {
-		String request = Base64Service.decode(req);
+	public ResponseEntity<String> registeredUser(@RequestParam(value = "data", required = false) String data) {
+		String request = Base64Service.decode(data);
 		AccountInfoVo vo = JsonHelper.json(request, AccountInfoVo.class);
 
 		ErrorType error = verifyUser(vo);
@@ -69,8 +69,8 @@ public class RegisteredController {
 
 	@ResponseBody
 	@PostMapping(value = "registered/seller")
-	public ResponseEntity<String> registeredSeller(@RequestParam(value = "data", required = false) String req) {
-		String request = Base64Service.decode(req);
+	public ResponseEntity<String> registeredSeller(@RequestParam(value = "data", required = false) String data) {
+		String request = Base64Service.decode(data);
 		SellerRegisteredVo vo = JsonHelper.json(request, SellerRegisteredVo.class);
 		
 		ErrorType error = verifySeller(vo);

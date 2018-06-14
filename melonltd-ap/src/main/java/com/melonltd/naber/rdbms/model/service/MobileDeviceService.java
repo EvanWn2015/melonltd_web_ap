@@ -29,6 +29,16 @@ public class MobileDeviceService {
 		return null;
 	}
 	
+	public MobileDeviceVo findByAccountUUID(String accountUUID) {
+		Sort sort = new Sort(Direction.DESC, "createDate");
+		Pageable pageable = new PageRequest(0, 1, sort);
+		Page<MobileDevice> page = mobileDeviceDao.findByAccountUUID(accountUUID, pageable);
+		if (page.hasContent()) {
+			return MobileDeviceVo.valueOf(page.getContent().get(0));
+		}
+		return null;
+	}
+	
 	
 	public MobileDeviceVo save(MobileDevice info) {
 		MobileDevice m = mobileDeviceDao.save(info);

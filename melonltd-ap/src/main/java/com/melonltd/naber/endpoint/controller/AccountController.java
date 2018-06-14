@@ -92,22 +92,24 @@ public class AccountController {
 				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
 			} else {
 				// TODO 忘記密碼相關信息與 密碼長度
-				String newPassword = Tools.getRandomPassword(8);
+//				String newPassword = Tools.getRandomPassword(8);
 				boolean status = false;
 				try {
-					mailSendService.sendEmail(vo.getEmail(), "forgetPassword", newPassword);
+//					mailSendService.sendEmail(vo.getEmail(), "forgetPassword", newPassword);
+					mailSendService.sendEmail(vo.getEmail(), "forgetPassword", vo.getPassword());
 					status = true;
 				} catch (UnsupportedEncodingException | MessagingException e) {
 					LOGGERO.error("mail send forget password fail phone:{}, mail:{}, msg:{}", req.getPhone(), vo.getEmail(), e.getMessage());
 					status = false;
 				}
 				if (status) {
-					vo.setPassword(newPassword);
-					if (accountInfoService.update(vo)) {
-						map = RespData.of(Status.TRUE, null, null);
-					} else {
-						map = RespData.of(Status.FALSE, ErrorType.UPDATE_ERROR, null);
-					}
+					map = RespData.of(Status.TRUE, null, null);
+//					vo.setPassword(newPassword);
+//					if (accountInfoService.update(vo)) {
+//						map = RespData.of(Status.TRUE, null, null);
+//					} else {
+//						map = RespData.of(Status.FALSE, ErrorType.UPDATE_ERROR, null);
+//					}
 				} else {
 					map = RespData.of(Status.FALSE, ErrorType.MAIL_SEND_ERROR, null);
 				}

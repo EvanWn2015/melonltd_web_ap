@@ -30,6 +30,26 @@ public class PudhSellerService {
 		NEW_ORDER
 	}
 	
+	
+	public void pushOrderToUser(String accountUUID, String mssage) {
+		MobileDeviceVo mobile = mobileDeviceService.findByAccountUUID(accountUUID);
+		LinkedHashMap<String, Object> map = Maps.newLinkedHashMap();
+		map.put("notify_type", PushType.NEW_ORDER.name());
+		map.put("data",mssage);
+		if (ObjectUtils.anyNotNull(mobile)) {
+			switch (DeviceCategory.of(mobile.getDevice_category())) {
+			case IOS:
+				anpsPushServcie.push(mobile.getDevice_token(), "", JsonHelper.toJson(map));
+				break;
+			case ANDROID:
+				androidPushService.push(mobile.getDevice_token(), "", JsonHelper.toJson(map));
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	
 	public void pushOrderToSeller(String restaurantUUID , OredeSubimtReq data, OrderStatus status ) {
 		MobileDeviceVo mobile =  mobileDeviceService.findByRestaurantUUID(restaurantUUID);
 		LinkedHashMap<String, Object> map = Maps.newLinkedHashMap();
