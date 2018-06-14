@@ -5,14 +5,12 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.RestaurantInfo;
+import com.melonltd.naber.rdbms.model.bean.RestaurantLocationTemplate;
 
 public class RestaurantInfoVo implements Serializable {
 	private static final long serialVersionUID = -1332259920125957056L;
@@ -212,7 +210,7 @@ public class RestaurantInfoVo implements Serializable {
 //		return vo;
 //	}
 
-	public static RestaurantInfoVo valueOf(RestaurantInfo info, LatLngVo start) {
+	public static RestaurantInfoVo valueOf(RestaurantInfo info) {
 		RestaurantInfoVo vo = checkIsStoreOpen(info);
 		vo.restaurant_uuid = info.getRestaurantUUID();
 		vo.name = info.getName();
@@ -231,18 +229,33 @@ public class RestaurantInfoVo implements Serializable {
 		vo.background_photo = info.getBackgroundPhoto();
 		vo.create_date = info.getCreateDate();
 		vo.top = info.getTop();
-		if (ObjectUtils.allNotNull(start)) {
-			double distance = Tools.getGoogleDistance(start, LatLngVo.of(info.getLatitude(), info.getLongitude()));
-			vo.distance = conversionFrom(distance);
-		}
+//		if (ObjectUtils.allNotNull(start)) {
+//			double distance = Tools.getGoogleDistance(start, LatLngVo.of(info.getLatitude(), info.getLongitude()));
+//			vo.distance = conversionFrom(distance);
+//		}
 		return vo;
 	}
 	
-	public static List<RestaurantInfoVo> valueOfArray(List<RestaurantInfo> infos, LatLngVo start) {
+	public static List<RestaurantInfoVo> valueOfArray(List<RestaurantInfo> infos) {
 		List<RestaurantInfoVo> vos = Lists.<RestaurantInfoVo>newArrayList();
-		vos.addAll(infos.stream().map(a -> valueOf(a,start)).collect(Collectors.toList()));
+		vos.addAll(infos.stream().map(a -> valueOf(a)).collect(Collectors.toList()));
 		return vos;
 	}
+	
+	public static RestaurantInfoVo valueOfTemplate(RestaurantLocationTemplate info) {
+		RestaurantInfoVo vo = new RestaurantInfoVo(); 
+		vo.restaurant_uuid = info.getRestaurantUUID();
+		vo.latitude = info.getLatitude();
+		vo.longitude = info.getLongitude();
+		return vo;
+	}
+
+	public static List<RestaurantInfoVo> valueOfTemplateArray(List<RestaurantLocationTemplate> infos) {
+		List<RestaurantInfoVo> vos = Lists.<RestaurantInfoVo>newArrayList();
+		vos.addAll(infos.stream().map(a -> valueOfTemplate(a)).collect(Collectors.toList()));
+		return vos;
+	}
+	
 	
 	
 	private static String conversionFrom (double distance) {

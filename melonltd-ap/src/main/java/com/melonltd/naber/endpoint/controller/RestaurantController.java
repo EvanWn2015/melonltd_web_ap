@@ -20,7 +20,7 @@ import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.RestaurantCategoryRelService;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
-import com.melonltd.naber.rdbms.model.vo.LatLngVo;
+import com.melonltd.naber.rdbms.model.service.RestaurantLocationTemplateService;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
@@ -31,8 +31,8 @@ import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class RestaurantController {
 //
-//	@Autowired
-//	private RestaurantStoredService restaurantStoredService;
+	@Autowired
+	private RestaurantLocationTemplateService restaurantLocationTemplateService;
 	
 	@Autowired
 	private RestaurantInfoService restaurantInfoService;
@@ -58,6 +58,17 @@ public class RestaurantController {
 		}
 	}
 
+	@ResponseBody
+	@PostMapping(value = "restaurant/location/template")
+	public ResponseEntity<String> getRestaurantLocationTemplate() {
+		LinkedHashMap<String, Object> map = null;
+		List<RestaurantInfoVo> list = restaurantLocationTemplateService.findAll();
+		map = RespData.of(Status.TRUE, null, list);
+		String result = Base64Service.encode(JsonHelper.toJson(map));
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	
 	@ResponseBody
 	@PostMapping(value = "restaurant/list")
 	public ResponseEntity<String> getRestaurantList(@RequestParam(value = "data", required = false) String data) {
@@ -100,13 +111,13 @@ public class RestaurantController {
 	private List<RestaurantInfoVo> getRestaurantsByType(ReqData req) {
 		switch (SearchType.of(req.getSearch_type())) {
 		case TOP:
-			return restaurantInfoService.findByTop(LatLngVo.of(req.getLatitude(), req.getLongitude()));
+			return restaurantInfoService.findByTop(30);
 		case AREA:
 			return restaurantInfoService.findByArea(req.getArea(), req.getPage());
 		case CATEGORY:
 			return restaurantInfoService.findByCategory(req.getCategory(), req.getPage());
 		case DISTANCE:
-			return restaurantInfoService.findByUUIDs(req.getUuids(),LatLngVo.of(req.getLatitude(), req.getLongitude()));
+			return restaurantInfoService.findByUUIDs(req.getUuids());
 		case NUKNOWN:
 			return Lists.<RestaurantInfoVo>newArrayList();
 		default:

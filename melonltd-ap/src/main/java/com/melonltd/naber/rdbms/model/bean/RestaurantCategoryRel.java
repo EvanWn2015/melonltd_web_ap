@@ -1,6 +1,7 @@
 package com.melonltd.naber.rdbms.model.bean;
 
 import java.io.Serializable;
+import java.util.PrimitiveIterator.OfDouble;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
+import com.melonltd.naber.rdbms.model.vo.RestaurantCategoryRelVo;
 
 @Entity
 @Table(name = "restaurant_category_rel")
@@ -75,7 +77,7 @@ public class RestaurantCategoryRel implements Serializable {
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
-	
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())

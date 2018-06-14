@@ -34,7 +34,7 @@ public class RestaurantInfoService {
 	public RestaurantInfoVo changeCanStoreRange(RestaurantInfoVo vo, List<DateRangeVo> canStoreRange) {
 		RestaurantInfo info = restaurantInfoDao.save(newRestaurantInfo(vo, canStoreRange));
 		if (ObjectUtils.allNotNull(info)) {
-			return RestaurantInfoVo.valueOf(info,null);
+			return RestaurantInfoVo.valueOf(info);
 		}
 		return null;
 	}
@@ -42,17 +42,17 @@ public class RestaurantInfoService {
 	public RestaurantInfoVo findByUUID(String uuid) {
 		RestaurantInfo info = restaurantInfoDao.findUUID(uuid);
 		if (ObjectUtils.anyNotNull(info)) {
-			return RestaurantInfoVo.valueOf(info, null);
+			return RestaurantInfoVo.valueOf(info);
 		}
 		return null;
 	}
 
-	public List<RestaurantInfoVo> findByTop(LatLngVo start) {
+	public List<RestaurantInfoVo> findByTop(int top) {
 		Sort sort = new Sort(Direction.DESC, "top");
-		Pageable pageable = new PageRequest(0, 30, sort);
+		Pageable pageable = new PageRequest(0, top, sort);
 		Page<RestaurantInfo> page = restaurantInfoDao.findByTop(pageable);
 		if (page.hasContent()) {
-			return RestaurantInfoVo.valueOfArray(page.getContent(), start);
+			return RestaurantInfoVo.valueOfArray(page.getContent());
 		}
 		return Lists.<RestaurantInfoVo>newArrayList();
 	}
@@ -65,7 +65,7 @@ public class RestaurantInfoService {
 		Pageable pageable = new PageRequest(page, 10, sort);
 		Page<RestaurantInfo> pages = restaurantInfoDao.findByArea(area, pageable);
 		if (pages.hasContent()) {
-			return RestaurantInfoVo.valueOfArray(pages.getContent(), null);
+			return RestaurantInfoVo.valueOfArray(pages.getContent());
 		}
 		return Lists.<RestaurantInfoVo>newArrayList();
 	}
@@ -78,21 +78,21 @@ public class RestaurantInfoService {
 		Pageable pageable = new PageRequest(page, 10, sort);
 		Page<RestaurantInfo> pages = restaurantInfoDao.findByCategory(category, pageable);
 		if (pages.hasContent()) {
-			return RestaurantInfoVo.valueOfArray(pages.getContent(), null);
+			return RestaurantInfoVo.valueOfArray(pages.getContent());
 		}
 		return Lists.<RestaurantInfoVo>newArrayList();
 	}
 	
 	
-	public List<RestaurantInfoVo> findByUUIDs(List<String> uuids, LatLngVo start) {
+	public List<RestaurantInfoVo> findByUUIDs(List<String> uuids) {
 		List<RestaurantInfo> list = restaurantInfoDao.findUUIDs(uuids);
-		return RestaurantInfoVo.valueOfArray(list, start);
+		return RestaurantInfoVo.valueOfArray(list);
 	}
 	
 	public RestaurantInfoVo findByAccountUUID (String accountUUID) {
 		RestaurantInfo info = restaurantInfoDao.findByAccountUUID(accountUUID);
 		if (ObjectUtils.allNotNull(info)) {
-			return RestaurantInfoVo.valueOf(info, null);
+			return RestaurantInfoVo.valueOf(info);
 		}
 		return null;
 	}
