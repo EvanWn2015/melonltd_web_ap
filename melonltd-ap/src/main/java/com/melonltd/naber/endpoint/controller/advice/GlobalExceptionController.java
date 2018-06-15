@@ -18,23 +18,25 @@ import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 
-@ControllerAdvice
+
+// 全局錯誤處理
+//@ControllerAdvice
 public class GlobalExceptionController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionController.class);
 	
-	@ExceptionHandler(RuntimeException.class)
-	public ResponseEntity<String> handleCustomException(HttpServletRequest req, RuntimeException ex) {
-		LinkedHashMap<String, Object> map = RespData.of(Status.FALSE, ErrorType.RESOLVE_ERROR, null);
-		String result = Base64Service.encode(JsonHelper.toJson(map));
-		return new ResponseEntity<String>(result, HttpStatus.OK);
-	}
-	
-	@ExceptionHandler(MalformedJsonException.class)
-	public ResponseEntity<String> handleJsonCustomException(HttpServletRequest req, MalformedJsonException ex) {
-		LinkedHashMap<String, Object> map = RespData.of(Status.FALSE, ErrorType.JSON_RESOLVE_ERROR, null);
-		String result = Base64Service.encode(JsonHelper.toJson(map));
-		return new ResponseEntity<String>(result, HttpStatus.OK);
-	}
-	
+//	@ExceptionHandler(RuntimeException.class)
+//	public ResponseEntity<String> handleCustomException(HttpServletRequest req, RuntimeException ex) {
+//		LinkedHashMap<String, Object> map = RespData.of(Status.FALSE, ErrorType.RESOLVE_ERROR, null);
+//		String result = Base64Service.encode(JsonHelper.toJson(map));
+//		return new ResponseEntity<String>(result, HttpStatus.OK);
+//	}
+//	
+//	@ExceptionHandler(MalformedJsonException.class)
+//	public ResponseEntity<String> handleJsonCustomException(HttpServletRequest req, MalformedJsonException ex) {
+//		LinkedHashMap<String, Object> map = RespData.of(Status.FALSE, ErrorType.JSON_RESOLVE_ERROR, null);
+//		String result = Base64Service.encode(JsonHelper.toJson(map));
+//		return new ResponseEntity<String>(result, HttpStatus.OK);
+//	}
+//	
 	
 }

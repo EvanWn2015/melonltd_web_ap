@@ -77,6 +77,15 @@ public class RestaurantCategoryRelService {
 		}
 		return null;
 	}
+	
+	public RestaurantCategoryRelVo findByRestaurantUUIDAndCategoryRelUUID(String restaurantUUID, String categoryRelUUID) {
+		RestaurantCategoryRel info = restaurantCategoryRelDao.findByRestaurantAndCategoryRelUUID(restaurantUUID,
+				categoryRelUUID);
+		if (ObjectUtils.allNotNull(info)) {
+			return RestaurantCategoryRelVo.valueOf(info);
+		}
+		return null;
+	}
 
 	public RestaurantCategoryRelVo save(RestaurantCategoryRel info) {
 		RestaurantCategoryRel newInfo = restaurantCategoryRelDao.save(info);

@@ -11,6 +11,7 @@ public class FoodItemVo implements Serializable {
 
 	private String food_uuid;
 	private String food_name;
+//	private String photo;
 	private String price;
 
 	private List<ItemVo> scopes = Lists.<ItemVo>newArrayList();
@@ -32,6 +33,14 @@ public class FoodItemVo implements Serializable {
 	public void setFood_name(String food_name) {
 		this.food_name = food_name;
 	}
+
+//	public String getPhoto() {
+//		return photo;
+//	}
+//
+//	public void setPhoto(String photo) {
+//		this.photo = photo;
+//	}
 
 	public String getPrice() {
 		return price;
@@ -67,8 +76,15 @@ public class FoodItemVo implements Serializable {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass()).add("food_uuid", food_uuid).add("food_name", food_name)
-				.add("price", price).add("scopes", scopes).add("opts", opts).add("demands", demands).toString();
+		return MoreObjects.toStringHelper(this.getClass())
+				.add("food_uuid", food_uuid)
+				.add("food_name", food_name)
+//				.add("photo", photo)
+				.add("price", price)
+				.add("scopes", scopes)
+				.add("opts", opts)
+				.add("demands", demands)
+				.toString();
 	}
 
 }

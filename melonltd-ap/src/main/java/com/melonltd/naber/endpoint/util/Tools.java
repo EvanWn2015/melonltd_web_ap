@@ -28,7 +28,7 @@ public class Tools {
 	private static DecimalFormat DF = new DecimalFormat();
 	
 	public static enum UUIDType {
-		ADMIN, USER, SELLER, NABER_BULLETIN, RESTAURANT, RESTAURANT_CATEGORY, DEVICE, AD, FOOD,ORDER
+		ADMIN, USER, SELLER, NABER_BULLETIN, RESTAURANT, RESTAURANT_CATEGORY, DEVICE, AD, FOOD, ORDER
 	}
 
 	/**
@@ -91,6 +91,10 @@ public class Tools {
 	
 	public static String getNowEndOfDayUTC() {
 		return LocalDateTime.now(ZoneOffset.UTC).with(LocalTime.MAX).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+	}
+	
+	public static String getEndOfPlusDayUTC(int plus) {
+		return LocalDateTime.now(ZoneOffset.UTC).plusDays(plus).with(LocalTime.MAX).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
 	}
 	
 	public static String getNowStartOfDayUTC(String date) {
@@ -188,6 +192,17 @@ public class Tools {
 				.collect(Collectors.toList());
 	}
 	
+	
+	public static List<DateRangeVo> buildCanStoreRange(Integer start , Integer end) {
+		List<DateRangeVo> list = Lists.<DateRangeVo>newArrayList();
+		if (start < end) {
+			list = buildDateRange(start, end);
+		} else {
+			list = buildDateRangeReverse(start, end);
+		}
+		return list;
+	}
+	
 	public static List<DateRangeVo> buildDateRange(Integer start , Integer end) {
 		start++;
 		Range<Integer> timeR = Range.open(start, start + 29);
@@ -202,11 +217,13 @@ public class Tools {
 			} else {
 				dd = 70;
 			}
+			
+			
+//			if (!status) {
+//				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
+//			}
 			timeR = Range.open(timeR.upperEndpoint() + 1, timeR.upperEndpoint() + dd);
-			status = timeR.upperEndpoint().intValue() < end;
-			if (!status) {
-				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
-			}
+			status = timeR.upperEndpoint().intValue() <= end;
 		}
 		return list;
 	}

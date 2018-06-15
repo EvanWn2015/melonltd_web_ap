@@ -132,6 +132,19 @@ public class CategoryFoodRelVo implements Serializable{
 		return vo;
 	}
 	
+	public static CategoryFoodRelVo valueOf(CategoryFoodRel info) {
+		CategoryFoodRelVo vo = new CategoryFoodRelVo();
+		vo.food_uuid = info.getFoodUUID();
+		vo.category_uuid = info.getCategoryUUID();
+		vo.food_name = info.getFoodName();
+		vo.default_price = info.getDefaultPrice();
+		vo.photo = info.getPhoto();
+		vo.food_data =JsonHelper.json(info.getFoodData(), FoodItemVo.class);
+		vo.status = info.getStatus();
+//		vo.enable = info.getEnable();
+		return vo;
+	}
+	
 	public static List<CategoryFoodRelVo> valueOfArray(List<CategoryFoodRel> infos, boolean isDetail) {
 		List<CategoryFoodRelVo> vos = Lists.<CategoryFoodRelVo>newArrayList();
 		vos.addAll(infos.stream().map(a -> valueOf(a,isDetail)).collect(Collectors.toList()));

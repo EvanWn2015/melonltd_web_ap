@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,7 +73,7 @@ public class ChangeOrdarController {
 			return ErrorType.INVALID;
 		}
 
-		if (!ObjectUtils.allNotNull(req.getUuid(), req.getType())) {
+		if (StringUtils.isAnyBlank(req.getUuid(), req.getType())) {
 			return ErrorType.INVALID;
 		}
 

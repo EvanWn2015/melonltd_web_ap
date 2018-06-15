@@ -16,7 +16,6 @@ import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.bean.RestaurantInfo;
 import com.melonltd.naber.rdbms.model.dao.RestaurantInfoDao;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
-import com.melonltd.naber.rdbms.model.vo.LatLngVo;
 import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 
 @Service("restaurantInfoService")
@@ -89,13 +88,29 @@ public class RestaurantInfoService {
 		return RestaurantInfoVo.valueOfArray(list);
 	}
 	
-	public RestaurantInfoVo findByAccountUUID (String accountUUID) {
+	public RestaurantInfoVo findByAccountUUID(String accountUUID) {
 		RestaurantInfo info = restaurantInfoDao.findByAccountUUID(accountUUID);
 		if (ObjectUtils.allNotNull(info)) {
 			return RestaurantInfoVo.valueOf(info);
 		}
 		return null;
 	}
+	
+	public RestaurantInfoVo update(RestaurantInfoVo vo) {
+		RestaurantInfo info = restaurantInfoDao.save(newRestaurantInfo(vo));
+		if (ObjectUtils.allNotNull(info)) {
+			return RestaurantInfoVo.valueOf(info);
+		}
+		return null;
+	}
+	
+//	public RestaurantInfo findNativeByAccountUUID(String accountUUID) {
+//		RestaurantInfo info = restaurantInfoDao.findByAccountUUID(accountUUID);
+//		if (ObjectUtils.allNotNull(info)) {
+//			return info;
+//		}
+//		return null;
+//	}
 	
 	private static RestaurantInfo newRestaurantInfo(RestaurantInfoVo vo,List<DateRangeVo> canStoreRange) {
 		RestaurantInfo info = new RestaurantInfo();
@@ -106,6 +121,29 @@ public class RestaurantInfoService {
 		info.setStoreEnd(vo.getStore_end());
 		info.setNotBusiness(JsonHelper.toJson(vo.getNot_business()));
 		info.setCanStoreRange(JsonHelper.toJson(canStoreRange));
+		info.setRestaurantCategory(vo.getRestaurant_category());
+		info.setLatitude(vo.getLatitude());
+		info.setLongitude(vo.getLongitude());
+		info.setBulletin(vo.getBulletin());
+		info.setPhoto(vo.getPhoto());
+		info.setCreateDate(vo.getCreate_date());
+		info.setBackgroundPhoto(vo.getBackground_photo());
+		info.setPhotoType(vo.getPhoto_type());
+		info.setEnable(vo.getEnable());
+		info.setTop(vo.getTop());
+		return info;
+	}
+	
+	
+	private static RestaurantInfo newRestaurantInfo(RestaurantInfoVo vo) {
+		RestaurantInfo info = new RestaurantInfo();
+		info.setRestaurantUUID(vo.getRestaurant_uuid());
+		info.setName(vo.getName());
+		info.setAddress(vo.getAddress());
+		info.setStoreStart(vo.getStore_start());
+		info.setStoreEnd(vo.getStore_end());
+		info.setNotBusiness(JsonHelper.toJson(vo.getNot_business()));
+		info.setCanStoreRange(JsonHelper.toJson(vo.getCan_store_range()));
 		info.setRestaurantCategory(vo.getRestaurant_category());
 		info.setLatitude(vo.getLatitude());
 		info.setLongitude(vo.getLongitude());

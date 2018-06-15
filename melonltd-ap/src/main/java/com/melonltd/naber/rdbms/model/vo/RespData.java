@@ -22,7 +22,7 @@ public class RespData {
 		SERVER_ERROR("0000", "服務器錯誤"),
 		SAVE_ERROR("0001", "儲存資料失敗"),
 		UPDATE_ERROR("0002", "服務器錯誤，更新失敗"),
-		DELETE_ERROR("0003", "服務器錯誤"),
+		DELETE_ERROR("0003", "服務器錯誤，刪除失敗"),
 		HEADESR_ERROR("0004", "headers 帳戶 token 認證失敗"),
 		DATABASE_NULL("0005", "查無此資料"),
 		MAIL_SEND_ERROR("0006", "服務器錯誤，發送mail失敗"),
@@ -43,7 +43,8 @@ public class RespData {
 		STORE_IS_CLOSE("3001", "目前時間不可接單"),
 		STATUS_IS_CLOSE("3002", "目前品項處於關閉狀態"),
 		LOGIN_FAIL("4001", "查無此帳戶 或 帳戶已失效"),
-		ORDER_MAX_PRICE("5001", "訂單種金額超過 5000");
+		ORDER_MAX_PRICE("5001", "訂單種金額超過 5000"),
+		FOOD_ITEM_DATA_ERROR("5002", "菜單資料結構錯誤");
 
 		ErrorType(String code, String msg) {
 			this.code = code;

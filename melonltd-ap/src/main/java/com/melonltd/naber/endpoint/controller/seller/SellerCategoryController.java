@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +34,7 @@ import com.melonltd.naber.rdbms.model.vo.RestaurantCategoryRelVo;
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class SellerCategoryController {
 
-	private static List<SwitchStatus> CAN_UPDATE_STATUS = Lists.<SwitchStatus>newArrayList(SwitchStatus.OPEN,
-			SwitchStatus.CLOSE);
+	private static List<SwitchStatus> CAN_UPDATE_STATUS = Lists.<SwitchStatus>newArrayList(SwitchStatus.OPEN, SwitchStatus.CLOSE);
 
 	@Autowired
 	private RestaurantCategoryRelService restaurantCategoryRelService;
@@ -147,7 +147,7 @@ public class SellerCategoryController {
 		}
 
 		if (!ObjectUtils.allNotNull(account)) {
-			return ErrorType.INVALID;
+			return ErrorType.DATABASE_NULL;
 		}
 
 		if (!ObjectUtils.allNotNull(account.getRestaurant_uuid())) {
@@ -166,18 +166,10 @@ public class SellerCategoryController {
 		}
 
 		if (!ObjectUtils.allNotNull(account)) {
-			return ErrorType.INVALID;
-		}
-
-		if (!ObjectUtils.allNotNull(req.getUuid())) {
-			return ErrorType.INVALID;
-		}
-
-		if (!ObjectUtils.allNotNull(account.getRestaurant_uuid())) {
 			return ErrorType.DATABASE_NULL;
 		}
 
-		if (!ObjectUtils.allNotNull(req.getStatus())) {
+		if (StringUtils.isAnyBlank(account.getRestaurant_uuid(), req.getStatus(), req.getUuid())) {
 			return ErrorType.INVALID;
 		}
 
@@ -192,13 +184,11 @@ public class SellerCategoryController {
 			return ErrorType.INVALID;
 		}
 		if (!ObjectUtils.allNotNull(account)) {
-			return ErrorType.INVALID;
-		}
-		if (!ObjectUtils.allNotNull(account.getRestaurant_uuid())) {
 			return ErrorType.DATABASE_NULL;
 		}
-		if (!ObjectUtils.allNotNull(req.getUuid())) {
-			return ErrorType.INVALID;
+		
+		if (StringUtils.isAnyBlank(account.getRestaurant_uuid(), req.getUuid())) {
+			return ErrorType.DATABASE_NULL;
 		}
 		return null;
 	}

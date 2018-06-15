@@ -1,18 +1,16 @@
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.apache.commons.collections4.bag.SynchronizedSortedBag;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.context.annotation.PropertySource;
 
@@ -23,10 +21,8 @@ import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
-import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
-import com.melonltd.naber.rdbms.model.type.OrderStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
@@ -326,6 +322,10 @@ public class MyTest {
 
 	@Test
 	public void fDate() {
+		
+//		ReqData data = new ReqData();
+		System.out.println(!StringUtils.isAnyBlank("sds","sdsd"));
+		System.out.println(!StringUtils.equals("00:010","00:00") || !StringUtils.equals("00:00","00:00"));
 //		System.out.println();
 		
 //		org.apache.commons.lang3.Range<String> month = org.apache.commons.lang3.Range.between(Tools.getNowStartOfMonthUTC(-1), Tools.getNowEndOfMonthUTC(-1));
@@ -339,7 +339,7 @@ public class MyTest {
 //		
 //		System.out.println(NumberUtils.isCreatable("0l"));
 		
-		System.out.println(String.valueOf(121L));
+//		System.out.println(String.valueOf(121L));
 //		System.out.println(Tools.getStartOfYearUTC(0, 0));
 //		System.out.println(Tools.getNowUTC());
 //		
@@ -363,10 +363,39 @@ public class MyTest {
 //		double k = Math.floor(j);
 //		System.out.println((int)k);
 		
-		String data = "2018-02-05T02:30:14.837Z";
+//		String data = "2018-02-05T02:30:14.837Z";
 //		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 //		System.out.println(df.format(data));
 
 	}
+	
+	@Test
+	public void rrtrr() {
+		List<DateRangeVo> oldRanges  = Tools.buildCanStoreRange(1100, 2200);
+		oldRanges.stream().forEach(a -> {
+			if (oldRanges.indexOf(a) % 2 ==0) {
+				a.setStatus("CLOSE");
+			}
+		});
+		List<DateRangeVo> newRanges = Tools.buildCanStoreRange(800, 1600);
+		
+		List<DateRangeVo> ol = oldRanges.stream().filter(o -> o.getStatus().equals("CLOSE")).collect(Collectors.toList());
+		
+		
+		List<DateRangeVo> nl = newRanges.stream().map(n ->{
+			System.out.println("nn: " + n.getDate());
+			return	ol.stream().filter(o ->{
+				System.out.println("oo: " + o.getDate());
+				return o.getDate().equals(n.getDate());
+			}).findFirst().get();
+		}).collect(Collectors.toList());
+		
+		System.out.println(ol.size()  + "!!!!" + oldRanges.size());
+		
+		newRanges.addAll(oldRanges);
+	}
+	
+	
+	
 
 }
