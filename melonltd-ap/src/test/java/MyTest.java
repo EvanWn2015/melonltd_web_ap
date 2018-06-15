@@ -22,6 +22,7 @@ import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
+import com.melonltd.naber.rdbms.model.type.OrderStatus;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
@@ -322,10 +323,12 @@ public class MyTest {
 
 	@Test
 	public void fDate() {
+		System.out.println(OrderStatus.CANCEL.getMssage());
+		System.out.println(String.format(OrderStatus.CANCEL.getMssage(), "RRRRR"));
 		
 //		ReqData data = new ReqData();
-		System.out.println(!StringUtils.isAnyBlank("sds","sdsd"));
-		System.out.println(!StringUtils.equals("00:010","00:00") || !StringUtils.equals("00:00","00:00"));
+//		System.out.println(!StringUtils.isAnyBlank("sds","sdsd"));
+//		System.out.println(!StringUtils.equals("00:010","00:00") || !StringUtils.equals("00:00","00:00"));
 //		System.out.println();
 		
 //		org.apache.commons.lang3.Range<String> month = org.apache.commons.lang3.Range.between(Tools.getNowStartOfMonthUTC(-1), Tools.getNowEndOfMonthUTC(-1));

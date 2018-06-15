@@ -57,7 +57,11 @@ public class ChangeOrdarController {
 				// TODO notify to user
 				if (CAN_NOTIFY_TYPE.contains(changeStatus)) {
 					String accountUUID = vo.getAccount_uuid();
-					pudhSellerService.pushOrderToUser(accountUUID, changeStatus.getMssage());
+					if (OrderStatus.CANCEL.equals(changeStatus)) {
+						pudhSellerService.pushOrderToUser(accountUUID, String.format(OrderStatus.CANCEL.getMssage(), req.getMessage()));	
+					}else {
+						pudhSellerService.pushOrderToUser(accountUUID, changeStatus.getMssage());
+					}
 				}
 			}else {
 				map = RespData.of(Status.FALSE, ErrorType.UPDATE_ERROR, null);

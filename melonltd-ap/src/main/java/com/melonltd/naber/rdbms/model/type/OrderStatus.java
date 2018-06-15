@@ -8,10 +8,10 @@ import com.google.common.collect.Lists;
 
 public enum OrderStatus {
 	UNFINISH("UNFINISH", "訂單未處理"), 
-	PROCESSING("PROCESSING", "訂單製作中"), 
-	CAN_FETCH("CAN_FETCH", "訂單可領取"), 
-	CANCEL("CANCEL", "訂單已取消"), 
-	FAIL("FAIL", "訂單已跑單"), 
+	PROCESSING("PROCESSING", "商家已接收到您的訂單並且開始製作囉!"), 
+	CAN_FETCH("CAN_FETCH", "商家已經完成製作您的餐點，\n可以前往領取囉!"), 
+	CANCEL("CANCEL", "不好意思，因為%s，\n所以商家無法製作您這訂單的餐點，\n並且取消此訂單了！\n可以看看別的商家或識別的餐點哦！"), 
+	FAIL("FAIL", "由於您沒去拿餐點，被記錄跑單一次！\n這會影響您使用ＮＡＢＥＲ的權利，\n之後送單前請特別留意。"), 
 	FINISH("FINISH", "訂單已結束");
 	
 	private String name;
