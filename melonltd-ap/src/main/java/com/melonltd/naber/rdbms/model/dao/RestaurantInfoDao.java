@@ -20,10 +20,10 @@ public interface RestaurantInfoDao extends JpaRepository<RestaurantInfo, String>
 	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable = 'Y' AND a.restaurantUUID IN (?1)")
 	public List<RestaurantInfo> findUUIDs(List<String> uuids);
 	
-	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable = 'Y'")
+	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable = 'Y' AND a.top>'0'")
 	public Page<RestaurantInfo> findByTop(Pageable pageable);
 	
-	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable = 'Y' AND a.address LIKE %?1% ")
+	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable='Y' AND a.address LIKE %?1% ")
 	public Page<RestaurantInfo> findByArea(String area, Pageable pageable);
 	
 	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable = 'Y' AND a.restaurantCategory=?1")

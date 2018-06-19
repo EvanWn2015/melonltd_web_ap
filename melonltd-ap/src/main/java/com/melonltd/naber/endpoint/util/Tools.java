@@ -186,7 +186,7 @@ public class Tools {
 				.collect(Collectors.toList());
 	}
 	
-	public static List<DateRangeVo> checkOpenStoreByRanges (	List<DateRangeVo> list, String now){
+	public static List<DateRangeVo> checkOpenStoreByRanges (List<DateRangeVo> list, String now){
 		return list.stream()
 				.filter(f -> SwitchStatus.CLOSE.name().equals(f.getStatus()) && org.apache.commons.lang3.Range.<String>between(f.getDate().substring(0, 5), f.getDate().substring(6, 11)).contains(now))
 				.collect(Collectors.toList());

@@ -47,7 +47,7 @@ public class RestaurantInfoService {
 	}
 
 	public List<RestaurantInfoVo> findByTop(int top) {
-		Sort sort = new Sort(Direction.DESC, "top");
+		Sort sort = new Sort(Direction.ASC, "top");
 		Pageable pageable = new PageRequest(0, top, sort);
 		Page<RestaurantInfo> page = restaurantInfoDao.findByTop(pageable);
 		if (page.hasContent()) {
@@ -57,7 +57,7 @@ public class RestaurantInfoService {
 	}
 
 	public List<RestaurantInfoVo> findByArea(String area, int page) {
-		if (page < 0) {
+		if (page > 0) {
 			page --;
 		}
 		Sort sort = new Sort(Direction.DESC, "createDate");
@@ -70,7 +70,7 @@ public class RestaurantInfoService {
 	}
 
 	public List<RestaurantInfoVo> findByCategory(String category, int page) {
-		if (page < 0) {
+		if (page > 0) {
 			page --;
 		}
 		Sort sort = new Sort(Direction.DESC, "createDate");
