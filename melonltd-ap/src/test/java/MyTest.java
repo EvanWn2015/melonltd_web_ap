@@ -317,7 +317,7 @@ public class MyTest {
 //		System.out.println(vo);
 //		String encode = "{\"phone\":\"0987654321\"}";
 //		System.out.println(Base64Service.encode(encode));
-		String code = "JTdCJTIycGhvbmUlMjIlM0ElMjIwOTg3NjU0MzIxJTIyJTdE";
+		String code = "%7B%22device_category%22%3A%22ANDROID%22%2C%22device_token%22%3A%22fxfKCol10l4%3AAPA91bGBl3UnKRz_ZNu0r3gATwQ__-E31iK4VoZh6kfSQAB_nmGmgq1C-VxWujza6ttFeOfxxqK-jRCp5BISoXpxXRcOhrHy6am7Is7fWwIgW0o5ZkWKoaUqnf4oHqw2BjYZcycXlj5L%22%2C%22password%22%3A%22qURl5BV4%22%2C%22phone%22%3A%220987654321%22%7D";
 		System.out.println(Base64Service.testDecode(code));
 	}
 

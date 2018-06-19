@@ -217,9 +217,9 @@ public class RestaurantInfoVo implements Serializable {
 		vo.address = info.getAddress();
 		vo.store_start = info.getStoreStart();
 		vo.store_end = info.getStoreEnd();
-		vo.is_store_now_open = checkIsStoreOpen(info) + "";
-		vo.not_business = JsonHelper.jsonArray(info.getNotBusiness(), String[].class);
-		vo.can_store_range = JsonHelper.jsonArray(info.getCanStoreRange(),DateRangeVo[].class);
+//		vo.is_store_now_open = checkIsStoreOpen(info) + "";
+//		vo.not_business = JsonHelper.jsonArray(info.getNotBusiness(), String[].class);
+//		vo.can_store_range = JsonHelper.jsonArray(info.getCanStoreRange(),DateRangeVo[].class);
 		vo.restaurant_category = info.getRestaurantCategory();
 		vo.latitude = info.getLatitude();
 		vo.longitude = info.getLongitude();

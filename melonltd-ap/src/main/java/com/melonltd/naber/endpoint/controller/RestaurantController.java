@@ -133,11 +133,11 @@ public class RestaurantController {
 		}
 		
 		switch (SearchType.of(req.getSearch_type())) {
-		case TOP:
-			if (StringUtils.isBlank(req.getLongitude()) || StringUtils.isBlank(req.getLatitude())) {
-				error = ErrorType.INVALID;
-			}
-			break;
+//		case TOP:
+//			if (StringUtils.isBlank(req.getLongitude()) || StringUtils.isBlank(req.getLatitude())) {
+//				error = ErrorType.INVALID;
+//			}
+//			break;
 		case AREA:
 			if (StringUtils.isBlank(req.getArea())) {
 				error = ErrorType.INVALID;
@@ -148,11 +148,11 @@ public class RestaurantController {
 				error = ErrorType.INVALID;
 			}
 			break;
-		case DISTANCE:
-			if (StringUtils.isBlank(req.getLongitude()) || StringUtils.isBlank(req.getLatitude())) {
-				error = ErrorType.INVALID;
-			}
-			break;
+//		case DISTANCE:
+//			if (StringUtils.isBlank(req.getLongitude()) || StringUtils.isBlank(req.getLatitude())) {
+//				error = ErrorType.INVALID;
+//			}
+//			break;
 		case NUKNOWN:
 		default:
 			break;
