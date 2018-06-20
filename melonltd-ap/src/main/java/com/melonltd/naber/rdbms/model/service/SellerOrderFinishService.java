@@ -31,13 +31,13 @@ public class SellerOrderFinishService {
 	}
 
 	public SellerStatVo findSellerStat(String restaurantUUID) {
-		String startDate = Tools.getStartOfYearUTC(0, 0);
-		String endDate = Tools.getNowUTC();
+		String startDate = Tools.getStartOfYearGMT(0, 0);
+		String endDate = Tools.getNowGMT();
 
 		List<SellerOrderFinish> list = sellerOrderFinishDao.findFinishByBetweenDate(restaurantUUID, startDate, endDate);
-		Range<String> year = Range.between(startDate, Tools.getNowEndOfMonthUTC(-1));
-		Range<String> month = Range.between(Tools.getNowStartOfMonthUTC(-1), Tools.getNowEndOfMonthUTC(-1));
-		Range<String> day = Range.between(Tools.getNowStartOfDayUTC(), endDate);
+		Range<String> year = Range.between(startDate, Tools.getNowEndOfMonthGMT(-1));
+		Range<String> month = Range.between(Tools.getNowStartOfMonthGMT(-1), Tools.getNowEndOfMonthGMT(-1));
+		Range<String> day = Range.between(Tools.getNowStartOfDayGMT(), endDate);
 
 		long yearIncome = 0L;
 		long monthIncome = 0L;

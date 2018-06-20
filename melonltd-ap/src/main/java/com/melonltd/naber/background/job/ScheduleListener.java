@@ -1,7 +1,5 @@
 package com.melonltd.naber.background.job;
 
-import java.time.Clock;
-import java.time.Instant;
 import java.time.ZoneId;
 import java.util.TimeZone;
 
@@ -20,6 +18,8 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.melonltd.naber.endpoint.util.Tools;
+
 public class ScheduleListener implements ServletContextListener{
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleListener.class);
 	
@@ -27,7 +27,7 @@ public class ScheduleListener implements ServletContextListener{
 	
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		LOGGER.info("start Order Job Schedule --> " + Instant.now(Clock.system(ZoneId.of("Asia/Kuala_Lumpur"))));
+		LOGGER.info("start Order Job Schedule --> " + Tools.getNowGMT());
 		JobDetail job = JobBuilder.newJob(OrderJob.class)
 						.withIdentity("OrderJob", "group1")
 						.build();

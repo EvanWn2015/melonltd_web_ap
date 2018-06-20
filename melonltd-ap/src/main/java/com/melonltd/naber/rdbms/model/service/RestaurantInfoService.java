@@ -2,6 +2,7 @@ package com.melonltd.naber.rdbms.model.service;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -84,8 +85,12 @@ public class RestaurantInfoService {
 	
 	
 	public List<RestaurantInfoVo> findByUUIDs(List<String> uuids) {
-		List<RestaurantInfo> list = restaurantInfoDao.findUUIDs(uuids);
-		return RestaurantInfoVo.valueOfArray(list);
+		if (CollectionUtils.isNotEmpty(uuids)) {
+			List<RestaurantInfo> list = restaurantInfoDao.findUUIDs(uuids);
+			return RestaurantInfoVo.valueOfArray(list);
+		}else {
+			return Lists.<RestaurantInfoVo>newArrayList();
+		}
 	}
 	
 	public RestaurantInfoVo findByAccountUUID(String accountUUID) {

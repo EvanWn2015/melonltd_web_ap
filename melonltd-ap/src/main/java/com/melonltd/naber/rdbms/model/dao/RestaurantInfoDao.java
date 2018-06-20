@@ -2,6 +2,8 @@ package com.melonltd.naber.rdbms.model.dao;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +20,7 @@ public interface RestaurantInfoDao extends JpaRepository<RestaurantInfo, String>
 	public RestaurantInfo findByAccountUUID(String accountUUID);
 	
 	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable = 'Y' AND a.restaurantUUID IN (?1)")
-	public List<RestaurantInfo> findUUIDs(List<String> uuids);
+	public List<RestaurantInfo> findUUIDs(@NotNull List<String> uuids);
 	
 	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable = 'Y' AND a.top>'0'")
 	public Page<RestaurantInfo> findByTop(Pageable pageable);

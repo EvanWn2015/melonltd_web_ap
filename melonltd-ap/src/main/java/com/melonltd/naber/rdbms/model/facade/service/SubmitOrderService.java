@@ -33,7 +33,7 @@ public class SubmitOrderService {
 		if (unfinish_count >= 3) {
 			return null;
 		}else {
-			String date = Tools.getNowUTC();
+			String date = Tools.getNowGMT();
 			OrderInfo orderInfo = newOrderInfo(accountUUID, orderUUID, vo, req, price, bonus, orders, date);
 			UserOrderLog userOrderLog = newUserOrderLog(accountUUID, orderUUID, vo, req, price, bonus, orders, date);
 			OrderLog orderLog = newOrderLog(accountUUID, orderUUID, vo, req, price, bonus, orders, date);

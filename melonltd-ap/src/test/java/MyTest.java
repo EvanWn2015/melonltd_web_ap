@@ -1,11 +1,18 @@
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -14,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.context.annotation.PropertySource;
 
+import com.google.api.client.util.DateTime;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import com.melonltd.naber.endpoint.util.Base64Service;
@@ -323,53 +331,13 @@ public class MyTest {
 
 	@Test
 	public void fDate() {
-		System.out.println(OrderStatus.CANCEL.getMssage());
-		System.out.println(String.format(OrderStatus.CANCEL.getMssage(), "RRRRR"));
-		
-//		ReqData data = new ReqData();
-//		System.out.println(!StringUtils.isAnyBlank("sds","sdsd"));
-//		System.out.println(!StringUtils.equals("00:010","00:00") || !StringUtils.equals("00:00","00:00"));
-//		System.out.println();
-		
-//		org.apache.commons.lang3.Range<String> month = org.apache.commons.lang3.Range.between(Tools.getNowStartOfMonthUTC(-1), Tools.getNowEndOfMonthUTC(-1));
-//		org.apache.commons.lang3.Range<String> year = org.apache.commons.lang3.Range.between(Tools.getStartOfYearUTC(0, 0), Tools.getNowEndOfMonthUTC(-1));
-//		org.apache.commons.lang3.Range<String> month = org.apache.commons.lang3.Range.between(Tools.getNowStartOfMonthUTC(-1), Tools.getNowEndOfMonthUTC(-1));
-//		org.apache.commons.lang3.Range<String> day = org.apache.commons.lang3.Range.between(Tools.getNowStartOfDayUTC(), Tools.getNowUTC());
-//		
-//		
-//		System.out.println(year);
-//		System.out.println(month);
-//		
-//		System.out.println(NumberUtils.isCreatable("0l"));
-		
-//		System.out.println(String.valueOf(121L));
-//		System.out.println(Tools.getStartOfYearUTC(0, 0));
-//		System.out.println(Tools.getNowUTC());
-//		
-//		System.out.println(Tools.getNowStartOfDayUTC());
-//		
-//		System.out.println(Tools.getNowStartOfMonthUTC(1));
-//		System.out.println(Tools.getNowEndOfMonthUTC(1));
-//		System.out.println(ObjectUtils.allNotNull("", ""));
-//		System.out.println(ObjectUtils.anyNotNull(null, null));
-//		System.out.println(Tools.getNowEndOfDayGMTtoUTC(Instant.now().toString(), 0, -8));
-//		System.out.println(Tools.getStartOfDayGMTtoUTC(Instant.now().toString(), 0, -8));
-		
-//		LocalDateTime lo = LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC);
-//		LocalDateTime.now(ZoneOffset.UTC).with(LocalTime.MAX).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
-//		System.out.println(LocalDateTime.now(ZoneOffset.UTC).with(LocalTime.MAX).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'")));
-//		System.out.println(lo.with(LocalTime.MIN).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'")));
-		
-//		int i = 679;
-//		double j = i/10d;
-//		System.out.println(j);
-//		double k = Math.floor(j);
-//		System.out.println((int)k);
-		
-//		String data = "2018-02-05T02:30:14.837Z";
-//		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-//		System.out.println(df.format(data));
-
+		String str = "0987654321";
+		Pattern pattern = Pattern.compile("(09)+[\\d]{8}");
+		Matcher matcher = pattern.matcher(str);
+		System.out.println(str.matches("(09)+[\\d]{8}"));
+		while(matcher.find()) {
+		    System.out.print(matcher.group());
+		}
 	}
 	
 	@Test
@@ -399,6 +367,17 @@ public class MyTest {
 	}
 	
 	
+	@Test
+	public void myttt () {
+		SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:SS.ssss'Z'");
+			try {
+				System.out.println(new SimpleDateFormat("dd日 hh時 mm分").format(simpleDate.parse("2018-06-13T07:11:31.9290Z")));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        
+	}
 	
 
 }

@@ -44,8 +44,8 @@ public class OrderInfoService {
 	}
 	
 	public List<OrderVo> findQuickSearchByPhone(String restaurantUUID ,String phone){
-		String startDate = Tools.getStartOfDayUTC(2,8);
-		String endDate = Tools.getNowEndOfDayUTC(0,8);
+		String startDate = Tools.getStartOfDayGMT(2,8);
+		String endDate = Tools.getNowEndOfDayGMT(0,8);
 		List<OrderInfo> list = orderInfoDao.findByPhoneAndBetweenDate(phone, startDate, endDate, restaurantUUID);
 		return OrderVo.valueInfoOfArray(list);
 	}
@@ -55,8 +55,8 @@ public class OrderInfoService {
 		if (page > 0) {
 			page --;
 		}
-		String startDate = Tools.getNowStartOfDayUTC(date);
-		String endDate = Tools.getNowEndOfDayUTC(date);
+		String startDate = Tools.getNowStartOfDay(date);
+		String endDate = Tools.getNowEndOfDay(date);
 		Sort sort = new Sort(Direction.DESC, "fetchDate");
 		Pageable pageable = new PageRequest(page, 10, sort);
 		Page<OrderInfo> pages = orderInfoDao.findByOrderStatusAndBetweenDate(accountUUID, status, startDate, endDate, pageable);

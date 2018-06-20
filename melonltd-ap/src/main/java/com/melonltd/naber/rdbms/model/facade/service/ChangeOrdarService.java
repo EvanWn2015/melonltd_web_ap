@@ -52,7 +52,7 @@ public class ChangeOrdarService {
 			OrderStatus orderStatus = OrderStatus.of(infoVo.getStatus());
 
 			// 更新時間 UTC
-			String date = Tools.getNowUTC();
+			String date = Tools.getNowGMT();
 
 			OrderLog orderLog = newOrderLog(infoVo, changeStatus, date, Enable.Y);
 			UserOrderLog userOrderLog = newUserOrderLog(infoVo, changeStatus, date, Enable.Y);

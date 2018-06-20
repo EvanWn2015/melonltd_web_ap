@@ -41,7 +41,7 @@ public class RestaurantCategoryRelService {
 		info.setCategoryUUID(Tools.buildUUID(UUIDType.RESTAURANT_CATEGORY));
 		info.setCategoryName(name);
 		info.setRestaurantUUID(restaurantUUID);
-		info.setCreateDate(Tools.getNowUTC());
+		info.setCreateDate(Tools.getNowGMT());
 		info.setEnable(Enable.Y.name());
 		info.setStatus(SwitchStatus.OPEN.name());
 

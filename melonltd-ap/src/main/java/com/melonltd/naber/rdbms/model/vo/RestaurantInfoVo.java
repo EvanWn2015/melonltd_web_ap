@@ -1,7 +1,6 @@
 package com.melonltd.naber.rdbms.model.vo;
 
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -258,23 +257,23 @@ public class RestaurantInfoVo implements Serializable {
 	
 	
 	
-	private static String conversionFrom (double distance) {
-		double d = 0;
-		d = distance/ 1000;
-		if (d < 0) {
-			return "";
-		}
-		String result = Tools.decimalFormat("0.0", d);
-		return (result.equals("0.0") ? "0.1" : result) + "公里";
-	}
+//	private static String conversionFrom (double distance) {
+//		double d = 0;
+//		d = distance/ 1000;
+//		if (d < 0) {
+//			return "";
+//		}
+//		String result = Tools.decimalFormat("0.0", d);
+//		return (result.equals("0.0") ? "0.1" : result) + "公里";
+//	}
 	
 	private static RestaurantInfoVo checkIsStoreOpen ( RestaurantInfo info) {
 		RestaurantInfoVo vo = new RestaurantInfoVo ();
 		String now = Tools.getGMTDate("HH:mm");
 		boolean c1 =Tools.checkOpenStore(info.getStoreStart(), info.getStoreEnd(),now); 
-		int nowUTC = Tools.getDayOfYear(Instant.now().toString(), "yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
+		int nowGMT = Tools.getDayOfYear(Tools.getNowGMT(), "yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
 		List<String> notBusiness = JsonHelper.jsonArray(info.getNotBusiness(), String[].class).stream().filter(a -> {
-							return Tools.getDayOfYear(a, "yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'") == nowUTC;
+							return Tools.getDayOfYear(a, "yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'") == nowGMT;
 						}).collect(Collectors.toList());
 		List<DateRangeVo> canStoreRange = Tools.checkOpenStoreByRanges(info.getCanStoreRange() ,now);
 		vo.not_business = notBusiness;

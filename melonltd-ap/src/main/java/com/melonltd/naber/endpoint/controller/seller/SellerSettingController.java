@@ -104,8 +104,8 @@ public class SellerSettingController {
 		}else {
 			RestaurantInfoVo restaurant = restaurantInfoService.findByAccountUUID(accountUUID);
 			if (ObjectUtils.allNotNull(restaurant)) {
-				String start = Tools.getNowStartOfDayUTC();
-				String end = Tools.getEndOfPlusDayUTC(2);
+				String start = Tools.getNowStartOfDayGMT();
+				String end = Tools.getEndOfPlusDayGMT(2);
 				Range<String> check3day = Range.<String>between(start, end);
 				long check = req.getNot_business().stream().filter(b -> !check3day.contains(b)).count();
 				if (check > 0L || req.getNot_business().size() == 0 || req.getNot_business().size() > 3) {

@@ -54,7 +54,7 @@ public class CategoryFoodRelSerice {
 		info.setFoodData(JsonHelper.toJson(vo.getFood_data()));
 		info.setStatus(SwitchStatus.OPEN.name());
 		info.setEnable(Enable.Y.name());
-		info.setCreateDate(Tools.getNowUTC());
+		info.setCreateDate(Tools.getNowGMT());
 		CategoryFoodRel newInfo = categoryFoodRelDao.save(info);
 		if (ObjectUtils.allNotNull(newInfo)) {
 			return CategoryFoodRelVo.valueOf(newInfo);	

@@ -5,7 +5,6 @@ import java.util.List;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.google.gson.stream.MalformedJsonException;
 
 public class JsonHelper {
 	private static Gson GSON = new Gson();

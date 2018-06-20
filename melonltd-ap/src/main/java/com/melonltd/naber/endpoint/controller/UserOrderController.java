@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +84,7 @@ public class UserOrderController {
 				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);	
 			}else {
 				boolean isOpen = checkIsStoreOpen(req, vo);
-				List<String> foodUUIDs = req.getOrders().stream().map(a -> a.getFood_uuid()).collect(Collectors.toList());
+				List<String> foodUUIDs = req.getOrders().stream().map(a -> a.getFood_uuid()).distinct().collect(Collectors.toList());
 				List<String> categoryUUIDs = req.getOrders().stream().map(a -> a.getCategory_uuid()).distinct().collect(Collectors.toList());
 				int foodOpens = categoryFoodRelSerice.getFoodStatusOpenByUUIDs(foodUUIDs);
 				int categoryOpens = restaurantCategoryRelService.getStatusByCategoryUUIDs(categoryUUIDs);
@@ -162,7 +163,7 @@ public class UserOrderController {
 	
 	
 	private static boolean checkIsStoreOpen(OredeSubimtReq req, RestaurantInfoVo vo) {
-		String fetch_date = Tools.fromatUTCToGMT("HH:mm",req.getFetch_date());
+		String fetch_date = Tools.fromatGMT("HH:mm",req.getFetch_date());
 		boolean c1 = Tools.checkOpenStore(vo.getStore_start(), vo.getStore_end(), fetch_date);
 		
 		List<DateRangeVo> canStoreRange = Tools.checkOpenStoreByRanges(vo.getCan_store_range(), fetch_date);
@@ -171,8 +172,9 @@ public class UserOrderController {
 		List<String> notBusiness = vo.getNot_business().stream().filter(a -> {
 			return Tools.getDayOfYear(a, "yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'") == nowUTC;
 		}).collect(Collectors.toList());
-		
-		return c1 && canStoreRange.size() == 0 && notBusiness.size() == 0;
+			
+		boolean	status = Range.<String>between(Tools.getNowGMT(), Tools.getPlusDayGMT(3)).contains(req.getFetch_date());
+		return c1 && canStoreRange.size() == 0 && notBusiness.size() == 0 && status;
 //		
 //		return false;
 	} 

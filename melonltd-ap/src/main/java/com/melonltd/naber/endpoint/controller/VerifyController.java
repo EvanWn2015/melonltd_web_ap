@@ -18,6 +18,9 @@ import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.service.VerifyPhoneLogService;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.VerifyPhoneLogVo;
+
+import antlr.collections.impl.LList;
+
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 
@@ -61,7 +64,11 @@ public class VerifyController {
 			map = RespData.of(Status.FALSE, ErrorType.VERIFY_CODE_FAIL, "");
 		} else {
 			ErrorType error = verifyPhoneLogService.verifyCode(req.getBatch_id(), req.getCode());
-			map = RespData.of(error == null ? Status.TRUE : Status.FALSE, error, null);
+			if (ObjectUtils.allNotNull(error)) {
+				map = RespData.of(Status.FALSE, error, null);
+			}else {
+				map = RespData.of(Status.TRUE, null, "");
+			}
 		}
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
