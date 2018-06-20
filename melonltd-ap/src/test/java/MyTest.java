@@ -41,29 +41,7 @@ public class MyTest {
 
 	@Test
 	public void mytest() {
-
-		System.out.println(true && true && true);
-		ReqData data = new ReqData();
-		data.setSearch_type("TOP");
-		data.setTop(30);
-		//// data.setArea("桃園");
-		// data.setPage(1);
-		data.setLatitude("24.8704608");
-		data.setLongitude("121.269048");
-		// System.out.println(222/1000d);
-		// System.out.println(Math.round(222/1000d));
-		// System.out.println(new BigDecimal(22/1000d).setScale(1,
-		// BigDecimal.ROUND_HALF_UP));
-		System.out.println("-1.0".compareTo("-2.0"));
-		// NumberFormat nf = NumberFormat.getInstance();
-		// System.out.println(nf.format(1234567.2));
-		// DecimalFormat df = new DecimalFormat("0.0");
-		System.out.println(Tools.decimalFormat("0.0", 0));
-		// System.out.println(49/1000d);
-		// System.out.println(df.format(50/1000d));
-		// System.out.println(df.format(80/1000d).equals("0.0"));
-		System.out.println(JsonHelper.toJson(data));
-
+		System.out.println("4554".matches("(09)+[\\d]{8}")); 
 	}
 
 	@Test
@@ -325,7 +303,7 @@ public class MyTest {
 //		System.out.println(vo);
 //		String encode = "{\"phone\":\"0987654321\"}";
 //		System.out.println(Base64Service.encode(encode));
-		String code = "%7B%22device_category%22%3A%22ANDROID%22%2C%22device_token%22%3A%22fxfKCol10l4%3AAPA91bGBl3UnKRz_ZNu0r3gATwQ__-E31iK4VoZh6kfSQAB_nmGmgq1C-VxWujza6ttFeOfxxqK-jRCp5BISoXpxXRcOhrHy6am7Is7fWwIgW0o5ZkWKoaUqnf4oHqw2BjYZcycXlj5L%22%2C%22password%22%3A%22qURl5BV4%22%2C%22phone%22%3A%220987654321%22%7D";
+		String code = "JTdCJTIycGFzc3dvcmQlMjIlM0ElMjJhMTIzNDU2JTIyJTJDJTIybmFtZSUyMiUzQSUyMnRlc3Rfc2VsbGVyJTIyJTJDJTIyZW1haWwlMjIlM0ElMjJldmFuLndhbmclNDBtZWxvbmx0ZC5jb20udHclMjIlMkMlMjJwaG9uZSUyMiUzQSUyMjA5ODc2NTQzMjElMjIlMkMlMjJhZGRyZXNzJTIyJTNBJTIyJUU2JUExJTgzJUU1JTlDJTkyJUU1JUI4JTgyJUU1JUI5JUIzJUU5JThFJUFFJUU1JThEJTgwJUU2JTk2JTg3JUU1JThDJTk2JUU4JUExJTk3MjE3JUU4JTk5JTlGJTIyJTJDJTIyYmlydGhfZGF5JTIyJTNBJTIyMTk4OCUyRjA0JTJGMDYlMjIlMkMlMjJpZGVudGl0eSUyMiUzQSUyMlNFTExFUlMlMjIlMkMlMjJsZXZlbCUyMiUzQSUyMk1BTkFHRSUyMiUyQyUyMmVuYWJsZSUyMiUzQSUyMlklMjIlN0Q=";
 		System.out.println(Base64Service.testDecode(code));
 	}
 

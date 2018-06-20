@@ -36,19 +36,16 @@ public class AccountInfoService {
 				}
 			});
 
-	
-
-	public AccountInfoVo findByPhone(String phone) {
-		AccountInfo info = accountInfoDao.findByPhone(phone);
+	public AccountInfoVo findByAccount(String account) {
+		AccountInfo info = accountInfoDao.findByAccount(account);
 		if (!ObjectUtils.anyNotNull(info)) {
 			return null;
 		}
 		return AccountInfoVo.of(info, true);
 	}
 	
-	
-	public AccountInfoVo findByPhoneAndPassword (String phone, String password) {
-		AccountInfo info = accountInfoDao.findByPhoneAndPassword(phone, password);
+	public AccountInfoVo findByPhoneAndAccount (String account, String password) {
+		AccountInfo info = accountInfoDao.findByPhoneAndAccount(account, password);
 		if (ObjectUtils.allNotNull(info)) {
 			putCache(info);
 			return AccountInfoVo.of(info, false);
@@ -66,12 +63,13 @@ public class AccountInfoService {
 	}
 
 	public AccountInfo save(AccountInfoVo vo, UUIDType type) {
-		AccountInfo oldInfo = accountInfoDao.findByPhone(vo.getPhone());
+		AccountInfo oldInfo = accountInfoDao.findByAccount(vo.getAccount());
 		if (ObjectUtils.allNotNull(oldInfo)) {
 			return null;
 		}
 
 		AccountInfo info = new AccountInfo();
+		info.setAccount(vo.getPhone());
 		info.setAccountUUID(Tools.buildAccountUUID(type));
 		info.setName(vo.getName());
 		info.setPassword(vo.getPassword());
@@ -128,7 +126,7 @@ public class AccountInfoService {
 		AccountInfo info = null;
 		try {
 			info = cacheBuilder.get(uuid);
-			return AccountInfoVo.of(info,hasPassword);
+			return AccountInfoVo.of(info, hasPassword);
 		} catch (Exception e) {
 			LOGGER.error("The {} does not exist in the cache", uuid);
 			return null;

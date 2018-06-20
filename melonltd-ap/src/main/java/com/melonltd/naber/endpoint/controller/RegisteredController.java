@@ -51,12 +51,13 @@ public class RegisteredController {
 		ErrorType error = verifyUser(vo);
 		LinkedHashMap<String, Object> map = null;
 		if (error == null) {
+			vo.setAccount(vo.getPhone());
 			AccountInfo info = accountInfoService.save(vo, UUIDType.USER);
 			if (ObjectUtils.allNotNull(info)) {
 				map = RespData.of(Status.TRUE, null, "");
 			} else {
 				LOGGER.error("save user error : phone: {}, name: {}", vo.getPhone(), vo.getName());
-				map = RespData.of(Status.FALSE, ErrorType.SAVE_ERROR, "");
+				map = RespData.of(Status.FALSE, ErrorType.ACCOUNT_ERROR, null);
 			}
 		} else {
 			map = RespData.of(Status.FALSE, error, null);

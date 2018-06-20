@@ -13,7 +13,8 @@ import com.google.common.base.MoreObjects;
 @Table(name = "account_info")
 public class AccountInfo implements Serializable {
 	private static final long serialVersionUID = 1002107104893197472L;
-
+	
+	private String account;
 	private String accountUUID;
 	private String name;
 	private String password;
@@ -33,7 +34,12 @@ public class AccountInfo implements Serializable {
 	private String photoType;
 
 	@Id
-	@Column(name = "phone", unique = true, nullable = false)
+	@Column(name = "account", unique = true, nullable = false)
+	public String getAccount() {
+		return account;
+	}
+	
+	@Column(name = "phone")
 	public String getPhone() {
 		return phone;
 	}
@@ -118,6 +124,10 @@ public class AccountInfo implements Serializable {
 		return photoType;
 	}
 
+	public void setAccount(String account) {
+		this.account = account;
+	}
+	
 	public void setAccountUUID(String accountUUID) {
 		this.accountUUID = accountUUID;
 	}
@@ -189,6 +199,7 @@ public class AccountInfo implements Serializable {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())
+				.add("account", account)
 				.add("accountUUID", accountUUID)
 				.add("name", name)
 				.add("password", password)

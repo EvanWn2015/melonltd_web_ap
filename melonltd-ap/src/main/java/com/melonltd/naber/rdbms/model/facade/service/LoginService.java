@@ -22,8 +22,8 @@ public class LoginService {
 	@Autowired
 	private MobileDeviceService mobileDeviceService;
 
-	public AccountInfoVo checkLoginAndChangeStatusAndIntoDeviceToken(String phone, String password, String deviceToken,DeviceCategory category) {
-		AccountInfoVo vo = accountInfoService.findByPhoneAndPassword(phone, password);
+	public AccountInfoVo checkLoginAndChangeStatusAndIntoDeviceToken(String account, String password, String deviceToken,DeviceCategory category) {
+		AccountInfoVo vo = accountInfoService.findByPhoneAndAccount(account, password);
 		if (ObjectUtils.allNotNull(vo)) {
 			if (!StringUtils.isBlank(deviceToken)) {
 				MobileDevice m = new MobileDevice();

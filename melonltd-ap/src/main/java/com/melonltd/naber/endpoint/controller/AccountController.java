@@ -87,7 +87,7 @@ public class AccountController {
 		if (ObjectUtils.anyNotNull(error)) {
 			map = RespData.of(Status.FALSE, error, null);
 		} else {
-			AccountInfoVo vo = accountInfoService.findByPhone(req.getPhone());
+			AccountInfoVo vo = accountInfoService.findByAccount(req.getPhone());
 			if (!ObjectUtils.anyNotNull(vo)) {
 				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
 			} else {

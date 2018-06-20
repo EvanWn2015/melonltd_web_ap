@@ -6,11 +6,13 @@ import com.google.common.collect.Lists;
 
 public enum Identity {
 	ADMIN("ADMIN"), 
-	ELEMENTARY("ELEMENTARY"), 
-	SENOR("SENOR"), 
-	JUNOR("JUNOR"), 
+
+	JUNIOR("JUNOR"), 
+	SENIOR("SENOR"), 
+	INTERMEDIATE("INTERMEDIATE"), 
 	UNIVERSITY("UNIVERSITY"), 
 	NON_STUDENT("NON_STUDENT"),
+	
 	SELLERS("SELLERS");
 	
 	private String name;
@@ -30,15 +32,15 @@ public enum Identity {
 	}
 	
 	public static List<Identity> getEnumValues() {
-		return Lists.newArrayList(ADMIN, ELEMENTARY, SENOR, JUNOR, UNIVERSITY, NON_STUDENT,SELLERS);
+		return Lists.newArrayList(ADMIN, INTERMEDIATE, SENIOR, JUNIOR, UNIVERSITY, NON_STUDENT,SELLERS);
 	}
 	
 	public static List<Identity> getNeedSchoolEnumValues() {
-		return Lists.newArrayList(SENOR, JUNOR, UNIVERSITY);
+		return Lists.newArrayList(SENIOR, JUNIOR, UNIVERSITY);
 	}
 	
 	public static List<Identity> getUserEnumValues() {
-		return Lists.newArrayList(ELEMENTARY, SENOR, JUNOR,UNIVERSITY,NON_STUDENT);
+		return Lists.newArrayList(INTERMEDIATE, SENIOR, JUNIOR,UNIVERSITY,NON_STUDENT);
 	}
 
 }

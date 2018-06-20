@@ -42,7 +42,9 @@ public class LogingController {
 		String request = Base64Service.decode(data);
 		AccountInfoVo vo = JsonHelper.json(request, AccountInfoVo.class);
 		DeviceCategory category = DeviceCategory.of(vo.getDevice_category());
-		vo = loginService.checkLoginAndChangeStatusAndIntoDeviceToken(vo.getPhone(), vo.getPassword(),vo.getDevice_token(), category);
+
+		vo.setAccount(vo.getPhone());
+		vo = loginService.checkLoginAndChangeStatusAndIntoDeviceToken(vo.getAccount(), vo.getPassword(),vo.getDevice_token(), category);
 		
 		LinkedHashMap<String, Object> map = null;
 		if (ObjectUtils.anyNotNull(vo)) {
