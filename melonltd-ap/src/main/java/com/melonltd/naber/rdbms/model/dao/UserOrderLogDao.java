@@ -13,7 +13,7 @@ import com.melonltd.naber.rdbms.model.bean.UserOrderLog;
 
 public interface UserOrderLogDao extends JpaRepository<UserOrderLog, String> {
 	
-	@Query("SELECT a FROM UserOrderLog a WHERE a.accountUUID = ?1 AND a.enable = 'Y' ORDER BY a.fetchDate DESC ")
+	@Query("SELECT a FROM UserOrderLog a WHERE a.accountUUID = ?1 AND a.enable = 'Y'")
 	public Page<UserOrderLog> findByAccountUUIDAndPage(String accountUUID, Pageable pageable);
 	
 	@Query("SELECT a FROM UserOrderLog a WHERE a.accountUUID = ?1 AND a.enable = 'Y' AND a.status IN ('UNFINISH', 'PROCESSING','CAN_FETCH')")

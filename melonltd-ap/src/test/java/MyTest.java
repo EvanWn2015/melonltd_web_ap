@@ -24,6 +24,7 @@ import org.springframework.context.annotation.PropertySource;
 import com.google.api.client.util.DateTime;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
+import com.mchange.lang.IntegerUtils;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
@@ -42,6 +43,7 @@ public class MyTest {
 	@Test
 	public void mytest() {
 		System.out.println("4554".matches("(09)+[\\d]{8}")); 
+		System.out.println(IntegerUtils.parseInt(null, 0));
 	}
 
 	@Test

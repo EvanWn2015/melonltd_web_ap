@@ -64,6 +64,7 @@ public class OredeSubimtReq {
 	public class OrderData {
 		private String category_uuid;
 		private String food_uuid;
+		private String count;
 		private FoodItemVo item;
 
 		public String getCategory_uuid() {
@@ -82,6 +83,14 @@ public class OredeSubimtReq {
 			this.food_uuid = food_uuid;
 		}
 
+		public String getCount() {
+			return count;
+		}
+
+		public void setCount(String count) {
+			this.count = count;
+		}
+
 		public FoodItemVo getItem() {
 			return item;
 		}
@@ -95,6 +104,7 @@ public class OredeSubimtReq {
 			return MoreObjects.toStringHelper(this.getClass())
 					.add("category_uuid", category_uuid)
 					.add("food_uuid", food_uuid)
+					.add("count", count)
 					.add("item", item)
 					.toString();
 		}

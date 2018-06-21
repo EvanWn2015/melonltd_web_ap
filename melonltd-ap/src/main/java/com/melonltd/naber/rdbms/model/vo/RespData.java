@@ -45,7 +45,9 @@ public class RespData {
 		STATUS_IS_CLOSE("3002", "目前品項處於關閉狀態"),
 		LOGIN_FAIL("4001", "查無此帳戶 或 帳戶已失效"),
 		ORDER_MAX_PRICE("5001", "訂單種金額超過 5000"),
-		FOOD_ITEM_DATA_ERROR("5002", "菜單資料結構錯誤");
+		ORDER_UNFINISH_MAX("5003", "未完成訂單數量已經滿3筆"),
+		FOOD_ITEM_DATA_ERROR("5002", "菜單資料結構錯誤"),
+		ORDER_MAX_COUNT("5004", "單筆菜單數量錯誤(1~50)");
 
 		ErrorType(String code, String msg) {
 			this.code = code;

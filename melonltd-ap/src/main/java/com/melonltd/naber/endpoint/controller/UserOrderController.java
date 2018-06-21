@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mchange.lang.IntegerUtils;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
@@ -96,16 +97,17 @@ public class UserOrderController {
 					map = RespData.of(Status.FALSE, errorType.STATUS_IS_CLOSE, null);	
 				}else {
 					int price = getPrice(req);
-					// 限制單筆訂單不可超過 5000
-					if (price > 5000) {
-						map = RespData.of(Status.FALSE, ErrorType.ORDER_MAX_PRICE, null);
+					boolean status = checkCount(req);
+					// 限制單筆訂單不可超過 5000  或  單筆菜單數量錯誤
+					if (price > 5000 || !status) {
+						map = status? RespData.of(Status.FALSE, ErrorType.ORDER_MAX_PRICE, null) : RespData.of(Status.FALSE, ErrorType.ORDER_MAX_COUNT, null);
 					}else {
 						String bonus = ((int)Math.floor(price / 10d) + "");
 						String orders = JsonHelper.toJson(OredeSubimtReq.ofOrders(req.getOrders()));
 						OrderVo result = submitOrderService.submitOrder(accountUUID , Tools.buildUUID(UUIDType.ORDER),  vo,  req,  String.valueOf(price),  bonus,  orders);
 						if (!ObjectUtils.anyNotNull(result)) {
 							LOGGER.error("submit order save fail account : {}, uuid:{} ",accountUUID, req.getRestaurant_uuid());
-							map = RespData.of(Status.FALSE, ErrorType.SAVE_ERROR, null);	
+							map = RespData.of(Status.FALSE, ErrorType.ORDER_UNFINISH_MAX, null);	
 						}else {
 							// push to seller 
 							pudhSellerService.pushOrderToSeller(result.getRestaurant_uuid(), OredeSubimtReq.ofOrders(req.getOrders()) ,OrderStatus.UNFINISH);
@@ -120,15 +122,21 @@ public class UserOrderController {
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 	
+	private boolean checkCount(OredeSubimtReq req) {
+		long count = req.getOrders().stream().filter(a -> IntegerUtils.parseInt(a.getCount(), 50) > 50).count();
+		return req.getOrders().stream().filter(a -> IntegerUtils.parseInt(a.getCount(), 50) > 50).count() == 0;
+	}
+	
 	private Integer getPrice(OredeSubimtReq req) {
 		int result = req.getOrders().stream().mapToInt(a -> {
+			int count= Integer.parseInt(a.getCount());
 			int price = Integer.parseInt(a.getItem().getPrice());
 			int opt = a.getItem().getOpts().stream().mapToInt(o -> o.getPrice() != null ? Integer.parseInt(o.getPrice()) : 0).sum();
 			int scopes = a.getItem().getScopes().stream().mapToInt(s -> s.getPrice() != null ? Integer.parseInt(s.getPrice()) : 0).sum();
 			if (scopes > 0 ) {
-				return scopes+opt;
+				return (scopes + opt) * count;
 			}
-			return price + opt + scopes;
+			return (price + opt + scopes) * count;
 		}).sum();
 		return result;
 	}
