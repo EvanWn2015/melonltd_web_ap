@@ -84,7 +84,7 @@ public class AccountController {
 				vo.setPassword(req.getPassword());
 				boolean status = accountInfoService.update(vo);
 				if (status) {
-					map = RespData.of(Status.TRUE, null, null);
+					map = RespData.of(Status.TRUE, null, "");
 				} else {
 					map = RespData.of(Status.FALSE, ErrorType.UPDATE_ERROR, null);
 				}
