@@ -3,6 +3,8 @@ package com.melonltd.naber.rdbms.model.service;
 import java.util.List;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +15,12 @@ import com.melonltd.naber.rdbms.model.bean.CategoryFoodRel;
 import com.melonltd.naber.rdbms.model.dao.CategoryFoodRelDao;
 import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
+import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.CategoryFoodRelVo;
 
 @Service("categoryFoodRelSerice")
 public class CategoryFoodRelSerice {
+	private static final Logger LOGGER = LoggerFactory.getLogger(CategoryFoodRelSerice.class);
 
 	@Autowired
 	private CategoryFoodRelDao categoryFoodRelDao;
@@ -29,6 +33,16 @@ public class CategoryFoodRelSerice {
 	public CategoryFoodRelVo findByFoodUUID(String foodUUID) {
 		CategoryFoodRel info = categoryFoodRelDao.findByFoodUUID(foodUUID);
 		return CategoryFoodRelVo.valueOf(info, true);
+	}
+	
+	public boolean updatePhoto(CategoryFoodRelVo vo) {
+		try {
+			categoryFoodRelDao.updatePhoto(vo.getPhoto(), vo.getFood_uuid());
+			return true;
+		}catch (Exception e) {
+			LOGGER.error("update photo fail food: {}, msg:{}",vo.getFood_uuid(),e.getMessage());
+			return false;
+		}
 	}
 
 	public int getFoodStatusOpenByUUIDs(List<String> foodUUIDs) {

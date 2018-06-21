@@ -3,7 +3,9 @@ package com.melonltd.naber.rdbms.model.dao;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.melonltd.naber.rdbms.model.bean.CategoryFoodRel;
 
@@ -26,5 +28,11 @@ public interface CategoryFoodRelDao extends JpaRepository<CategoryFoodRel, Strin
 	
 	@Query("SELECT f FROM CategoryFoodRel f, RestaurantCategoryRel c WHERE f.categoryUUID=c.categoryUUID AND f.foodUUID =?1 AND c.restaurantUUID=?2 AND c.enable='Y' AND f.enable='Y'")
 	public CategoryFoodRel findByFoodUUIDAndRestaurantUUID(String foodUUID, String restaurantUUID);
+	
+	@Transactional
+	@Modifying
+	@Query("UPDATE CategoryFoodRel a SET a.photo=?1 WHERE a.foodUUID=?2")	
+	public void updatePhoto(String photo, String foodUUID);
+	
 	
 }

@@ -38,10 +38,11 @@ public class AccountInfoService {
 
 	public AccountInfoVo findByAccount(String account) {
 		AccountInfo info = accountInfoDao.findByAccount(account);
-		if (!ObjectUtils.anyNotNull(info)) {
-			return null;
+		if (ObjectUtils.allNotNull(info)) {
+			cacheBuilder.invalidate(info.getAccountUUID());
+			return AccountInfoVo.of(info, true);
 		}
-		return AccountInfoVo.of(info, true);
+		return null;
 	}
 	
 	public AccountInfoVo findByPhoneAndAccount (String account, String password) {
@@ -53,11 +54,11 @@ public class AccountInfoService {
 		return null;
 	}
 
-	public AccountInfoVo findByAccountUUID(String uuid) {
+	public AccountInfoVo findByAccountUUID(String uuid, boolean hasPassword ) {
 		AccountInfo info = accountInfoDao.findByAccountUUID(uuid);
-		if (ObjectUtils.anyNotNull(info)) {
-			info.getIsLogin();
-			return AccountInfoVo.of(info,true);
+		if (ObjectUtils.allNotNull(info)) {
+			cacheBuilder.invalidate(info.getAccountUUID());
+			return AccountInfoVo.of(info,hasPassword);
 		}
 		return null;
 	}
@@ -90,6 +91,17 @@ public class AccountInfoService {
 	public boolean update(AccountInfoVo vo) {
 		try {
 			accountInfoDao.updatePasswordByPhoneAndUUID(vo.getPassword(), vo.getPhone(),vo.getAccount_uuid());
+			clearCacheBuilderByKey(vo.getAccount_uuid());
+			return true;
+		}catch (Exception e) {
+			LOGGER.error("update password fail account: {}, msg:{}",vo.getAccount_uuid(),e.getMessage());
+			return false;
+		}
+	}
+	
+	public boolean updatePhoto(AccountInfoVo vo) {
+		try {
+			accountInfoDao.updatePhoto(vo.getPhoto(), vo.getPhone(),vo.getAccount_uuid());
 			clearCacheBuilderByKey(vo.getAccount_uuid());
 			return true;
 		}catch (Exception e) {

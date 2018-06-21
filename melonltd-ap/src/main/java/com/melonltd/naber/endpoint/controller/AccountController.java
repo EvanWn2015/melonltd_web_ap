@@ -41,6 +41,25 @@ public class AccountController {
 	@Autowired
 	private MailSendService mailSendService;
 
+	
+	
+	@ResponseBody
+	@PostMapping(value = "account/find/info")
+	public ResponseEntity<String> findAccountInfo(HttpServletRequest httpRequest) {
+		
+		String accountUUID = httpRequest.getHeader("Authorization");
+		AccountInfoVo vo = accountInfoService.findByAccountUUID(accountUUID,false);
+		LinkedHashMap<String, Object> map = null;
+		if (ObjectUtils.allNotNull(vo)) {
+			map = RespData.of(Status.TRUE, null, vo);
+		}else {
+			map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
+		}
+		String result = Base64Service.encode(JsonHelper.toJson(map));
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	
 	@ResponseBody
 	@PostMapping(value = "account/update/password")
 	public ResponseEntity<String> changePassword(HttpServletRequest httpRequest,
@@ -122,11 +141,11 @@ public class AccountController {
 
 	private ErrorType checkRequest(AccountReq req, boolean isChange) {
 
-		if (!ObjectUtils.anyNotNull(req)) {
+		if (!ObjectUtils.allNotNull(req)) {
 			return ErrorType.INVALID;
 		}
 		if (isChange) {
-			if (!ObjectUtils.anyNotNull(req.getOld_password(), req.getPassword(), req.getPhone())) {
+			if (!ObjectUtils.allNotNull(req.getOld_password(), req.getPassword(), req.getPhone())) {
 				return ErrorType.INVALID;
 			}
 
@@ -138,7 +157,7 @@ public class AccountController {
 				return ErrorType.INVALID_PASSWORD_REPEAT;
 			}
 		} else {
-			if (!ObjectUtils.anyNotNull(req.getPhone())) {
+			if (!ObjectUtils.allNotNull(req.getPhone())) {
 				return ErrorType.INVALID;
 			}
 		}
