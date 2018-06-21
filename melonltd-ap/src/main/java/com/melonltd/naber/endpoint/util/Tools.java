@@ -24,8 +24,7 @@ public class Tools {
 
 	private static DecimalFormat DF = new DecimalFormat();
 	private static final ZoneId ZONEID_GMT = ZoneId.of("Asia/Kuala_Lumpur");
-	private static final DateTimeFormatter yyyy_MM_dd_T_HH_mm_ss_SSSS_Z = DateTimeFormatter
-			.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
+	private static final DateTimeFormatter yyyy_MM_dd_T_HH_mm_ss_SSSS_Z = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
 
 	public static enum UUIDType {
 		ADMIN, USER, SELLER, NABER_BULLETIN, RESTAURANT, RESTAURANT_CATEGORY, DEVICE, AD, FOOD, ORDER
