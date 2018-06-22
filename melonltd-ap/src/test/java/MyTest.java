@@ -42,8 +42,21 @@ public class MyTest {
 
 	@Test
 	public void mytest() {
-		System.out.println("4554".matches("(09)+[\\d]{8}")); 
-		System.out.println(IntegerUtils.parseInt(null, 0));
+		System.out.println(Tools.getNowGMT());
+
+		for (int i = 0; i < 10; i++) {
+			System.out.println(Tools.buildUUID(UUIDType.FOOD));
+		}
+
+		// Integer start = Integer.parseInt(new
+		// StringBuffer("09:00").deleteCharAt(2).toString());
+		// Integer end = Integer.parseInt(new
+		// StringBuffer("22:00").deleteCharAt(2).toString());
+		// List<DateRangeVo> list = Tools.buildCanStoreRange(start, end);
+		// System.out.println(list.toString());
+		//
+		//
+		// System.out.println(JsonHelper.toJson(list));
 	}
 
 	@Test
@@ -124,7 +137,8 @@ public class MyTest {
 
 		boolean status = true;
 		while (status) {
-			list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
+			list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(),
+					SwitchStatus.OPEN));
 			int dd = 30;
 			if (timeR.upperEndpoint() % 100 == 0) {
 				dd = 30;
@@ -134,7 +148,8 @@ public class MyTest {
 			timeR = Range.open(timeR.upperEndpoint() + 1, timeR.upperEndpoint() + dd);
 			status = timeR.upperEndpoint().intValue() < end;
 			if (!status) {
-				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
+				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(),
+						SwitchStatus.OPEN));
 			}
 		}
 		return list;
@@ -148,7 +163,8 @@ public class MyTest {
 
 		boolean status = true;
 		while (status) {
-			list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
+			list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(),
+					SwitchStatus.OPEN));
 			int dd = 30;
 			if (timeR.upperEndpoint() % 100 == 0) {
 				dd = 30;
@@ -163,7 +179,8 @@ public class MyTest {
 			}
 
 			if (timeR.upperEndpoint().intValue() == end) {
-				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(), SwitchStatus.OPEN));
+				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), timeR.upperEndpoint().intValue(),
+						SwitchStatus.OPEN));
 				status = false;
 			}
 		}
@@ -299,12 +316,13 @@ public class MyTest {
 
 	@Test
 	public void decode() {
-//		String json = "{\"food_name\":\"奶茶\",\"price\":\"2323\",\"opts\":[{\"name\":\"布丁\",\"price\":\"5\"},{\"name\":\"仙草\",\"price\":\"15\"}],\"scopes\":[{\"name\":\"超大杯\",\"price\":\"15\"},{\"name\":\"大杯\",\"price\":\"15\"},{\"name\":\"中杯\",\"price\":\"5\"},{\"name\":\"小杯\",\"price\":\"5\"}],\"demands\":[{\"name\":\"甜度\",\"datas\":[{\"name\":\"全糖\"},{\"name\":\"8分糖\"},{\"name\":\"無糖\"}]},{\"name\":\"冰塊\",\"datas\":[{\"name\":\"正常\"},{\"name\":\"少冰\"},{\"name\":\"微冰\"},{\"name\":\"去冰\"}]}]}";
-//
-//		FoodItemVo vo = JsonHelper.json(json, FoodItemVo.class);
-//		System.out.println(vo);
-//		String encode = "{\"phone\":\"0987654321\"}";
-//		System.out.println(Base64Service.encode(encode));
+		// String json =
+		// "{\"food_name\":\"奶茶\",\"price\":\"2323\",\"opts\":[{\"name\":\"布丁\",\"price\":\"5\"},{\"name\":\"仙草\",\"price\":\"15\"}],\"scopes\":[{\"name\":\"超大杯\",\"price\":\"15\"},{\"name\":\"大杯\",\"price\":\"15\"},{\"name\":\"中杯\",\"price\":\"5\"},{\"name\":\"小杯\",\"price\":\"5\"}],\"demands\":[{\"name\":\"甜度\",\"datas\":[{\"name\":\"全糖\"},{\"name\":\"8分糖\"},{\"name\":\"無糖\"}]},{\"name\":\"冰塊\",\"datas\":[{\"name\":\"正常\"},{\"name\":\"少冰\"},{\"name\":\"微冰\"},{\"name\":\"去冰\"}]}]}";
+		//
+		// FoodItemVo vo = JsonHelper.json(json, FoodItemVo.class);
+		// System.out.println(vo);
+		// String encode = "{\"phone\":\"0987654321\"}";
+		// System.out.println(Base64Service.encode(encode));
 		String code = "JTdCJTIycGFzc3dvcmQlMjIlM0ElMjJhMTIzNDU2JTIyJTJDJTIybmFtZSUyMiUzQSUyMnRlc3Rfc2VsbGVyJTIyJTJDJTIyZW1haWwlMjIlM0ElMjJldmFuLndhbmclNDBtZWxvbmx0ZC5jb20udHclMjIlMkMlMjJwaG9uZSUyMiUzQSUyMjA5ODc2NTQzMjElMjIlMkMlMjJhZGRyZXNzJTIyJTNBJTIyJUU2JUExJTgzJUU1JTlDJTkyJUU1JUI4JTgyJUU1JUI5JUIzJUU5JThFJUFFJUU1JThEJTgwJUU2JTk2JTg3JUU1JThDJTk2JUU4JUExJTk3MjE3JUU4JTk5JTlGJTIyJTJDJTIyYmlydGhfZGF5JTIyJTNBJTIyMTk4OCUyRjA0JTJGMDYlMjIlMkMlMjJpZGVudGl0eSUyMiUzQSUyMlNFTExFUlMlMjIlMkMlMjJsZXZlbCUyMiUzQSUyMk1BTkFHRSUyMiUyQyUyMmVuYWJsZSUyMiUzQSUyMlklMjIlN0Q=";
 		System.out.println(Base64Service.testDecode(code));
 	}
@@ -315,49 +333,48 @@ public class MyTest {
 		Pattern pattern = Pattern.compile("(09)+[\\d]{8}");
 		Matcher matcher = pattern.matcher(str);
 		System.out.println(str.matches("(09)+[\\d]{8}"));
-		while(matcher.find()) {
-		    System.out.print(matcher.group());
+		while (matcher.find()) {
+			System.out.print(matcher.group());
 		}
 	}
-	
+
 	@Test
 	public void rrtrr() {
-		List<DateRangeVo> oldRanges  = Tools.buildCanStoreRange(1100, 2200);
+		List<DateRangeVo> oldRanges = Tools.buildCanStoreRange(1100, 2200);
 		oldRanges.stream().forEach(a -> {
-			if (oldRanges.indexOf(a) % 2 ==0) {
+			if (oldRanges.indexOf(a) % 2 == 0) {
 				a.setStatus("CLOSE");
 			}
 		});
 		List<DateRangeVo> newRanges = Tools.buildCanStoreRange(800, 1600);
-		
-		List<DateRangeVo> ol = oldRanges.stream().filter(o -> o.getStatus().equals("CLOSE")).collect(Collectors.toList());
-		
-		
-		List<DateRangeVo> nl = newRanges.stream().map(n ->{
+
+		List<DateRangeVo> ol = oldRanges.stream().filter(o -> o.getStatus().equals("CLOSE"))
+				.collect(Collectors.toList());
+
+		List<DateRangeVo> nl = newRanges.stream().map(n -> {
 			System.out.println("nn: " + n.getDate());
-			return	ol.stream().filter(o ->{
+			return ol.stream().filter(o -> {
 				System.out.println("oo: " + o.getDate());
 				return o.getDate().equals(n.getDate());
 			}).findFirst().get();
 		}).collect(Collectors.toList());
-		
-		System.out.println(ol.size()  + "!!!!" + oldRanges.size());
-		
+
+		System.out.println(ol.size() + "!!!!" + oldRanges.size());
+
 		newRanges.addAll(oldRanges);
 	}
-	
-	
+
 	@Test
-	public void myttt () {
+	public void myttt() {
 		SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:SS.ssss'Z'");
-			try {
-				System.out.println(new SimpleDateFormat("dd日 hh時 mm分").format(simpleDate.parse("2018-06-13T07:11:31.9290Z")));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        
+		try {
+			System.out
+					.println(new SimpleDateFormat("dd日 hh時 mm分").format(simpleDate.parse("2018-06-13T07:11:31.9290Z")));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
-	
 
 }

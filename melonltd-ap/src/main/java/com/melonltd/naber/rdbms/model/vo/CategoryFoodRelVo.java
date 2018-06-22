@@ -122,9 +122,9 @@ public class CategoryFoodRelVo implements Serializable{
 		
 		if (isDetail) {
 			vo.food_data =JsonHelper.json(info.getFoodData(), FoodItemVo.class);
-			vo.food_uuid = vo.food_data.getFood_uuid();
-			vo.food_name = vo.food_data.getFood_name();
-			vo.default_price = vo.food_data.getPrice();	
+//			vo.food_uuid = vo.food_data.getFood_uuid();
+//			vo.food_name = vo.food_data.getFood_name();
+//			vo.default_price = vo.food_data.getPrice();	
 		}
 		
 //		vo.status = info.getStatus();

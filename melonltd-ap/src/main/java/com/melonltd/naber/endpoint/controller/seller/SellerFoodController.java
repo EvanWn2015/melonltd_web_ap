@@ -57,6 +57,9 @@ public class SellerFoodController {
 		ReqData req = JsonHelper.json(request, ReqData.class);
 		
 		String accountUUID = httpRequest.getHeader("Authorization");
+		if (!StringUtils.isBlank(accountUUID)) {
+			accountInfoService.clearCacheBuilderByKey(accountUUID);
+		}
 		AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 
 		ErrorType errorType = checkReqData(req, account);
@@ -83,6 +86,9 @@ public class SellerFoodController {
 		CategoryFoodRelVo req = JsonHelper.json(request, CategoryFoodRelVo.class);
 		
 		String accountUUID = httpRequest.getHeader("Authorization");
+		if (!StringUtils.isBlank(accountUUID)) {
+			accountInfoService.clearCacheBuilderByKey(accountUUID);
+		}
 		AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 
 		ErrorType errorType = checkAddReqData(req, account);
@@ -117,6 +123,9 @@ public class SellerFoodController {
 		CategoryFoodRelVo req = JsonHelper.json(request, CategoryFoodRelVo.class);
 		
 		String accountUUID = httpRequest.getHeader("Authorization");
+		if (!StringUtils.isBlank(accountUUID)) {
+			accountInfoService.clearCacheBuilderByKey(accountUUID);
+		}
 		AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 
 		ErrorType errorType = checkUpdateReqData(req, account);
@@ -157,6 +166,9 @@ public class SellerFoodController {
 		ReqData req = JsonHelper.json(request, ReqData.class);
 		
 		String accountUUID = httpRequest.getHeader("Authorization");
+		if (!StringUtils.isBlank(accountUUID)) {
+			accountInfoService.clearCacheBuilderByKey(accountUUID);
+		}
 		AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 
 		ErrorType errorType = checkDeleteReqData(req, account);
@@ -190,6 +202,9 @@ public class SellerFoodController {
 		ReqData req = JsonHelper.json(request, ReqData.class);
 		
 		String accountUUID = httpRequest.getHeader("Authorization");
+		if (!StringUtils.isBlank(accountUUID)) {
+			accountInfoService.clearCacheBuilderByKey(accountUUID);
+		}
 		AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 
 		ErrorType errorType = checkChangeReqData(req, account);
