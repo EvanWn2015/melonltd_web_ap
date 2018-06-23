@@ -85,7 +85,7 @@ public class UserOrderController {
 				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);	
 			}else {
 				boolean isOpen = checkIsStoreOpen(req, vo);
-				List<String> foodUUIDs = req.getOrders().stream().map(a -> a.getFood_uuid()).distinct().collect(Collectors.toList());
+				List<String> foodUUIDs = req.getOrders().stream().map(a -> a.getItem().getFood_uuid()).distinct().collect(Collectors.toList());
 				List<String> categoryUUIDs = req.getOrders().stream().map(a -> a.getCategory_uuid()).distinct().collect(Collectors.toList());
 				int foodOpens = categoryFoodRelSerice.getFoodStatusOpenByUUIDs(foodUUIDs);
 				int categoryOpens = restaurantCategoryRelService.getStatusByCategoryUUIDs(categoryUUIDs);

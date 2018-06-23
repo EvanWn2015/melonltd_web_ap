@@ -63,7 +63,7 @@ public class OredeSubimtReq {
 
 	public class OrderData {
 		private String category_uuid;
-		private String food_uuid;
+//		private String food_uuid;
 		private String count;
 		private FoodItemVo item;
 
@@ -75,13 +75,13 @@ public class OredeSubimtReq {
 			this.category_uuid = category_uuid;
 		}
 
-		public String getFood_uuid() {
-			return food_uuid;
-		}
-
-		public void setFood_uuid(String food_uuid) {
-			this.food_uuid = food_uuid;
-		}
+//		public String getFood_uuid() {
+//			return food_uuid;
+//		}
+//
+//		public void setFood_uuid(String food_uuid) {
+//			this.food_uuid = food_uuid;
+//		}
 
 		public String getCount() {
 			return count;
@@ -103,7 +103,7 @@ public class OredeSubimtReq {
 		public String toString() {
 			return MoreObjects.toStringHelper(this.getClass())
 					.add("category_uuid", category_uuid)
-					.add("food_uuid", food_uuid)
+//					.add("food_uuid", food_uuid)
 					.add("count", count)
 					.add("item", item)
 					.toString();
