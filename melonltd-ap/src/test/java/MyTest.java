@@ -1,4 +1,7 @@
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -42,23 +45,25 @@ public class MyTest {
 
 	@Test
 	public void mytest() {
-		System.out.println(Tools.getNowGMT());
+		try {
+			String pushMessage = "{\"data\":{\"title\":\"" + "title" + "\",\"message\":\"" + "message" + "\"},\"to\":\"" + "dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g" + "\"}";
+			URL url = new URL("https://fcm.googleapis.com/fcm/send");
 
-		for (int i = 0; i < 10; i++) {
-			System.out.println(Tools.buildUUID(UUIDType.FOOD));
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestProperty("Authorization", "key=" + "AIzaSyAtVkjDZtUn-U3jZi17Gr9KKD6bGyYMjhY");
+			conn.setRequestProperty("Content-Type", "application/json");
+			conn.setRequestMethod("POST");
+			conn.setDoOutput(true);
+
+			// Send FCM message content.
+			OutputStream outputStream = conn.getOutputStream();
+			outputStream.write(pushMessage.getBytes());
+			System.out.println(conn.getResponseCode());
+			System.out.println(conn.getResponseMessage());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+
 		}
-		
-		List<ReqData> list = JsonHelper.jsonArray("", ReqData[].class);
-
-		// Integer start = Integer.parseInt(new
-		// StringBuffer("09:00").deleteCharAt(2).toString());
-		// Integer end = Integer.parseInt(new
-		// StringBuffer("22:00").deleteCharAt(2).toString());
-		// List<DateRangeVo> list = Tools.buildCanStoreRange(start, end);
-		// System.out.println(list.toString());
-		//
-		//
-		// System.out.println(JsonHelper.toJson(list));
 	}
 
 	@Test
