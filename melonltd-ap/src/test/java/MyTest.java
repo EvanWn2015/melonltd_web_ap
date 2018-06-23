@@ -47,6 +47,8 @@ public class MyTest {
 		for (int i = 0; i < 10; i++) {
 			System.out.println(Tools.buildUUID(UUIDType.FOOD));
 		}
+		
+		List<ReqData> list = JsonHelper.jsonArray("", ReqData[].class);
 
 		// Integer start = Integer.parseInt(new
 		// StringBuffer("09:00").deleteCharAt(2).toString());
