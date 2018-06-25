@@ -25,10 +25,8 @@ public class AccountInfoService {
 	@Autowired
 	AccountInfoDao accountInfoDao;
 
-	LoadingCache<String, AccountInfo> cacheBuilder = CacheBuilder.newBuilder()
-			.expireAfterAccess(7, TimeUnit.DAYS)
-			.maximumSize(1000)
-			.build(new CacheLoader<String, AccountInfo>() {
+	LoadingCache<String, AccountInfo> cacheBuilder = CacheBuilder.newBuilder().expireAfterAccess(7, TimeUnit.DAYS)
+			.maximumSize(1000).build(new CacheLoader<String, AccountInfo>() {
 				@Override
 				public AccountInfo load(String uuid) throws Exception {
 					AccountInfo info = accountInfoDao.findByAccountUUID(uuid);
@@ -44,8 +42,17 @@ public class AccountInfoService {
 		}
 		return null;
 	}
-	
-	public AccountInfoVo findByPhoneAndAccount (String account, String password) {
+
+	public AccountInfoVo findByPhoneAndMail(String phone, String email) {
+		AccountInfo info = accountInfoDao.findByPhoneAndMail(phone, email);
+		if (ObjectUtils.allNotNull(info)) {
+			cacheBuilder.invalidate(info.getAccountUUID());
+			return AccountInfoVo.of(info, true);
+		}
+		return null;
+	}
+
+	public AccountInfoVo findByPhoneAndAccount(String account, String password) {
 		AccountInfo info = accountInfoDao.findByPhoneAndAccount(account, password);
 		if (ObjectUtils.allNotNull(info)) {
 			putCache(info);
@@ -54,11 +61,11 @@ public class AccountInfoService {
 		return null;
 	}
 
-	public AccountInfoVo findByAccountUUID(String uuid, boolean hasPassword ) {
+	public AccountInfoVo findByAccountUUID(String uuid, boolean hasPassword) {
 		AccountInfo info = accountInfoDao.findByAccountUUID(uuid);
 		if (ObjectUtils.allNotNull(info)) {
 			cacheBuilder.invalidate(info.getAccountUUID());
-			return AccountInfoVo.of(info,hasPassword);
+			return AccountInfoVo.of(info, hasPassword);
 		}
 		return null;
 	}
@@ -86,26 +93,25 @@ public class AccountInfoService {
 		info.setIsLogin("N");
 		return accountInfoDao.save(info);
 	}
-	
-	
+
 	public boolean update(AccountInfoVo vo) {
 		try {
-			accountInfoDao.updatePasswordByPhoneAndUUID(vo.getPassword(), vo.getPhone(),vo.getAccount_uuid());
+			accountInfoDao.updatePasswordByPhoneAndUUID(vo.getPassword(), vo.getPhone(), vo.getAccount_uuid());
 			clearCacheBuilderByKey(vo.getAccount_uuid());
 			return true;
-		}catch (Exception e) {
-			LOGGER.error("update password fail account: {}, msg:{}",vo.getAccount_uuid(),e.getMessage());
+		} catch (Exception e) {
+			LOGGER.error("update password fail account: {}, msg:{}", vo.getAccount_uuid(), e.getMessage());
 			return false;
 		}
 	}
-	
+
 	public boolean updatePhoto(AccountInfoVo vo) {
 		try {
-			accountInfoDao.updatePhoto(vo.getPhoto(), vo.getPhone(),vo.getAccount_uuid());
+			accountInfoDao.updatePhoto(vo.getPhoto(), vo.getPhone(), vo.getAccount_uuid());
 			clearCacheBuilderByKey(vo.getAccount_uuid());
 			return true;
-		}catch (Exception e) {
-			LOGGER.error("update password fail account: {}, msg:{}",vo.getAccount_uuid(),e.getMessage());
+		} catch (Exception e) {
+			LOGGER.error("update password fail account: {}, msg:{}", vo.getAccount_uuid(), e.getMessage());
 			return false;
 		}
 	}
@@ -118,7 +124,7 @@ public class AccountInfoService {
 			accountInfoDao.save(info);
 		}
 	}
-	
+
 	public void changeLoginStatus(String uuid) {
 		try {
 			AccountInfo info = cacheBuilder.get(uuid);
@@ -133,7 +139,6 @@ public class AccountInfoService {
 		}
 	}
 
-	
 	public AccountInfoVo getCacheBuilderByKey(String uuid, boolean hasPassword) {
 		AccountInfo info = null;
 		try {
@@ -144,6 +149,7 @@ public class AccountInfoService {
 			return null;
 		}
 	}
+
 	public void putCache(AccountInfo info) {
 		cacheBuilder.put(info.getAccountUUID(), info);
 	}

@@ -45,6 +45,20 @@ public class VerifyPhoneLogService {
 		}
 	}
 
+	@Transactional(readOnly = false, rollbackFor = HibernateException.class)
+	public String sendForgetPassword(String phone, String content) {
+		String start = Tools.getNowStartOfDayGMT();
+		String end = Tools.getNowEndOfDayGMT();
+		List<VerifyPhoneLog> logs = verifyPhoneLogDao.findByPhoneNumberAndBetweenDates(phone, start, end);
+		if (logs == null) {
+			return sendPhoneSMS("Forget", content, phone);
+		} else if (logs.size() < 2) {
+			return sendPhoneSMS("Forget", content, phone);
+		} else {
+			return null;
+		}
+	}
+
 	// 驗證 6碼，並檢查是否超過三分鐘
 	@Transactional(readOnly = true)
 	public ErrorType verifyCode(String batchId, String code) {
@@ -56,11 +70,11 @@ public class VerifyPhoneLogService {
 		long old = Tools.getMinutes(log.getVerifyDate());
 		long now = Tools.getMinutes(date);
 		long range = 1000 * 60 * 3L;
-		
+
 		if (now - old > range) {
 			return ErrorType.EXCEED_TIME;
 		}
-		
+
 		if (ObjectUtils.allNotNull(log)) {
 			return null;
 		}

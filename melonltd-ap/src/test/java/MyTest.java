@@ -13,6 +13,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,6 +26,7 @@ import org.junit.Test;
 import org.springframework.context.annotation.PropertySource;
 
 import com.google.api.client.util.DateTime;
+import com.google.api.client.util.Maps;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import com.mchange.lang.IntegerUtils;
@@ -33,12 +35,16 @@ import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
+import com.melonltd.naber.rdbms.model.req.vo.AccountReq;
+import com.melonltd.naber.rdbms.model.req.vo.DemandsItemVo;
+import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
+import com.mysql.jdbc.NoSubInterceptorWrapper;
 
 @PropertySource("classpath:/config.properties")
 public class MyTest {
@@ -46,11 +52,14 @@ public class MyTest {
 	@Test
 	public void mytest() {
 		try {
-			String pushMessage = "{\"data\":{\"title\":\"" + "title" + "\",\"message\":\"" + "message" + "\"},\"to\":\"" + "dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g" + "\"}";
+			String pushMessage = "{\"data\":{\"title\":\"" + "title" + "\",\"message\":\"" + "message" + "\"},\"to\":\""
+					+ "dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g"
+					+ "\"}";
 			URL url = new URL("https://fcm.googleapis.com/fcm/send");
 
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestProperty("Authorization", "key=" + "AIzaSyAtVkjDZtUn-U3jZi17Gr9KKD6bGyYMjhY");
+			conn.setRequestProperty("Authorization", "key="
+					+ "AAAAUVwQKe4:APA91bGcpT-HZ6kZQ5jPeUBkRhg-Mo1PlUS4RN6QZEJ0pqODkXfW3n4ywY1Y-pF7hfMtresjO94PRl9XfnL87P8FlS8BFTmwmcudwdc8_FL7elIRlG9UO1rMXnqv3y7iGjER8Sy11thdE8-I3dwgdT93_jIVv_iJCQ");
 			conn.setRequestProperty("Content-Type", "application/json");
 			conn.setRequestMethod("POST");
 			conn.setDoOutput(true);
@@ -71,8 +80,8 @@ public class MyTest {
 		System.out.println(Instant.now());
 		System.out.println(Tools.getGMTDate("HH:mm"));
 
-		String start = "09:30";
-		String end = "17:30";
+		String start = "06:30";
+		String end = "11:00";
 		// String now = Tools.getGMTDate("HH:mm");
 		String now = "02:10";
 
@@ -89,12 +98,15 @@ public class MyTest {
 		DateRangeVo vow = new DateRangeVo();
 
 	}
-
+	
+	
 	@Test
-	public void myBu() {
+	public void RESTAURANT() {
+		System.out.println(Tools.buildUUID(UUIDType.RESTAURANT));
 
-		String store_start = "09:00";
-		String store_end = "17:30";
+		String store_start = "10:30";
+		String store_end = "21:30";
+		//
 		Integer start = Integer.parseInt(new StringBuffer(store_start).deleteCharAt(2).toString());
 		Integer end = Integer.parseInt(new StringBuffer(store_end).deleteCharAt(2).toString());
 		List<DateRangeVo> list = Lists.<DateRangeVo>newArrayList();
@@ -103,25 +115,91 @@ public class MyTest {
 		} else {
 			list = buildDateRangeReverse(start, end);
 		}
-		// boolean status = buildRanges(list);
-		// System.out.println(list);
-		//
-		// System.out.println(JsonHelper.toJson(list));
-
-		System.out.println("---->");
-		System.out.println(list);
-		System.out.println("---->");
+		
 		System.out.println(JsonHelper.toJson(list));
-		System.out.println("---->");
-		System.out.println(JsonHelper.jsonArray(JsonHelper.toJson(list), DateRangeVo[].class));
-		System.out.println("<----");
-
-		// System.out.println(org.apache.commons.lang3.Range.<String>between("23:31",
-		// "24:00").contains("13:30"));
-		// System.out.println(status);
 
 	}
+	
+	
+	@Test
+	public void categoryRelData() {
+		String r_uuid = "RESTAURANT_20180625_115446_901_822510ad-bf95-4a93-9bde-1b3bcef83655";
+		String[] names = new String[] {"吐司", "大滿足吃法", "飲料"};
+		for (String name :names) {
+			String c_uuid = Tools.buildUUID(UUIDType.RESTAURANT_CATEGORY);
+			System.err.println("INSERT INTO restaurant_category_rel (`category_uuid`, `restaurant_uuid`, `category_name`, `status`, `enable`, `create_date`) VALUES ('" + c_uuid + "', '"+r_uuid+"', '"+name+"', 'OPEN', 'Y', '2018-06-22T11:48:13.5580Z');");
+		}
+	}
+	
+	
+	@Test
+	public void foodData() {
+		String c_uuid = "RESTAURANT_CATEGORY_20180625_124434_440_c2e9afc3-dbb5-4755-9640-bac45fede5fa";
+		
+		Map<String, String> datas = Maps.newHashMap();
+		datas.put("這一刻灰奶茶","	75");
+		datas.put("紅茶鮮奶茶","50");
+		datas.put("珍珠紅茶鮮奶茶","55");
+		datas.put("布丁紅茶鮮奶茶","65");
+		datas.put("綠茶鮮奶茶","50");
+		datas.put("抹茶鮮奶茶","60");
+		datas.put("抹茶紅豆鮮奶茶","65");
+		datas.put("可可鮮奶茶","55");
+		datas.put("冬瓜鮮奶茶","50");
+		
+		for (Map.Entry<String, String> entry : datas.entrySet()){
+			String f_uuid = Tools.buildUUID(UUIDType.FOOD);
+			System.out.println("INSERT INTO category_food_rel (`food_uuid`, `category_uuid`, `food_name`, `default_price`, `food_data`, `status`, `enable`, `create_date`) "+
+					"VALUES ('"+f_uuid+"', '"+c_uuid+"', '"+entry.getKey()+"', '"+entry.getValue()+"', '"+getData(entry.getKey() , entry.getValue())+"', 'OPEN', 'Y', '2018-06-22T12:53:54.1070Z');");
+		}
+	}
+	
+	private String getData(String name , String price) {
+		return "{\"scopes\":[{\"name\":\""+name+"\",\"price\":\""+price+"\"}],\"opts\":[],\"demands\":[]}";
+	}
 
+	@Test
+	public void DemandsItemData() {
+		String[] names = new String[] {"去冰","微冰","少冰","全","多冰"};
+		DemandsItemVo demandsItemVo = new DemandsItemVo();
+		demandsItemVo.setName("冰塊");
+		List<ItemVo> opt = Lists.newArrayList();
+		for (String name: names) {
+			ItemVo item = new ItemVo();
+			item.setName(name);
+			demandsItemVo.getDatas().add(item);
+		}
+		System.out.println(JsonHelper.toJson(demandsItemVo));
+		
+		String[] names2 = new String[] {"無糖","微糖","半糖","少糖","全糖"};
+		DemandsItemVo demandsItemVo2 = new DemandsItemVo();
+		demandsItemVo2.setName("甜度");
+		List<ItemVo> opt2 = Lists.newArrayList();
+		for (String name: names2) {
+			ItemVo item = new ItemVo();
+			item.setName(name);
+			demandsItemVo2.getDatas().add(item);
+		}
+		System.out.println(JsonHelper.toJson(demandsItemVo2));
+		
+		
+		Map<String, String> optDatas = Maps.newHashMap();
+		
+		
+		System.out.println(optData(optDatas));
+	}
+	
+	public String optData(Map<String, String> optDatas) {
+		List<ItemVo> opts = Lists.newArrayList();
+		for (Map.Entry<String, String> entry : optDatas.entrySet()){
+			ItemVo item = new ItemVo();
+			item.setName(entry.getKey());
+			item.setPrice(entry.getValue());
+			opts.add(item);
+		}
+		return JsonHelper.toJson(opts);
+	}
+	
 	public boolean buildRanges(List<DateRangeVo> list) {
 		// List<DateRangeVo> list = JsonHelper.<DateRangeVo>jsonArray(data,
 		// DateRangeVo.class);
@@ -199,7 +277,7 @@ public class MyTest {
 	public void buildUUID() {
 		int i = 5;
 		while (i != 0) {
-			System.out.println(Tools.buildUUID(UUIDType.ORDER));
+			System.out.println(Tools.buildUUID(UUIDType.RESTAURANT));
 			i--;
 		}
 	}
@@ -330,7 +408,23 @@ public class MyTest {
 		// System.out.println(vo);
 		// String encode = "{\"phone\":\"0987654321\"}";
 		// System.out.println(Base64Service.encode(encode));
-		String code = "JTdCJTIycGFzc3dvcmQlMjIlM0ElMjJhMTIzNDU2JTIyJTJDJTIybmFtZSUyMiUzQSUyMnRlc3Rfc2VsbGVyJTIyJTJDJTIyZW1haWwlMjIlM0ElMjJldmFuLndhbmclNDBtZWxvbmx0ZC5jb20udHclMjIlMkMlMjJwaG9uZSUyMiUzQSUyMjA5ODc2NTQzMjElMjIlMkMlMjJhZGRyZXNzJTIyJTNBJTIyJUU2JUExJTgzJUU1JTlDJTkyJUU1JUI4JTgyJUU1JUI5JUIzJUU5JThFJUFFJUU1JThEJTgwJUU2JTk2JTg3JUU1JThDJTk2JUU4JUExJTk3MjE3JUU4JTk5JTlGJTIyJTJDJTIyYmlydGhfZGF5JTIyJTNBJTIyMTk4OCUyRjA0JTJGMDYlMjIlMkMlMjJpZGVudGl0eSUyMiUzQSUyMlNFTExFUlMlMjIlMkMlMjJsZXZlbCUyMiUzQSUyMk1BTkFHRSUyMiUyQyUyMmVuYWJsZSUyMiUzQSUyMlklMjIlN0Q=";
+		
+		AccountInfoVo vo = new AccountInfoVo();
+		vo.setPhone("0928297076");
+		vo.setPassword("a123456");
+		vo.setDevice_category("ANDROID");
+		vo.setDevice_token("dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g");
+		JsonHelper.toJson(vo);
+		String encode = JsonHelper.toJson(vo);
+		System.out.println(encode);
+		System.out.println(Base64Service.encode(encode));
+		
+		String code = "JTdCJTIyZGV2aWNlX2NhdGVnb3J5JTIyJTNBJTIyQU5EUk9JRCUyMiUyQyUyMmRldmljZV90b2tl\n" + 
+				"biUyMiUzQSUyMmRXRW1aVnlwMHRZJTNBQVBBOTFiRzZWMFJrMEQzQTRpaElZLWlaVjN2V292Y3d0\n" + 
+				"TTBScE42RWFhazduV1Bld0kxWTY4TUxhTHd1XzVFUXM2ZGlkU3hiQkFGd2xpTjh2R0JmaC0tc1I1\n" + 
+				"cWJkRjJia0hZTTdscUtWVDBTOFplV2JwTE5JYzFPdE5Ec3BMNlhiX3RiNEZHdnM4UExONmZKR1FE\n" + 
+				"MnZiQkFjZFBaYVRhMi1nJTIyJTJDJTIycGFzc3dvcmQlMjIlM0ElMjJhMTIzNDU2JTIyJTJDJTIy\n" + 
+				"cGhvbmUlMjIlM0ElMjIwOTI4Mjk3MDc2JTIyJTdE";
 		System.out.println(Base64Service.testDecode(code));
 	}
 

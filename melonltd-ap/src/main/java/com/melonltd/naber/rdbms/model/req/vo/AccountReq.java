@@ -7,6 +7,7 @@ public class AccountReq {
 	private String phone;
 	private String old_password;
 	private String password;
+	private String email;
 
 	public String getPhone() {
 		return phone;
@@ -31,14 +32,19 @@ public class AccountReq {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass())
-				.add("phone",phone)
-				.add("old_password",old_password)
-				.add("password",password)
-				.toString();
+		return MoreObjects.toStringHelper(this.getClass()).add("phone", phone).add("email", email)
+				.add("old_password", old_password).add("password", password).toString();
 	}
 
 }

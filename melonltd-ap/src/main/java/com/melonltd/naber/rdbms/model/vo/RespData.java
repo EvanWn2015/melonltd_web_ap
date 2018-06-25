@@ -38,7 +38,7 @@ public class RespData {
 		INVALID_PHONE("1006", "無效參數，查無屬於此電話號碼帳戶"),
 		INVALID_PASSWORD_ORIGINAL("1007", "無效參數，與舊密碼不同"),
 		EXCEED("2001", "超過可用次數"), 
-		SEND_SMS_FAIL("2002", "取得驗證碼失敗"), 
+		SEND_SMS_FAIL("2002", "該號碼今天請求SMS次數已經用盡，$split請明天再嘗試！！"), 
 		VERIFY_CODE_FAIL("2003","驗證失敗"), 
 		EXCEED_TIME("2004", "超過驗證時效"),
 		STORE_IS_CLOSE("3001", "目前時間不可接單"),

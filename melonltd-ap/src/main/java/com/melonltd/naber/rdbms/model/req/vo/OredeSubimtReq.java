@@ -9,6 +9,11 @@ public class OredeSubimtReq {
 	private String restaurant_uuid;
 	private String fetch_date;
 	private String user_message;
+
+	private String restaurant_name;
+	private String user_name;
+	private String user_phone;
+
 	private List<OrderData> orders;
 
 	public String getRestaurant_uuid() {
@@ -35,6 +40,30 @@ public class OredeSubimtReq {
 		this.user_message = user_message;
 	}
 
+	public String getRestaurant_name() {
+		return restaurant_name;
+	}
+
+	public void setRestaurant_name(String restaurant_name) {
+		this.restaurant_name = restaurant_name;
+	}
+
+	public String getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
+	}
+
+	public String getUser_phone() {
+		return user_phone;
+	}
+
+	public void setUser_phone(String user_phone) {
+		this.user_phone = user_phone;
+	}
+
 	public List<OrderData> getOrders() {
 		return orders;
 	}
@@ -42,28 +71,21 @@ public class OredeSubimtReq {
 	public void setOrders(List<OrderData> orders) {
 		this.orders = orders;
 	}
-	
-	
-	public static OredeSubimtReq ofOrders (List<OrderData> orders) {
+
+	public static OredeSubimtReq ofOrders(List<OrderData> orders) {
 		OredeSubimtReq data = new OredeSubimtReq();
 		data.orders = orders;
 		return data;
 	}
-	
+
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass())
-				.add("restaurant_uuid", restaurant_uuid)
-				.add("fetch_date", fetch_date)
-				.add("user_message", user_message)
-				.add("orders", orders)
-				.toString();
+		return MoreObjects.toStringHelper(this.getClass()).add("restaurant_uuid", restaurant_uuid)
+				.add("fetch_date", fetch_date).add("user_message", user_message).add("orders", orders).toString();
 	}
-	
 
 	public class OrderData {
 		private String category_uuid;
-//		private String food_uuid;
 		private String count;
 		private FoodItemVo item;
 
@@ -74,14 +96,6 @@ public class OredeSubimtReq {
 		public void setCategory_uuid(String category_uuid) {
 			this.category_uuid = category_uuid;
 		}
-
-//		public String getFood_uuid() {
-//			return food_uuid;
-//		}
-//
-//		public void setFood_uuid(String food_uuid) {
-//			this.food_uuid = food_uuid;
-//		}
 
 		public String getCount() {
 			return count;
@@ -98,15 +112,11 @@ public class OredeSubimtReq {
 		public void setItem(FoodItemVo item) {
 			this.item = item;
 		}
-		
+
 		@Override
 		public String toString() {
-			return MoreObjects.toStringHelper(this.getClass())
-					.add("category_uuid", category_uuid)
-//					.add("food_uuid", food_uuid)
-					.add("count", count)
-					.add("item", item)
-					.toString();
+			return MoreObjects.toStringHelper(this.getClass()).add("category_uuid", category_uuid).add("count", count)
+					.add("item", item).toString();
 		}
 
 	}

@@ -26,6 +26,7 @@ import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.push.service.MailSendService;
 import com.melonltd.naber.rdbms.model.req.vo.AccountReq;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
+import com.melonltd.naber.rdbms.model.service.VerifyPhoneLogService;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
@@ -41,25 +42,25 @@ public class AccountController {
 	@Autowired
 	private MailSendService mailSendService;
 
-	
-	
+	@Autowired
+	private VerifyPhoneLogService verifyPhoneLogService;
+
 	@ResponseBody
 	@PostMapping(value = "account/find/info")
 	public ResponseEntity<String> findAccountInfo(HttpServletRequest httpRequest) {
-		
+
 		String accountUUID = httpRequest.getHeader("Authorization");
-		AccountInfoVo vo = accountInfoService.findByAccountUUID(accountUUID,false);
+		AccountInfoVo vo = accountInfoService.findByAccountUUID(accountUUID, false);
 		LinkedHashMap<String, Object> map = null;
 		if (ObjectUtils.allNotNull(vo)) {
 			map = RespData.of(Status.TRUE, null, vo);
-		}else {
+		} else {
 			map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
 		}
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
-	
-	
+
 	@ResponseBody
 	@PostMapping(value = "account/update/password")
 	public ResponseEntity<String> changePassword(HttpServletRequest httpRequest,
@@ -103,34 +104,18 @@ public class AccountController {
 		LinkedHashMap<String, Object> map = null;
 
 		ErrorType error = checkRequest(req, false);
-		if (ObjectUtils.anyNotNull(error)) {
+		if (ObjectUtils.allNotNull(error)) {
 			map = RespData.of(Status.FALSE, error, null);
 		} else {
-			AccountInfoVo vo = accountInfoService.findByAccount(req.getPhone());
-			if (!ObjectUtils.anyNotNull(vo)) {
+			AccountInfoVo vo = accountInfoService.findByPhoneAndMail(req.getPhone(), req.getEmail());
+			if (!ObjectUtils.allNotNull(vo)) {
 				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
 			} else {
-				// TODO 忘記密碼相關信息與 密碼長度
-//				String newPassword = Tools.getRandomPassword(8);
-				boolean status = false;
-				try {
-//					mailSendService.sendEmail(vo.getEmail(), "forgetPassword", newPassword);
-					mailSendService.sendEmail(vo.getEmail(), "forgetPassword", vo.getPassword());
-					status = true;
-				} catch (UnsupportedEncodingException | MessagingException e) {
-					LOGGERO.error("mail send forget password fail phone:{}, mail:{}, msg:{}", req.getPhone(), vo.getEmail(), e.getMessage());
-					status = false;
-				}
-				if (status) {
-					map = RespData.of(Status.TRUE, null, null);
-//					vo.setPassword(newPassword);
-//					if (accountInfoService.update(vo)) {
-//						map = RespData.of(Status.TRUE, null, null);
-//					} else {
-//						map = RespData.of(Status.FALSE, ErrorType.UPDATE_ERROR, null);
-//					}
+				String status = verifyPhoneLogService.sendForgetPassword(req.getPhone(), "" + vo.getPassword() + "");
+				if (!StringUtils.isBlank(status)) {
+					map = RespData.of(Status.TRUE, null, status);
 				} else {
-					map = RespData.of(Status.FALSE, ErrorType.MAIL_SEND_ERROR, null);
+					map = RespData.of(Status.FALSE, ErrorType.SEND_SMS_FAIL, null);
 				}
 			}
 		}
@@ -157,11 +142,10 @@ public class AccountController {
 				return ErrorType.INVALID_PASSWORD_REPEAT;
 			}
 		} else {
-			if (!ObjectUtils.allNotNull(req.getPhone())) {
+			if (!ObjectUtils.allNotNull(req.getPhone(), req.getEmail())) {
 				return ErrorType.INVALID;
 			}
 		}
-
 		return null;
 	}
 

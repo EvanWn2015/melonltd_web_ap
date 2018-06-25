@@ -37,7 +37,6 @@ public class Base64Service {
 			}else {
 				return URLDecoder.decode(new String(Base64.getDecoder().decode(key), "UTF-8"), "UTF-8");	
 			}
-//			String decode = new String(Base64.getDecoder().decode(key));
 		} catch (UnsupportedEncodingException e) {
 			LOGGER.error("", e);
 			throw new Base64Exception("Decryption error or The Cookie was tampered with !", e);
