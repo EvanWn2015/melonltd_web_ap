@@ -13,6 +13,7 @@ import com.melonltd.naber.rdbms.model.service.OrderLogService;
 import com.melonltd.naber.rdbms.model.service.UserOrderLogService;
 import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
+import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
 import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 
@@ -27,16 +28,16 @@ public class SubmitOrderService {
 	private OrderLogService orderLogService;
 
 	
-	public OrderVo submitOrder(String accountUUID, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req, String price, String bonus, String orders) {
-		int unfinish_count = userOrderLogService.findByOrderStatusAccountUUID(accountUUID);
+	public OrderVo submitOrder(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req, String price, String bonus, String orders) {
+		int unfinish_count = userOrderLogService.findByOrderStatusAccountUUID(account.getAccount_uuid());
 		// 限制未完成訂單數量三筆，不可再提交訂單 
 		if (unfinish_count >= 3) {
 			return null;
 		}else {
 			String date = Tools.getNowGMT();
-			OrderInfo orderInfo = newOrderInfo(accountUUID, orderUUID, vo, req, price, bonus, orders, date);
-			UserOrderLog userOrderLog = newUserOrderLog(accountUUID, orderUUID, vo, req, price, bonus, orders, date);
-			OrderLog orderLog = newOrderLog(accountUUID, orderUUID, vo, req, price, bonus, orders, date);
+			OrderInfo orderInfo = newOrderInfo(account, orderUUID, vo, req, price, bonus, orders, date);
+			UserOrderLog userOrderLog = newUserOrderLog(account, orderUUID, vo, req, price, bonus, orders, date);
+			OrderLog orderLog = newOrderLog(account, orderUUID, vo, req, price, bonus, orders, date);
 			orderInfoService.save(orderInfo);
 			orderLogService.save(orderLog);
 			OrderVo orderVo = userOrderLogService.save(userOrderLog); 
@@ -45,9 +46,9 @@ public class SubmitOrderService {
 	}
 	
 
-	private static OrderInfo newOrderInfo(String accountUUID, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req, String price, String bonus, String orders, String date) {
+	private static OrderInfo newOrderInfo(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req, String price, String bonus, String orders, String date) {
 		OrderInfo info = new OrderInfo();
-		info.setAccountUUID(accountUUID);
+		info.setAccountUUID(account.getAccount_uuid());
 		info.setOrderUUID(orderUUID);
 		info.setRestaurantUUID(vo.getRestaurant_uuid());
 		info.setUserMessage(req.getUser_message());
@@ -62,9 +63,9 @@ public class SubmitOrderService {
 		return info;
 	}
 	
-	private static OrderLog newOrderLog(String accountUUID, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req, String price, String bonus, String orders, String date) {
+	private static OrderLog newOrderLog(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req, String price, String bonus, String orders, String date) {
 		OrderLog info = new OrderLog();
-		info.setAccountUUID(accountUUID);
+		info.setAccountUUID(account.getAccount_uuid());
 		info.setOrderUUID(orderUUID);
 		info.setRestaurantUUID(vo.getRestaurant_uuid());
 		info.setUserMessage(req.getUser_message());
@@ -79,13 +80,11 @@ public class SubmitOrderService {
 		return info;
 	}
 
-	private static UserOrderLog newUserOrderLog(String accountUUID, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req, String price, String bonus, String orders, String date) {
+	private static UserOrderLog newUserOrderLog(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req, String price, String bonus, String orders, String date) {
 		UserOrderLog info = new UserOrderLog();
-		info.setAccountUUID(accountUUID);
+		info.setAccountUUID(account.getAccount_uuid());
 		info.setOrderUUID(orderUUID);
 		info.setRestaurantUUID(vo.getRestaurant_uuid());
-		info.setRestaurantName(vo.getName());
-		info.setRestaurantAddress(vo.getAddress());
 		info.setUserMessage(req.getUser_message());
 		info.setCreateDate(date);
 		info.setUpdateDate(date);

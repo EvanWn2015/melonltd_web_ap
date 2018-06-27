@@ -25,17 +25,20 @@ import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 
+
+// 
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class LogingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LogingController.class);
 
 	@Autowired
-	AccountInfoService accountInfoService;
+	private AccountInfoService accountInfoService;
 	
 	@Autowired
-	LoginService loginService;
+	private LoginService loginService;
 
+	// 
 	@ResponseBody
 	@PostMapping(value = "login")
 	public ResponseEntity<String> login(@RequestParam(value = "data", required = false) String data) {

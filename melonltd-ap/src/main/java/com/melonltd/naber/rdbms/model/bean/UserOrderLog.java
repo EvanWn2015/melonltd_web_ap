@@ -20,8 +20,8 @@ public class UserOrderLog implements Serializable {
 	private String orderUUID;
 	private String accountUUID;
 	private String restaurantUUID;
-	private String restaurantName;
-	private String restaurantAddress;
+//	private String restaurantName;
+//	private String restaurantAddress;
 	private String userMessage;
 	private String createDate;
 	private String updateDate;
@@ -31,6 +31,7 @@ public class UserOrderLog implements Serializable {
 	private String orderData;
 	private String status;
 	private String enable;
+	
 
 	@Id
 	@Column(name = "order_uuid", unique = true, nullable = false)
@@ -48,15 +49,15 @@ public class UserOrderLog implements Serializable {
 		return restaurantUUID;
 	}
 	
-	@Column(name = "restaurant_name")
-	public String getRestaurantName() {
-		return restaurantName;
-	}
-
-	@Column(name = "restaurant_address")
-	public String getRestaurantAddress() {
-		return restaurantAddress;
-	}
+//	@Column(name = "restaurant_name")
+//	public String getRestaurantName() {
+//		return restaurantName;
+//	}
+//
+//	@Column(name = "restaurant_address")
+//	public String getRestaurantAddress() {
+//		return restaurantAddress;
+//	}
 
 	@Column(name = "user_message")
 	public String getUserMessage() {
@@ -115,13 +116,13 @@ public class UserOrderLog implements Serializable {
 		this.restaurantUUID = restaurantUUID;
 	}
 	
-	public void setRestaurantName(String restaurantName) {
-		this.restaurantName = restaurantName;
-	}
-
-	public void setRestaurantAddress(String restaurantAddress) {
-		this.restaurantAddress = restaurantAddress;
-	}
+//	public void setRestaurantName(String restaurantName) {
+//		this.restaurantName = restaurantName;
+//	}
+//
+//	public void setRestaurantAddress(String restaurantAddress) {
+//		this.restaurantAddress = restaurantAddress;
+//	}
 
 	public void setUserMessage(String userMessage) {
 		this.userMessage = userMessage;
@@ -164,8 +165,8 @@ public class UserOrderLog implements Serializable {
 		info.orderUUID = vo.getOrder_uuid();
 		info.accountUUID = vo.getAccount_uuid();
 		info.restaurantUUID = vo.getRestaurant_uuid();
-		info.restaurantName = vo.getRestaurant_name();
-		info.restaurantAddress = vo.getRestaurant_address();
+//		info.restaurantName = vo.getRestaurant_name();
+//		info.restaurantAddress = vo.getRestaurant_address();
 		info.userMessage = vo.getUser_message();
 		info.createDate = vo.getCreate_date();
 		info.updateDate = vo.getUpdate_date();
@@ -184,8 +185,8 @@ public class UserOrderLog implements Serializable {
 				.add("orderUUID", orderUUID)
 				.add("accountUUID", accountUUID)
 				.add("restaurantUUID", restaurantUUID)
-				.add("restaurantName", restaurantName)
-				.add("restaurantAddress", restaurantAddress)
+//				.add("restaurantName", restaurantName)
+//				.add("restaurantAddress", restaurantAddress)
 				.add("userMessage", userMessage)
 				.add("createDate", createDate)
 				.add("updateDate", updateDate)

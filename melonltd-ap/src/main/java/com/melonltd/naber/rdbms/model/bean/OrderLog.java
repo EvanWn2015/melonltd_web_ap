@@ -17,6 +17,8 @@ public class OrderLog implements Serializable {
 	
 	private String orderUUID;
 	private String accountUUID;
+//	private String accountName;
+//	private String accountPhone;
 	private String restaurantUUID;
 	private String userMessage;
 	private String createDate;
@@ -27,6 +29,25 @@ public class OrderLog implements Serializable {
 	private String orderData;
 	private String status;
 	private String enable;
+	
+	
+//	@Column(name = "account_name")
+//	public String getAccountName() {
+//		return accountName;
+//	}
+//
+//	@Column(name = "account_phone")
+//	public String getAccountPhone() {
+//		return accountPhone;
+//	}
+//
+//	public void setAccountName(String accountName) {
+//		this.accountName = accountName;
+//	}
+//
+//	public void setAccountPhone(String accountPhone) {
+//		this.accountPhone = accountPhone;
+//	}
 
 	@Id
 	@Column(name = "order_uuid", unique = true, nullable = false)

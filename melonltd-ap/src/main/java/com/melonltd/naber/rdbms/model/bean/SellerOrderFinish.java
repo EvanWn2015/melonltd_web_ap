@@ -18,8 +18,8 @@ public class SellerOrderFinish implements Serializable {
 	
 	private String orderUUID;
 	private String accountUUID;
-	private String accountName;
-	private String accountPhone;
+//	private String accountName;
+//	private String accountPhone;
 	private String restaurantUUID;
 	private String userMessage;
 	private String createDate;
@@ -30,6 +30,7 @@ public class SellerOrderFinish implements Serializable {
 	private String orderData;
 	private String status;
 	private String enable;
+	
 
 	@Id
 	@Column(name = "order_uuid", unique = true, nullable = false)
@@ -42,15 +43,15 @@ public class SellerOrderFinish implements Serializable {
 		return accountUUID;
 	}
 	
-	@Column(name = "account_name")
-	public String getAccountName() {
-		return accountName;
-	}
-	
-	@Column(name = "account_phone")
-	public String getAccountPhone() {
-		return accountName;
-	}
+//	@Column(name = "account_name")
+//	public String getAccountName() {
+//		return accountName;
+//	}
+//	
+//	@Column(name = "account_phone")
+//	public String getAccountPhone() {
+//		return accountName;
+//	}
 
 	@Column(name = "restaurant_uuid")
 	public String getRestaurantUUID() {
@@ -110,13 +111,13 @@ public class SellerOrderFinish implements Serializable {
 		this.accountUUID = accountUUID;
 	}
 	
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
-	}
-	
-	public void setAccountPhone(String accountPhone) {
-		this.accountPhone = accountPhone;
-	}
+//	public void setAccountName(String accountName) {
+//		this.accountName = accountName;
+//	}
+//	
+//	public void setAccountPhone(String accountPhone) {
+//		this.accountPhone = accountPhone;
+//	}
 
 	public void setRestaurantUUID(String restaurantUUID) {
 		this.restaurantUUID = restaurantUUID;
@@ -179,8 +180,8 @@ public class SellerOrderFinish implements Serializable {
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass()).add("orderUUID", orderUUID)
 				.add("accountUUID", accountUUID)
-				.add("accountName", accountName)
-				.add("accountPhone", accountPhone)
+//				.add("accountName", accountName)
+//				.add("accountPhone", accountPhone)
 				.add("restaurantUUID", restaurantUUID).add("userMessage", userMessage).add("createDate", createDate)
 				.add("updateDate", updateDate).add("orderPrice", orderPrice).add("orderBonus", orderBonus)
 				.add("fetchDate", fetchDate).add("orderData", orderData).add("status", status).add("enable", enable)

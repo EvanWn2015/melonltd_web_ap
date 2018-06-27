@@ -1,5 +1,6 @@
 
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
@@ -25,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.context.annotation.PropertySource;
 
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.api.client.util.DateTime;
 import com.google.api.client.util.Maps;
 import com.google.common.collect.Lists;
@@ -39,10 +41,12 @@ import com.melonltd.naber.rdbms.model.req.vo.AccountReq;
 import com.melonltd.naber.rdbms.model.req.vo.DemandsItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
+import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
+import com.melonltd.naber.rdbms.model.vo.NotificationVo;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 import com.mysql.jdbc.NoSubInterceptorWrapper;
 
@@ -52,21 +56,31 @@ public class MyTest {
 	@Test
 	public void mytest() {
 		try {
-			String pushMessage = "{\"data\":{\"title\":\"" + "title" + "\",\"message\":\"" + "message" + "\"},\"to\":\""
-					+ "dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g"
-					+ "\"}";
+
+			NotificationVo notificationVo = new NotificationVo ();
+			notificationVo.setTo("dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g");
+			Map<String, String> map = Maps.newHashMap();
+			map.put("identity", Identity.SELLERS.name());
+			map.put("title", "訂單信息");
+			map.put("message", "你的訂單");
+			map.put("picture", "https://firebasestorage.googleapis.com/v0/b/naber-20180622.appspot.com/o/restaurant%2Fbackground%2FRESTAURANT_20180622_113122_120_d7c29279-1e0d-489a-b854-2e5270da7267.jpg?alt=media&token=25502bb8-e397-4541-9d86-7cd304b53e58");
+			map.put("icon", "https://firebasestorage.googleapis.com/v0/b/naber-20180622.appspot.com/o/restaurant%2Flogo%2FRESTAURANT_20180622_113122_120_d7c29279-1e0d-489a-b854-2e5270da7267.jpg?alt=media&token=a443d757-f8a9-400e-9012-171e669d981c");
+			notificationVo.setData(map);
+			
+			
+			
 			URL url = new URL("https://fcm.googleapis.com/fcm/send");
 
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestProperty("Authorization", "key="
-					+ "AAAAUVwQKe4:APA91bGcpT-HZ6kZQ5jPeUBkRhg-Mo1PlUS4RN6QZEJ0pqODkXfW3n4ywY1Y-pF7hfMtresjO94PRl9XfnL87P8FlS8BFTmwmcudwdc8_FL7elIRlG9UO1rMXnqv3y7iGjER8Sy11thdE8-I3dwgdT93_jIVv_iJCQ");
+			conn.setRequestProperty("Authorization", "key=AAAAUVwQKe4:APA91bGcpT-HZ6kZQ5jPeUBkRhg-Mo1PlUS4RN6QZEJ0pqODkXfW3n4ywY1Y-pF7hfMtresjO94PRl9XfnL87P8FlS8BFTmwmcudwdc8_FL7elIRlG9UO1rMXnqv3y7iGjER8Sy11thdE8-I3dwgdT93_jIVv_iJCQ");
 			conn.setRequestProperty("Content-Type", "application/json");
 			conn.setRequestMethod("POST");
 			conn.setDoOutput(true);
 
+			System.out.println(JsonHelper.toJson(notificationVo));
 			// Send FCM message content.
 			OutputStream outputStream = conn.getOutputStream();
-			outputStream.write(pushMessage.getBytes());
+			outputStream.write(JsonHelper.toJson(notificationVo).getBytes());
 			System.out.println(conn.getResponseCode());
 			System.out.println(conn.getResponseMessage());
 		} catch (Exception e) {
@@ -409,34 +423,29 @@ public class MyTest {
 		// String encode = "{\"phone\":\"0987654321\"}";
 		// System.out.println(Base64Service.encode(encode));
 		
-		AccountInfoVo vo = new AccountInfoVo();
-		vo.setPhone("0928297076");
-		vo.setPassword("a123456");
-		vo.setDevice_category("ANDROID");
-		vo.setDevice_token("dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g");
-		JsonHelper.toJson(vo);
-		String encode = JsonHelper.toJson(vo);
-		System.out.println(encode);
-		System.out.println(Base64Service.encode(encode));
+//		AccountInfoVo vo = new AccountInfoVo();
+//		vo.setPhone("0928297076");
+//		vo.setPassword("a123456");
+//		vo.setDevice_category("ANDROID");
+//		vo.setDevice_token("dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g");
+//		JsonHelper.toJson(vo);
+//		String encode = JsonHelper.toJson(vo);
+//		System.out.println(encode);
+//		System.out.println(Base64Service.encode(encode));
 		
-		String code = "JTdCJTIyZGV2aWNlX2NhdGVnb3J5JTIyJTNBJTIyQU5EUk9JRCUyMiUyQyUyMmRldmljZV90b2tl\n" + 
-				"biUyMiUzQSUyMmRXRW1aVnlwMHRZJTNBQVBBOTFiRzZWMFJrMEQzQTRpaElZLWlaVjN2V292Y3d0\n" + 
-				"TTBScE42RWFhazduV1Bld0kxWTY4TUxhTHd1XzVFUXM2ZGlkU3hiQkFGd2xpTjh2R0JmaC0tc1I1\n" + 
-				"cWJkRjJia0hZTTdscUtWVDBTOFplV2JwTE5JYzFPdE5Ec3BMNlhiX3RiNEZHdnM4UExONmZKR1FE\n" + 
-				"MnZiQkFjZFBaYVRhMi1nJTIyJTJDJTIycGFzc3dvcmQlMjIlM0ElMjJhMTIzNDU2JTIyJTJDJTIy\n" + 
-				"cGhvbmUlMjIlM0ElMjIwOTI4Mjk3MDc2JTIyJTdE";
+		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIydHJ1ZSUyMiUyQyUyMmRhdGElMjIlM0ElN0IlMjJhY2NvdW50JTIyJTNBJTIyMDkyODI5NzA3NiUyMiUyQyUyMmFjY291bnRfdXVpZCUyMiUzQSUyMlVTRVJfMjAxODA2MjBfYjM5Yzk2MzUtYTA1ZS00ZGVmLTgxODAtMDg3YmRiYWExMTU3JTIyJTJDJTIybmFtZSUyMiUzQSUyMkV2YW5XYW5nJTIyJTJDJTIyZW1haWwlMjIlM0ElMjJqbnN3Y3klNDBnbWFpbC5jb20lMjIlMkMlMjJwaG9uZSUyMiUzQSUyMjA5MjgyOTcwNzYlMjIlMkMlMjJhZGRyZXNzJTIyJTNBJTIyQWRkdyUyMiUyQyUyMmJpcnRoX2RheSUyMiUzQSUyMjE5ODQtMDYtMjAlMjIlMkMlMjJpZGVudGl0eSUyMiUzQSUyMk5PTl9TVFVERU5UJTIyJTJDJTIyc2Nob29sX25hbWUlMjIlM0ElMjIlRTQlQjglQUQlRTUlQTQlQUUlRTUlQTQlQTclRTUlQUQlQjglMjIlMkMlMjJib251cyUyMiUzQSUyMjAlMjIlMkMlMjJsZXZlbCUyMiUzQSUyMiUyMiUyQyUyMmVuYWJsZSUyMiUzQSUyMlklMjIlMkMlMjJpc19sb2dpbiUyMiUzQSUyMlklMjIlMkMlMjJsb2dpbl9kYXRlJTIyJTNBJTIyMjAxOC0wNi0yN1QwMCUzQTAwJTNBMzMuODcwMFolMjIlMkMlMjJwaG90byUyMiUzQSUyMmh0dHBzJTNBJTJGJTJGZmlyZWJhc2VzdG9yYWdlLmdvb2dsZWFwaXMuY29tJTJGdjAlMkZiJTJGbmFiZXItMjAxODA2MjIuYXBwc3BvdC5jb20lMkZvJTJGdXNlclVTRVJfMjAxODA2MjBfYjM5Yzk2MzUtYTA1ZS00ZGVmLTgxODAtMDg3YmRiYWExMTU3LmpwZyUzRmFsdCU1Q3UwMDNkbWVkaWElNUN1MDAyNnRva2VuJTVDdTAwM2QxYzc0YmUyMS0yNTI3LTQyMGEtODhjOC02MGQyNzgzNTVkNmMlMjIlN0QlN0Q=";
 		System.out.println(Base64Service.testDecode(code));
 	}
 
 	@Test
 	public void fDate() {
-		String str = "0987654321";
-		Pattern pattern = Pattern.compile("(09)+[\\d]{8}");
-		Matcher matcher = pattern.matcher(str);
-		System.out.println(str.matches("(09)+[\\d]{8}"));
-		while (matcher.find()) {
-			System.out.print(matcher.group());
-		}
+		
+		System.out.println(StringUtils.leftPad("國",4,'-'));
+		System.out.println(StringUtils.rightPad("a",4,"-"));
+		System.out.println(Strings.padEnd("國", 4, '\u0020'));
+		System.out.println(Strings.padStart("國", 4, '\u0020'));
+		System.out.println(Strings.padStart("a", 4, '\u0020'));
+
 	}
 
 	@Test
@@ -451,6 +460,11 @@ public class MyTest {
 
 		List<DateRangeVo> ol = oldRanges.stream().filter(o -> o.getStatus().equals("CLOSE"))
 				.collect(Collectors.toList());
+		
+		
+		ol.stream().forEach(a -> {
+			System.out.println(a.toString());
+		});
 
 		List<DateRangeVo> nl = newRanges.stream().map(n -> {
 			System.out.println("nn: " + n.getDate());
@@ -467,15 +481,8 @@ public class MyTest {
 
 	@Test
 	public void myttt() {
-		SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:SS.ssss'Z'");
-		try {
-			System.out
-					.println(new SimpleDateFormat("dd日 hh時 mm分").format(simpleDate.parse("2018-06-13T07:11:31.9290Z")));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		
 
 	}
-
 }

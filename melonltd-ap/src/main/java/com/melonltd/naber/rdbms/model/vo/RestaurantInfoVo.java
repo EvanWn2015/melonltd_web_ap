@@ -209,7 +209,7 @@ public class RestaurantInfoVo implements Serializable {
 //		return vo;
 //	}
 
-	public static RestaurantInfoVo valueOf(RestaurantInfo info) {
+	public static RestaurantInfoVo valueOf(RestaurantInfo info, boolean hasStoreRange) {
 		RestaurantInfoVo vo = checkIsStoreOpen(info);
 		vo.restaurant_uuid = info.getRestaurantUUID();
 		vo.name = info.getName();
@@ -218,7 +218,9 @@ public class RestaurantInfoVo implements Serializable {
 		vo.store_end = info.getStoreEnd();
 //		vo.is_store_now_open = checkIsStoreOpen(info) + "";
 //		vo.not_business = JsonHelper.jsonArray(info.getNotBusiness(), String[].class);
-//		vo.can_store_range = JsonHelper.jsonArray(info.getCanStoreRange(),DateRangeVo[].class);
+		if (hasStoreRange) {
+			vo.can_store_range = JsonHelper.jsonArray(info.getCanStoreRange(),DateRangeVo[].class);
+		}
 		vo.restaurant_category = info.getRestaurantCategory();
 		vo.latitude = info.getLatitude();
 		vo.longitude = info.getLongitude();
@@ -237,7 +239,7 @@ public class RestaurantInfoVo implements Serializable {
 	
 	public static List<RestaurantInfoVo> valueOfArray(List<RestaurantInfo> infos) {
 		List<RestaurantInfoVo> vos = Lists.<RestaurantInfoVo>newArrayList();
-		vos.addAll(infos.stream().map(a -> valueOf(a)).collect(Collectors.toList()));
+		vos.addAll(infos.stream().map(a -> valueOf(a,false)).collect(Collectors.toList()));
 		return vos;
 	}
 	

@@ -127,12 +127,6 @@ public class ChangeOrdarService {
 		SellerOrderFinish info = new SellerOrderFinish();
 		info.setOrderUUID(vo.getOrder_uuid());
 		info.setAccountUUID(vo.getAccount_uuid());
-		
-		if (ObjectUtils.allNotNull(accout)) {
-			info.setAccountName(accout.getName());
-			info.setAccountPhone(accout.getPhone());
-		}
-		
 		info.setRestaurantUUID(vo.getRestaurant_uuid());
 		info.setUserMessage(vo.getUser_message());
 		info.setCreateDate(date);

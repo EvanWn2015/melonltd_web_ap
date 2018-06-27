@@ -2,6 +2,7 @@ package com.melonltd.naber.endpoint.controller.seller;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,12 +15,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.Maps;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.facade.service.ChangeOrdarService;
 import com.melonltd.naber.rdbms.model.push.service.PudhSellerService;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
+import com.melonltd.naber.rdbms.model.service.AccountInfoService;
+import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
+import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
+import com.melonltd.naber.rdbms.model.vo.NotificationVo;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
@@ -37,6 +43,9 @@ public class ChangeOrdarController {
 	@Autowired
 	private PudhSellerService pudhSellerService;
 
+	@Autowired
+	private AccountInfoService accountInfoService;
+	
 	@ResponseBody
 	@PostMapping(value = "seller/update/order")
 	public ResponseEntity<String> updateOrder(@RequestParam(value = "data", required = false) String data) {
@@ -57,11 +66,26 @@ public class ChangeOrdarController {
 				// TODO notify to user
 				if (CAN_NOTIFY_TYPE.contains(changeStatus)) {
 					String accountUUID = vo.getAccount_uuid();
+					AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);
+					
+					NotificationVo notificationVo = new NotificationVo();
+					Map<String, String> datas = Maps.newHashMap();
+					datas.put("identity", Identity.of(account.getIdentity()).name());
+					datas.put("title", "訂單信息");
+					notificationVo.setData(datas);
+					
 					if (OrderStatus.CANCEL.equals(changeStatus)) {
-						pudhSellerService.pushOrderToUser(accountUUID, String.format(OrderStatus.CANCEL.getMssage(), req.getMessage()));	
+						datas.put("message", String.format(OrderStatus.CANCEL.getMssage(), req.getMessage()));
+						notificationVo.setData(datas);
+						pudhSellerService.pushOrderToUser(accountUUID,notificationVo);
+//						pudhSellerService.pushOrderToUser(accountUUID, String.format(OrderStatus.CANCEL.getMssage(), req.getMessage()));
 					}else {
-						pudhSellerService.pushOrderToUser(accountUUID, changeStatus.getMssage());
+						datas.put("message", changeStatus.getMssage());
+						notificationVo.setData(datas);
+						pudhSellerService.pushOrderToUser(accountUUID,notificationVo);
+//						pudhSellerService.pushOrderToUser(accountUUID, changeStatus.getMssage());
 					}
+					
 				}
 			}else {
 				map = RespData.of(Status.FALSE, ErrorType.UPDATE_ERROR, null);

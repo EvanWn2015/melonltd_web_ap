@@ -1,9 +1,7 @@
 package com.melonltd.naber.endpoint.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -22,8 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.melonltd.naber.constant.RegexConstant;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
-import com.melonltd.naber.endpoint.util.Tools;
-import com.melonltd.naber.rdbms.model.push.service.MailSendService;
 import com.melonltd.naber.rdbms.model.req.vo.AccountReq;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.VerifyPhoneLogService;
@@ -39,8 +35,8 @@ public class AccountController {
 
 	@Autowired
 	private AccountInfoService accountInfoService;
-	@Autowired
-	private MailSendService mailSendService;
+//	@Autowired
+//	private MailSendService mailSendService;
 
 	@Autowired
 	private VerifyPhoneLogService verifyPhoneLogService;

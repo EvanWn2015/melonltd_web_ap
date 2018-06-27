@@ -164,8 +164,6 @@ public class OrderVo {
 		OrderVo vo = new OrderVo();
 		vo.order_uuid = info.getOrderUUID();
 		vo.account_uuid = info.getAccountUUID();
-		vo.account_name = info.getAccountName();
-		vo.account_phone = info.getAccountPhone();
 		vo.restaurant_uuid = info.getRestaurantUUID();
 		vo.user_message = info.getUserMessage();
 		vo.create_date = info.getCreateDate();
@@ -183,6 +181,8 @@ public class OrderVo {
 		OrderVo vo = new OrderVo();
 		vo.order_uuid = info.getOrderUUID();
 		vo.account_uuid = info.getAccountUUID();
+		vo.restaurant_uuid = info.getRestaurantUUID();
+		vo.restaurant_uuid = info.getRestaurantUUID();
 		vo.restaurant_uuid = info.getRestaurantUUID();
 		vo.user_message = info.getUserMessage();
 		vo.create_date = info.getCreateDate();
@@ -217,8 +217,6 @@ public class OrderVo {
 		OrderVo vo = new OrderVo();
 		vo.order_uuid = info.getOrderUUID();
 		vo.account_uuid = info.getAccountUUID();
-		vo.restaurant_name = info.getRestaurantName();
-		vo.restaurant_address = info.getRestaurantAddress();
 		vo.restaurant_uuid = info.getRestaurantUUID();
 		vo.user_message = info.getUserMessage();
 		vo.create_date = info.getCreateDate();

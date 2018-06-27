@@ -34,7 +34,7 @@ public class RestaurantInfoService {
 	public RestaurantInfoVo changeCanStoreRange(RestaurantInfoVo vo, List<DateRangeVo> canStoreRange) {
 		RestaurantInfo info = restaurantInfoDao.save(newRestaurantInfo(vo, canStoreRange));
 		if (ObjectUtils.allNotNull(info)) {
-			return RestaurantInfoVo.valueOf(info);
+			return RestaurantInfoVo.valueOf(info, true);
 		}
 		return null;
 	}
@@ -42,7 +42,7 @@ public class RestaurantInfoService {
 	public RestaurantInfoVo findByUUID(String uuid) {
 		RestaurantInfo info = restaurantInfoDao.findUUID(uuid);
 		if (ObjectUtils.anyNotNull(info)) {
-			return RestaurantInfoVo.valueOf(info);
+			return RestaurantInfoVo.valueOf(info, true);
 		}
 		return null;
 	}
@@ -96,7 +96,7 @@ public class RestaurantInfoService {
 	public RestaurantInfoVo findByAccountUUID(String accountUUID) {
 		RestaurantInfo info = restaurantInfoDao.findByAccountUUID(accountUUID);
 		if (ObjectUtils.allNotNull(info)) {
-			return RestaurantInfoVo.valueOf(info);
+			return RestaurantInfoVo.valueOf(info, true);
 		}
 		return null;
 	}
@@ -104,7 +104,7 @@ public class RestaurantInfoService {
 	public RestaurantInfoVo update(RestaurantInfoVo vo) {
 		RestaurantInfo info = restaurantInfoDao.save(newRestaurantInfo(vo));
 		if (ObjectUtils.allNotNull(info)) {
-			return RestaurantInfoVo.valueOf(info);
+			return RestaurantInfoVo.valueOf(info, false);
 		}
 		return null;
 	}

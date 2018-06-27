@@ -9,11 +9,10 @@ public class OredeSubimtReq {
 	private String restaurant_uuid;
 	private String fetch_date;
 	private String user_message;
-
 	private String restaurant_name;
+	private String restaurant_address;
 	private String user_name;
 	private String user_phone;
-
 	private List<OrderData> orders;
 
 	public String getRestaurant_uuid() {
@@ -46,6 +45,14 @@ public class OredeSubimtReq {
 
 	public void setRestaurant_name(String restaurant_name) {
 		this.restaurant_name = restaurant_name;
+	}
+
+	public String getRestaurant_address() {
+		return restaurant_address;
+	}
+
+	public void setRestaurant_address(String restaurant_address) {
+		this.restaurant_address = restaurant_address;
 	}
 
 	public String getUser_name() {
@@ -86,6 +93,10 @@ public class OredeSubimtReq {
 
 	public class OrderData {
 		private String category_uuid;
+		private String user_name;
+		private String user_phone;
+		private String restaurant_name;
+		private String restaurant_address;
 		private String count;
 		private FoodItemVo item;
 
@@ -95,6 +106,38 @@ public class OredeSubimtReq {
 
 		public void setCategory_uuid(String category_uuid) {
 			this.category_uuid = category_uuid;
+		}
+
+		public String getUser_name() {
+			return user_name;
+		}
+
+		public void setUser_name(String user_name) {
+			this.user_name = user_name;
+		}
+
+		public String getUser_phone() {
+			return user_phone;
+		}
+
+		public void setUser_phone(String user_phone) {
+			this.user_phone = user_phone;
+		}
+
+		public String getRestaurant_name() {
+			return restaurant_name;
+		}
+
+		public void setRestaurant_name(String restaurant_name) {
+			this.restaurant_name = restaurant_name;
+		}
+
+		public String getRestaurant_address() {
+			return restaurant_address;
+		}
+
+		public void setRestaurant_address(String restaurant_address) {
+			this.restaurant_address = restaurant_address;
 		}
 
 		public String getCount() {

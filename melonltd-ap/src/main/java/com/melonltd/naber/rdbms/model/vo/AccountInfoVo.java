@@ -244,5 +244,4 @@ public class AccountInfoVo implements Serializable{
 		
 		return vo;
 	}
-
 }

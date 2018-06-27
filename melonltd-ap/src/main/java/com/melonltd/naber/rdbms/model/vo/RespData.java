@@ -29,7 +29,7 @@ public class RespData {
 		NOT_BE_CHANGED("0007", "不可改變該狀態"),
 		RESOLVE_ERROR("0008", "資料解析錯誤"),
 		ACCOUNT_ERROR("0009", "帳號已經存在"),
-		JSON_RESOLVE_ERROR("0009", "Json資料解析錯誤"),
+		JSON_RESOLVE_ERROR("0010", "Json資料解析錯誤"),
 		INVALID("1001", "無效參數"),
 		INVALID_PASSWORD("1002", "無效參數，密碼長度不6~20碼範圍內或非英數組合"),
 		INVALID_EMAIL("1003", "無效參數，Email格式錯誤"),

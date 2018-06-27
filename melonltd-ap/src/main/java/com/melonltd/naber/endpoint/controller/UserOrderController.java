@@ -33,11 +33,13 @@ import com.melonltd.naber.rdbms.model.facade.service.SubmitOrderService;
 import com.melonltd.naber.rdbms.model.push.service.PudhSellerService;
 import com.melonltd.naber.rdbms.model.req.vo.OredeSubimtReq;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
+import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.CategoryFoodRelSerice;
 import com.melonltd.naber.rdbms.model.service.RestaurantCategoryRelService;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.service.UserOrderLogService;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
+import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
@@ -50,8 +52,8 @@ import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 public class UserOrderController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserOrderController.class);
 //	
-//	@Autowired
-//	private UserOrderLogStoredService userOrderLogStoredService;
+	@Autowired
+	private AccountInfoService accountInfoService;
 	
 	@Autowired
 	private CategoryFoodRelSerice categoryFoodRelSerice;
@@ -80,8 +82,9 @@ public class UserOrderController {
 			map = RespData.of(Status.FALSE, errorType, null);
 		}else {
 			String accountUUID = httpRequest.getHeader("Authorization");
+			AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 			RestaurantInfoVo vo = restaurantInfoService.findByUUID(req.getRestaurant_uuid());
-			if (!ObjectUtils.allNotNull(vo, accountUUID)) {
+			if (!ObjectUtils.allNotNull(vo, account)) {
 				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);	
 			}else {
 				boolean isOpen = checkIsStoreOpen(req, vo);
@@ -103,8 +106,8 @@ public class UserOrderController {
 						map = status? RespData.of(Status.FALSE, ErrorType.ORDER_MAX_PRICE, null) : RespData.of(Status.FALSE, ErrorType.ORDER_MAX_COUNT, null);
 					}else {
 						String bonus = ((int)Math.floor(price / 10d) + "");
-						String orders = JsonHelper.toJson(OredeSubimtReq.ofOrders(req.getOrders()));
-						OrderVo result = submitOrderService.submitOrder(accountUUID , Tools.buildUUID(UUIDType.ORDER),  vo,  req,  String.valueOf(price),  bonus,  orders);
+						String orders = JsonHelper.toJson(req);
+						OrderVo result = submitOrderService.submitOrder(account , Tools.buildUUID(UUIDType.ORDER),  vo,  req,  String.valueOf(price),  bonus,  orders);
 						if (!ObjectUtils.anyNotNull(result)) {
 							LOGGER.error("submit order save fail account : {}, uuid:{} ",accountUUID, req.getRestaurant_uuid());
 							map = RespData.of(Status.FALSE, ErrorType.ORDER_UNFINISH_MAX, null);	
