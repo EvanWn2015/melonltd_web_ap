@@ -37,10 +37,9 @@ public class RegisteredController {
 	private static List<Identity> needSchoolName = Identity.getNeedSchoolEnumValues();
 
 	@Autowired
-	AccountInfoService accountInfoService;
-
+	private AccountInfoService accountInfoService;
 	@Autowired
-	SellerRegisteredService sellerRegisteredService;
+	private SellerRegisteredService sellerRegisteredService;
 
 	@ResponseBody
 	@PostMapping(value = "registered/user")

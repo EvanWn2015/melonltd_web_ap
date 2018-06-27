@@ -8,10 +8,13 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,10 +24,13 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
 import org.springframework.context.annotation.PropertySource;
+import org.w3c.dom.stylesheets.LinkStyle;
 
 import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.api.client.util.DateTime;
@@ -57,22 +63,24 @@ public class MyTest {
 	public void mytest() {
 		try {
 
-			NotificationVo notificationVo = new NotificationVo ();
-			notificationVo.setTo("dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g");
+			NotificationVo notificationVo = new NotificationVo();
+			notificationVo.setTo(
+					"dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g");
 			Map<String, String> map = Maps.newHashMap();
 			map.put("identity", Identity.SELLERS.name());
 			map.put("title", "訂單信息");
 			map.put("message", "你的訂單");
-			map.put("picture", "https://firebasestorage.googleapis.com/v0/b/naber-20180622.appspot.com/o/restaurant%2Fbackground%2FRESTAURANT_20180622_113122_120_d7c29279-1e0d-489a-b854-2e5270da7267.jpg?alt=media&token=25502bb8-e397-4541-9d86-7cd304b53e58");
-			map.put("icon", "https://firebasestorage.googleapis.com/v0/b/naber-20180622.appspot.com/o/restaurant%2Flogo%2FRESTAURANT_20180622_113122_120_d7c29279-1e0d-489a-b854-2e5270da7267.jpg?alt=media&token=a443d757-f8a9-400e-9012-171e669d981c");
+			map.put("picture",
+					"https://firebasestorage.googleapis.com/v0/b/naber-20180622.appspot.com/o/restaurant%2Fbackground%2FRESTAURANT_20180622_113122_120_d7c29279-1e0d-489a-b854-2e5270da7267.jpg?alt=media&token=25502bb8-e397-4541-9d86-7cd304b53e58");
+			map.put("icon",
+					"https://firebasestorage.googleapis.com/v0/b/naber-20180622.appspot.com/o/restaurant%2Flogo%2FRESTAURANT_20180622_113122_120_d7c29279-1e0d-489a-b854-2e5270da7267.jpg?alt=media&token=a443d757-f8a9-400e-9012-171e669d981c");
 			notificationVo.setData(map);
-			
-			
-			
+
 			URL url = new URL("https://fcm.googleapis.com/fcm/send");
 
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestProperty("Authorization", "key=AAAAUVwQKe4:APA91bGcpT-HZ6kZQ5jPeUBkRhg-Mo1PlUS4RN6QZEJ0pqODkXfW3n4ywY1Y-pF7hfMtresjO94PRl9XfnL87P8FlS8BFTmwmcudwdc8_FL7elIRlG9UO1rMXnqv3y7iGjER8Sy11thdE8-I3dwgdT93_jIVv_iJCQ");
+			conn.setRequestProperty("Authorization",
+					"key=AAAAUVwQKe4:APA91bGcpT-HZ6kZQ5jPeUBkRhg-Mo1PlUS4RN6QZEJ0pqODkXfW3n4ywY1Y-pF7hfMtresjO94PRl9XfnL87P8FlS8BFTmwmcudwdc8_FL7elIRlG9UO1rMXnqv3y7iGjER8Sy11thdE8-I3dwgdT93_jIVv_iJCQ");
 			conn.setRequestProperty("Content-Type", "application/json");
 			conn.setRequestMethod("POST");
 			conn.setDoOutput(true);
@@ -112,8 +120,7 @@ public class MyTest {
 		DateRangeVo vow = new DateRangeVo();
 
 	}
-	
-	
+
 	@Test
 	public void RESTAURANT() {
 		System.out.println(Tools.buildUUID(UUIDType.RESTAURANT));
@@ -129,83 +136,85 @@ public class MyTest {
 		} else {
 			list = buildDateRangeReverse(start, end);
 		}
-		
+
 		System.out.println(JsonHelper.toJson(list));
 
 	}
-	
-	
+
 	@Test
 	public void categoryRelData() {
 		String r_uuid = "RESTAURANT_20180625_115446_901_822510ad-bf95-4a93-9bde-1b3bcef83655";
-		String[] names = new String[] {"吐司", "大滿足吃法", "飲料"};
-		for (String name :names) {
+		String[] names = new String[] { "吐司", "大滿足吃法", "飲料" };
+		for (String name : names) {
 			String c_uuid = Tools.buildUUID(UUIDType.RESTAURANT_CATEGORY);
-			System.err.println("INSERT INTO restaurant_category_rel (`category_uuid`, `restaurant_uuid`, `category_name`, `status`, `enable`, `create_date`) VALUES ('" + c_uuid + "', '"+r_uuid+"', '"+name+"', 'OPEN', 'Y', '2018-06-22T11:48:13.5580Z');");
+			System.err.println(
+					"INSERT INTO restaurant_category_rel (`category_uuid`, `restaurant_uuid`, `category_name`, `status`, `enable`, `create_date`) VALUES ('"
+							+ c_uuid + "', '" + r_uuid + "', '" + name
+							+ "', 'OPEN', 'Y', '2018-06-22T11:48:13.5580Z');");
 		}
 	}
-	
-	
+
 	@Test
 	public void foodData() {
 		String c_uuid = "RESTAURANT_CATEGORY_20180625_124434_440_c2e9afc3-dbb5-4755-9640-bac45fede5fa";
-		
+
 		Map<String, String> datas = Maps.newHashMap();
-		datas.put("這一刻灰奶茶","	75");
-		datas.put("紅茶鮮奶茶","50");
-		datas.put("珍珠紅茶鮮奶茶","55");
-		datas.put("布丁紅茶鮮奶茶","65");
-		datas.put("綠茶鮮奶茶","50");
-		datas.put("抹茶鮮奶茶","60");
-		datas.put("抹茶紅豆鮮奶茶","65");
-		datas.put("可可鮮奶茶","55");
-		datas.put("冬瓜鮮奶茶","50");
-		
-		for (Map.Entry<String, String> entry : datas.entrySet()){
+		datas.put("這一刻灰奶茶", "	75");
+		datas.put("紅茶鮮奶茶", "50");
+		datas.put("珍珠紅茶鮮奶茶", "55");
+		datas.put("布丁紅茶鮮奶茶", "65");
+		datas.put("綠茶鮮奶茶", "50");
+		datas.put("抹茶鮮奶茶", "60");
+		datas.put("抹茶紅豆鮮奶茶", "65");
+		datas.put("可可鮮奶茶", "55");
+		datas.put("冬瓜鮮奶茶", "50");
+
+		for (Map.Entry<String, String> entry : datas.entrySet()) {
 			String f_uuid = Tools.buildUUID(UUIDType.FOOD);
-			System.out.println("INSERT INTO category_food_rel (`food_uuid`, `category_uuid`, `food_name`, `default_price`, `food_data`, `status`, `enable`, `create_date`) "+
-					"VALUES ('"+f_uuid+"', '"+c_uuid+"', '"+entry.getKey()+"', '"+entry.getValue()+"', '"+getData(entry.getKey() , entry.getValue())+"', 'OPEN', 'Y', '2018-06-22T12:53:54.1070Z');");
+			System.out.println(
+					"INSERT INTO category_food_rel (`food_uuid`, `category_uuid`, `food_name`, `default_price`, `food_data`, `status`, `enable`, `create_date`) "
+							+ "VALUES ('" + f_uuid + "', '" + c_uuid + "', '" + entry.getKey() + "', '"
+							+ entry.getValue() + "', '" + getData(entry.getKey(), entry.getValue())
+							+ "', 'OPEN', 'Y', '2018-06-22T12:53:54.1070Z');");
 		}
 	}
-	
-	private String getData(String name , String price) {
-		return "{\"scopes\":[{\"name\":\""+name+"\",\"price\":\""+price+"\"}],\"opts\":[],\"demands\":[]}";
+
+	private String getData(String name, String price) {
+		return "{\"scopes\":[{\"name\":\"" + name + "\",\"price\":\"" + price + "\"}],\"opts\":[],\"demands\":[]}";
 	}
 
 	@Test
 	public void DemandsItemData() {
-		String[] names = new String[] {"去冰","微冰","少冰","全","多冰"};
+		String[] names = new String[] { "去冰", "微冰", "少冰", "全", "多冰" };
 		DemandsItemVo demandsItemVo = new DemandsItemVo();
 		demandsItemVo.setName("冰塊");
 		List<ItemVo> opt = Lists.newArrayList();
-		for (String name: names) {
+		for (String name : names) {
 			ItemVo item = new ItemVo();
 			item.setName(name);
 			demandsItemVo.getDatas().add(item);
 		}
 		System.out.println(JsonHelper.toJson(demandsItemVo));
-		
-		String[] names2 = new String[] {"無糖","微糖","半糖","少糖","全糖"};
+
+		String[] names2 = new String[] { "無糖", "微糖", "半糖", "少糖", "全糖" };
 		DemandsItemVo demandsItemVo2 = new DemandsItemVo();
 		demandsItemVo2.setName("甜度");
 		List<ItemVo> opt2 = Lists.newArrayList();
-		for (String name: names2) {
+		for (String name : names2) {
 			ItemVo item = new ItemVo();
 			item.setName(name);
 			demandsItemVo2.getDatas().add(item);
 		}
 		System.out.println(JsonHelper.toJson(demandsItemVo2));
-		
-		
+
 		Map<String, String> optDatas = Maps.newHashMap();
-		
-		
+
 		System.out.println(optData(optDatas));
 	}
-	
+
 	public String optData(Map<String, String> optDatas) {
 		List<ItemVo> opts = Lists.newArrayList();
-		for (Map.Entry<String, String> entry : optDatas.entrySet()){
+		for (Map.Entry<String, String> entry : optDatas.entrySet()) {
 			ItemVo item = new ItemVo();
 			item.setName(entry.getKey());
 			item.setPrice(entry.getValue());
@@ -213,7 +222,7 @@ public class MyTest {
 		}
 		return JsonHelper.toJson(opts);
 	}
-	
+
 	public boolean buildRanges(List<DateRangeVo> list) {
 		// List<DateRangeVo> list = JsonHelper.<DateRangeVo>jsonArray(data,
 		// DateRangeVo.class);
@@ -422,26 +431,26 @@ public class MyTest {
 		// System.out.println(vo);
 		// String encode = "{\"phone\":\"0987654321\"}";
 		// System.out.println(Base64Service.encode(encode));
-		
-//		AccountInfoVo vo = new AccountInfoVo();
-//		vo.setPhone("0928297076");
-//		vo.setPassword("a123456");
-//		vo.setDevice_category("ANDROID");
-//		vo.setDevice_token("dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g");
-//		JsonHelper.toJson(vo);
-//		String encode = JsonHelper.toJson(vo);
-//		System.out.println(encode);
-//		System.out.println(Base64Service.encode(encode));
-		
+
+		// AccountInfoVo vo = new AccountInfoVo();
+		// vo.setPhone("0928297076");
+		// vo.setPassword("a123456");
+		// vo.setDevice_category("ANDROID");
+		// vo.setDevice_token("dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g");
+		// JsonHelper.toJson(vo);
+		// String encode = JsonHelper.toJson(vo);
+		// System.out.println(encode);
+		// System.out.println(Base64Service.encode(encode));
+
 		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIydHJ1ZSUyMiUyQyUyMmRhdGElMjIlM0ElN0IlMjJhY2NvdW50JTIyJTNBJTIyMDkyODI5NzA3NiUyMiUyQyUyMmFjY291bnRfdXVpZCUyMiUzQSUyMlVTRVJfMjAxODA2MjBfYjM5Yzk2MzUtYTA1ZS00ZGVmLTgxODAtMDg3YmRiYWExMTU3JTIyJTJDJTIybmFtZSUyMiUzQSUyMkV2YW5XYW5nJTIyJTJDJTIyZW1haWwlMjIlM0ElMjJqbnN3Y3klNDBnbWFpbC5jb20lMjIlMkMlMjJwaG9uZSUyMiUzQSUyMjA5MjgyOTcwNzYlMjIlMkMlMjJhZGRyZXNzJTIyJTNBJTIyQWRkdyUyMiUyQyUyMmJpcnRoX2RheSUyMiUzQSUyMjE5ODQtMDYtMjAlMjIlMkMlMjJpZGVudGl0eSUyMiUzQSUyMk5PTl9TVFVERU5UJTIyJTJDJTIyc2Nob29sX25hbWUlMjIlM0ElMjIlRTQlQjglQUQlRTUlQTQlQUUlRTUlQTQlQTclRTUlQUQlQjglMjIlMkMlMjJib251cyUyMiUzQSUyMjAlMjIlMkMlMjJsZXZlbCUyMiUzQSUyMiUyMiUyQyUyMmVuYWJsZSUyMiUzQSUyMlklMjIlMkMlMjJpc19sb2dpbiUyMiUzQSUyMlklMjIlMkMlMjJsb2dpbl9kYXRlJTIyJTNBJTIyMjAxOC0wNi0yN1QwMCUzQTAwJTNBMzMuODcwMFolMjIlMkMlMjJwaG90byUyMiUzQSUyMmh0dHBzJTNBJTJGJTJGZmlyZWJhc2VzdG9yYWdlLmdvb2dsZWFwaXMuY29tJTJGdjAlMkZiJTJGbmFiZXItMjAxODA2MjIuYXBwc3BvdC5jb20lMkZvJTJGdXNlclVTRVJfMjAxODA2MjBfYjM5Yzk2MzUtYTA1ZS00ZGVmLTgxODAtMDg3YmRiYWExMTU3LmpwZyUzRmFsdCU1Q3UwMDNkbWVkaWElNUN1MDAyNnRva2VuJTVDdTAwM2QxYzc0YmUyMS0yNTI3LTQyMGEtODhjOC02MGQyNzgzNTVkNmMlMjIlN0QlN0Q=";
 		System.out.println(Base64Service.testDecode(code));
 	}
 
 	@Test
 	public void fDate() {
-		
-		System.out.println(StringUtils.leftPad("國",4,'-'));
-		System.out.println(StringUtils.rightPad("a",4,"-"));
+
+		System.out.println(StringUtils.leftPad("國", 4, '-'));
+		System.out.println(StringUtils.rightPad("a", 4, "-"));
 		System.out.println(Strings.padEnd("國", 4, '\u0020'));
 		System.out.println(Strings.padStart("國", 4, '\u0020'));
 		System.out.println(Strings.padStart("a", 4, '\u0020'));
@@ -460,8 +469,7 @@ public class MyTest {
 
 		List<DateRangeVo> ol = oldRanges.stream().filter(o -> o.getStatus().equals("CLOSE"))
 				.collect(Collectors.toList());
-		
-		
+
 		ol.stream().forEach(a -> {
 			System.out.println(a.toString());
 		});
@@ -481,8 +489,8 @@ public class MyTest {
 
 	@Test
 	public void myttt() {
-		
-		
-
+		System.out.println(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+		System.out.println(Tools.getNowStartOfDay("2018-06-27T15:21:88.0009Z"));
+	
 	}
 }
