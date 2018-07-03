@@ -3,11 +3,13 @@ package com.melonltd.naber.rdbms.model.facade.service;
 import java.util.List;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mchange.lang.IntegerUtils;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.OrderInfo;
 import com.melonltd.naber.rdbms.model.bean.OrderLog;
@@ -51,7 +53,7 @@ public class ChangeOrdarService {
 			// 訂單目前狀態
 			OrderStatus orderStatus = OrderStatus.of(infoVo.getStatus());
 
-			// 更新時間 UTC
+			// 更新時間GMT
 			String date = Tools.getNowGMT();
 
 			OrderLog orderLog = newOrderLog(infoVo, changeStatus, date, Enable.Y);
@@ -59,15 +61,36 @@ public class ChangeOrdarService {
 
 			// 處理結束的訂單
 			if (FINISH_TYPE.contains(changeStatus)) {
-				OrderInfo orderInfo = newOrderInfo(infoVo, changeStatus, date, Enable.N);
 				AccountInfoVo accout = accountInfoService.getCacheBuilderByKey(infoVo.getAccount_uuid(),false);
 				
-				SellerOrderFinish finish = newOrderFinish(infoVo, changeStatus, date, Enable.Y, accout);
-				LOGGERO.debug("處理結束的訂單 , order status:{}, change status:{}, order uuid:{}, date:{}",orderStatus,changeStatus,orderUUID, date);
-				orderInfoService.save(orderInfo);
-				userOrderLogService.save(userOrderLog);
-				orderLogService.save(orderLog);
-				return sellerOrderFinishService.save(finish);
+				boolean status = true;
+				if (OrderStatus.FINISH.equals(changeStatus)) {
+					// TODO 如果是完成訂單必須計算紅利給user
+					int bonusSum = IntegerUtils.parseInt(infoVo.getOrder_bonus(), 0) + IntegerUtils.parseInt(accout.getBonus(), 0);
+					status = accountInfoService.updateBonus(String.valueOf(bonusSum), accout.getAccount_uuid());
+					LOGGERO.debug("處理訂單處於完成，計算紅利更新使用者紅利 ,user uuid {}, user bonus sum {}, order status:{}, change status:{}, order uuid:{}, date:{}", accout.getAccount_uuid(), bonusSum, orderStatus, changeStatus, orderUUID, date);
+				}
+				
+				if (status) {
+					OrderInfo orderInfo = newOrderInfo(infoVo, changeStatus, date, Enable.N);
+					SellerOrderFinish finish = newOrderFinish(infoVo, changeStatus, date, Enable.Y);
+					LOGGERO.debug("處理結束的訂單 , order status:{}, change status:{}, order uuid:{}, date:{}",orderStatus,changeStatus,orderUUID, date);
+					orderInfoService.save(orderInfo);
+					userOrderLogService.save(userOrderLog);
+					orderLogService.save(orderLog);
+					return sellerOrderFinishService.save(finish);
+				}else {
+					LOGGERO.debug("處理訂單處於完成計算紅利更新使用者紅利失敗 , order status:{}, change status:{}, order uuid:{}, date:{}", orderStatus, changeStatus, orderUUID, date);
+					return null;
+				}
+				
+//				OrderInfo orderInfo = newOrderInfo(infoVo, changeStatus, date, Enable.N);
+//				SellerOrderFinish finish = newOrderFinish(infoVo, changeStatus, date, Enable.Y, accout);
+//				LOGGERO.debug("處理結束的訂單 , order status:{}, change status:{}, order uuid:{}, date:{}",orderStatus,changeStatus,orderUUID, date);
+//				orderInfoService.save(orderInfo);
+//				userOrderLogService.save(userOrderLog);
+//				orderLogService.save(orderLog);
+//				return sellerOrderFinishService.save(finish);
 
 			} else if (UPDATE_TYPE.contains(changeStatus)) {
 				OrderInfo orderInfo = newOrderInfo(infoVo, changeStatus, date, Enable.Y);
@@ -80,8 +103,7 @@ public class ChangeOrdarService {
 				}
 
 				// 如果訂單處於為製作中 只能更改狀態可領取，不可返回未處理
-				if (!ObjectUtils.notEqual(orderStatus, OrderStatus.PROCESSING)
-						&& !ObjectUtils.notEqual(changeStatus, OrderStatus.CAN_FETCH)) {
+				if (!ObjectUtils.notEqual(orderStatus, OrderStatus.PROCESSING) && !ObjectUtils.notEqual(changeStatus, OrderStatus.CAN_FETCH)) {
 					LOGGERO.debug("處理訂單處於為製作中 , order status:{}, change status:{}, order uuid:{}, date:{}",orderStatus,changeStatus,orderUUID, date);
 					orderInfoService.save(orderInfo);
 					orderLogService.save(orderLog);
@@ -123,7 +145,7 @@ public class ChangeOrdarService {
 		return info;
 	}
 
-	private static SellerOrderFinish newOrderFinish(OrderVo vo, OrderStatus status, String date, Enable enable, AccountInfoVo accout ) {
+	private static SellerOrderFinish newOrderFinish(OrderVo vo, OrderStatus status, String date, Enable enable) {
 		SellerOrderFinish info = new SellerOrderFinish();
 		info.setOrderUUID(vo.getOrder_uuid());
 		info.setAccountUUID(vo.getAccount_uuid());

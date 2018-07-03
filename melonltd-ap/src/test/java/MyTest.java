@@ -1,60 +1,45 @@
 
+import java.awt.ImageCapabilities;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
 import org.springframework.context.annotation.PropertySource;
-import org.w3c.dom.stylesheets.LinkStyle;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import com.google.api.client.repackaged.com.google.common.base.Strings;
-import com.google.api.client.util.DateTime;
 import com.google.api.client.util.Maps;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
-import com.mchange.lang.IntegerUtils;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
+import com.melonltd.naber.rdbms.model.bean.OrderInfo;
+import com.melonltd.naber.rdbms.model.dao.OrderInfoDao;
 import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
-import com.melonltd.naber.rdbms.model.req.vo.AccountReq;
 import com.melonltd.naber.rdbms.model.req.vo.DemandsItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
-import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.type.Identity;
-import com.melonltd.naber.rdbms.model.type.OrderStatus;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
 import com.melonltd.naber.rdbms.model.vo.NotificationVo;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
-import com.mysql.jdbc.NoSubInterceptorWrapper;
 
 @PropertySource("classpath:/config.properties")
 public class MyTest {
@@ -448,13 +433,31 @@ public class MyTest {
 
 	@Test
 	public void fDate() {
-
-		System.out.println(StringUtils.leftPad("國", 4, '-'));
-		System.out.println(StringUtils.rightPad("a", 4, "-"));
-		System.out.println(Strings.padEnd("國", 4, '\u0020'));
-		System.out.println(Strings.padStart("國", 4, '\u0020'));
-		System.out.println(Strings.padStart("a", 4, '\u0020'));
-
+		
+		
+			ItemVo itemVo1 = new ItemVo();
+			itemVo1.setName("AA");
+			itemVo1.setPrice("22");
+			
+			ItemVo itemVo2 = new ItemVo();
+			itemVo2.setName("BB");
+			itemVo2.setPrice("11");
+			
+			List<ItemVo> items = Lists.newArrayList(itemVo1, itemVo2);
+			
+			ItemVo itemVo3 = new ItemVo();
+			itemVo3.setName("AA");
+			itemVo3.setPrice("22");
+			
+			ItemVo itemVo4 = new ItemVo();
+			itemVo4.setName("BB");
+			itemVo4.setPrice("11");
+			
+			List<ItemVo> items2 = Lists.newArrayList(itemVo4, itemVo3);
+			
+			System.out.println(items.containsAll(items2));
+			
+			System.out.println(items.contains(itemVo3));
 	}
 
 	@Test
@@ -483,14 +486,6 @@ public class MyTest {
 		}).collect(Collectors.toList());
 
 		System.out.println(ol.size() + "!!!!" + oldRanges.size());
-
 		newRanges.addAll(oldRanges);
-	}
-
-	@Test
-	public void myttt() {
-		System.out.println(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
-		System.out.println(Tools.getNowStartOfDay("2018-06-27T15:21:88.0009Z"));
-	
 	}
 }

@@ -2,6 +2,7 @@ package com.melonltd.naber.endpoint.controller;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,10 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,7 +28,11 @@ import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.facade.service.SubmitOrderService;
 import com.melonltd.naber.rdbms.model.push.service.PudhSellerService;
+import com.melonltd.naber.rdbms.model.req.vo.DemandsItemVo;
+import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
+import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.OredeSubimtReq;
+import com.melonltd.naber.rdbms.model.req.vo.OredeSubimtReq.OrderData;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.CategoryFoodRelSerice;
@@ -40,6 +41,7 @@ import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.service.UserOrderLogService;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
+import com.melonltd.naber.rdbms.model.vo.CategoryFoodRelVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
@@ -51,17 +53,17 @@ import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class UserOrderController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserOrderController.class);
-//	
+	//
 	@Autowired
 	private AccountInfoService accountInfoService;
-	
+
 	@Autowired
 	private CategoryFoodRelSerice categoryFoodRelSerice;
 	@Autowired
 	private UserOrderLogService userOrderLogService;
 	@Autowired
 	private SubmitOrderService submitOrderService;
-	@Autowired 
+	@Autowired
 	private RestaurantInfoService restaurantInfoService;
 	@Autowired
 	private PudhSellerService pudhSellerService;
@@ -76,67 +78,94 @@ public class UserOrderController {
 		OredeSubimtReq req = JsonHelper.json(request, OredeSubimtReq.class);
 
 		LinkedHashMap<String, Object> map = null;
-		
+
 		ErrorType errorType = checkRequest(req);
-		if(ObjectUtils.anyNotNull(errorType)){
+		if (ObjectUtils.anyNotNull(errorType)) {
 			map = RespData.of(Status.FALSE, errorType, null);
-		}else {
+		} else {
 			String accountUUID = httpRequest.getHeader("Authorization");
 			AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 			RestaurantInfoVo vo = restaurantInfoService.findByUUID(req.getRestaurant_uuid());
 			if (!ObjectUtils.allNotNull(vo, account)) {
-				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);	
-			}else {
+				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
+			} else {
 				boolean isOpen = checkIsStoreOpen(req, vo);
 				List<String> foodUUIDs = req.getOrders().stream().map(a -> a.getItem().getFood_uuid()).distinct().collect(Collectors.toList());
 				List<String> categoryUUIDs = req.getOrders().stream().map(a -> a.getCategory_uuid()).distinct().collect(Collectors.toList());
-				int foodOpens = categoryFoodRelSerice.getFoodStatusOpenByUUIDs(foodUUIDs);
+				List<CategoryFoodRelVo> foodList = categoryFoodRelSerice.getFoodStatusOpenByUUIDs(foodUUIDs);
+				boolean isItemChange = checkLiveItemData(req.getOrders(), foodList);
 				int categoryOpens = restaurantCategoryRelService.getStatusByCategoryUUIDs(categoryUUIDs);
 				if (!isOpen) {
-					LOGGER.info("Store is close account : {}, uuid:{} ",accountUUID, req.getRestaurant_uuid());
-					map = RespData.of(Status.FALSE, errorType.STORE_IS_CLOSE, null);
-				}else if (foodUUIDs.size() != foodOpens || categoryUUIDs.size() != categoryOpens) {
-					LOGGER.info("food item or category status is close account : {}, food_uuid:{} ",accountUUID, foodUUIDs);
-					map = RespData.of(Status.FALSE, errorType.STATUS_IS_CLOSE, null);	
-				}else {
+					LOGGER.info("Store is close account : {}, uuid:{} ", accountUUID, req.getRestaurant_uuid());
+					map = RespData.of(Status.FALSE, ErrorType.STORE_IS_CLOSE, null);
+				}else if (!isItemChange) {
+					LOGGER.info("Store item is change account : {}, uuid:{} ", accountUUID, req.getRestaurant_uuid());
+					map = RespData.of(Status.FALSE, ErrorType.FOOD_ITEM_IS_CHANGE, null);
+				} else if (foodUUIDs.size() != foodList.size() ) {
+					LOGGER.info("food item status is close account : {}, food_uuid:{} ", accountUUID, foodUUIDs);
+					map = RespData.of(Status.FALSE, ErrorType.FOOD_ITEM_CLOSE, null);
+				}else if (categoryUUIDs.size() != categoryOpens) {
+					LOGGER.info("category status is close account : {}, food_uuid:{} ", accountUUID, foodUUIDs);
+					map = RespData.of(Status.FALSE, ErrorType.CATEGORY_IS_CLOSE, null);
+				} else {
 					int price = getPrice(req);
 					boolean status = checkCount(req);
-					// 限制單筆訂單不可超過 5000  或  單筆菜單數量錯誤
+					// 限制單筆訂單不可超過 5000 或 單筆菜單數量錯誤
 					if (price > 5000 || !status) {
-						map = status? RespData.of(Status.FALSE, ErrorType.ORDER_MAX_PRICE, null) : RespData.of(Status.FALSE, ErrorType.ORDER_MAX_COUNT, null);
-					}else {
-						String bonus = ((int)Math.floor(price / 10d) + "");
+						map = status ? RespData.of(Status.FALSE, ErrorType.ORDER_MAX_PRICE, null)
+								: RespData.of(Status.FALSE, ErrorType.ORDER_MAX_COUNT, null);
+					} else {
+						String bonus = ((int) Math.floor(price / 10d) + "");
 						String orders = JsonHelper.toJson(req);
-						OrderVo result = submitOrderService.submitOrder(account , Tools.buildUUID(UUIDType.ORDER),  vo,  req,  String.valueOf(price),  bonus,  orders);
+						OrderVo result = submitOrderService.submitOrder(account, Tools.buildUUID(UUIDType.ORDER), vo,
+								req, String.valueOf(price), bonus, orders);
 						if (!ObjectUtils.anyNotNull(result)) {
-							LOGGER.error("submit order save fail account : {}, uuid:{} ",accountUUID, req.getRestaurant_uuid());
-							map = RespData.of(Status.FALSE, ErrorType.ORDER_UNFINISH_MAX, null);	
-						}else {
-							// push to seller 
-							pudhSellerService.pushOrderToSeller(result.getRestaurant_uuid(), OredeSubimtReq.ofOrders(req.getOrders()) ,OrderStatus.UNFINISH);
+							LOGGER.error("submit order save fail account : {}, uuid:{} ", accountUUID,
+									req.getRestaurant_uuid());
+							map = RespData.of(Status.FALSE, ErrorType.ORDER_UNFINISH_MAX, null);
+						} else {
+							// push to seller
+							pudhSellerService.pushOrderToSeller(result.getRestaurant_uuid(),
+									OredeSubimtReq.ofOrders(req.getOrders()), OrderStatus.UNFINISH);
 							map = RespData.of(Status.TRUE, null, result);
 						}
 					}
 				}
 			}
 		}
-		
+
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
-	
+
+	private static boolean checkLiveItemData(List<OrderData> orders, List<CategoryFoodRelVo> foodList) {
+		List<FoodItemVo> items = orders.stream().map(a -> a.getItem()).collect(Collectors.toList());
+		long count = items.stream().filter(o -> {
+							Predicate<CategoryFoodRelVo> equalfoodUUID = (a) -> a.getFood_uuid().equals(o.getFood_uuid());
+							List<ItemVo> foodScopes = foodList.stream().filter(equalfoodUUID).flatMap(r -> r.getFood_data().getScopes().stream()).collect(Collectors.toList());
+							List<ItemVo> foodOpts = foodList.stream().filter(equalfoodUUID).flatMap(r -> r.getFood_data().getOpts().stream()).collect(Collectors.toList());
+							List<DemandsItemVo> foodDemands = foodList.stream().filter(equalfoodUUID).flatMap(r -> r.getFood_data().getDemands().stream()).collect(Collectors.toList());
+							long c = o.getDemands().stream().filter(d -> foodDemands.stream().filter(b -> StringUtils.equals(b.getName(), d.getName())).flatMap(b -> b.getDatas().stream()).collect(Collectors.toList()).containsAll(d.getDatas())).count();
+							return c == foodDemands.size() && foodScopes.containsAll(o.getScopes()) && foodOpts.containsAll(o.getOpts());
+						}).count();
+		return count == items.size();
+	}
+
 	private boolean checkCount(OredeSubimtReq req) {
-		long count = req.getOrders().stream().filter(a -> IntegerUtils.parseInt(a.getCount(), 50) > 50).count();
+		// long count = req.getOrders().stream().filter(a ->
+		// IntegerUtils.parseInt(a.getCount(), 50) > 50).count();
 		return req.getOrders().stream().filter(a -> IntegerUtils.parseInt(a.getCount(), 50) > 50).count() == 0;
 	}
-	
+
 	private Integer getPrice(OredeSubimtReq req) {
 		int result = req.getOrders().stream().mapToInt(a -> {
-			int count= Integer.parseInt(a.getCount());
+			int count = Integer.parseInt(a.getCount());
 			int price = Integer.parseInt(a.getItem().getPrice());
-			int opt = a.getItem().getOpts().stream().mapToInt(o -> o.getPrice() != null ? Integer.parseInt(o.getPrice()) : 0).sum();
-			int scopes = a.getItem().getScopes().stream().mapToInt(s -> s.getPrice() != null ? Integer.parseInt(s.getPrice()) : 0).sum();
-			if (scopes > 0 ) {
+			int opt = a.getItem().getOpts().stream()
+					.mapToInt(o -> o.getPrice() != null ? Integer.parseInt(o.getPrice()) : 0).sum();
+			int scopes = a.getItem().getScopes().stream()
+					.mapToInt(s -> s.getPrice() != null ? Integer.parseInt(s.getPrice()) : 0).sum();
+			if (scopes > 0) {
 				return (scopes + opt) * count;
 			}
 			return (price + opt + scopes) * count;
@@ -159,41 +188,27 @@ public class UserOrderController {
 			map = RespData.of(Status.FALSE, ErrorType.HEADESR_ERROR, null);
 		} else {
 			int page = req.getPage();
-			if (page > 0) {
-				page = page - 1;
-			}
-			Sort sort = new Sort(Direction.ASC, "fetchDate");
-			Pageable pageable = new PageRequest(page, 10, sort);
-			List<OrderVo> list = userOrderLogService.findByAccountUUIDAndPage(uuid, pageable);
+			List<OrderVo> list = userOrderLogService.findByAccountUUIDAndPage(uuid, page);
 			map = RespData.of(Status.TRUE, null, list);
 		}
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
-	
-	
-	
+
 	private static boolean checkIsStoreOpen(OredeSubimtReq req, RestaurantInfoVo vo) {
-		String fetch_date = Tools.fromatGMT("HH:mm",req.getFetch_date());
+		String fetch_date = Tools.fromatGMT("HH:mm", req.getFetch_date());
 		boolean c1 = Tools.checkOpenStore(vo.getStore_start(), vo.getStore_end(), fetch_date);
-		
 		List<DateRangeVo> canStoreRange = Tools.checkOpenStoreByRanges(vo.getCan_store_range(), fetch_date);
-		
-		int nowUTC = Tools.getDayOfYear(req.getFetch_date(),"yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
-		List<String> notBusiness = vo.getNot_business().stream().filter(a -> {
-			return Tools.getDayOfYear(a, "yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'") == nowUTC;
-		}).collect(Collectors.toList());
-			
-		boolean	status = Range.<String>between(Tools.getNowGMT(), Tools.getPlusDayGMT(3)).contains(req.getFetch_date());
+		int nowGMT = Tools.getDayOfYear(req.getFetch_date(), "yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
+		List<String> notBusiness = vo.getNot_business().stream().filter(a -> Tools.getDayOfYear(a, "yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'") == nowGMT).collect(Collectors.toList());
+		boolean status = Range.<String>between(Tools.getNowGMT(), Tools.getPlusDayGMT(3)).contains(req.getFetch_date());
 		return c1 && canStoreRange.size() == 0 && notBusiness.size() == 0 && status;
-//		
-//		return false;
-	} 
+	}
 
 	private static ErrorType checkRequest(OredeSubimtReq req) {
 		ErrorType error = null;
 		if (!ObjectUtils.anyNotNull(req)) {
-			return  ErrorType.INVALID;
+			return ErrorType.INVALID;
 		}
 		if (StringUtils.isAllBlank(req.getRestaurant_uuid(), req.getFetch_date())) {
 			error = ErrorType.INVALID;

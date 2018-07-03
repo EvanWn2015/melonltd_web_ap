@@ -2,12 +2,14 @@ package com.melonltd.naber.rdbms.model.service;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
@@ -45,9 +47,12 @@ public class CategoryFoodRelSerice {
 		}
 	}
 
-	public int getFoodStatusOpenByUUIDs(List<String> foodUUIDs) {
+	public List<CategoryFoodRelVo> getFoodStatusOpenByUUIDs(List<String> foodUUIDs) {
 		List<CategoryFoodRel> list = categoryFoodRelDao.findStatusByFoodUUIDs(foodUUIDs);
-		return list.size();
+		if (CollectionUtils.isNotEmpty(list)) {
+			return CategoryFoodRelVo.valueOfArray(list, true);
+		}
+		return Lists.<CategoryFoodRelVo>newArrayList();
 	}
 
 	public List<CategoryFoodRel> findBycategoryUUID(String categoryUUID) {
@@ -92,6 +97,7 @@ public class CategoryFoodRelSerice {
 		info.setFoodName(vo.getFood_name());
 		info.setDefaultPrice(vo.getDefault_price());
 		info.setFoodData(JsonHelper.toJson(vo.getFood_data()));
+		info.setStatus(vo.getStatus());
 		
 		CategoryFoodRel newInfo = categoryFoodRelDao.save(info);
 		if (ObjectUtils.allNotNull(newInfo)) {

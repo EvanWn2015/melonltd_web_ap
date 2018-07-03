@@ -104,7 +104,7 @@ public class RestaurantInfoService {
 	public RestaurantInfoVo update(RestaurantInfoVo vo) {
 		RestaurantInfo info = restaurantInfoDao.save(newRestaurantInfo(vo));
 		if (ObjectUtils.allNotNull(info)) {
-			return RestaurantInfoVo.valueOf(info, false);
+			return RestaurantInfoVo.valueOf(info, true);
 		}
 		return null;
 	}

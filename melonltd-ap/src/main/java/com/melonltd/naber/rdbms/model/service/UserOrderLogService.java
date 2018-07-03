@@ -5,7 +5,10 @@ import java.util.List;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -40,10 +43,16 @@ public class UserOrderLogService {
 		return null;
 	}
 
-	public List<OrderVo> findByAccountUUIDAndPage(String accountUUID, Pageable pageable) {
-		Page<UserOrderLog> page = userOrderLogDao.findByAccountUUIDAndPage(accountUUID, pageable);
-		if (page.hasContent()) {
-			return OrderVo.valueOfArray(page.getContent());
+	public List<OrderVo> findByAccountUUIDAndPage(String accountUUID, int page) {
+		
+		if (page > 0) {
+			page = page - 1;
+		}
+		Sort sort = new Sort(Direction.DESC, "fetchDate");
+		Pageable pageable = new PageRequest(page, 10, sort);
+		Page<UserOrderLog> pages = userOrderLogDao.findByAccountUUIDAndPage(accountUUID, pageable);
+		if (pages.hasContent()) {
+			return OrderVo.valueOfArray(pages.getContent());
 		}
 		return Lists.newArrayList();
 	}

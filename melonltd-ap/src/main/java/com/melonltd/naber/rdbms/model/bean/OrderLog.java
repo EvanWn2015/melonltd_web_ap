@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -15,10 +17,9 @@ import com.melonltd.naber.rdbms.model.vo.OrderVo;
 public class OrderLog implements Serializable {
 	private static final long serialVersionUID = 2088198035040888362L;
 	
+	private Long id;
 	private String orderUUID;
 	private String accountUUID;
-//	private String accountName;
-//	private String accountPhone;
 	private String restaurantUUID;
 	private String userMessage;
 	private String createDate;
@@ -30,27 +31,14 @@ public class OrderLog implements Serializable {
 	private String status;
 	private String enable;
 	
-	
-//	@Column(name = "account_name")
-//	public String getAccountName() {
-//		return accountName;
-//	}
-//
-//	@Column(name = "account_phone")
-//	public String getAccountPhone() {
-//		return accountPhone;
-//	}
-//
-//	public void setAccountName(String accountName) {
-//		this.accountName = accountName;
-//	}
-//
-//	public void setAccountPhone(String accountPhone) {
-//		this.accountPhone = accountPhone;
-//	}
-
 	@Id
-	@Column(name = "order_uuid", unique = true, nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", unique = true, nullable = false)
+	public Long getId() {
+		return id;
+	}
+
+	@Column(name = "order_uuid")
 	public String getOrderUUID() {
 		return orderUUID;
 	}
@@ -108,6 +96,10 @@ public class OrderLog implements Serializable {
 	@Column(name = "enable")
 	public String getEnable() {
 		return enable;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public void setOrderUUID(String orderUUID) {
@@ -170,6 +162,23 @@ public class OrderLog implements Serializable {
 		info.orderBonus = vo.getOrder_bonus();
 		info.fetchDate = vo.getFetch_date();
 		info.orderData = vo.getOrder_data();
+		info.status = vo.getStatus();
+		info.enable = vo.getEnable();
+		return info;
+	}
+	
+	public static OrderLog of (OrderInfo vo) {
+		OrderLog info = new OrderLog();
+		info.orderUUID = vo.getOrderUUID();
+		info.accountUUID = vo.getAccountUUID();
+		info.restaurantUUID = vo.getRestaurantUUID();
+		info.userMessage = vo.getUserMessage();
+		info.createDate = vo.getCreateDate();
+		info.updateDate = vo.getUpdateDate();
+		info.orderPrice = vo.getOrderPrice();
+		info.orderBonus = vo.getOrderBonus();
+		info.fetchDate = vo.getFetchDate();
+		info.orderData = vo.getOrderData();
 		info.status = vo.getStatus();
 		info.enable = vo.getEnable();
 		return info;

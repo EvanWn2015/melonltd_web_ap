@@ -56,6 +56,14 @@ public class Tools {
 	public static String fromatGMT(String pattern, String date) {
 		return LocalDateTime.parse(date, yyyy_MM_dd_T_HH_mm_ss_SSSS_Z).format(DateTimeFormatter.ofPattern(pattern));
 	}
+	
+	public static String fromatStartOfDayGMT(String date) {
+		return LocalDateTime.parse(date, yyyy_MM_dd_T_HH_mm_ss_SSSS_Z).with(LocalTime.MIN).format(yyyy_MM_dd_T_HH_mm_ss_SSSS_Z);
+	}
+	
+	public static String fromatEndOfDayGMT(String date) {
+		return LocalDateTime.parse(date, yyyy_MM_dd_T_HH_mm_ss_SSSS_Z).with(LocalTime.MAX).format(yyyy_MM_dd_T_HH_mm_ss_SSSS_Z);
+	}
 
 	public static String getPlusDayGMT(int days) {
 		return LocalDateTime.now(ZONEID_GMT).plusDays(days).format(yyyy_MM_dd_T_HH_mm_ss_SSSS_Z);
@@ -153,7 +161,7 @@ public class Tools {
 
 	// 檢查接單開關時間範圍
 	public static List<DateRangeVo> checkOpenStoreByRanges(String canStoreRange, String now) {
-
+		
 		List<DateRangeVo> list = JsonHelper.jsonArray(canStoreRange, DateRangeVo[].class);
 		return list.stream()
 				.filter(f -> SwitchStatus.CLOSE.name().equals(f.getStatus()) && org.apache.commons.lang3.Range
@@ -239,7 +247,7 @@ public class Tools {
 	 * 隨機亂數密碼產生
 	 * 
 	 * @param len
-	 *            所需產生長度
+	 * 所需產生長度
 	 */
 	public static String getRandomPassword(int len) {
 		String str = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -258,13 +266,7 @@ public class Tools {
 		double lon2 = (Math.PI / 180) * end.getLongitude();
 
 		double R = 6371;// 地球半径
-		double d = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1))
-				* R;
+		double d = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)) * R;
 		return d * 1000;
 	}
-
-	// class LatLng{
-	// double latitude;
-	// double longitude;
-	// }
 }

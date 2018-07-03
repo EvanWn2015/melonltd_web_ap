@@ -18,8 +18,6 @@ public class OrderInfo implements Serializable {
 
 	private String orderUUID;
 	private String accountUUID;
-//	private String accountName;
-//	private String accountPhone;
 	private String restaurantUUID;
 	private String userMessage;
 	private String createDate;
@@ -30,24 +28,6 @@ public class OrderInfo implements Serializable {
 	private String orderData;
 	private String status;
 	private String enable;
-//
-//	@Column(name = "account_name")
-//	public String getAccountName() {
-//		return accountName;
-//	}
-//
-//	@Column(name = "account_phone")
-//	public String getAccountPhone() {
-//		return accountPhone;
-//	}
-//
-//	public void setAccountName(String accountName) {
-//		this.accountName = accountName;
-//	}
-//
-//	public void setAccountPhone(String accountPhone) {
-//		this.accountPhone = accountPhone;
-//	}
 
 	@Id
 	@Column(name = "order_uuid", unique = true, nullable = false)
@@ -161,8 +141,6 @@ public class OrderInfo implements Serializable {
 	public static OrderInfo of (OrderVo vo) {
 		OrderInfo info = new OrderInfo();
 		info.orderUUID = vo.getOrder_uuid();
-//		info.accountName = vo.getAccount_name();
-//		info.accountPhone = vo.getAccount_phone();
 		info.accountUUID = vo.getAccount_uuid();
 		info.restaurantUUID = vo.getRestaurant_uuid();
 		info.userMessage = vo.getUser_message();

@@ -220,6 +220,7 @@ public class RestaurantInfoVo implements Serializable {
 //		vo.not_business = JsonHelper.jsonArray(info.getNotBusiness(), String[].class);
 		if (hasStoreRange) {
 			vo.can_store_range = JsonHelper.jsonArray(info.getCanStoreRange(),DateRangeVo[].class);
+			vo.not_business = JsonHelper.jsonArray(info.getNotBusiness(), String[].class);
 		}
 		vo.restaurant_category = info.getRestaurantCategory();
 		vo.latitude = info.getLatitude();

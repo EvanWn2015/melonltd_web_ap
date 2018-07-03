@@ -3,8 +3,6 @@ package com.melonltd.naber.rdbms.model.vo;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.rdbms.model.bean.OrderInfo;
@@ -237,6 +235,12 @@ public class OrderVo {
 	}
 	
 	public static List<OrderVo> valueInfoOfArray(List<OrderInfo> infos){
+		List<OrderVo> vos = Lists.newArrayList();
+		vos.addAll(infos.stream().map(a -> valueOf(a)).collect(Collectors.toList()));
+		return vos;
+	}
+	
+	public static List<OrderVo> valueOrderFinishOfArray(List<SellerOrderFinish> infos){
 		List<OrderVo> vos = Lists.newArrayList();
 		vos.addAll(infos.stream().map(a -> valueOf(a)).collect(Collectors.toList()));
 		return vos;

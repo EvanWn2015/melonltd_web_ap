@@ -31,7 +31,9 @@ public class VerifyPhoneLogService {
 		while (code.length() != 6) {
 			code += (int) (Math.random() * 10);
 		}
-		String content = "驗證碼為：" + code + "，請在三分鐘內驗證完成。";
+//		
+		String content = "歡迎您成為NABER會員，以下是您的驗證碼： " + code + "請在三分鐘內驗證完成。NABER期待您有更快速、便利的生活。";
+//		String content = "驗證碼為：" + code + "，請在三分鐘內驗證完成。";
 		String start = Tools.getNowStartOfDayGMT();
 		String end = Tools.getNowEndOfDayGMT();
 		// 2018-06-02T18:23:12.7410Z
@@ -88,7 +90,7 @@ public class VerifyPhoneLogService {
 			VerifyPhoneLog log = new VerifyPhoneLog();
 			log.setBatchId(batchId);
 			log.setPhone(phoneNumber);
-			log.setVerifyDate(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+			log.setVerifyDate(Tools.getNowGMT());
 			log.setVerifyCode(code);
 			verifyPhoneLogDao.save(log);
 			return batchId;

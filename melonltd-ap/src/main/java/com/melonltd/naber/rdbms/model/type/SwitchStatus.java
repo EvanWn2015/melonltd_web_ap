@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.Lists;
 
 public enum SwitchStatus {
-		OPEN("OPNE"), CLOSE("CLOSE");
+		OPEN("OPEN"), CLOSE("CLOSE");
 	
 	private String name;
 	

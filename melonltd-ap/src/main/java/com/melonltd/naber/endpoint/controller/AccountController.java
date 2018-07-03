@@ -107,11 +107,15 @@ public class AccountController {
 			if (!ObjectUtils.allNotNull(vo)) {
 				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
 			} else {
-				String status = verifyPhoneLogService.sendForgetPassword(req.getPhone(), "" + vo.getPassword() + "");
-				if (!StringUtils.isBlank(status)) {
-					map = RespData.of(Status.TRUE, null, status);
-				} else {
+				if (req.getPhone().length() != 10) {
 					map = RespData.of(Status.FALSE, ErrorType.SEND_SMS_FAIL, null);
+				}else {
+					String status = verifyPhoneLogService.sendForgetPassword(req.getPhone(), "NABER用戶您好：您會員登入密碼為：("+vo.getPassword()+")若非您本人的操作，請盡速聯繫NABER客服人員。");
+					if (!StringUtils.isBlank(status)) {
+						map = RespData.of(Status.TRUE, null, status);
+					} else {
+						map = RespData.of(Status.FALSE, ErrorType.SEND_SMS_FAIL, null);
+					}
 				}
 			}
 		}

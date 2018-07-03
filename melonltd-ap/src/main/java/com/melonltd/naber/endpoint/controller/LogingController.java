@@ -1,6 +1,9 @@
 package com.melonltd.naber.endpoint.controller;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.inject.Inject;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.api.client.util.Maps;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.facade.service.LoginService;
@@ -58,6 +62,19 @@ public class LogingController {
 		
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	
+	private void test () {
+		// login
+		// data key
+		// v
+		
+		
+		Map<String, String> req = Maps.newHashMap();
+		req.get("data");
+		login(req.get("data"));
+		
 	}
 
 	

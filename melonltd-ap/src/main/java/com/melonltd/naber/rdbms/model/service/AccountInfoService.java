@@ -25,7 +25,7 @@ public class AccountInfoService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountInfoService.class);
 
 	@Autowired
-	AccountInfoDao accountInfoDao;
+	private AccountInfoDao accountInfoDao;
 
 	LoadingCache<String, AccountInfo> cacheBuilder = CacheBuilder.newBuilder().expireAfterAccess(7, TimeUnit.DAYS)
 			.maximumSize(1000).build(new CacheLoader<String, AccountInfo>() {
@@ -114,6 +114,17 @@ public class AccountInfoService {
 			return true;
 		} catch (Exception e) {
 			LOGGER.error("update password fail account: {}, msg:{}", vo.getAccount_uuid(), e.getMessage());
+			return false;
+		}
+	}
+	
+	public boolean updateBonus(String bonus, String accountUUID) {
+		try {
+			accountInfoDao.updateBonus(bonus, accountUUID);
+			clearCacheBuilderByKey(accountUUID);
+			return true;
+		} catch (Exception e) {
+			LOGGER.error("update password fail account: {}, msg:{}",accountUUID, e.getMessage());
 			return false;
 		}
 	}

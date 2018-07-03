@@ -22,7 +22,7 @@ public class LoginService {
 	@Autowired
 	private MobileDeviceService mobileDeviceService;
 
-	public AccountInfoVo checkLoginAndChangeStatusAndIntoDeviceToken(String account, String password, String deviceToken,DeviceCategory category) {
+	public AccountInfoVo checkLoginAndChangeStatusAndIntoDeviceToken(String account, String password, String deviceToken, DeviceCategory category) {
 		AccountInfoVo vo = accountInfoService.findByPhoneAndAccount(account, password);
 		if (ObjectUtils.allNotNull(vo)) {
 			if (!StringUtils.isBlank(deviceToken)) {

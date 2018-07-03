@@ -34,7 +34,7 @@ import com.melonltd.naber.rdbms.model.vo.RestaurantCategoryRelVo;
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class SellerCategoryController {
 
-	private static List<SwitchStatus> CAN_UPDATE_STATUS = Lists.<SwitchStatus>newArrayList(SwitchStatus.OPEN, SwitchStatus.CLOSE);
+	private static List<SwitchStatus> CAN_UPDATE_STATUS = SwitchStatus.getEnumValues();
 
 	@Autowired
 	private RestaurantCategoryRelService restaurantCategoryRelService;
@@ -50,8 +50,7 @@ public class SellerCategoryController {
 		AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 		LinkedHashMap<String, Object> map = null;
 		if (ObjectUtils.allNotNull(account)) {
-			List<RestaurantCategoryRelVo> list = restaurantCategoryRelService
-					.findAllByRestaurantUUID(account.getRestaurant_uuid());
+			List<RestaurantCategoryRelVo> list = restaurantCategoryRelService.findAllByRestaurantUUID(account.getRestaurant_uuid());
 			map = RespData.of(Status.TRUE, null, list);
 		} else {
 			map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
@@ -190,6 +189,9 @@ public class SellerCategoryController {
 		if (StringUtils.isAnyBlank(account.getRestaurant_uuid(), req.getUuid())) {
 			return ErrorType.DATABASE_NULL;
 		}
+//		if (req.getPage() == 0) {
+//			return ErrorType.DATABASE_NULL;
+//		}
 		return null;
 	}
 

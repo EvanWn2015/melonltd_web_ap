@@ -22,6 +22,7 @@ import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.req.vo.AccountReq;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
+import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.OrderInfoService;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
@@ -35,9 +36,13 @@ import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class QuickSearchController {
 	private static final Logger LOGGERO = LoggerFactory.getLogger(QuickSearchController.class);
-
+//
+//	@Autowired
+//	private AccountInfoService accountInfoService;
+//	
 	@Autowired
 	private OrderInfoService orderInfoService;
+	
 	@Autowired
 	private RestaurantInfoService restaurantInfoService;
 	
@@ -79,7 +84,7 @@ public class QuickSearchController {
 		ErrorType errorType = checkReqData(req);
 		LinkedHashMap<String, Object> map = null;
 		String accountUUID = httpRequest.getHeader("Authorization");
-		
+
 		if(StringUtils.isBlank(accountUUID)) {
 			map = RespData.of(Status.FALSE, ErrorType.HEADESR_ERROR, null);
 		}else if (ObjectUtils.allNotNull(errorType)) {

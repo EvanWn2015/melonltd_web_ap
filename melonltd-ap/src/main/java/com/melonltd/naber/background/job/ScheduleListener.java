@@ -37,10 +37,10 @@ public class ScheduleListener implements ServletContextListener{
 //		.withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * 1/1 * ? *"))
 		Trigger trigger = TriggerBuilder.newTrigger()
 						.withIdentity("OrderJob", "group1")
-						.withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * 1/1 * ? *"))
-//						.withSchedule(CronScheduleBuilder
-//								.dailyAtHourAndMinute(0,0)
-//								.inTimeZone(TimeZone.getTimeZone(ZoneId.of("Asia/Kuala_Lumpur"))))
+//						.withSchedule(CronScheduleBuilder.cronSchedule("*/10 * * * * ?"))
+						.withSchedule(CronScheduleBuilder
+								.dailyAtHourAndMinute(14,43)
+								.inTimeZone(TimeZone.getTimeZone(ZoneId.of("Asia/Kuala_Lumpur"))))
 						.build();
 		try {
 			scheduler = ((StdSchedulerFactory) sce.getServletContext()
