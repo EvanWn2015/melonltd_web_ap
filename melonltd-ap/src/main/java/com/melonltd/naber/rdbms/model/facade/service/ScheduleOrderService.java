@@ -20,7 +20,7 @@ import com.melonltd.naber.rdbms.model.dao.AccountInfoDao;
 import com.melonltd.naber.rdbms.model.dao.OrderInfoDao;
 import com.melonltd.naber.rdbms.model.dao.OrderLogDao;
 import com.melonltd.naber.rdbms.model.dao.SellerOrderFinishDao;
-import com.melonltd.naber.rdbms.model.dao.UserOrderLogDao;
+import com.melonltd.naber.rdbms.model.dao.UserOrderInfoDao;
 import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
 
@@ -33,13 +33,14 @@ public class ScheduleOrderService {
 	@Autowired
 	private OrderInfoDao orderInfoDao;
 	@Autowired
-	private UserOrderLogDao userOrderLogDao;
+	private UserOrderInfoDao userOrderInfoDao;
 	@Autowired
 	private OrderLogDao orderLogDao;
 	@Autowired
 	private SellerOrderFinishDao sellerOrderFinishDao;
 
 	public void doOrderJob(String startDate, String endDate) {
+		LOGGER.info("處理訂單時間紀錄: now: {}, start: {}, end: {}", Tools.getNowGMT(), startDate, endDate);
 		
 		List<OrderInfo> list = orderInfoDao.findUnfinishProcessingCanFetchByBetweenDate(startDate, endDate);
 		if (CollectionUtils.isNotEmpty(list)) {
@@ -65,7 +66,7 @@ public class ScheduleOrderService {
 			List<SellerOrderFinish> finishList = list.stream().map(a -> newOrderFinish(a, OrderStatus.FINISH, now, Enable.Y)).collect(Collectors.toList());
 			
 			accountInfoDao.save(accountList);
-			userOrderLogDao.updateOrderStatusByorderUUIDs(orderUUIDs, OrderStatus.FINISH.name(), now);
+			userOrderInfoDao.updateOrderStatusByorderUUIDs(orderUUIDs, OrderStatus.FINISH.name(), now);
 			orderInfoDao.save(orderList);
 			orderLogDao.save(logList);
 			sellerOrderFinishDao.save(finishList);

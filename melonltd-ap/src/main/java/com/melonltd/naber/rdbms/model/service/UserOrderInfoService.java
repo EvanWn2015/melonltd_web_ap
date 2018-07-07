@@ -13,18 +13,18 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naber.rdbms.model.bean.OrderInfo;
-import com.melonltd.naber.rdbms.model.bean.UserOrderLog;
-import com.melonltd.naber.rdbms.model.dao.UserOrderLogDao;
+import com.melonltd.naber.rdbms.model.bean.UserOrderInfo;
+import com.melonltd.naber.rdbms.model.dao.UserOrderInfoDao;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
 
-@Service("userOrderLogService")
-public class UserOrderLogService {
+@Service("userOrderInfoService")
+public class UserOrderInfoService {
 
 	@Autowired
-	private UserOrderLogDao userOrderLogDao;
+	private UserOrderInfoDao userOrderInfoDao;
 
-	public OrderVo save(UserOrderLog info) {
-		UserOrderLog u = userOrderLogDao.save(info);
+	public OrderVo save(UserOrderInfo info) {
+		UserOrderInfo u = userOrderInfoDao.save(info);
 		if (ObjectUtils.anyNotNull(u)) {
 			return OrderVo.valueOf(u);
 		}
@@ -32,7 +32,7 @@ public class UserOrderLogService {
 	}
 	
 	public OrderVo findOne(String uuid) {
-		UserOrderLog o = userOrderLogDao.findOne(uuid);
+		UserOrderInfo o = userOrderInfoDao.findOne(uuid);
 		if (ObjectUtils.anyNotNull(o)) {
 			if (o.getEnable().equals("N")) {
 				return null;
@@ -50,7 +50,7 @@ public class UserOrderLogService {
 		}
 		Sort sort = new Sort(Direction.DESC, "fetchDate");
 		Pageable pageable = new PageRequest(page, 10, sort);
-		Page<UserOrderLog> pages = userOrderLogDao.findByAccountUUIDAndPage(accountUUID, pageable);
+		Page<UserOrderInfo> pages = userOrderInfoDao.findByAccountUUIDAndPage(accountUUID, pageable);
 		if (pages.hasContent()) {
 			return OrderVo.valueOfArray(pages.getContent());
 		}
@@ -59,7 +59,12 @@ public class UserOrderLogService {
 	
 	
 	public int findByOrderStatusAccountUUID(String accountUUID) {
-		List<UserOrderLog> list = userOrderLogDao.findByOrderStatusAccountUUID(accountUUID);
+		List<UserOrderInfo> list = userOrderInfoDao.findByOrderStatusAccountUUID(accountUUID);
+		return list.size();
+	}
+	
+	public int findByOrderFailByAccountUUID(String accountUUID) {
+		List<UserOrderInfo> list = userOrderInfoDao.findByOrderFailByAccountUUID(accountUUID);
 		return list.size();
 	}
 }

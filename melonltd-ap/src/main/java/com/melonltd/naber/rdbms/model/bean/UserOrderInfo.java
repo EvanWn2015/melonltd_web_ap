@@ -12,8 +12,8 @@ import com.melonltd.naber.rdbms.model.vo.OrderVo;
 
 
 @Entity
-@Table(name = "user_order_log")
-public class UserOrderLog implements Serializable {
+@Table(name = "user_order_info")
+public class UserOrderInfo implements Serializable {
 
 	private static final long serialVersionUID = -7484434525019743183L;
 	
@@ -160,8 +160,8 @@ public class UserOrderLog implements Serializable {
 		this.enable = enable;
 	}
 	
-	public static UserOrderLog of (OrderVo vo) {
-		UserOrderLog info = new UserOrderLog();
+	public static UserOrderInfo of (OrderVo vo) {
+		UserOrderInfo info = new UserOrderInfo();
 		info.orderUUID = vo.getOrder_uuid();
 		info.accountUUID = vo.getAccount_uuid();
 		info.restaurantUUID = vo.getRestaurant_uuid();

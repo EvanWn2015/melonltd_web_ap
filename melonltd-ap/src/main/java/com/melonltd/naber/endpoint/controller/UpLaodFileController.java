@@ -18,10 +18,10 @@ import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
-import com.melonltd.naber.rdbms.model.service.CategoryFoodRelSerice;
+import com.melonltd.naber.rdbms.model.service.FoodInfoSerice;
 import com.melonltd.naber.rdbms.model.type.UpLoadType;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
-import com.melonltd.naber.rdbms.model.vo.CategoryFoodRelVo;
+import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
@@ -36,7 +36,7 @@ public class UpLaodFileController {
 	private AccountInfoService accountInfoService;
 
 	@Autowired
-	private CategoryFoodRelSerice categoryFoodRelSerice;
+	private FoodInfoSerice foodInfoSerice;
 
 	@ResponseBody
 	@PostMapping(value = "image/upload")
@@ -61,10 +61,10 @@ public class UpLaodFileController {
 					map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
 				}
 			} else if (UpLoadType.FOOD.equals(UpLoadType.of(req.getType()))) {
-				CategoryFoodRelVo vo = categoryFoodRelSerice.findByFoodUUID(req.getUuid());
+				FoodInfoVo vo = foodInfoSerice.findByFoodUUID(req.getUuid());
 				if (ObjectUtils.allNotNull(vo)) {
 					vo.setPhoto(req.getDate());
-					boolean status = categoryFoodRelSerice.updatePhoto(vo);
+					boolean status = foodInfoSerice.updatePhoto(vo);
 					map = status ? RespData.of(Status.TRUE, null, "")
 							: RespData.of(Status.FALSE, ErrorType.UPDATE_ERROR, null);
 				} else {

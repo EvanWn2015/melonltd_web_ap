@@ -10,26 +10,26 @@
 	</listener>
 	
 	<!-- Order Job -->
-	<!-- <listener>
+	<listener>
 		<listener-class>org.quartz.ee.servlet.QuartzInitializerListener</listener-class>
 	</listener>
 	<listener>
 		<listener-class>com.melonltd.naber.background.job.ScheduleListener</listener-class>
-	</listener> -->
+	</listener>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:spring/naber-app.xml</param-value>
 	</context-param>
 
-	<!-- <filter>
+	<filter>
 		<filter-name>HTTPS</filter-name>
 		<filter-class>com.melonltd.naber.filter.HTTPSFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>HTTPS</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping> -->
+	</filter-mapping>
 
 	<filter>
 		<filter-name>encodingFilter</filter-name>

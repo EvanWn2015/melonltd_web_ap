@@ -10,8 +10,8 @@ import javax.persistence.Table;
 import com.google.common.base.MoreObjects;
 
 @Entity
-@Table(name = "category_food_rel")
-public class CategoryFoodRel implements Serializable {
+@Table(name = "food_info")
+public class FoodInfo implements Serializable {
 	private static final long serialVersionUID = -5381913190890717792L;
 
 	private String foodUUID;

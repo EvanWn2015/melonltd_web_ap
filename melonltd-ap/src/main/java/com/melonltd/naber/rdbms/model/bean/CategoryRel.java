@@ -9,11 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
-import com.melonltd.naber.rdbms.model.vo.RestaurantCategoryRelVo;
+import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
 
 @Entity
-@Table(name = "restaurant_category_rel")
-public class RestaurantCategoryRel implements Serializable {
+@Table(name = "category_rel")
+public class CategoryRel implements Serializable {
 	private static final long serialVersionUID = 6997247221789078230L;
 
 	private String categoryUUID;

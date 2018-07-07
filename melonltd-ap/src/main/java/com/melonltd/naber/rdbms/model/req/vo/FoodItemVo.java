@@ -10,6 +10,7 @@ public class FoodItemVo implements Serializable {
 	private static final long serialVersionUID = 8854246756125375923L;
 
 	private String food_uuid;
+	private String category_name;
 	private String food_name;
 	private String food_photo;
 	private String price;
@@ -72,6 +73,14 @@ public class FoodItemVo implements Serializable {
 
 	public void setDemands(List<DemandsItemVo> demands) {
 		this.demands = demands;
+	}
+	
+	public String getCategory_name() {
+		return category_name;
+	}
+
+	public void setCategory_name(String category_name) {
+		this.category_name = category_name;
 	}
 
 	@Override

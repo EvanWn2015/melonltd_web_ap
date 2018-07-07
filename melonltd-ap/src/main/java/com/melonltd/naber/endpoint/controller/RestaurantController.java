@@ -18,13 +18,13 @@ import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
-import com.melonltd.naber.rdbms.model.service.RestaurantCategoryRelService;
+import com.melonltd.naber.rdbms.model.service.CategoryRelService;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.service.RestaurantLocationTemplateService;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
-import com.melonltd.naber.rdbms.model.vo.RestaurantCategoryRelVo;
+import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
 import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 
 @Controller
@@ -38,7 +38,7 @@ public class RestaurantController {
 	private RestaurantInfoService restaurantInfoService;
 	
 	@Autowired
-	private RestaurantCategoryRelService restaurantCategoryRelService;
+	private CategoryRelService categoryRelService;
 
 	private enum SearchType {
 		TOP("TOP"), AREA("AREA"), CATEGORY("CATEGORY"), DISTANCE("DISTANCE"), NUKNOWN("NUKNOWN");
@@ -99,7 +99,7 @@ public class RestaurantController {
 		if (StringUtils.isBlank(req.getUuid())) {
 			map = RespData.of(Status.FALSE, ErrorType.INVALID, null);
 		}else {
-			List<RestaurantCategoryRelVo> list = restaurantCategoryRelService.findByRestaurantUUID(req.getUuid());
+			List<CategoryRelVo> list = categoryRelService.findByRestaurantUUID(req.getUuid());
 			map = RespData.of(Status.TRUE, null, list);
 		}
 

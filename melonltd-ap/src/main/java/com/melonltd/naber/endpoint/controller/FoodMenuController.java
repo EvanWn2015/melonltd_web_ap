@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
-import com.melonltd.naber.rdbms.model.service.CategoryFoodRelSerice;
+import com.melonltd.naber.rdbms.model.service.FoodInfoSerice;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
-import com.melonltd.naber.rdbms.model.vo.CategoryFoodRelVo;
+import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
@@ -28,7 +28,7 @@ import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 public class FoodMenuController {
 
 	@Autowired
-	private CategoryFoodRelSerice categoryFoodRelSerice;
+	private FoodInfoSerice foodInfoSerice;
 
 	@ResponseBody
 	@PostMapping(value = "restaurant/food/list")
@@ -40,7 +40,7 @@ public class FoodMenuController {
 		if (StringUtils.isBlank(req.getUuid())) {
 			map = RespData.of(Status.FALSE, ErrorType.INVALID, null);
 		} else {
-			List<CategoryFoodRelVo> list = categoryFoodRelSerice.findByStatusAndCategoryUUID(SwitchStatus.OPEN.name(), req.getUuid());
+			List<FoodInfoVo> list = foodInfoSerice.findByStatusAndCategoryUUID(SwitchStatus.OPEN.name(), req.getUuid());
 			map = RespData.of(Status.TRUE, null, list);
 		}
 
@@ -59,7 +59,7 @@ public class FoodMenuController {
 		if (StringUtils.isBlank(req.getUuid())) {
 			map = RespData.of(Status.FALSE, ErrorType.INVALID, null);
 		} else {
-			CategoryFoodRelVo vo = categoryFoodRelSerice.findByFoodUUID(req.getUuid());
+			FoodInfoVo vo = foodInfoSerice.findByFoodUUID(req.getUuid());
 			map = RespData.of(Status.TRUE, null, vo);
 		}
 

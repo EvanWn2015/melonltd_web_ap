@@ -14,12 +14,12 @@ import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.OrderInfo;
 import com.melonltd.naber.rdbms.model.bean.OrderLog;
 import com.melonltd.naber.rdbms.model.bean.SellerOrderFinish;
-import com.melonltd.naber.rdbms.model.bean.UserOrderLog;
+import com.melonltd.naber.rdbms.model.bean.UserOrderInfo;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.OrderInfoService;
 import com.melonltd.naber.rdbms.model.service.OrderLogService;
 import com.melonltd.naber.rdbms.model.service.SellerOrderFinishService;
-import com.melonltd.naber.rdbms.model.service.UserOrderLogService;
+import com.melonltd.naber.rdbms.model.service.UserOrderInfoService;
 import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
@@ -38,7 +38,7 @@ public class ChangeOrdarService {
 	@Autowired
 	private OrderInfoService orderInfoService;
 	@Autowired
-	private UserOrderLogService userOrderLogService;
+	private UserOrderInfoService userOrderInfoService;
 	@Autowired
 	private OrderLogService orderLogService;
 	@Autowired
@@ -47,7 +47,7 @@ public class ChangeOrdarService {
 	public OrderVo updateOrder(String orderUUID, OrderStatus changeStatus) {
 		OrderVo infoVo = orderInfoService.findOne(orderUUID);
 //		OrderVo logVo = orderLogService.findOne(orderUUID);
-		OrderVo userLogVo = userOrderLogService.findOne(orderUUID);
+		OrderVo userLogVo = userOrderInfoService.findOne(orderUUID);
 
 		if (ObjectUtils.allNotNull(infoVo, userLogVo)) {
 			// 訂單目前狀態
@@ -57,7 +57,7 @@ public class ChangeOrdarService {
 			String date = Tools.getNowGMT();
 
 			OrderLog orderLog = newOrderLog(infoVo, changeStatus, date, Enable.Y);
-			UserOrderLog userOrderLog = newUserOrderLog(infoVo, changeStatus, date, Enable.Y);
+			UserOrderInfo userOrderLog = newUserOrderInfo(infoVo, changeStatus, date, Enable.Y);
 
 			// 處理結束的訂單
 			if (FINISH_TYPE.contains(changeStatus)) {
@@ -76,7 +76,7 @@ public class ChangeOrdarService {
 					SellerOrderFinish finish = newOrderFinish(infoVo, changeStatus, date, Enable.Y);
 					LOGGERO.debug("處理結束的訂單 , order status:{}, change status:{}, order uuid:{}, date:{}",orderStatus,changeStatus,orderUUID, date);
 					orderInfoService.save(orderInfo);
-					userOrderLogService.save(userOrderLog);
+					userOrderInfoService.save(userOrderLog);
 					orderLogService.save(orderLog);
 					return sellerOrderFinishService.save(finish);
 				}else {
@@ -99,7 +99,7 @@ public class ChangeOrdarService {
 					LOGGERO.debug("處理訂單處於為未處理 , order status:{}, change status:{}, order uuid:{}, date:{}",orderStatus,changeStatus,orderUUID, date);
 					orderInfoService.save(orderInfo);
 					orderLogService.save(orderLog);
-					return userOrderLogService.save(userOrderLog);
+					return userOrderInfoService.save(userOrderLog);
 				}
 
 				// 如果訂單處於為製作中 只能更改狀態可領取，不可返回未處理
@@ -107,7 +107,7 @@ public class ChangeOrdarService {
 					LOGGERO.debug("處理訂單處於為製作中 , order status:{}, change status:{}, order uuid:{}, date:{}",orderStatus,changeStatus,orderUUID, date);
 					orderInfoService.save(orderInfo);
 					orderLogService.save(orderLog);
-					return userOrderLogService.save(userOrderLog);
+					return userOrderInfoService.save(userOrderLog);
 				}
 				LOGGERO.debug("處理訂單處於為製作中 , order status:{}, change status:{}, order uuid:{}, date:{}",orderStatus,changeStatus,orderUUID, date);
 				return null;
@@ -137,8 +137,8 @@ public class ChangeOrdarService {
 		return info;
 	}
 
-	private static UserOrderLog newUserOrderLog(OrderVo vo, OrderStatus status, String date, Enable enable) {
-		UserOrderLog info = UserOrderLog.of(vo);
+	private static UserOrderInfo newUserOrderInfo(OrderVo vo, OrderStatus status, String date, Enable enable) {
+		UserOrderInfo info = UserOrderInfo.of(vo);
 		info.setUpdateDate(date);
 		info.setStatus(status.name());
 		info.setEnable(enable.name());

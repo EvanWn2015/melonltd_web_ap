@@ -78,12 +78,10 @@ public class ChangeOrdarController {
 						datas.put("message", String.format(OrderStatus.CANCEL.getMssage(), req.getMessage()));
 						notificationVo.setData(datas);
 						pudhSellerService.pushOrderToUser(accountUUID,notificationVo);
-//						pudhSellerService.pushOrderToUser(accountUUID, String.format(OrderStatus.CANCEL.getMssage(), req.getMessage()));
 					}else {
 						datas.put("message", changeStatus.getMssage());
 						notificationVo.setData(datas);
 						pudhSellerService.pushOrderToUser(accountUUID,notificationVo);
-//						pudhSellerService.pushOrderToUser(accountUUID, changeStatus.getMssage());
 					}
 					
 				}

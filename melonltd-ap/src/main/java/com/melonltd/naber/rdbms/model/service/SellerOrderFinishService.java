@@ -79,16 +79,17 @@ public class SellerOrderFinishService {
 		Predicate<SellerOrderFinish> containsYear = (a) -> year.contains(a.getUpdateDate());
 		Predicate<SellerOrderFinish> containsMonth = (a) -> month.contains(a.getUpdateDate());
 		Predicate<SellerOrderFinish> containsDay = (a) -> day.contains(a.getUpdateDate());
-
+		Predicate<SellerOrderFinish> finishPred = (a) -> OrderStatus.of(a.getStatus()).equals(OrderStatus.FINISH);
+		
 		Predicate<OrderInfo> equalUnFinish = (a) -> OrderStatus.of(a.getStatus()).equals(OrderStatus.UNFINISH);
 		Predicate<OrderInfo> equalProcessing = (a) -> OrderStatus.of(a.getStatus()).equals(OrderStatus.PROCESSING);
 		Predicate<OrderInfo> equalCanFetch = (a) -> OrderStatus.of(a.getStatus()).equals(OrderStatus.CAN_FETCH);
 		Predicate<OrderInfo> equalCancel = (a) -> OrderStatus.of(a.getStatus()).equals(OrderStatus.CANCEL);
 
 		long finishCount = list.stream().filter(o -> OrderStatus.of(o.getStatus()).equals(OrderStatus.FINISH)).count();
-		long yearIncome = list.parallelStream().filter(isNumber.and(containsYear)).mapToInt(a -> IntegerUtils.parseInt(a.getOrderPrice(), 0)).sum();
-		long monthIncome = list.parallelStream().filter(isNumber.and(containsMonth)).mapToInt(a -> IntegerUtils.parseInt(a.getOrderPrice(), 0)).sum();
-		long dayIncome = list.parallelStream().filter(isNumber.and(containsDay)).mapToInt(a -> IntegerUtils.parseInt(a.getOrderPrice(), 0)).sum();
+		long yearIncome = list.parallelStream().filter(isNumber.and(containsYear).and(finishPred)).mapToInt(a -> IntegerUtils.parseInt(a.getOrderPrice(), 0)).sum();
+		long monthIncome = list.parallelStream().filter(isNumber.and(containsMonth).and(finishPred)).mapToInt(a -> IntegerUtils.parseInt(a.getOrderPrice(), 0)).sum();
+		long dayIncome = list.parallelStream().filter(isNumber.and(containsDay).and(finishPred)).mapToInt(a -> IntegerUtils.parseInt(a.getOrderPrice(), 0)).sum();
 
 		long unFinishCount = orderLive.parallelStream().filter(equalUnFinish).count();
 		long processingCount = orderLive.parallelStream().filter(equalProcessing).count();

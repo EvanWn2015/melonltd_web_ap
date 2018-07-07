@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
-import com.melonltd.naber.rdbms.model.bean.RestaurantCategoryRel;
+import com.melonltd.naber.rdbms.model.bean.CategoryRel;
 
-public class RestaurantCategoryRelVo implements Serializable{
+public class CategoryRelVo implements Serializable{
 	private static final long serialVersionUID = 1978459295957706702L;
 	
 	private String category_uuid;
@@ -69,8 +69,8 @@ public class RestaurantCategoryRelVo implements Serializable{
 	}
 
 	
-	public static RestaurantCategoryRelVo valueOf(RestaurantCategoryRel info) {
-		RestaurantCategoryRelVo vo = new RestaurantCategoryRelVo ();
+	public static CategoryRelVo valueOf(CategoryRel info) {
+		CategoryRelVo vo = new CategoryRelVo ();
 		vo.category_uuid = info.getCategoryUUID();
 		vo.restaurant_uuid = info.getRestaurantUUID();
 		vo.category_name = info.getCategoryName();
@@ -80,8 +80,8 @@ public class RestaurantCategoryRelVo implements Serializable{
 		return vo;
 	}
 	
-	public static List<RestaurantCategoryRelVo> valueOfArray(List<RestaurantCategoryRel> infos) {
-		List<RestaurantCategoryRelVo> vos = Lists.<RestaurantCategoryRelVo>newArrayList();
+	public static List<CategoryRelVo> valueOfArray(List<CategoryRel> infos) {
+		List<CategoryRelVo> vos = Lists.<CategoryRelVo>newArrayList();
 		vos.addAll(infos.stream().map(a -> valueOf(a)).collect(Collectors.toList()));
 		return vos;
 	}

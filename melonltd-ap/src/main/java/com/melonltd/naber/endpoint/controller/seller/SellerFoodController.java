@@ -20,19 +20,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
-import com.melonltd.naber.rdbms.model.bean.CategoryFoodRel;
+import com.melonltd.naber.rdbms.model.bean.FoodInfo;
 import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
-import com.melonltd.naber.rdbms.model.service.CategoryFoodRelSerice;
-import com.melonltd.naber.rdbms.model.service.RestaurantCategoryRelService;
+import com.melonltd.naber.rdbms.model.service.FoodInfoSerice;
+import com.melonltd.naber.rdbms.model.service.CategoryRelService;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
-import com.melonltd.naber.rdbms.model.vo.CategoryFoodRelVo;
+import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
-import com.melonltd.naber.rdbms.model.vo.RestaurantCategoryRelVo;
+import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
 
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
@@ -43,10 +43,10 @@ public class SellerFoodController {
 	private AccountInfoService accountInfoService;
 
 	@Autowired
-	private RestaurantCategoryRelService restaurantCategoryRelService;
+	private CategoryRelService categoryRelService;
 	
 	@Autowired
-	private CategoryFoodRelSerice categoryFoodRelSerice;
+	private FoodInfoSerice foodInfoSerice;
 	
 	@ResponseBody
 	@PostMapping(value = "seller/food/list")
@@ -68,7 +68,7 @@ public class SellerFoodController {
 		if (ObjectUtils.allNotNull(errorType)) {
 			map = RespData.of(Status.FALSE, errorType, null);
 		}else {
-			List<CategoryFoodRelVo> list = categoryFoodRelSerice.findBycategoryUUIDAndRestaurantUUID(req.getUuid(), account.getRestaurant_uuid());
+			List<FoodInfoVo> list = foodInfoSerice.findBycategoryUUIDAndRestaurantUUID(req.getUuid(), account.getRestaurant_uuid());
 			map = RespData.of(Status.TRUE, null, list);
 		}
 		
@@ -83,7 +83,7 @@ public class SellerFoodController {
 			@RequestParam(value = "data", required = false) String data) {
 		
 		String request = Base64Service.decode(data);
-		CategoryFoodRelVo req = JsonHelper.json(request, CategoryFoodRelVo.class);
+		FoodInfoVo req = JsonHelper.json(request, FoodInfoVo.class);
 		
 		String accountUUID = httpRequest.getHeader("Authorization");
 		if (!StringUtils.isBlank(accountUUID)) {
@@ -97,9 +97,9 @@ public class SellerFoodController {
 		if (ObjectUtils.allNotNull(errorType)) {
 			map = RespData.of(Status.FALSE, errorType, null);
 		}else {
-			RestaurantCategoryRelVo category = restaurantCategoryRelService.findByRestaurantUUIDAndCategoryRelUUID(account.getRestaurant_uuid(), req.getCategory_uuid());
+			CategoryRelVo category = categoryRelService.findByRestaurantUUIDAndCategoryRelUUID(account.getRestaurant_uuid(), req.getCategory_uuid());
 			if (ObjectUtils.allNotNull(category)) {
-				CategoryFoodRelVo vo = categoryFoodRelSerice.save(req);
+				FoodInfoVo vo = foodInfoSerice.save(req);
 				if (ObjectUtils.allNotNull(vo)) {
 					map = RespData.of(Status.TRUE, null, vo);
 				}else {
@@ -120,7 +120,7 @@ public class SellerFoodController {
 			@RequestParam(value = "data", required = false) String data) {
 		
 		String request = Base64Service.decode(data);
-		CategoryFoodRelVo req = JsonHelper.json(request, CategoryFoodRelVo.class);
+		FoodInfoVo req = JsonHelper.json(request, FoodInfoVo.class);
 		
 		String accountUUID = httpRequest.getHeader("Authorization");
 		if (!StringUtils.isBlank(accountUUID)) {
@@ -134,11 +134,11 @@ public class SellerFoodController {
 		if (ObjectUtils.allNotNull(errorType)) {
 			map = RespData.of(Status.FALSE, errorType, null);
 		}else {
-			RestaurantCategoryRelVo category = restaurantCategoryRelService.findByRestaurantUUIDAndCategoryRelUUID(account.getRestaurant_uuid(), req.getCategory_uuid());
+			CategoryRelVo category = categoryRelService.findByRestaurantUUIDAndCategoryRelUUID(account.getRestaurant_uuid(), req.getCategory_uuid());
 			if (ObjectUtils.allNotNull(category)) {
-				CategoryFoodRel food = categoryFoodRelSerice.findByFoodUUIDAndRestaurantUUID(req.getFood_uuid(), account.getRestaurant_uuid());
+				FoodInfo food = foodInfoSerice.findByFoodUUIDAndRestaurantUUID(req.getFood_uuid(), account.getRestaurant_uuid());
 				if (ObjectUtils.allNotNull(food)) {
-					CategoryFoodRelVo vo = categoryFoodRelSerice.update(req,food);
+					FoodInfoVo vo = foodInfoSerice.update(req,food);
 					if (ObjectUtils.allNotNull(vo)) {
 						map = RespData.of(Status.TRUE, null, vo);
 					}else {
@@ -177,9 +177,9 @@ public class SellerFoodController {
 		if (ObjectUtils.allNotNull(errorType)) {
 			map = RespData.of(Status.FALSE, errorType, null);
 		}else {
-			CategoryFoodRel info = categoryFoodRelSerice.findByFoodUUIDAndRestaurantUUID(req.getUuid(), account.getRestaurant_uuid());
+			FoodInfo info = foodInfoSerice.findByFoodUUIDAndRestaurantUUID(req.getUuid(), account.getRestaurant_uuid());
 			if (ObjectUtils.allNotNull(info)) {
-				CategoryFoodRelVo vo = categoryFoodRelSerice.delete(info);
+				FoodInfoVo vo = foodInfoSerice.delete(info);
 				if (ObjectUtils.allNotNull(vo)) {
 					map = RespData.of(Status.TRUE, null, "");
 				}else {
@@ -213,12 +213,12 @@ public class SellerFoodController {
 		if (ObjectUtils.allNotNull(errorType)) {
 			map = RespData.of(Status.FALSE, errorType, null);
 		}else {
-			CategoryFoodRel info = categoryFoodRelSerice.findByFoodUUIDAndRestaurantUUID(req.getUuid(), account.getRestaurant_uuid());
+			FoodInfo info = foodInfoSerice.findByFoodUUIDAndRestaurantUUID(req.getUuid(), account.getRestaurant_uuid());
 			if (ObjectUtils.allNotNull(info)) {
 				if (!ObjectUtils.notEqual(SwitchStatus.of(info.getStatus()), SwitchStatus.of(req.getStatus()))) {
 					map = RespData.of(Status.FALSE, ErrorType.NOT_BE_CHANGED, null);
 				}else {
-					CategoryFoodRelVo vo = categoryFoodRelSerice.changeStatus(info, SwitchStatus.of(req.getStatus()));
+					FoodInfoVo vo = foodInfoSerice.changeStatus(info, SwitchStatus.of(req.getStatus()));
 					if (ObjectUtils.allNotNull(vo)) {
 						map = RespData.of(Status.TRUE, null, "");
 					}else {
@@ -251,7 +251,7 @@ public class SellerFoodController {
 		return null;
 	}
 		
-	private static ErrorType checkAddReqData(CategoryFoodRelVo req, AccountInfoVo account) {
+	private static ErrorType checkAddReqData(FoodInfoVo req, AccountInfoVo account) {
 		if (!ObjectUtils.allNotNull(req)) {
 			return ErrorType.INVALID;
 		}
@@ -273,7 +273,7 @@ public class SellerFoodController {
 		return null;
 	}
 	
-	private static ErrorType checkUpdateReqData(CategoryFoodRelVo req, AccountInfoVo account) {
+	private static ErrorType checkUpdateReqData(FoodInfoVo req, AccountInfoVo account) {
 		if (!ObjectUtils.allNotNull(req)) {
 			return ErrorType.INVALID;
 		}

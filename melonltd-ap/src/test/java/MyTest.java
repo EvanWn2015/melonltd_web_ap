@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.commons.codec.StringEncoder;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.context.annotation.PropertySource;
@@ -38,6 +39,7 @@ import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
+import com.melonltd.naber.rdbms.model.vo.LatLngVo;
 import com.melonltd.naber.rdbms.model.vo.NotificationVo;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 
@@ -409,27 +411,15 @@ public class MyTest {
 
 	@Test
 	public void decode() {
-		// String json =
-		// "{\"food_name\":\"奶茶\",\"price\":\"2323\",\"opts\":[{\"name\":\"布丁\",\"price\":\"5\"},{\"name\":\"仙草\",\"price\":\"15\"}],\"scopes\":[{\"name\":\"超大杯\",\"price\":\"15\"},{\"name\":\"大杯\",\"price\":\"15\"},{\"name\":\"中杯\",\"price\":\"5\"},{\"name\":\"小杯\",\"price\":\"5\"}],\"demands\":[{\"name\":\"甜度\",\"datas\":[{\"name\":\"全糖\"},{\"name\":\"8分糖\"},{\"name\":\"無糖\"}]},{\"name\":\"冰塊\",\"datas\":[{\"name\":\"正常\"},{\"name\":\"少冰\"},{\"name\":\"微冰\"},{\"name\":\"去冰\"}]}]}";
-		//
-		// FoodItemVo vo = JsonHelper.json(json, FoodItemVo.class);
-		// System.out.println(vo);
-		// String encode = "{\"phone\":\"0987654321\"}";
-		// System.out.println(Base64Service.encode(encode));
 
-		// AccountInfoVo vo = new AccountInfoVo();
-		// vo.setPhone("0928297076");
-		// vo.setPassword("a123456");
-		// vo.setDevice_category("ANDROID");
-		// vo.setDevice_token("dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g");
-		// JsonHelper.toJson(vo);
-		// String encode = JsonHelper.toJson(vo);
-		// System.out.println(encode);
-		// System.out.println(Base64Service.encode(encode));
-
-		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIydHJ1ZSUyMiUyQyUyMmRhdGElMjIlM0ElN0IlMjJhY2NvdW50JTIyJTNBJTIyMDkyODI5NzA3NiUyMiUyQyUyMmFjY291bnRfdXVpZCUyMiUzQSUyMlVTRVJfMjAxODA2MjBfYjM5Yzk2MzUtYTA1ZS00ZGVmLTgxODAtMDg3YmRiYWExMTU3JTIyJTJDJTIybmFtZSUyMiUzQSUyMkV2YW5XYW5nJTIyJTJDJTIyZW1haWwlMjIlM0ElMjJqbnN3Y3klNDBnbWFpbC5jb20lMjIlMkMlMjJwaG9uZSUyMiUzQSUyMjA5MjgyOTcwNzYlMjIlMkMlMjJhZGRyZXNzJTIyJTNBJTIyQWRkdyUyMiUyQyUyMmJpcnRoX2RheSUyMiUzQSUyMjE5ODQtMDYtMjAlMjIlMkMlMjJpZGVudGl0eSUyMiUzQSUyMk5PTl9TVFVERU5UJTIyJTJDJTIyc2Nob29sX25hbWUlMjIlM0ElMjIlRTQlQjglQUQlRTUlQTQlQUUlRTUlQTQlQTclRTUlQUQlQjglMjIlMkMlMjJib251cyUyMiUzQSUyMjAlMjIlMkMlMjJsZXZlbCUyMiUzQSUyMiUyMiUyQyUyMmVuYWJsZSUyMiUzQSUyMlklMjIlMkMlMjJpc19sb2dpbiUyMiUzQSUyMlklMjIlMkMlMjJsb2dpbl9kYXRlJTIyJTNBJTIyMjAxOC0wNi0yN1QwMCUzQTAwJTNBMzMuODcwMFolMjIlMkMlMjJwaG90byUyMiUzQSUyMmh0dHBzJTNBJTJGJTJGZmlyZWJhc2VzdG9yYWdlLmdvb2dsZWFwaXMuY29tJTJGdjAlMkZiJTJGbmFiZXItMjAxODA2MjIuYXBwc3BvdC5jb20lMkZvJTJGdXNlclVTRVJfMjAxODA2MjBfYjM5Yzk2MzUtYTA1ZS00ZGVmLTgxODAtMDg3YmRiYWExMTU3LmpwZyUzRmFsdCU1Q3UwMDNkbWVkaWElNUN1MDAyNnRva2VuJTVDdTAwM2QxYzc0YmUyMS0yNTI3LTQyMGEtODhjOC02MGQyNzgzNTVkNmMlMjIlN0QlN0Q=";
+		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIyZmFsc2UlMjIlMkMlMjJlcnJfY29kZSUyMiUzQSUyMjAwMDglMjIlMkMlMjJlcnJfbXNnJTIyJTNBJTIyJUU4JUIzJTg3JUU2JTk2JTk5JUU4JUE3JUEzJUU2JTlFJTkwJUU5JThDJUFGJUU4JUFBJUE0JTIyJTdE";
 		System.out.println(Base64Service.testDecode(code));
+		
+		
+		String encoder = "{\"fetch_date\":\"2018-07-06T14:30:54.0000Z\",\"orders\":[{\"category_uuid\":\"RESTAURANT_CATEGORY_20180622_114813_572_15c69548-9c89-4a58-bf63-ac8f9d014c0d\",\"count\":1,\"item\":{\"category_name\":\"原味茶\",\"demands\":[{\"datas\":[{\"name\":\"多冰\"}],\"name\":\"冰塊\"},{\"datas\":[{\"name\":\"正常\"}],\"name\":\"甜度\"}],\"food_name\":\"茉莉鮮綠茶\",\"food_uuid\":\"FOOD_20180622_121551_064_a60b0228-6d8b-4986-8a5c-2135fc5656f9\",\"opts\":[],\"price\":\"25\",\"scopes\":[{\"name\":\"冰大\",\"price\":\"25\"}]}}],\"restaurant_address\":\"330桃園市桃園區復興路365-8號\",\"restaurant_name\":\"清玉-復興店\",\"restaurant_uuid\":\"RESTAURANT_20180703_141149_917_fddc2e23-c638-46fb-a256-ab9f24249eb9\",\"user_message\":\"\",\"user_name\":\"EvanWang\",\"user_phone\":\"0928297076\"}";
+		System.err.println(Base64Service.testEncode(encoder));
 	}
+	
 
 	@Test
 	public void fDate() {
@@ -487,5 +477,60 @@ public class MyTest {
 
 		System.out.println(ol.size() + "!!!!" + oldRanges.size());
 		newRanges.addAll(oldRanges);
+	}
+	
+	
+	@Test
+	public void rrr () {
+		System.out.println(Tools.buildUUID(UUIDType.ADMIN));
+		System.out.println(Tools.getNowGMT());
+		
+	}
+	
+	
+//  早餐	NEF-18X3X11	中央大學-麥味登	桃園市	中壢區 320	中央大學學餐	中央大學	24.968420,121.195666
+//	中式	NEF-18X3X12	中央大學-三顧茅廬	桃園市	中壢區 320	中央大學學餐	中央大學	24.968420,121.195666
+//	早餐	NEF-18X3X13	中央大學-拉亞漢堡	桃園市	中壢區 320	中央大學學餐	中央大學	24.968420,121.195666
+//	早餐	NEF-18X3X14	萬能科大-陽光早餐	桃園市	中壢區 320	萬能科大學餐	萬能科大	24.990607,121.232380
+//	飲料	NEF-18X3X15	萬能科大-Miranda's mini Bar	桃園市	中壢區 320	萬能科大學餐	萬能科大	24.990607,121.232380
+//	中式	NEF-18X3X16	元智大學-陽光麵食	桃園市	中壢區 320	元智大學學餐	元智大學	24.970147,121.263482
+//	複合式	NEF-18X3X17	元智大學-咖啡元智	桃園市	中壢區 320	元智大學學餐	元智大學	24.970147,121.263482
+//	早餐	NEF-18X3X18	元智大學-美而美複合飲食	桃園市	中壢區 320	元智大學學餐	元智大學	24.970147,121.263482
+	
+//	11:30~15:00,16:30~19:45(一~五)
+	@Test
+	public void myttt() {
+		
+//		int size = 10;
+//		System.out.println(size % 10 == 0 && size != 0);
+		
+//		for (int i=0; i< 8; i++) {
+//			System.out.println(Tools.buildUUID(UUIDType.AD));	
+//		}
+//		
+//		System.out.println(Tools.getNowGMT());
+////		System.out.println(Tools.buildUUID(UUIDType.SELLER));
+//		int start = 1200;
+//		int end = 1300;
+//		11:00–19:00
+//		System.out.println("restaurant_uuid:");
+//		System.out.println(Tools.buildUUID(UUIDType.RESTAURANT));
+//		System.out.println("can_store_range :");
+//		System.out.println(JsonHelper.toJson(Tools.buildCanStoreRange(start, end)));
+//		System.out.println("create_date :");
+//		System.out.println(Tools.getNowGMT());
+//		System.out.println("enable :");
+//		System.out.println("Y");
+//		System.out.println("top :");
+//		System.out.println("0");
+//		System.out.println("not_business :");
+//		System.out.println("[]");
+//		LatLngVo now = LatLngVo.of("24.957070", "121.202726");
+//		LatLngVo end = LatLngVo.of("24.990271","121.303352");
+//		
+		System.out.println(Tools.buildUUID(UUIDType.USER));
+		System.out.println(Tools.getNowGMT());
+		
+//		System.out.println(Tools.getGoogleDistance(now, end));
 	}
 }

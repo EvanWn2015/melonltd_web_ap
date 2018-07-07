@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 import com.melonltd.naber.rdbms.model.bean.OrderInfo;
 import com.melonltd.naber.rdbms.model.bean.OrderLog;
 import com.melonltd.naber.rdbms.model.bean.SellerOrderFinish;
-import com.melonltd.naber.rdbms.model.bean.UserOrderLog;
+import com.melonltd.naber.rdbms.model.bean.UserOrderInfo;
 
 public class OrderVo {
 
@@ -211,7 +211,7 @@ public class OrderVo {
 		return vo;
 	}
 	
-	public static OrderVo valueOf(UserOrderLog info){
+	public static OrderVo valueOf(UserOrderInfo info){
 		OrderVo vo = new OrderVo();
 		vo.order_uuid = info.getOrderUUID();
 		vo.account_uuid = info.getAccountUUID();
@@ -228,7 +228,7 @@ public class OrderVo {
 		return vo;
 	}
 	
-	public static List<OrderVo> valueOfArray(List<UserOrderLog> infos){
+	public static List<OrderVo> valueOfArray(List<UserOrderInfo> infos){
 		List<OrderVo> vos = Lists.newArrayList();
 		vos.addAll(infos.stream().map(a -> valueOf(a)).collect(Collectors.toList()));
 		return vos;

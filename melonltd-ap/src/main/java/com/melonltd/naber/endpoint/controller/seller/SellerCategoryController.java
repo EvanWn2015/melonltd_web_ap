@@ -22,13 +22,13 @@ import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.facade.service.DeleteCategoryService;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
-import com.melonltd.naber.rdbms.model.service.RestaurantCategoryRelService;
+import com.melonltd.naber.rdbms.model.service.CategoryRelService;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
-import com.melonltd.naber.rdbms.model.vo.RestaurantCategoryRelVo;
+import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
 
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
@@ -37,7 +37,7 @@ public class SellerCategoryController {
 	private static List<SwitchStatus> CAN_UPDATE_STATUS = SwitchStatus.getEnumValues();
 
 	@Autowired
-	private RestaurantCategoryRelService restaurantCategoryRelService;
+	private CategoryRelService categoryRelService;
 	@Autowired
 	private AccountInfoService accountInfoService;
 	@Autowired
@@ -50,7 +50,7 @@ public class SellerCategoryController {
 		AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 		LinkedHashMap<String, Object> map = null;
 		if (ObjectUtils.allNotNull(account)) {
-			List<RestaurantCategoryRelVo> list = restaurantCategoryRelService.findAllByRestaurantUUID(account.getRestaurant_uuid());
+			List<CategoryRelVo> list = categoryRelService.findAllByRestaurantUUID(account.getRestaurant_uuid());
 			map = RespData.of(Status.TRUE, null, list);
 		} else {
 			map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
@@ -76,7 +76,7 @@ public class SellerCategoryController {
 		if (ObjectUtils.allNotNull(errorType)) {
 			map = RespData.of(Status.FALSE, errorType, null);
 		} else {
-			RestaurantCategoryRelVo relVo = restaurantCategoryRelService.saveCategoryRel(account.getRestaurant_uuid(), req.getName());
+			CategoryRelVo relVo = categoryRelService.saveCategoryRel(account.getRestaurant_uuid(), req.getName());
 			if (ObjectUtils.allNotNull(relVo)) {
 				map = RespData.of(Status.TRUE, null, relVo);
 			} else {
@@ -102,7 +102,7 @@ public class SellerCategoryController {
 		if (ObjectUtils.allNotNull(errorType)) {
 			map = RespData.of(Status.FALSE, errorType, null);
 		} else {
-			RestaurantCategoryRelVo relVo = restaurantCategoryRelService .updateCategoryRelStatus(account.getRestaurant_uuid(), req);
+			CategoryRelVo relVo = categoryRelService.updateCategoryRelStatus(account.getRestaurant_uuid(), req);
 			if (ObjectUtils.allNotNull(relVo)) {
 				map = RespData.of(Status.TRUE, null, relVo);
 			} else {
@@ -129,7 +129,7 @@ public class SellerCategoryController {
 		if (ObjectUtils.allNotNull(errorType)) {
 			map = RespData.of(Status.FALSE, errorType, null);
 		} else {
-			RestaurantCategoryRelVo relVo = deleteCategoryService.deleteCategoryRelStatus(account.getRestaurant_uuid(), req);
+			CategoryRelVo relVo = deleteCategoryService.deleteCategoryRelStatus(account.getRestaurant_uuid(), req);
 			if (ObjectUtils.allNotNull(relVo)) {
 				map = RespData.of(Status.TRUE, null, "");
 			} else {

@@ -32,7 +32,7 @@ public class VerifyPhoneLogService {
 			code += (int) (Math.random() * 10);
 		}
 //		
-		String content = "歡迎您成為NABER會員，以下是您的驗證碼： " + code + "請在三分鐘內驗證完成。NABER期待您有更快速、便利的生活。";
+		String content = "歡迎您成為NABER會員，以下是您的驗證碼： " + code + ",請在三分鐘內驗證完成。NABER期待您有更快速、便利的生活。";
 //		String content = "驗證碼為：" + code + "，請在三分鐘內驗證完成。";
 		String start = Tools.getNowStartOfDayGMT();
 		String end = Tools.getNowEndOfDayGMT();

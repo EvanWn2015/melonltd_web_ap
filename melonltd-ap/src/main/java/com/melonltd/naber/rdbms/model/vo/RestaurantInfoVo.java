@@ -281,7 +281,8 @@ public class RestaurantInfoVo implements Serializable {
 		List<DateRangeVo> canStoreRange = Tools.checkOpenStoreByRanges(info.getCanStoreRange() ,now);
 		vo.not_business = notBusiness;
 		vo.can_store_range = canStoreRange;
-		vo.is_store_now_open = (c1 && canStoreRange.size() == 0 && notBusiness.size() == 0) +"";
+//		vo.is_store_now_open = (c1 && canStoreRange.size() == 0 && notBusiness.size() == 0) +"";
+		vo.is_store_now_open = c1 +"";
 		return vo;
 	}
 	

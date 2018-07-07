@@ -19,7 +19,7 @@ public interface OrderInfoDao extends JpaRepository<OrderInfo, String> {
 	@Query("SELECT o FROM OrderInfo o, AccountInfo a WHERE o.status =?2 AND o.enable='Y' AND (o.fetchDate BETWEEN ?3 AND ?4) AND o.restaurantUUID = a.restaurantUUID AND a.accountUUID=?1 ")
 	public Page<OrderInfo> findByOrderStatusAndBetweenDate (String accountUUID, String status,String startDate, String endDate, Pageable pageable);
 	
-	@Query("SELECT o FROM OrderInfo o WHERE o.restaurantUUID=?1 AND (o.updateDate BETWEEN ?2 AND ?3) AND o.enable='Y' AND o.status IN('UNFINISH','PROCESSING','CAN_FETCH','CANCEL')")
+	@Query("SELECT o FROM OrderInfo o WHERE o.restaurantUUID=?1 AND (o.updateDate BETWEEN ?2 AND ?3) AND o.status IN('UNFINISH','PROCESSING','CAN_FETCH','CANCEL')")
 	public List<OrderInfo> findUnfinishProcessingCanFetchByBetweenDate(String restaurantUUID, String startDate, String endDate);
 	
 	@Query("SELECT o FROM OrderInfo o WHERE o.enable='Y' AND (o.fetchDate BETWEEN ?1 AND ?2) AND o.status IN('UNFINISH','PROCESSING','CAN_FETCH')")

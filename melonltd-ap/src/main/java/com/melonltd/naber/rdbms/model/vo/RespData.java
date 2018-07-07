@@ -41,13 +41,15 @@ public class RespData {
 		SEND_SMS_FAIL("2002", "該號碼今天請求SMS次數已經用盡，$split請明天再嘗試！！"), 
 		VERIFY_CODE_FAIL("2003","驗證失敗"), 
 		EXCEED_TIME("2004", "超過驗證時效"),
-		STORE_IS_CLOSE("3001", "目前時間不可接單"),
+		RANGE_STORE_IS_CLOSE("3000", "該商家不接單時段$split"),
+		STORE_IS_CLOSE("3001", "%s"),
 		FOOD_ITEM_CLOSE("3002", "目前品項處於關閉狀態。"),
 		FOOD_ITEM_IS_CHANGE("3003", "目前品項內容有所改變，$split請刪除此購物車內訂單重新下訂"),
 		CATEGORY_IS_CLOSE("3004", "目前種類處於關閉狀態。"),
 		LOGIN_FAIL("4001", "查無此帳戶 或 帳戶已失效"),
 		ORDER_MAX_PRICE("5001", "訂單種金額超過 5000"),
 		ORDER_UNFINISH_MAX("5003", "未完成訂單數量已經滿3筆"),
+		ORDER_FAIL_MAX("5005", "由於您跑單次數過多，$split無法再下任何一筆訂單如有疑問，$split請洽詢NABER客服"),
 		FOOD_ITEM_DATA_ERROR("5002", "菜單資料結構錯誤"),
 		ORDER_MAX_COUNT("5004", "單筆菜單數量錯誤(1~50)");
 
@@ -66,6 +68,17 @@ public class RespData {
 		if (Status.FALSE.equals(status)) {
 			map.put("err_code", error.code);
 			map.put("err_msg", error.msg);
+		}
+		map.put("data", o);
+		return map;
+	}
+	
+	public static LinkedHashMap<String, Object> of(Status status, ErrorType error, String errorMsg, Object o) {
+		LinkedHashMap<String, Object> map = Maps.newLinkedHashMap();
+		map.put("status", status.name);
+		if (Status.FALSE.equals(status)) {
+			map.put("err_code", error.code);
+			map.put("err_msg", errorMsg);
 		}
 		map.put("data", o);
 		return map;

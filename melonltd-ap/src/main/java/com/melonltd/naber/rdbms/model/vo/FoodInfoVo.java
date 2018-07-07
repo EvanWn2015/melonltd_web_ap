@@ -7,10 +7,10 @@ import java.util.stream.Collectors;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.JsonHelper;
-import com.melonltd.naber.rdbms.model.bean.CategoryFoodRel;
+import com.melonltd.naber.rdbms.model.bean.FoodInfo;
 import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
 
-public class CategoryFoodRelVo implements Serializable{
+public class FoodInfoVo implements Serializable{
 	private static final long serialVersionUID = -1682202184306433042L;
 	
 	private String food_uuid;
@@ -111,8 +111,8 @@ public class CategoryFoodRelVo implements Serializable{
 				.toString();
 	}
 	
-	public static CategoryFoodRelVo valueOf(CategoryFoodRel info, boolean isDetail ) {
-		CategoryFoodRelVo vo = new CategoryFoodRelVo();
+	public static FoodInfoVo valueOf(FoodInfo info, boolean isDetail ) {
+		FoodInfoVo vo = new FoodInfoVo();
 		vo.food_uuid = info.getFoodUUID();
 		vo.category_uuid = info.getCategoryUUID();
 		vo.food_name = info.getFoodName();
@@ -133,8 +133,8 @@ public class CategoryFoodRelVo implements Serializable{
 		return vo;
 	}
 	
-	public static CategoryFoodRelVo valueOf(CategoryFoodRel info) {
-		CategoryFoodRelVo vo = new CategoryFoodRelVo();
+	public static FoodInfoVo valueOf(FoodInfo info) {
+		FoodInfoVo vo = new FoodInfoVo();
 		vo.food_uuid = info.getFoodUUID();
 		vo.category_uuid = info.getCategoryUUID();
 		vo.food_name = info.getFoodName();
@@ -146,8 +146,8 @@ public class CategoryFoodRelVo implements Serializable{
 		return vo;
 	}
 	
-	public static List<CategoryFoodRelVo> valueOfArray(List<CategoryFoodRel> infos, boolean isDetail) {
-		List<CategoryFoodRelVo> vos = Lists.<CategoryFoodRelVo>newArrayList();
+	public static List<FoodInfoVo> valueOfArray(List<FoodInfo> infos, boolean isDetail) {
+		List<FoodInfoVo> vos = Lists.<FoodInfoVo>newArrayList();
 		vos.addAll(infos.stream().map(a -> valueOf(a,isDetail)).collect(Collectors.toList()));
 		return vos;
 	}
