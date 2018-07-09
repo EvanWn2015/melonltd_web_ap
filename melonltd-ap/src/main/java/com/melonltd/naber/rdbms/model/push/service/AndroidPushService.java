@@ -53,14 +53,14 @@ public class AndroidPushService {
 			URL url = new URL("https://fcm.googleapis.com/fcm/send");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestProperty("Authorization", "key=" + SERVER_KEY);
-			conn.setRequestProperty("Accept-Charset", "utf-8");
+			conn.setRequestProperty("Accept-Charset", "UTF-8"); 
 			conn.setRequestProperty("Content-Type", "application/json");
-			conn.setRequestProperty("Content-Type", "utf-8");
+//			conn.setRequestProperty("Content-Type", "utf-8");
 			conn.setRequestMethod("POST");
 			conn.setDoOutput(true);
 
 			OutputStream outputStream = conn.getOutputStream();
-			outputStream.write(pushMessage.getBytes());
+			outputStream.write(pushMessage.getBytes("UTF-8"));
 			LOGGER.info("pusp status ResponseCode: {}, ResponseMessage: {}",conn.getResponseCode(), conn.getResponseMessage());
 		} catch (Exception e) {
 			LOGGER.error("push error , error: {}" , e.getMessage());

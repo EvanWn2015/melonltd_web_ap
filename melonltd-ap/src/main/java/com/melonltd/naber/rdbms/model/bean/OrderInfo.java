@@ -4,12 +4,11 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
-
-import javax.persistence.Id;
 
 @Entity
 @Table(name = "order_info")

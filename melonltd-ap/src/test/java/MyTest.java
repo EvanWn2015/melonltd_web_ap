@@ -1,5 +1,4 @@
 
-import java.awt.ImageCapabilities;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,16 +12,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.apache.commons.codec.StringEncoder;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
-import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.api.client.util.Maps;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
@@ -30,8 +22,6 @@ import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
-import com.melonltd.naber.rdbms.model.bean.OrderInfo;
-import com.melonltd.naber.rdbms.model.dao.OrderInfoDao;
 import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
 import com.melonltd.naber.rdbms.model.req.vo.DemandsItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
@@ -39,7 +29,6 @@ import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
-import com.melonltd.naber.rdbms.model.vo.LatLngVo;
 import com.melonltd.naber.rdbms.model.vo.NotificationVo;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 
@@ -414,40 +403,37 @@ public class MyTest {
 
 		String code = "JTdCJTIyc3RhdHVzJTIyJTNBJTIyZmFsc2UlMjIlMkMlMjJlcnJfY29kZSUyMiUzQSUyMjAwMDglMjIlMkMlMjJlcnJfbXNnJTIyJTNBJTIyJUU4JUIzJTg3JUU2JTk2JTk5JUU4JUE3JUEzJUU2JTlFJTkwJUU5JThDJUFGJUU4JUFBJUE0JTIyJTdE";
 		System.out.println(Base64Service.testDecode(code));
-		
-		
+
 		String encoder = "{\"fetch_date\":\"2018-07-06T14:30:54.0000Z\",\"orders\":[{\"category_uuid\":\"RESTAURANT_CATEGORY_20180622_114813_572_15c69548-9c89-4a58-bf63-ac8f9d014c0d\",\"count\":1,\"item\":{\"category_name\":\"原味茶\",\"demands\":[{\"datas\":[{\"name\":\"多冰\"}],\"name\":\"冰塊\"},{\"datas\":[{\"name\":\"正常\"}],\"name\":\"甜度\"}],\"food_name\":\"茉莉鮮綠茶\",\"food_uuid\":\"FOOD_20180622_121551_064_a60b0228-6d8b-4986-8a5c-2135fc5656f9\",\"opts\":[],\"price\":\"25\",\"scopes\":[{\"name\":\"冰大\",\"price\":\"25\"}]}}],\"restaurant_address\":\"330桃園市桃園區復興路365-8號\",\"restaurant_name\":\"清玉-復興店\",\"restaurant_uuid\":\"RESTAURANT_20180703_141149_917_fddc2e23-c638-46fb-a256-ab9f24249eb9\",\"user_message\":\"\",\"user_name\":\"EvanWang\",\"user_phone\":\"0928297076\"}";
 		System.err.println(Base64Service.testEncode(encoder));
 	}
-	
 
 	@Test
 	public void fDate() {
-		
-		
-			ItemVo itemVo1 = new ItemVo();
-			itemVo1.setName("AA");
-			itemVo1.setPrice("22");
-			
-			ItemVo itemVo2 = new ItemVo();
-			itemVo2.setName("BB");
-			itemVo2.setPrice("11");
-			
-			List<ItemVo> items = Lists.newArrayList(itemVo1, itemVo2);
-			
-			ItemVo itemVo3 = new ItemVo();
-			itemVo3.setName("AA");
-			itemVo3.setPrice("22");
-			
-			ItemVo itemVo4 = new ItemVo();
-			itemVo4.setName("BB");
-			itemVo4.setPrice("11");
-			
-			List<ItemVo> items2 = Lists.newArrayList(itemVo4, itemVo3);
-			
-			System.out.println(items.containsAll(items2));
-			
-			System.out.println(items.contains(itemVo3));
+
+		ItemVo itemVo1 = new ItemVo();
+		itemVo1.setName("AA");
+		itemVo1.setPrice("22");
+
+		ItemVo itemVo2 = new ItemVo();
+		itemVo2.setName("BB");
+		itemVo2.setPrice("11");
+
+		List<ItemVo> items = Lists.newArrayList(itemVo1, itemVo2);
+
+		ItemVo itemVo3 = new ItemVo();
+		itemVo3.setName("AA");
+		itemVo3.setPrice("22");
+
+		ItemVo itemVo4 = new ItemVo();
+		itemVo4.setName("BB");
+		itemVo4.setPrice("11");
+
+		List<ItemVo> items2 = Lists.newArrayList(itemVo4, itemVo3);
+
+		System.out.println(items.containsAll(items2));
+
+		System.out.println(items.contains(itemVo3));
 	}
 
 	@Test
@@ -478,59 +464,30 @@ public class MyTest {
 		System.out.println(ol.size() + "!!!!" + oldRanges.size());
 		newRanges.addAll(oldRanges);
 	}
-	
-	
+
 	@Test
-	public void rrr () {
+	public void rrr() {
 		System.out.println(Tools.buildUUID(UUIDType.ADMIN));
 		System.out.println(Tools.getNowGMT());
-		
+		System.out.println(Tools.getStartOfDayGMT(0, 0));
+		System.out.println(Tools.getStartOfDayGMT(-1, 0));
+		System.out.println(Tools.getStartOfDayGMT(-2, 0));
+
 	}
-	
-	
-//  早餐	NEF-18X3X11	中央大學-麥味登	桃園市	中壢區 320	中央大學學餐	中央大學	24.968420,121.195666
-//	中式	NEF-18X3X12	中央大學-三顧茅廬	桃園市	中壢區 320	中央大學學餐	中央大學	24.968420,121.195666
-//	早餐	NEF-18X3X13	中央大學-拉亞漢堡	桃園市	中壢區 320	中央大學學餐	中央大學	24.968420,121.195666
-//	早餐	NEF-18X3X14	萬能科大-陽光早餐	桃園市	中壢區 320	萬能科大學餐	萬能科大	24.990607,121.232380
-//	飲料	NEF-18X3X15	萬能科大-Miranda's mini Bar	桃園市	中壢區 320	萬能科大學餐	萬能科大	24.990607,121.232380
-//	中式	NEF-18X3X16	元智大學-陽光麵食	桃園市	中壢區 320	元智大學學餐	元智大學	24.970147,121.263482
-//	複合式	NEF-18X3X17	元智大學-咖啡元智	桃園市	中壢區 320	元智大學學餐	元智大學	24.970147,121.263482
-//	早餐	NEF-18X3X18	元智大學-美而美複合飲食	桃園市	中壢區 320	元智大學學餐	元智大學	24.970147,121.263482
-	
-//	11:30~15:00,16:30~19:45(一~五)
+
+	// 早餐 NEF-18X3X11 中央大學-麥味登 桃園市 中壢區 320 中央大學學餐 中央大學 24.968420,121.195666
+	// 中式 NEF-18X3X12 中央大學-三顧茅廬 桃園市 中壢區 320 中央大學學餐 中央大學 24.968420,121.195666
+	// 早餐 NEF-18X3X13 中央大學-拉亞漢堡 桃園市 中壢區 320 中央大學學餐 中央大學 24.968420,121.195666
+	// 早餐 NEF-18X3X14 萬能科大-陽光早餐 桃園市 中壢區 320 萬能科大學餐 萬能科大 24.990607,121.232380
+	// 飲料 NEF-18X3X15 萬能科大-Miranda's mini Bar 桃園市 中壢區 320 萬能科大學餐 萬能科大
+	// 24.990607,121.232380
+	// 中式 NEF-18X3X16 元智大學-陽光麵食 桃園市 中壢區 320 元智大學學餐 元智大學 24.970147,121.263482
+	// 複合式 NEF-18X3X17 元智大學-咖啡元智 桃園市 中壢區 320 元智大學學餐 元智大學 24.970147,121.263482
+	// 早餐 NEF-18X3X18 元智大學-美而美複合飲食 桃園市 中壢區 320 元智大學學餐 元智大學 24.970147,121.263482
+
+	// 11:30~15:00,16:30~19:45(一~五)
 	@Test
 	public void myttt() {
-		
-//		int size = 10;
-//		System.out.println(size % 10 == 0 && size != 0);
-		
-//		for (int i=0; i< 8; i++) {
-//			System.out.println(Tools.buildUUID(UUIDType.AD));	
-//		}
-//		
-//		System.out.println(Tools.getNowGMT());
-////		System.out.println(Tools.buildUUID(UUIDType.SELLER));
-//		int start = 1200;
-//		int end = 1300;
-//		11:00–19:00
-//		System.out.println("restaurant_uuid:");
-//		System.out.println(Tools.buildUUID(UUIDType.RESTAURANT));
-//		System.out.println("can_store_range :");
-//		System.out.println(JsonHelper.toJson(Tools.buildCanStoreRange(start, end)));
-//		System.out.println("create_date :");
-//		System.out.println(Tools.getNowGMT());
-//		System.out.println("enable :");
-//		System.out.println("Y");
-//		System.out.println("top :");
-//		System.out.println("0");
-//		System.out.println("not_business :");
-//		System.out.println("[]");
-//		LatLngVo now = LatLngVo.of("24.957070", "121.202726");
-//		LatLngVo end = LatLngVo.of("24.990271","121.303352");
-//		
-		System.out.println(Tools.buildUUID(UUIDType.USER));
-		System.out.println(Tools.getNowGMT());
-		
-//		System.out.println(Tools.getGoogleDistance(now, end));
+
 	}
 }

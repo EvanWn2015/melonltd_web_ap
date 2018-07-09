@@ -27,26 +27,38 @@ public class SubmitOrderService {
 	@Autowired
 	private OrderLogService orderLogService;
 
-	
-	public OrderVo submitOrder(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req, String price, String bonus, String orders) {
+	public OrderVo submitOrder(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req,
+			String price, String bonus, String orders) {
 		int unfinish_count = userOrderInfoService.findByOrderStatusAccountUUID(account.getAccount_uuid());
-		// 限制未完成訂單數量三筆，不可再提交訂單 
+		// 限制未完成訂單數量三筆，不可再提交訂單
 		if (unfinish_count >= 3) {
 			return null;
-		}else {
+		} else {
 			String date = Tools.getNowGMT();
 			OrderInfo orderInfo = newOrderInfo(account, orderUUID, vo, req, price, bonus, orders, date);
 			UserOrderInfo userOrderLog = newUserOrderInfo(account, orderUUID, vo, req, price, bonus, orders, date);
 			OrderLog orderLog = newOrderLog(account, orderUUID, vo, req, price, bonus, orders, date);
 			orderInfoService.save(orderInfo);
 			orderLogService.save(orderLog);
-			OrderVo orderVo = userOrderInfoService.save(userOrderLog); 
+			OrderVo orderVo = userOrderInfoService.save(userOrderLog);
 			return orderVo;
 		}
 	}
-	
 
-	private static OrderInfo newOrderInfo(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req, String price, String bonus, String orders, String date) {
+	public OrderVo submitTestOrder(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req,
+			String price, String bonus, String orders) {
+		String date = Tools.getNowGMT();
+		OrderInfo orderInfo = newOrderInfo(account, orderUUID, vo, req, price, bonus, orders, date);
+		UserOrderInfo userOrderLog = newUserOrderInfo(account, orderUUID, vo, req, price, bonus, orders, date);
+		OrderLog orderLog = newOrderLog(account, orderUUID, vo, req, price, bonus, orders, date);
+		orderInfoService.save(orderInfo);
+		orderLogService.save(orderLog);
+		OrderVo orderVo = userOrderInfoService.save(userOrderLog);
+		return orderVo;
+	}
+
+	private static OrderInfo newOrderInfo(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo,
+			OredeSubimtReq req, String price, String bonus, String orders, String date) {
 		OrderInfo info = new OrderInfo();
 		info.setAccountUUID(account.getAccount_uuid());
 		info.setOrderUUID(orderUUID);
@@ -62,8 +74,9 @@ public class SubmitOrderService {
 		info.setEnable(Enable.Y.name());
 		return info;
 	}
-	
-	private static OrderLog newOrderLog(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req, String price, String bonus, String orders, String date) {
+
+	private static OrderLog newOrderLog(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo,
+			OredeSubimtReq req, String price, String bonus, String orders, String date) {
 		OrderLog info = new OrderLog();
 		info.setAccountUUID(account.getAccount_uuid());
 		info.setOrderUUID(orderUUID);
@@ -80,7 +93,8 @@ public class SubmitOrderService {
 		return info;
 	}
 
-	private static UserOrderInfo newUserOrderInfo(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req, String price, String bonus, String orders, String date) {
+	private static UserOrderInfo newUserOrderInfo(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo,
+			OredeSubimtReq req, String price, String bonus, String orders, String date) {
 		UserOrderInfo info = new UserOrderInfo();
 		info.setAccountUUID(account.getAccount_uuid());
 		info.setOrderUUID(orderUUID);

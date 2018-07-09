@@ -5,7 +5,7 @@
 	</Properties>
 	<Appenders>
 		<Console name="console" target="SYSTEM_OUT">
-			<PatternLayout pattern="%d{ISO8601}[%p|%t|%c|%M:%L|u:] %m%n" />
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss zzz} [%p|%t|%c|%M:%L|u:] %m%n" />
 		</Console>
 		<RollingFile name="RollingFile" fileName="${api_log}/naber-ap.log"
 			filePattern="${api_log}/naber-ap-%d{yyyy-MM-dd}.log">

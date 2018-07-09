@@ -26,9 +26,9 @@ import com.melonltd.naber.rdbms.model.service.SellerRegisteredService;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
-import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
+import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")

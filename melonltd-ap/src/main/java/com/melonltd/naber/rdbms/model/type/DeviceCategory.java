@@ -2,7 +2,6 @@ package com.melonltd.naber.rdbms.model.type;
 
 import java.util.List;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Lists;

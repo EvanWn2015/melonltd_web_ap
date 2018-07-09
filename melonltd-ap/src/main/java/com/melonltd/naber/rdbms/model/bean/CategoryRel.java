@@ -1,7 +1,6 @@
 package com.melonltd.naber.rdbms.model.bean;
 
 import java.io.Serializable;
-import java.util.PrimitiveIterator.OfDouble;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
-import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
 
 @Entity
 @Table(name = "category_rel")

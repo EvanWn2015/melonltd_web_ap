@@ -39,7 +39,7 @@ public class ScheduleListener implements ServletContextListener{
 						.withIdentity("OrderJob", "group1")
 //						.withSchedule(CronScheduleBuilder.cronSchedule("*/10 * * * * ?"))
 						.withSchedule(CronScheduleBuilder
-								.dailyAtHourAndMinute(0,0)
+								.dailyAtHourAndMinute(0,10)
 								.inTimeZone(TimeZone.getTimeZone(ZoneId.of("Asia/Kuala_Lumpur"))))
 						.build();
 		try {

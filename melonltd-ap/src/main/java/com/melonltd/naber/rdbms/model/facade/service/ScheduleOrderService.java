@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mchange.lang.IntegerUtils;
-import com.melonltd.naber.background.job.OrderJob;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.AccountInfo;
 import com.melonltd.naber.rdbms.model.bean.OrderInfo;
@@ -40,7 +39,7 @@ public class ScheduleOrderService {
 	private SellerOrderFinishDao sellerOrderFinishDao;
 
 	public void doOrderJob(String startDate, String endDate) {
-		LOGGER.info("處理訂單時間紀錄: now: {}, start: {}, end: {}", Tools.getNowGMT(), startDate, endDate);
+		LOGGER.info("Processing order job time log , now: {}, start: {}, end: {}", Tools.getNowGMT(), startDate, endDate);
 		
 		List<OrderInfo> list = orderInfoDao.findUnfinishProcessingCanFetchByBetweenDate(startDate, endDate);
 		if (CollectionUtils.isNotEmpty(list)) {
@@ -72,7 +71,7 @@ public class ScheduleOrderService {
 			sellerOrderFinishDao.save(finishList);
 		}
 		
-		LOGGER.info("處理訂單筆數: {}", list.size());
+		LOGGER.info("Processing order count : {}", list.size());
 	}
 
 //	private static OrderInfo newOrderInfo(OrderVo vo, OrderStatus status, String date, Enable enable) {

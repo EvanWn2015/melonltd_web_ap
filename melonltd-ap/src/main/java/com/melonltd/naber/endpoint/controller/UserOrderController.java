@@ -99,8 +99,22 @@ public class UserOrderController {
 				int price = getPrice(req);
 				String bonus = ((int) Math.floor(price / 10d) + "");
 				String orders = JsonHelper.toJson(req);
-				OrderVo resultOrder = submitOrderService.submitOrder(account, Tools.buildUUID(UUIDType.ORDER), vo, req, String.valueOf(price), bonus, orders);
-				map = RespData.of(Status.TRUE, null, resultOrder);
+				OrderVo resultOrder = submitOrderService.submitTestOrder(account, Tools.buildUUID(UUIDType.ORDER), vo, req, String.valueOf(price), bonus, orders);
+				if (!ObjectUtils.anyNotNull(resultOrder)) {
+					LOGGER.error("submit order save fail account : {}, uuid:{} ", accountUUID, req.getRestaurant_uuid());
+					map = RespData.of(Status.FALSE, ErrorType.ORDER_UNFINISH_MAX, null);
+				} else {
+					// push to seller
+					NotificationVo notificationVo = new NotificationVo();
+					Map<String, String> datas = Maps.newHashMap();
+					datas.put("identity", Identity.SELLERS.name());
+					datas.put("title", "訂單信息");
+					datas.put("message", "您有新訂單！請前往訂單查看！");
+					notificationVo.setData(datas);
+					pudhSellerService.pushOrderToSeller(resultOrder.getRestaurant_uuid(), notificationVo);
+					map = RespData.of(Status.TRUE, null, resultOrder);
+				}
+//				map = RespData.of(Status.TRUE, null, resultOrder);
 			} else {
 				int failCount = userOrderInfoService.findByOrderFailByAccountUUID(account.getAccount_uuid());
 				if (failCount >= 3) {

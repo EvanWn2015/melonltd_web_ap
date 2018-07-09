@@ -24,14 +24,14 @@ public class OrderJob implements Job {
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 		long now = System.currentTimeMillis();
-		LOGGER.info("Do Order Job start: --> {} , dataTime:{}", now, Tools.getNowGMT());
+		LOGGER.debug("Do Order Job start: --> {} , dataTime:{}", now, Tools.getNowGMT());
 
-		String start = Tools.getStartOfDayGMT(5, 0);
-		String end = Tools.getEndOfPlusDayGMT(-5);
-		LOGGER.info("處理資料時段開始:{} , 結束:{}", start, end);
+		String start = Tools.getStartOfDayGMT(2, 0);
+		String end = Tools.getEndOfPlusDayGMT(-2);
+		LOGGER.debug("Processing interval,  start:{} , end:{}", start, end);
 		scheduleOrderService.doOrderJob(start, end);
 
 		System.out.println();
-		LOGGER.info("Do Order Job end: --> {} ", (System.currentTimeMillis() - now) / 1000d);
+		LOGGER.debug("Do Order Job end: --> {} ", (System.currentTimeMillis() - now) / 1000d);
 	}
 }

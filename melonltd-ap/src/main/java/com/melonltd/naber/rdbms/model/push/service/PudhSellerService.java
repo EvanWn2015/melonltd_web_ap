@@ -1,25 +1,19 @@
 package com.melonltd.naber.rdbms.model.push.service;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Maps;
-import com.melonltd.naber.endpoint.util.JsonHelper;
-import com.melonltd.naber.rdbms.model.req.vo.OredeSubimtReq;
 import com.melonltd.naber.rdbms.model.service.MobileDeviceService;
 import com.melonltd.naber.rdbms.model.type.DeviceCategory;
-import com.melonltd.naber.rdbms.model.type.Identity;
-import com.melonltd.naber.rdbms.model.type.OrderStatus;
 import com.melonltd.naber.rdbms.model.vo.MobileDeviceVo;
 import com.melonltd.naber.rdbms.model.vo.NotificationVo;
 
 @Service("pudhSellerService")
 public class PudhSellerService {
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(PudhSellerService.class);
 	@Autowired
 	private MobileDeviceService mobileDeviceService;
 	
@@ -106,6 +100,7 @@ public class PudhSellerService {
 	public void pushOrderToSeller(String restaurantUUID ,NotificationVo notificationVo) {
 		MobileDeviceVo mobile = mobileDeviceService.findByRestaurantUUID(restaurantUUID);
 		if (ObjectUtils.anyNotNull(mobile)) {
+			LOGGER.debug("push to seller  account {},   token {}" , mobile.getAccount_uuid(),mobile.getDevice_token());
 			notificationVo.setTo(mobile.getDevice_token());
 			switch (DeviceCategory.of(mobile.getDevice_category())) {
 			case IOS:

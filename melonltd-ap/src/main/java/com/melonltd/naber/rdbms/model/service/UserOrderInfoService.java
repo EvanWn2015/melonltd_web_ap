@@ -12,7 +12,6 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
-import com.melonltd.naber.rdbms.model.bean.OrderInfo;
 import com.melonltd.naber.rdbms.model.bean.UserOrderInfo;
 import com.melonltd.naber.rdbms.model.dao.UserOrderInfoDao;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;

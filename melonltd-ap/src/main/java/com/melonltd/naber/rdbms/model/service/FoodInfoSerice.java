@@ -1,6 +1,9 @@
 package com.melonltd.naber.rdbms.model.service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -15,9 +18,9 @@ import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.bean.FoodInfo;
 import com.melonltd.naber.rdbms.model.dao.FoodInfoDao;
+import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
-import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
 
 @Service("foodInfoSerice")
@@ -36,13 +39,13 @@ public class FoodInfoSerice {
 		FoodInfo info = foodInfoDao.findByFoodUUID(foodUUID);
 		return FoodInfoVo.valueOf(info, true);
 	}
-	
+
 	public boolean updatePhoto(FoodInfoVo vo) {
 		try {
 			foodInfoDao.updatePhoto(vo.getPhoto(), vo.getFood_uuid());
 			return true;
-		}catch (Exception e) {
-			LOGGER.error("update photo fail food: {}, msg:{}",vo.getFood_uuid(),e.getMessage());
+		} catch (Exception e) {
+			LOGGER.error("update photo fail food: {}, msg:{}", vo.getFood_uuid(), e.getMessage());
 			return false;
 		}
 	}
@@ -59,11 +62,11 @@ public class FoodInfoSerice {
 		List<FoodInfo> list = foodInfoDao.findBycategoryUUID(categoryUUID);
 		return list;
 	}
-	
+
 	public void saves(List<FoodInfo> infos) {
 		foodInfoDao.save(infos);
 	}
-	
+
 	public FoodInfoVo save(FoodInfoVo vo) {
 		FoodInfo info = new FoodInfo();
 		info.setCategoryUUID(vo.getCategory_uuid());
@@ -76,51 +79,54 @@ public class FoodInfoSerice {
 		info.setCreateDate(Tools.getNowGMT());
 		FoodInfo newInfo = foodInfoDao.save(info);
 		if (ObjectUtils.allNotNull(newInfo)) {
-			return FoodInfoVo.valueOf(newInfo);	
+			return FoodInfoVo.valueOf(newInfo);
 		}
 		return null;
 	}
-	
+
 	public FoodInfoVo delete(FoodInfo info) {
 		info.setEnable(Enable.N.name());
 		info.setStatus(SwitchStatus.CLOSE.name());
 		FoodInfo newInfo = foodInfoDao.save(info);
 		if (ObjectUtils.allNotNull(newInfo)) {
-			return FoodInfoVo.valueOf(newInfo);	
+			return FoodInfoVo.valueOf(newInfo);
 		}
 		return null;
 	}
-	
-	public FoodInfoVo update(FoodInfoVo vo ,FoodInfo info) {
-//		info.setCategoryUUID(vo.getCategory_uuid());
+
+	public FoodInfoVo update(FoodInfoVo vo, FoodInfo info) {
+		// info.setCategoryUUID(vo.getCategory_uuid());
+		Optional<ItemVo> minPriceItem = vo.getFood_data().getScopes().stream()
+				.collect(Collectors.minBy(Comparator.comparingInt(a -> Integer.parseInt(a.getPrice()))));
+
+		info.setDefaultPrice(minPriceItem.isPresent() ? minPriceItem.get().getPrice() : info.getDefaultPrice());
 		info.setFoodUUID(vo.getFood_uuid());
 		info.setFoodName(vo.getFood_name());
-		info.setDefaultPrice(vo.getDefault_price());
 		info.setFoodData(JsonHelper.toJson(vo.getFood_data()));
 		info.setStatus(vo.getStatus());
-		
+
 		FoodInfo newInfo = foodInfoDao.save(info);
 		if (ObjectUtils.allNotNull(newInfo)) {
-			return FoodInfoVo.valueOf(newInfo);	
+			return FoodInfoVo.valueOf(newInfo);
 		}
 		return null;
 	}
-	
+
 	public FoodInfoVo changeStatus(FoodInfo info, SwitchStatus status) {
 		info.setStatus(status.name());
 		FoodInfo newInfo = foodInfoDao.save(info);
 		if (ObjectUtils.allNotNull(newInfo)) {
-			return FoodInfoVo.valueOf(newInfo);	
+			return FoodInfoVo.valueOf(newInfo);
 		}
 		return null;
 	}
-	
-	public List<FoodInfoVo> findBycategoryUUIDAndRestaurantUUID (String categoryUUID, String restaurantUUID){
+
+	public List<FoodInfoVo> findBycategoryUUIDAndRestaurantUUID(String categoryUUID, String restaurantUUID) {
 		List<FoodInfo> list = foodInfoDao.findBycategoryUUIDAndRestaurantUUID(categoryUUID, restaurantUUID);
 		return FoodInfoVo.valueOfArray(list, true);
 	}
-	
-	public FoodInfo findByFoodUUIDAndRestaurantUUID (String foodUUID, String restaurantUUID) {
+
+	public FoodInfo findByFoodUUIDAndRestaurantUUID(String foodUUID, String restaurantUUID) {
 		FoodInfo info = foodInfoDao.findByFoodUUIDAndRestaurantUUID(foodUUID, restaurantUUID);
 		if (ObjectUtils.allNotNull(info)) {
 			return info;
