@@ -1,7 +1,10 @@
 package com.melonltd.naber.rdbms.model.vo;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import com.google.api.client.util.Lists;
 import com.google.common.base.MoreObjects;
 import com.melonltd.naber.rdbms.model.bean.MobileDevice;
 
@@ -74,6 +77,13 @@ public class MobileDeviceVo implements Serializable {
 		vo.device_category = info.getDeviceCategory();
 		vo.create_date = info.getCreateDate();
 		return vo;
+	}
+	
+	
+	public static List<MobileDeviceVo> valueOfArray (List<MobileDevice> infos) {
+		List<MobileDeviceVo> list = Lists.newArrayList();
+		list = infos.stream().map(a -> valueOf(a)).collect(Collectors.toList());
+		return list;
 	}
 
 }

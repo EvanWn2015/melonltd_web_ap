@@ -40,6 +40,10 @@ public class Tools {
 	public static String getNowGMT() {
 		return LocalDateTime.now(ZONEID_GMT).format(yyyy_MM_dd_T_HH_mm_ss_SSSS_Z);
 	}
+	
+	public static String getNowGMT(int hours,int minutes) {
+		return LocalDateTime.now(ZONEID_GMT).plusHours(hours).plusMinutes(minutes).format(yyyy_MM_dd_T_HH_mm_ss_SSSS_Z);
+	}
 
 	public static String getNowStartOfDayGMT() {
 		return LocalDateTime.now(ZONEID_GMT).with(LocalTime.MIN).format(yyyy_MM_dd_T_HH_mm_ss_SSSS_Z);

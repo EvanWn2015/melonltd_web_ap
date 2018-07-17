@@ -73,5 +73,17 @@ public class OrderInfoService {
 		}
 		return Lists.<OrderVo>newArrayList();
 	}
+	
+	public List<OrderVo> findLiveByOrderStatusAndBetweenDate(String accountUUID){
+		String startDate = Tools.getNowGMT(0,-20);
+		String endDate = Tools.getNowEndOfDayGMT();
+		Sort sort = new Sort(Direction.ASC, "fetchDate");
+		Pageable pageable = new PageRequest(0, 10,sort);
+		Page<OrderInfo> pages = orderInfoDao.findByOrderStatusAndBetweenDate(accountUUID, "UNFINISH", startDate, endDate, pageable);
+		if(pages.hasContent()) {
+			return OrderVo.valueInfoOfArray(pages.getContent());
+		}
+		return Lists.<OrderVo>newArrayList();
+	}
 
 }

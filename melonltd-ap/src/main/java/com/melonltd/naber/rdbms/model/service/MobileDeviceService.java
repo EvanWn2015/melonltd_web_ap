@@ -1,51 +1,69 @@
 package com.melonltd.naber.rdbms.model.service;
 
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.google.api.client.util.Lists;
+import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.bean.MobileDevice;
 import com.melonltd.naber.rdbms.model.dao.MobileDeviceDao;
 import com.melonltd.naber.rdbms.model.vo.MobileDeviceVo;
 
 @Service("mobileDeviceService")
 public class MobileDeviceService {
-	
+
 	@Autowired
 	private MobileDeviceDao mobileDeviceDao;
-	
-	public MobileDeviceVo findByRestaurantUUID(String restaurantUUID) {
-		Sort sort = new Sort(Direction.DESC, "createDate");
-		Pageable pageable = new PageRequest(0, 1, sort);
-		Page<MobileDevice> page = mobileDeviceDao.findByRestaurantUUID(restaurantUUID, pageable);
-		if (page.hasContent()) {
-			return MobileDeviceVo.valueOf(page.getContent().get(0));
+
+	public List<MobileDeviceVo> findByAccountUUID(String accountUUID) {
+		List<MobileDevice> list = mobileDeviceDao.findByAccountUUID(accountUUID);
+		if (CollectionUtils.isEmpty(list)) {
+			return Lists.newArrayList();
 		}
-		return null;
+		return MobileDeviceVo.valueOfArray(list);
 	}
-	
-	public MobileDeviceVo findByAccountUUID(String accountUUID) {
-		Sort sort = new Sort(Direction.DESC, "createDate");
-		Pageable pageable = new PageRequest(0, 1, sort);
-		Page<MobileDevice> page = mobileDeviceDao.findByAccountUUID(accountUUID, pageable);
-		if (page.hasContent()) {
-			return MobileDeviceVo.valueOf(page.getContent().get(0));
+
+	public List<MobileDeviceVo> findByRestaurantUUID(String restaurantUUID) {
+		List<MobileDevice> list = mobileDeviceDao.findByRestaurantUUID(restaurantUUID);
+		if (CollectionUtils.isEmpty(list)) {
+			return Lists.newArrayList();
 		}
-		return null;
+		return MobileDeviceVo.valueOfArray(list);
 	}
-	
-	
-	public MobileDeviceVo save(MobileDevice info) {
-		MobileDevice m = mobileDeviceDao.save(info);
-		if (ObjectUtils.anyNotNull(m)) {
-			return MobileDeviceVo.valueOf(m);
+
+	public void save(MobileDevice info) {
+		List<MobileDevice> list = mobileDeviceDao.findByAccountUUIDAndDeviceCategory(info.getAccountUUID(),info.getDeviceCategory());
+		if (CollectionUtils.isEmpty(list)) {
+			List<String> tokens = Lists.newArrayList();
+			tokens.add(info.getDeviceToken());
+			info.setDeviceToken(JsonHelper.toJson(tokens));
+			list.add(info);
+			mobileDeviceDao.save(info);
+		}else {
+			list.forEach(d -> {
+				List<String> tokens = JsonHelper.jsonArray(d.getDeviceToken(), String[].class);
+				tokens.add(info.getDeviceToken());
+				tokens = tokens.stream().distinct().collect(Collectors.toList());
+				d.setDeviceToken(JsonHelper.toJson(tokens));
+				mobileDeviceDao.save(d);
+			});
 		}
-		return null;
+	}
+
+	public void remove(MobileDeviceVo vo) {
+		List<MobileDevice> list = mobileDeviceDao.findByAccountUUIDAndDeviceCategory(vo.getAccount_uuid(), vo.getDevice_category());
+		if (!CollectionUtils.isEmpty(list)) {
+			list.forEach(d -> {
+				List<String> tokens = JsonHelper.jsonArray(d.getDeviceToken(), String[].class);
+				tokens = tokens.stream().filter(a -> !a.equals(vo.getDevice_token())).distinct().collect(Collectors.toList());
+				d.setDeviceToken(JsonHelper.toJson(tokens));
+				mobileDeviceDao.save(d);
+			});
+		}
 	}
 
 }

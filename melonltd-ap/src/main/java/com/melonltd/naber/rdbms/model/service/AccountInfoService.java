@@ -131,9 +131,10 @@ public class AccountInfoService {
 	public void refreshLoginStatus(String uuid) {
 		AccountInfo info = accountInfoDao.findByAccountUUID(uuid);
 		if (ObjectUtils.anyNotNull(info)) {
-			info.setLoginDate(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+			info.setLoginDate("");
 			info.setIsLogin("N");
 			accountInfoDao.save(info);
+			clearCacheBuilderByKey(uuid);
 		}
 	}
 

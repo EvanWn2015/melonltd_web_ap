@@ -96,6 +96,23 @@ public class QuickSearchController {
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
+	
+	
+	@ResponseBody
+	@PostMapping(value = "seller/ordar/live")
+	public ResponseEntity<String> orderLiveList(HttpServletRequest httpRequest) {
+		LinkedHashMap<String, Object> map = null;
+		String accountUUID = httpRequest.getHeader("Authorization");
+
+		if(StringUtils.isBlank(accountUUID)) {
+			map = RespData.of(Status.FALSE, ErrorType.HEADESR_ERROR, null);
+		} else {
+			List<OrderVo> list = orderInfoService.findLiveByOrderStatusAndBetweenDate(accountUUID);
+			map = RespData.of(Status.TRUE, null, list);
+		}
+		String result = Base64Service.encode(JsonHelper.toJson(map));
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
 
 	private ErrorType checkReqData(AccountReq req) {
 		if (!ObjectUtils.allNotNull(req)) {

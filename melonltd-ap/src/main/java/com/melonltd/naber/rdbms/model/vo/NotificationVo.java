@@ -19,6 +19,13 @@ public class NotificationVo {
 	public void setData(Object data) {
 		this.data = data;
 	}
+	
+	public static NotificationVo newInstance (String to ,NotificationVo vo) {
+		NotificationVo notify = new NotificationVo();
+		notify.to = to;
+		notify.data = vo.getData();
+		return notify;
+	}
 
 	public class Notify {
 		private String body;

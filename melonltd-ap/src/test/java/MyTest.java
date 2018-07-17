@@ -9,15 +9,20 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.context.annotation.PropertySource;
 
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.api.client.util.Maps;
+import com.google.api.client.util.Sets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
+import com.mchange.v2.sql.filter.SynchronizedFilterDataSource;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
@@ -488,6 +493,51 @@ public class MyTest {
 	// 11:30~15:00,16:30~19:45(一~五)
 	@Test
 	public void myttt() {
+		
+//		String decode = "JTdCJTIyZGV2aWNlX2NhdGVnb3J5JTIyJTNBJTIyQU5EUk9JRCUyMiUyQyUyMmRldmljZV90b2tlbiUyMiUzQSUyMmUtX01sME9PcC1nJTNBQVBBOTFiR0RYUnl0NEItRTV0WktIWGljV2Y3VFhNUU96LVJkWUtXclFwMGZzLWJLeWZ4bHdwX3dzUjJ0UkFxM1VacHRndmxIdVNDd0JFXzRDbXoxWVV6RnU1UHB1UnVKdUEzWkh5Skh0QTNtaWZtMm9KOWRTcWZ5Sk94eUN5T3djVnRPX29UNl9xdUpDcGtlX01Ydk9Tb29MQ0xqZXVJeUd3JTIyJTJDJTIycGFzc3dvcmQlMjIlM0ElMjJzMTIzNDU2JTIyJTJDJTIycGhvbmUlMjIlM0ElMjJORVItMThYMVgxNCUyMiU3RA==";
+//		System.out.println(Base64Service.decode(decode));
+////		String token = "[\"1\",\"2\",\"3\",\"4\",\"5\",\"1\"]";
+////		String newToken = "11";
+//		Set<String> tokens = Sets.newHashSet();
+//		tokens.add("1");
+//		tokens.add("13");
+//		tokens.add("12");
+//		
+//		tokens.add("11");
+//		tokens.add("14");
+//		tokens.add("51");
+//		tokens.add("11");
+		System.out.println(StringUtils.contains("USER_20180711_135013_889_ae5ca77d-a825-428b-ae96-789199d521f4","USER"));
+//		tokens.add(newToken);
+//		tokens = tokens.stream().distinct().collect(Collectors.toList());
+//		System.out.println(tokens.toString());
+//		System.out.println(JsonHelper.toJson(tokens));
+		String startDate = Tools.getNowGMT(0,-20);
+		String endDate = Tools.getNowEndOfDayGMT();
+		
+		System.out.println(startDate);
+		System.out.println(endDate);
+		
+	}
+
+	
+	// 全形字長度
+	public static int strLength(final String value) {
+		int length = 0;
+		if (Strings.isNullOrEmpty(value)) {
+			return length;
+		}
+		for (int i = 0; i < value.length(); i++) {
+			if (Character.UnicodeBlock.of(value.charAt(i)) != Character.UnicodeBlock.BASIC_LATIN || !isHalfWidth(value.charAt(i))) {
+				length++;
+			}
+			length++;
+		}
+		return length;
+	}
+
+	public static boolean isHalfWidth(char c) {
+		return '\u0000' <= c && c <= '\u00FF' || '\uFF61' <= c && c <= '\uFFDC' || '\uFFE8' <= c && c <= '\uFFEE';
 
 	}
 }
