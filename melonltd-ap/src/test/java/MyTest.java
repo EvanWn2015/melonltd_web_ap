@@ -33,6 +33,7 @@ import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
+import com.melonltd.naber.rdbms.model.vo.AdvertisementVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
 import com.melonltd.naber.rdbms.model.vo.NotificationVo;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
@@ -494,29 +495,15 @@ public class MyTest {
 	@Test
 	public void myttt() {
 		
-//		String decode = "JTdCJTIyZGV2aWNlX2NhdGVnb3J5JTIyJTNBJTIyQU5EUk9JRCUyMiUyQyUyMmRldmljZV90b2tlbiUyMiUzQSUyMmUtX01sME9PcC1nJTNBQVBBOTFiR0RYUnl0NEItRTV0WktIWGljV2Y3VFhNUU96LVJkWUtXclFwMGZzLWJLeWZ4bHdwX3dzUjJ0UkFxM1VacHRndmxIdVNDd0JFXzRDbXoxWVV6RnU1UHB1UnVKdUEzWkh5Skh0QTNtaWZtMm9KOWRTcWZ5Sk94eUN5T3djVnRPX29UNl9xdUpDcGtlX01Ydk9Tb29MQ0xqZXVJeUd3JTIyJTJDJTIycGFzc3dvcmQlMjIlM0ElMjJzMTIzNDU2JTIyJTJDJTIycGhvbmUlMjIlM0ElMjJORVItMThYMVgxNCUyMiU3RA==";
-//		System.out.println(Base64Service.decode(decode));
-////		String token = "[\"1\",\"2\",\"3\",\"4\",\"5\",\"1\"]";
-////		String newToken = "11";
-//		Set<String> tokens = Sets.newHashSet();
-//		tokens.add("1");
-//		tokens.add("13");
-//		tokens.add("12");
-//		
-//		tokens.add("11");
-//		tokens.add("14");
-//		tokens.add("51");
-//		tokens.add("11");
-		System.out.println(StringUtils.contains("USER_20180711_135013_889_ae5ca77d-a825-428b-ae96-789199d521f4","USER"));
-//		tokens.add(newToken);
-//		tokens = tokens.stream().distinct().collect(Collectors.toList());
-//		System.out.println(tokens.toString());
-//		System.out.println(JsonHelper.toJson(tokens));
-		String startDate = Tools.getNowGMT(0,-20);
-		String endDate = Tools.getNowEndOfDayGMT();
+		AccountInfoVo infoVo = new AccountInfoVo();
+		infoVo.setAccount("0928297076");
+		infoVo.setPassword("s123456");
+		String json = JsonHelper.toJson(infoVo);
+		System.out.println(json);
+		System.out.println(Base64Service.testEncode(json));
 		
-		System.out.println(startDate);
-		System.out.println(endDate);
+		
+		System.out.println(Base64Service.decode("JTdCJTIyc3RhdHVzJTIyJTNBJTIyZmFsc2UlMjIlMkMlMjJlcnJfY29kZSUyMiUzQSUyMjQwMDElMjIlMkMlMjJlcnJfbXNnJTIyJTNBJTIyJUU2JTlGJUE1JUU3JTg0JUExJUU2JUFEJUE0JUU1JUI4JUIzJUU2JTg4JUI2KyVFNiU4OCU5NislRTUlQjglQjMlRTYlODglQjYlRTUlQjclQjIlRTUlQTQlQjElRTYlOTUlODglMjIlN0Q="));
 		
 	}
 
@@ -540,4 +527,12 @@ public class MyTest {
 		return '\u0000' <= c && c <= '\u00FF' || '\uFF61' <= c && c <= '\uFFDC' || '\uFFE8' <= c && c <= '\uFFEE';
 
 	}
+	
+	@Test
+	public void tttt() {
+		
+	}
 }
+
+
+

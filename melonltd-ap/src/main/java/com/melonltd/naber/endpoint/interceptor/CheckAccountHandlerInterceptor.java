@@ -88,7 +88,7 @@ public class CheckAccountHandlerInterceptor implements HandlerInterceptor {
 		response.setHeader("content-type", "text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		LinkedHashMap<String, Object> map = null;
-		map = RespData.of(Status.FALSE, ErrorType.HEADESR_ERROR, "");
+		map = RespData.of(Status.FALSE, ErrorType.HEADESR_ERROR, null);
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		response.getWriter().write(result);
 	}

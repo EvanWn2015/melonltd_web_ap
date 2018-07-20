@@ -24,24 +24,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.api.client.util.Lists;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.bean.CategoryRel;
 import com.melonltd.naber.rdbms.model.bean.FoodInfo;
 import com.melonltd.naber.rdbms.model.bean.MobileDevice;
+import com.melonltd.naber.rdbms.model.bean.OrderInfo;
 import com.melonltd.naber.rdbms.model.bean.RestaurantInfo;
 import com.melonltd.naber.rdbms.model.bean.RestaurantLocationTemplate;
 import com.melonltd.naber.rdbms.model.bean.SellerRegistered;
 import com.melonltd.naber.rdbms.model.dao.CategoryRelDao;
 import com.melonltd.naber.rdbms.model.dao.FoodInfoDao;
 import com.melonltd.naber.rdbms.model.dao.MobileDeviceDao;
+import com.melonltd.naber.rdbms.model.dao.OrderInfoDao;
 import com.melonltd.naber.rdbms.model.dao.RestaurantInfoDao;
 import com.melonltd.naber.rdbms.model.dao.RestaurantLocationTemplateDao;
 import com.melonltd.naber.rdbms.model.dao.SellerRegisteredDao;
@@ -92,6 +91,9 @@ public class AdminController {
 
 	@Autowired
 	private MobileDeviceDao mobileDeviceDao;
+	
+	@Autowired
+	private OrderInfoDao orderInfoDao;
 
 	@ResponseBody
 	@PostMapping(value = "admin/processing/dsevice")
@@ -446,6 +448,30 @@ public class AdminController {
 
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("待處理註冊信息", sellerRegistereds);
+
+				LinkedHashMap<String, Object> maps = RespData.of(Status.TRUE, null, map);
+				resp = JsonHelper.toJson(maps);
+			}
+		}
+		return new ResponseEntity<String>(resp, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "admin/find/all/orders")
+	public ResponseEntity<String> findAllOrders(HttpServletRequest httpRequest) {
+		String accountUUID = httpRequest.getHeader("Authorization");
+		AccountInfoVo accountInfoVo = accountInfoService.getCacheBuilderByKey(accountUUID, false);
+		String resp = "";
+		if (ObjectUtils.allNotNull(accountInfoVo)) {
+			if (Identity.ADMIN.equals(Identity.of(accountInfoVo.getIdentity()))) {
+				String startDate = Tools.getNowStartOfDayGMT();
+				String endDate = Tools.getNowEndOfDayGMT();
+				List<OrderInfo> orders = orderInfoDao.findByBetweenDate(startDate, endDate);
+				Map<String, Object> map = Maps.newHashMap();
+				
+				map.put("開始", startDate);
+				map.put("結束", endDate);
+				map.put("訂單", orders);
 
 				LinkedHashMap<String, Object> maps = RespData.of(Status.TRUE, null, map);
 				resp = JsonHelper.toJson(maps);

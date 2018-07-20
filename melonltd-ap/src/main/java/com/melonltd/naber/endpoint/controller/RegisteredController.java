@@ -53,7 +53,7 @@ public class RegisteredController {
 			vo.setAccount(vo.getPhone());
 			AccountInfo info = accountInfoService.save(vo, UUIDType.USER);
 			if (ObjectUtils.allNotNull(info)) {
-				map = RespData.of(Status.TRUE, null, "");
+				map = RespData.of(Status.TRUE, null, null);
 			} else {
 				LOGGER.error("save user error : phone: {}, name: {}", vo.getPhone(), vo.getName());
 				map = RespData.of(Status.FALSE, ErrorType.ACCOUNT_ERROR, null);
@@ -62,7 +62,6 @@ public class RegisteredController {
 			map = RespData.of(Status.FALSE, error, null);
 		}
 
-		System.out.println(JsonHelper.toJson(map));
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
@@ -79,10 +78,10 @@ public class RegisteredController {
 		if (error == null) {
 			SellerRegistered info = sellerRegisteredService.save(vo);
 			if (ObjectUtils.allNotNull(info)) {
-				map = RespData.of(Status.TRUE, null, "");
+				map = RespData.of(Status.TRUE, null, null);
 			} else {
 				LOGGER.error("save seller error, seller name : {}, device id : {}", vo.getSeller_name(), vo.getDevice_id());
-				map = RespData.of(Status.FALSE, ErrorType.SAVE_ERROR, "");
+				map = RespData.of(Status.FALSE, ErrorType.SAVE_ERROR, null);
 			}
 		} else {
 			map = RespData.of(Status.FALSE, error, null);
@@ -112,15 +111,15 @@ public class RegisteredController {
 		if (!vo.getPassword().matches(RegexConstant.REGEX_PASSWORD)) {
 			return ErrorType.INVALID_PASSWORD;
 		}
-		if (!ObjectUtils.allNotNull(vo.getEmail())) {
-			return ErrorType.INVALID_EMAIL;
-		}
-		if (!vo.getEmail().matches(RegexConstant.REGEX_EMAIL)) {
-			return ErrorType.INVALID_EMAIL;
-		}
-		if (!ObjectUtils.allNotNull(vo.getAddress())) {
-			return ErrorType.INVALID;
-		}
+//		if (!ObjectUtils.allNotNull(vo.getEmail())) {
+//			return ErrorType.INVALID_EMAIL;
+//		}
+//		if (!vo.getEmail().matches(RegexConstant.REGEX_EMAIL)) {
+//			return ErrorType.INVALID_EMAIL;
+//		}
+//		if (!ObjectUtils.allNotNull(vo.getAddress())) {
+//			return ErrorType.INVALID;
+//		}
 		if (!ObjectUtils.allNotNull(vo.getIdentity())) {
 			return ErrorType.INVALID;
 		}

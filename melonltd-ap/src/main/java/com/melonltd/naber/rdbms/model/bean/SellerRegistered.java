@@ -96,7 +96,7 @@ public class SellerRegistered implements Serializable {
 
 	public static SellerRegistered valueOf(SellerRegisteredVo vo) {
 		SellerRegistered info = new SellerRegistered();
-		info.sellerName = vo.getName();
+		info.sellerName = vo.getSeller_name();
 		info.phone = vo.getPhone();
 		info.address = vo.getAddress();
 		info.name = vo.getName();

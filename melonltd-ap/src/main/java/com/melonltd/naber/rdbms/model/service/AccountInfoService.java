@@ -83,9 +83,9 @@ public class AccountInfoService {
 		info.setName(vo.getName());
 		info.setPassword(vo.getPassword());
 		info.setPhone(vo.getPhone());
-		info.setEmail(vo.getEmail());
-		info.setBirthDay(vo.getBirth_day());
-		info.setAddress(vo.getAddress());
+		info.setEmail(StringUtils.isBlank(vo.getEmail()) ? "" : vo.getEmail());
+		info.setBirthDay(StringUtils.isBlank(vo.getBirth_day()) ? "": vo.getBirth_day());
+		info.setAddress(StringUtils.isBlank(vo.getAddress()) ?"":vo.getAddress());
 		info.setIdentity(vo.getIdentity());
 		info.setSchoolName(vo.getSchool_name());
 		info.setLevel(vo.getLevel());
