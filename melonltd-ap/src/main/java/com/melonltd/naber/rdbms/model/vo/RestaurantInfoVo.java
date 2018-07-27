@@ -20,6 +20,7 @@ public class RestaurantInfoVo implements Serializable {
 	private String store_start;
 	private String store_end;
 	private String is_store_now_open;
+	private String can_discount;
 	private List<String> not_business;
 	private List<DateRangeVo> can_store_range;
 	private String restaurant_category;
@@ -188,6 +189,15 @@ public class RestaurantInfoVo implements Serializable {
 		this.top = top;
 	}
 	
+	public String getCan_discount() {
+		return can_discount;
+	}
+
+	public void setCan_discount(String can_discount) {
+		this.can_discount = can_discount;
+	}
+	
+	
 //	public static RestaurantInfoVo valueOf (RestaurantInfo info) {
 //		RestaurantInfoVo vo = new RestaurantInfoVo(); 
 //		vo.restaurant_uuid = info.getRestaurantUUID();
@@ -209,6 +219,8 @@ public class RestaurantInfoVo implements Serializable {
 //		return vo;
 //	}
 
+
+
 	public static RestaurantInfoVo valueOf(RestaurantInfo info, boolean hasStoreRange) {
 		RestaurantInfoVo vo = checkIsStoreOpen(info);
 		vo.restaurant_uuid = info.getRestaurantUUID();
@@ -216,6 +228,7 @@ public class RestaurantInfoVo implements Serializable {
 		vo.address = info.getAddress();
 		vo.store_start = info.getStoreStart();
 		vo.store_end = info.getStoreEnd();
+		vo.can_discount = info.getCanDiscount();
 //		vo.is_store_now_open = checkIsStoreOpen(info) + "";
 //		vo.not_business = JsonHelper.jsonArray(info.getNotBusiness(), String[].class);
 		if (hasStoreRange) {
@@ -300,6 +313,7 @@ public class RestaurantInfoVo implements Serializable {
 				.add("latitude", latitude)
 				.add("longitude", longitude)
 				.add("bulletin", bulletin)
+				.add("can_discount", can_discount)
 				.add("photo", photo)
 				.add("background_photo", background_photo)
 				.add("photo_type", photo_type)

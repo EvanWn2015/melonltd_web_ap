@@ -26,6 +26,7 @@ public class GlobalExceptionController {
 	
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<String> handleCustomException(HttpServletRequest req, RuntimeException ex) {
+		LOGGER.error("Server Error , {}", ex.getMessage());
 		LinkedHashMap<String, Object> map = RespData.of(Status.FALSE, ErrorType.RESOLVE_ERROR, null);
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
@@ -33,6 +34,7 @@ public class GlobalExceptionController {
 	
 	@ExceptionHandler(MalformedJsonException.class)
 	public ResponseEntity<String> handleJsonCustomException(HttpServletRequest req, MalformedJsonException ex) {
+		LOGGER.error("JSON RESOLVE Error , {}", ex.getMessage());
 		LinkedHashMap<String, Object> map = RespData.of(Status.FALSE, ErrorType.JSON_RESOLVE_ERROR, null);
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);

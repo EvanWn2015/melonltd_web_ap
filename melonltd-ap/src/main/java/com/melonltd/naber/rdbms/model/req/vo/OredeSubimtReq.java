@@ -13,6 +13,8 @@ public class OredeSubimtReq {
 	private String restaurant_address;
 	private String user_name;
 	private String user_phone;
+	private String use_discount;
+	
 	private List<OrderData> orders;
 
 	public String getRestaurant_uuid() {
@@ -79,6 +81,14 @@ public class OredeSubimtReq {
 		this.orders = orders;
 	}
 
+	public String getUse_discount() {
+		return use_discount;
+	}
+
+	public void setUse_discount(String use_discount) {
+		this.use_discount = use_discount;
+	}
+
 	public static OredeSubimtReq ofOrders(List<OrderData> orders) {
 		OredeSubimtReq data = new OredeSubimtReq();
 		data.orders = orders;
@@ -87,8 +97,13 @@ public class OredeSubimtReq {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass()).add("restaurant_uuid", restaurant_uuid)
-				.add("fetch_date", fetch_date).add("user_message", user_message).add("orders", orders).toString();
+		return MoreObjects.toStringHelper(this.getClass())
+				.add("restaurant_uuid", restaurant_uuid)
+				.add("fetch_date", fetch_date)
+				.add("user_message", user_message)
+				.add("use_discount", use_discount)
+				.add("orders", orders)
+				.toString();
 	}
 
 	public class OrderData {

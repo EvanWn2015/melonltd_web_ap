@@ -32,6 +32,8 @@ public class AccountInfo implements Serializable {
 	private String loginDate;
 	private String photo;
 	private String photoType;
+	private String useDiscount;
+	private String createDate;
 
 	@Id
 	@Column(name = "account", unique = true, nullable = false)
@@ -123,7 +125,18 @@ public class AccountInfo implements Serializable {
 	public String getPhotoType() {
 		return photoType;
 	}
+	
+	@Column(name = "use_discount")
+	public String getUseDiscount() {
+		return useDiscount;
+	}
+	
+	@Column(name = "create_date")
+	public String getCreateDate() {
+		return createDate;
+	}
 
+	
 	public void setAccount(String account) {
 		this.account = account;
 	}
@@ -196,6 +209,14 @@ public class AccountInfo implements Serializable {
 		this.photoType = photoType;
 	}
 
+	public void setUseDiscount(String useDiscount) {
+		this.useDiscount = useDiscount;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())
@@ -204,6 +225,8 @@ public class AccountInfo implements Serializable {
 				.add("name", name)
 				.add("password", password)
 				.add("email", email)
+				.add("createDate",createDate)
+				.add("useDiscount", useDiscount)
 				.add("phone", phone)
 				.add("address", address)
 				.add("identity", identity)

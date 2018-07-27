@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
 import com.mchange.lang.IntegerUtils;
+import com.melonltd.naber.constant.NaberConstant;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
@@ -117,7 +118,8 @@ public class UserOrderController {
 //				map = RespData.of(Status.TRUE, null, resultOrder);
 			} else {
 				int failCount = userOrderInfoService.findByOrderFailByAccountUUID(account.getAccount_uuid());
-				if (failCount >= 3) {
+				// 若訂單未完成滿三筆，不可在下訂單
+				if (failCount >= NaberConstant.ORDER_PRICE_COUNT_MAX) {
 					LOGGER.info("Store is close account : {}, uuid:{} ", accountUUID, req.getRestaurant_uuid());
 					map = RespData.of(Status.FALSE, ErrorType.ORDER_FAIL_MAX, null);
 				} else {
@@ -143,7 +145,7 @@ public class UserOrderController {
 						int price = getPrice(req);
 						boolean status = checkCount(req);
 						// 限制單筆訂單不可超過 5000 或 單筆菜單數量錯誤
-						if (price > 5000 || !status) {
+						if (price > NaberConstant.ORDER_PRICE_MAX || !status) {
 							map = status ? RespData.of(Status.FALSE, ErrorType.ORDER_MAX_PRICE, null) : RespData.of(Status.FALSE, ErrorType.ORDER_MAX_COUNT, null);
 						} else {
 							String bonus = ((int) Math.floor(price / 10d) + "");

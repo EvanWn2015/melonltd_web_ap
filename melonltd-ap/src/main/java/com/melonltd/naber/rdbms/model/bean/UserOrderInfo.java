@@ -26,6 +26,7 @@ public class UserOrderInfo implements Serializable {
 	private String createDate;
 	private String updateDate;
 	private String orderPrice;
+	private String discount;
 	private String orderBonus;
 	private String fetchDate;
 	private String orderData;
@@ -78,7 +79,12 @@ public class UserOrderInfo implements Serializable {
 	public String getOrderPrice() {
 		return orderPrice;
 	}
-
+	
+	@Column(name = "discount")
+	public String getDiscount() {
+		return discount;
+	}
+	
 	@Column(name = "order_bonus")
 	public String getOrderBonus() {
 		return orderBonus;
@@ -139,6 +145,10 @@ public class UserOrderInfo implements Serializable {
 	public void setOrderPrice(String orderPrice) {
 		this.orderPrice = orderPrice;
 	}
+	
+	public void setDiscount(String discount) {
+		this.discount = discount;
+	}
 
 	public void setOrderBonus(String orderBonus) {
 		this.orderBonus = orderBonus;
@@ -171,6 +181,7 @@ public class UserOrderInfo implements Serializable {
 		info.createDate = vo.getCreate_date();
 		info.updateDate = vo.getUpdate_date();
 		info.orderPrice = vo.getOrder_price();
+		info.discount = vo.getDiscount();
 		info.orderBonus = vo.getOrder_bonus();
 		info.fetchDate = vo.getFetch_date();
 		info.orderData = vo.getOrder_data();
@@ -196,6 +207,7 @@ public class UserOrderInfo implements Serializable {
 				.add("orderData", orderData)
 				.add("status", status)
 				.add("enable", enable)
+				.add("discount", discount)
 				.toString();
 	}
 

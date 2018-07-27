@@ -23,6 +23,7 @@ public class OrderVo {
 	private String create_date;
 	private String update_date;
 	private String order_price;
+	private String discount;
 	private String order_bonus;
 	private String fetch_date;
 	private String order_data;
@@ -117,7 +118,15 @@ public class OrderVo {
 	public void setOrder_price(String order_price) {
 		this.order_price = order_price;
 	}
-
+	
+	public String getDiscount() {
+		return discount;
+	}
+	
+	public void setDiscount(String discount) {
+		this.discount = discount;
+	}
+	
 	public String getOrder_bonus() {
 		return order_bonus;
 	}
@@ -167,6 +176,7 @@ public class OrderVo {
 		vo.create_date = info.getCreateDate();
 		vo.update_date = info.getUpdateDate();
 		vo.order_price = info.getOrderPrice();
+		vo.discount = info.getDiscount();
 		vo.order_bonus = info.getOrderBonus();
 		vo.fetch_date = info.getFetchDate();
 		vo.order_data = info.getOrderData();
@@ -186,6 +196,7 @@ public class OrderVo {
 		vo.create_date = info.getCreateDate();
 		vo.update_date = info.getUpdateDate();
 		vo.order_price = info.getOrderPrice();
+		vo.discount = info.getDiscount();
 		vo.order_bonus = info.getOrderBonus();
 		vo.fetch_date = info.getFetchDate();
 		vo.order_data = info.getOrderData();
@@ -203,6 +214,7 @@ public class OrderVo {
 		vo.create_date = info.getCreateDate();
 		vo.update_date = info.getUpdateDate();
 		vo.order_price = info.getOrderPrice();
+		vo.discount = info.getDiscount();
 		vo.order_bonus = info.getOrderBonus();
 		vo.fetch_date = info.getFetchDate();
 		vo.order_data = info.getOrderData();

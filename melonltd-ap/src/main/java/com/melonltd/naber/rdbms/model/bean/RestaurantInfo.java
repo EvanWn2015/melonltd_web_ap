@@ -22,6 +22,7 @@ public class RestaurantInfo implements Serializable {
 	private String notBusiness;
 	private String canStoreRange;
 	private String restaurantCategory;
+	private String canDiscount;
 	private String latitude;
 	private String longitude;
 	private String bulletin;
@@ -31,7 +32,8 @@ public class RestaurantInfo implements Serializable {
 	private String photoType;
 	private String enable;
 	private String top;
-
+	
+	
 	@Id
 	@Column(name = "restaurant_uuid", unique = true, nullable = false)
 	public String getRestaurantUUID() {
@@ -108,7 +110,10 @@ public class RestaurantInfo implements Serializable {
 		return createDate;
 	}
 
-	
+	@Column(name = "can_discount")
+	public String getCanDiscount() {
+		return canDiscount;
+	}
 
 	@Column(name = "enable")
 	public String getEnable() {
@@ -179,6 +184,10 @@ public class RestaurantInfo implements Serializable {
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
+	
+	public void setCanDiscount(String canDiscount) {
+		this.canDiscount = canDiscount;
+	}
 
 	public void setEnable(String enable) {
 		this.enable = enable;
@@ -199,6 +208,7 @@ public class RestaurantInfo implements Serializable {
 				.add("storeEnd",storeEnd)
 				.add("notBusiness",notBusiness)
 				.add("canStoreRange",canStoreRange)
+				.add("canDiscount", canDiscount)
 				.add("restaurantCategory", restaurantCategory)
 				.add("latitude",latitude)
 				.add("longitude",longitude)
