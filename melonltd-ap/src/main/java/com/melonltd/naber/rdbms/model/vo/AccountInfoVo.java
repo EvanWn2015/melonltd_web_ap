@@ -26,7 +26,7 @@ public class AccountInfoVo implements Serializable{
 	private String login_date;
 	private String photo;
 	private String photo_type;
-	private String use_discount;
+	private String use_bonus;
 	private String create_date;
 	
 	
@@ -217,7 +217,7 @@ public class AccountInfoVo implements Serializable{
 				.add("photo_type",photo_type)
 				.add("devlcie_token",device_token)
 				.add("device_category",device_category)
-				.add("use_discount",use_discount)
+				.add("use_bonus",use_bonus)
 				.add("create_date",create_date)
 				.toString();
 	}
@@ -242,7 +242,7 @@ public class AccountInfoVo implements Serializable{
 		vo.login_date = info.getLoginDate();
 		vo.photo = info.getPhoto();
 		vo.photo_type = info.getPhotoType();
-		vo.use_discount = info.getUseDiscount();
+		vo.use_bonus = info.getUseBonus();
 		vo.create_date = info.getCreateDate();
 		if (hasPassword) {
 			vo.password = info.getPassword();	

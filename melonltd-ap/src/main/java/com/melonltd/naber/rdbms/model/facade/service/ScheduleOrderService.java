@@ -106,7 +106,7 @@ public class ScheduleOrderService {
 		info.setCreateDate(date);
 		info.setUpdateDate(date);
 		info.setOrderPrice(vo.getOrderPrice());
-		info.setDiscount(vo.getDiscount());
+		info.setUseBonus(vo.getUseBonus());
 		info.setOrderBonus(vo.getOrderBonus());
 		info.setFetchDate(vo.getFetchDate());
 		info.setOrderData(vo.getOrderData());

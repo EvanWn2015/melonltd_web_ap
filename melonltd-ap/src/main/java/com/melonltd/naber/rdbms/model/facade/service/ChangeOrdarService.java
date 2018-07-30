@@ -153,7 +153,7 @@ public class ChangeOrdarService {
 		info.setCreateDate(date);
 		info.setUpdateDate(date);
 		info.setOrderPrice(vo.getOrder_price());
-		info.setDiscount(vo.getDiscount());
+		info.setUseBonus(vo.getUse_Bonus());
 		info.setOrderBonus(vo.getOrder_bonus());
 		info.setFetchDate(vo.getFetch_date());
 		info.setOrderData(vo.getOrder_data());

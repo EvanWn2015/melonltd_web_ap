@@ -34,7 +34,7 @@ public class PudhSellerService {
 	public void pushOrderToUser(String accountUUID, NotificationVo notificationVo) {
 		List<MobileDeviceVo> mobiles = mobileDeviceService.findByAccountUUID(accountUUID);
 		if (CollectionUtils.isNotEmpty(mobiles)) {
-			mobiles.forEach(m -> {
+			for (MobileDeviceVo m : mobiles) {
 				switch (DeviceCategory.of(m.getDevice_category())) {
 				case IOS:
 					// anpsPushServcie.push(m.getDevice_token(), "", "");
@@ -50,7 +50,66 @@ public class PudhSellerService {
 				default:
 					break;
 				}
-			});
+			}
+//			
+//			mobiles.forEach(m -> {
+//				switch (DeviceCategory.of(m.getDevice_category())) {
+//				case IOS:
+//					// anpsPushServcie.push(m.getDevice_token(), "", "");
+//					break;
+//				case ANDROID:
+//					// List<NotificationVo> notificationVos = Lists.newArrayList();
+//					List<String> tokens = JsonHelper.jsonArray(m.getDevice_token(), String[].class);
+//					List<NotificationVo> notificationVos = tokens.stream().map(t -> {
+//						return NotificationVo.newInstance(t ,notificationVo);
+//					}).collect(Collectors.toList());
+//					androidPushService.pushs(notificationVos);
+//					break;
+//				default:
+//					break;
+//				}
+//			});
+		}
+	}
+	
+
+	public void pushOrderToSeller(String restaurantUUID, NotificationVo notificationVo) {
+		List<MobileDeviceVo> mobiles = mobileDeviceService.findByRestaurantUUID(restaurantUUID);
+		if (CollectionUtils.isNotEmpty(mobiles)) {
+			
+			for (MobileDeviceVo m : mobiles) {
+				switch (DeviceCategory.of(m.getDevice_category())) {
+				case IOS:
+//					anpsPushServcie.push(m.getDevice_token(), "", "");
+					break;
+				case ANDROID:
+					List<String> tokens = JsonHelper.jsonArray(m.getDevice_token(), String[].class);
+					List<NotificationVo> notificationVos = tokens.stream().map(t -> {
+						return NotificationVo.newInstance(t ,notificationVo);
+					}).collect(Collectors.toList());
+					androidPushService.pushs(notificationVos);
+					break;
+				default:
+					break;
+				}
+			}
+			
+//			mobiles.forEach(m -> {
+//				switch (DeviceCategory.of(m.getDevice_category())) {
+//				case IOS:
+////					anpsPushServcie.push(m.getDevice_token(), "", "");
+//					break;
+//				case ANDROID:
+//					List<String> tokens = JsonHelper.jsonArray(m.getDevice_token(), String[].class);
+//					List<NotificationVo> notificationVos = tokens.stream().map(t -> {
+//						return NotificationVo.newInstance(t ,notificationVo);
+//					}).collect(Collectors.toList());
+//					androidPushService.pushs(notificationVos);
+//					break;
+//				default:
+//					break;
+//				}
+//			});
 		}
 	}
 
@@ -107,26 +166,5 @@ public class PudhSellerService {
 	// }
 	// }
 
-	public void pushOrderToSeller(String restaurantUUID, NotificationVo notificationVo) {
-		List<MobileDeviceVo> mobiles = mobileDeviceService.findByRestaurantUUID(restaurantUUID);
-		if (CollectionUtils.isNotEmpty(mobiles)) {
-			mobiles.forEach(m -> {
-				switch (DeviceCategory.of(m.getDevice_category())) {
-				case IOS:
-//					anpsPushServcie.push(m.getDevice_token(), "", "");
-					break;
-				case ANDROID:
-					List<String> tokens = JsonHelper.jsonArray(m.getDevice_token(), String[].class);
-					List<NotificationVo> notificationVos = tokens.stream().map(t -> {
-						return NotificationVo.newInstance(t ,notificationVo);
-					}).collect(Collectors.toList());
-					androidPushService.pushs(notificationVos);
-					break;
-				default:
-					break;
-				}
-			});
-		}
-	}
 
 }

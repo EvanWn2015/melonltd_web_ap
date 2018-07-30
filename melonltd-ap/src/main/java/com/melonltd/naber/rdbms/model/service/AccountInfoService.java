@@ -90,7 +90,7 @@ public class AccountInfoService {
 		info.setSchoolName(vo.getSchool_name());
 		info.setLevel(vo.getLevel());
 		info.setCreateDate(Tools.getNowGMT());
-		info.setUseDiscount("0");
+		info.setUseBonus("0");
 		info.setBonus("0");
 		info.setEnable("Y");
 		info.setIsLogin("N");

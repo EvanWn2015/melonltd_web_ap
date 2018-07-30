@@ -1,6 +1,5 @@
 package com.melonltd.naber.rdbms.model.push.service;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -33,25 +32,14 @@ public class AndroidPushService {
 		this.serverKey = this.SERVER_KEY;
 	}
 
-	private static HttpURLConnection getConnection() throws IOException {
-		URL url = new URL("https://fcm.googleapis.com/fcm/send");
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestProperty("Authorization", "key=" + serverKey);
-		conn.setRequestProperty("Accept-Charset", "UTF-8");
-		conn.setRequestProperty("Content-Type", "application/json");
-		conn.setRequestMethod("POST");
-		conn.setDoOutput(true);
-		return conn;
-	}
-
 	public void pushs(List<NotificationVo> notificationVos) {
-		notificationVos.stream().forEach(a -> {
+		
+		for (NotificationVo a : notificationVos) {
 			try {
 				String pushMessage = JsonHelper.toJson(a);
-//				HttpURLConnection conn = getConnection();
 				URL url = new URL("https://fcm.googleapis.com/fcm/send");
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-				conn.setRequestProperty("Authorization", "key=" + serverKey);
+				conn.setRequestProperty("Authorization", "key=" + this.serverKey);
 				conn.setRequestProperty("Accept-Charset", "UTF-8");
 				conn.setRequestProperty("Content-Type", "application/json");
 				conn.setRequestMethod("POST");
@@ -62,7 +50,6 @@ public class AndroidPushService {
 			} catch (Exception e) {
 				LOGGER.error("push error , error: {}", e.getMessage());
 			}
-		});
+		}
 	}
-
 }

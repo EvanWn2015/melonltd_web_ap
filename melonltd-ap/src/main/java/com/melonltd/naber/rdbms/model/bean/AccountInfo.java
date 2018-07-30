@@ -32,7 +32,7 @@ public class AccountInfo implements Serializable {
 	private String loginDate;
 	private String photo;
 	private String photoType;
-	private String useDiscount;
+	private String useBonus;
 	private String createDate;
 
 	@Id
@@ -126,9 +126,9 @@ public class AccountInfo implements Serializable {
 		return photoType;
 	}
 	
-	@Column(name = "use_discount")
-	public String getUseDiscount() {
-		return useDiscount;
+	@Column(name = "use_bonus")
+	public String getUseBonus() {
+		return useBonus;
 	}
 	
 	@Column(name = "create_date")
@@ -209,8 +209,8 @@ public class AccountInfo implements Serializable {
 		this.photoType = photoType;
 	}
 
-	public void setUseDiscount(String useDiscount) {
-		this.useDiscount = useDiscount;
+	public void setUseBonus(String useBonus) {
+		this.useBonus = useBonus;
 	}
 
 	public void setCreateDate(String createDate) {
@@ -226,7 +226,7 @@ public class AccountInfo implements Serializable {
 				.add("password", password)
 				.add("email", email)
 				.add("createDate",createDate)
-				.add("useDiscount", useDiscount)
+				.add("useBonus", useBonus)
 				.add("phone", phone)
 				.add("address", address)
 				.add("identity", identity)

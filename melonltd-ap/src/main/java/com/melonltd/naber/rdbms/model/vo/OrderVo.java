@@ -23,7 +23,7 @@ public class OrderVo {
 	private String create_date;
 	private String update_date;
 	private String order_price;
-	private String discount;
+	private String use_bonus;
 	private String order_bonus;
 	private String fetch_date;
 	private String order_data;
@@ -119,12 +119,12 @@ public class OrderVo {
 		this.order_price = order_price;
 	}
 	
-	public String getDiscount() {
-		return discount;
+	public String getUse_Bonus() {
+		return use_bonus;
 	}
 	
-	public void setDiscount(String discount) {
-		this.discount = discount;
+	public void setUse_Bonus(String use_bonus) {
+		this.use_bonus = use_bonus;
 	}
 	
 	public String getOrder_bonus() {
@@ -176,7 +176,7 @@ public class OrderVo {
 		vo.create_date = info.getCreateDate();
 		vo.update_date = info.getUpdateDate();
 		vo.order_price = info.getOrderPrice();
-		vo.discount = info.getDiscount();
+		vo.use_bonus = info.getUseBonus();
 		vo.order_bonus = info.getOrderBonus();
 		vo.fetch_date = info.getFetchDate();
 		vo.order_data = info.getOrderData();
@@ -196,7 +196,7 @@ public class OrderVo {
 		vo.create_date = info.getCreateDate();
 		vo.update_date = info.getUpdateDate();
 		vo.order_price = info.getOrderPrice();
-		vo.discount = info.getDiscount();
+		vo.use_bonus = info.getUseBonus();
 		vo.order_bonus = info.getOrderBonus();
 		vo.fetch_date = info.getFetchDate();
 		vo.order_data = info.getOrderData();
@@ -214,7 +214,7 @@ public class OrderVo {
 		vo.create_date = info.getCreateDate();
 		vo.update_date = info.getUpdateDate();
 		vo.order_price = info.getOrderPrice();
-		vo.discount = info.getDiscount();
+		vo.use_bonus = info.getUseBonus();
 		vo.order_bonus = info.getOrderBonus();
 		vo.fetch_date = info.getFetchDate();
 		vo.order_data = info.getOrderData();
@@ -232,6 +232,7 @@ public class OrderVo {
 		vo.create_date = info.getCreateDate();
 		vo.update_date = info.getUpdateDate();
 		vo.order_price = info.getOrderPrice();
+		vo.use_bonus = info.getUseBonus();
 		vo.order_bonus = info.getOrderBonus();
 		vo.fetch_date = info.getFetchDate();
 		vo.order_data = info.getOrderData();
@@ -267,6 +268,7 @@ public class OrderVo {
 				.add("restaurant_name", restaurant_name)
 				.add("restaurant_address", restaurant_address)
 				.add("user_message", user_message)
+				.add("use_bonus", use_bonus)
 				.add("create_date", create_date)
 				.add("update_date", update_date)
 				.add("order_price", order_price)

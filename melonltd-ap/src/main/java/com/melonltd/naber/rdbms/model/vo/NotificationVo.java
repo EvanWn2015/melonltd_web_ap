@@ -3,6 +3,8 @@ package com.melonltd.naber.rdbms.model.vo;
 public class NotificationVo {
 	private String to;
 	private Object data;
+	private AndroidPriority android = new AndroidPriority("1");
+	private IOSPriority apns = new IOSPriority();
 
 	public String getTo() {
 		return to;
@@ -56,4 +58,15 @@ public class NotificationVo {
 			this.icon = icon;
 		}
 	}
+}
+
+class AndroidPriority{
+	String priority;
+	AndroidPriority (String priority){
+		this.priority = priority;
+	} 
+}
+
+class IOSPriority {
+	String headers = "{\"apns-priority\":\"1\"}"; 
 }
