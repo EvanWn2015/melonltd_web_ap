@@ -44,23 +44,18 @@ public class AndroidPushService {
 		return conn;
 	}
 
-//	public void push(String device_token, NotificationVo notificationVo) {
-//		try {
-//			String pushMessage = JsonHelper.toJson(notificationVo);
-//			HttpURLConnection conn = getConnection();
-//			OutputStream outputStream = conn.getOutputStream();
-//			outputStream.write(pushMessage.getBytes("UTF-8"));
-//			LOGGER.info("pusp status ResponseCode: {}, ResponseMessage: {}", conn.getResponseCode(), conn.getResponseMessage());
-//		} catch (Exception e) {
-//			LOGGER.error("push error , error: {}", e.getMessage());
-//		}
-//	}
-
 	public void pushs(List<NotificationVo> notificationVos) {
 		notificationVos.stream().forEach(a -> {
 			try {
 				String pushMessage = JsonHelper.toJson(a);
-				HttpURLConnection conn = getConnection();
+//				HttpURLConnection conn = getConnection();
+				URL url = new URL("https://fcm.googleapis.com/fcm/send");
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestProperty("Authorization", "key=" + serverKey);
+				conn.setRequestProperty("Accept-Charset", "UTF-8");
+				conn.setRequestProperty("Content-Type", "application/json");
+				conn.setRequestMethod("POST");
+				conn.setDoOutput(true);
 				OutputStream outputStream = conn.getOutputStream();
 				outputStream.write(pushMessage.getBytes("UTF-8"));
 				LOGGER.info("pusp status ResponseCode: {}, ResponseMessage: {}", conn.getResponseCode(), conn.getResponseMessage());

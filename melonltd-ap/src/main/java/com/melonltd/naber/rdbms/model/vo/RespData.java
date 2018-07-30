@@ -3,6 +3,8 @@ package com.melonltd.naber.rdbms.model.vo;
 import java.util.LinkedHashMap;
 
 import com.google.common.collect.Maps;
+import com.melonltd.naber.constant.NaberConstant;
+import com.melonltd.naber.endpoint.util.JsonHelper;
 
 public class RespData {
 	public enum Status {
@@ -70,6 +72,10 @@ public class RespData {
 			map.put("err_msg", error.msg);
 		}
 		map.put("data", o);
+		
+		if (NaberConstant.IS_DEBUG && status.equals(Status.TRUE)) {
+			System.out.println(o.toString());
+		}
 		return map;
 	}
 	
@@ -81,6 +87,9 @@ public class RespData {
 			map.put("err_msg", errorMsg);
 		}
 		map.put("data", o);
+		if (NaberConstant.IS_DEBUG && status.equals(Status.TRUE)) {
+			System.out.println(o.toString());
+		}
 		return map;
 	}
 	
