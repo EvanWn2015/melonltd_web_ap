@@ -129,6 +129,7 @@ public class RestaurantInfoService {
 		info.setRestaurantCategory(vo.getRestaurant_category());
 		info.setLatitude(vo.getLatitude());
 		info.setLongitude(vo.getLongitude());
+		info.setCanDiscount("Y");
 		info.setBulletin(vo.getBulletin());
 		info.setPhoto(vo.getPhoto());
 		info.setCreateDate(vo.getCreate_date());
@@ -147,6 +148,7 @@ public class RestaurantInfoService {
 		info.setAddress(vo.getAddress());
 		info.setStoreStart(vo.getStore_start());
 		info.setStoreEnd(vo.getStore_end());
+		info.setCanDiscount("Y");
 		info.setNotBusiness(JsonHelper.toJson(vo.getNot_business()));
 		info.setCanStoreRange(JsonHelper.toJson(vo.getCan_store_range()));
 		info.setRestaurantCategory(vo.getRestaurant_category());
