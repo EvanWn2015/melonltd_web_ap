@@ -72,10 +72,6 @@ public class RespData {
 			map.put("err_msg", error.msg);
 		}
 		map.put("data", o);
-		
-		if (NaberConstant.IS_DEBUG && status.equals(Status.TRUE)) {
-			System.out.println(o.toString());
-		}
 		return map;
 	}
 	
@@ -87,9 +83,6 @@ public class RespData {
 			map.put("err_msg", errorMsg);
 		}
 		map.put("data", o);
-		if (NaberConstant.IS_DEBUG && status.equals(Status.TRUE)) {
-			System.out.println(o.toString());
-		}
 		return map;
 	}
 	

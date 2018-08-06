@@ -531,6 +531,37 @@ public class MyTest {
 	@Test
 	public void tttt() {
 		
+		
+		String jj = "{\n" + 
+					"  \"enable\": \"Y\",\n" + 
+					"  \"password\":\"a123456\",\n" + 
+					"  \"identity\": \"SELLERS\",\n" + 
+					"  \"phone\": \"1\",\n" + 
+					"  \"is_login\": \"Y\",\n" + 
+					"  \"account_uuid\": \"SELLER_20180703_175534_325_2f3fc8cc-4ec2-4669-be06-b745ce389f47\",\n" + 
+					"  \"login_date\": \"2018-08-03T12:40:22.6160Z\",\n" + 
+					"  \"level\": \"MANAGE\",\n" + 
+					"  \"address\": \"320桃園市中壢區民族路二段130號\",\n" + 
+					"  \"restaurant_uuid\": \"RESTAURANT_20180703_175534_327_f252aaec-8dec-48b8-826d-5197add44686\",\n" + 
+					"  \"account\": \"NER-18X1X14\",\n" + 
+					"  \"email\": \"NER-18X1X14@gmail.com\",\n" + 
+					"  \"name\": \"清玉-民族店\",\n" + 
+					"  \"bonus\": \"0\"\n" + 
+					"}";
+		
+		AccountInfoVo info = JsonHelper.json(jj, AccountInfoVo.class);
+//		AccountInfoVo info = new AccountInfoVo();
+		System.out.println(info.toString().getBytes().length / 1024.0);
+		System.out.println(JsonHelper.toJson(info).getBytes().length);
+		
+		double one = 0.5546875;
+		
+		System.out.println(one * 1000 / 1024);
+		System.out.println(one * 2000 / 1024);
+		System.out.println(one * 10000 / 1024);
+		System.out.println(one * 20000 / 1024);
+		System.out.println(one * 30000 / 1024);
+		
 	}
 }
 

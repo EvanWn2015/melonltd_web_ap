@@ -67,6 +67,7 @@ public class SubmitOrderService {
 		info.setCreateDate(date);
 		info.setUpdateDate(date);
 		info.setOrderPrice(price);
+		info.setUseBonus("0");
 		info.setUseBonus(req.getUse_bonus());
 		info.setOrderBonus(bonus);
 		info.setFetchDate(req.getFetch_date());
@@ -86,6 +87,7 @@ public class SubmitOrderService {
 		info.setCreateDate(date);
 		info.setUpdateDate(date);
 		info.setOrderPrice(price);
+		info.setUseBonus("0");
 		info.setUseBonus(req.getUse_bonus());
 		info.setOrderBonus(bonus);
 		info.setFetchDate(req.getFetch_date());
@@ -105,6 +107,7 @@ public class SubmitOrderService {
 		info.setCreateDate(date);
 		info.setUpdateDate(date);
 		info.setOrderPrice(price);
+		info.setUseBonus("0");
 		info.setUseBonus(req.getUse_bonus());
 //		info.setDiscount(req.getUse_discount());
 		info.setOrderBonus(bonus);
