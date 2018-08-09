@@ -563,6 +563,19 @@ public class MyTest {
 		System.out.println(one * 30000 / 1024);
 		
 	}
+	
+	@Test
+	public void dsds () {
+//		Tools.buildDateRange(30, 2400);
+//		Tools.buildDateRange(0, 2400);
+		List<DateRangeVo> list = Tools.buildCanStoreRange(1200, 1200);
+		list.stream().forEach(r -> {
+			System.out.println(r.toString());
+		});
+		
+		
+		System.out.println(list);
+	}
 }
 
 

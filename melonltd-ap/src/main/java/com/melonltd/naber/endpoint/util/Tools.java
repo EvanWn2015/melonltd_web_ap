@@ -182,6 +182,10 @@ public class Tools {
 
 	public static List<DateRangeVo> buildCanStoreRange(Integer start, Integer end) {
 		List<DateRangeVo> list = Lists.<DateRangeVo>newArrayList();
+		if (end == 0) {
+			end = 2400;
+		}
+		
 		if (start < end) {
 			list = buildDateRange(start, end);
 		} else {
@@ -191,8 +195,15 @@ public class Tools {
 	}
 
 	public static List<DateRangeVo> buildDateRange(Integer start, Integer end) {
+		int tmpEnd = 0;
+		if (start % 100 == 0) {
+			tmpEnd = start + 30;
+		} else {
+			tmpEnd =  start + 70;
+		}
+		
 		start++;
-		Range<Integer> timeR = Range.open(start, start + 29);
+		Range<Integer> timeR = Range.open(start, tmpEnd);
 		List<DateRangeVo> list = Lists.<DateRangeVo>newArrayList();
 
 		boolean status = true;
@@ -217,8 +228,15 @@ public class Tools {
 	}
 
 	public static List<DateRangeVo> buildDateRangeReverse(Integer start, Integer end) {
+		int tmpEnd = 0;
+		if (start % 100 == 0) {
+			tmpEnd = start + 30;
+		} else {
+			tmpEnd =  start + 70;
+		}
+		
 		start++;
-		Range<Integer> timeR = Range.open(start, start + 29);
+		Range<Integer> timeR = Range.open(start, tmpEnd);
 		List<DateRangeVo> list = Lists.<DateRangeVo>newArrayList();
 		boolean status = true;
 
@@ -236,6 +254,9 @@ public class Tools {
 			if (timeR.upperEndpoint().intValue() == 2400) {
 				list.add(DateRangeVo.of(timeR.lowerEndpoint().intValue(), 2400, SwitchStatus.OPEN));
 				timeR = Range.open(0 + 1, 30);
+				if (end == 0) {
+					status = false;
+				}
 			}
 
 			if (timeR.upperEndpoint().intValue() == end) {
