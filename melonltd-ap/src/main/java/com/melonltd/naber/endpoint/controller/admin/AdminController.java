@@ -46,6 +46,7 @@ import com.melonltd.naber.rdbms.model.dao.RestaurantLocationTemplateDao;
 import com.melonltd.naber.rdbms.model.dao.SellerRegisteredDao;
 import com.melonltd.naber.rdbms.model.facade.service.ScheduleOrderService;
 import com.melonltd.naber.rdbms.model.push.service.AndroidPushService;
+import com.melonltd.naber.rdbms.model.push.service.AnpsPushServcie;
 import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
@@ -73,6 +74,8 @@ public class AdminController {
 
 	@Autowired
 	private AndroidPushService androidPushService;
+	@Autowired
+	private AnpsPushServcie anpsPushServcie;
 
 	@Autowired
 	private RestaurantInfoDao restaurantInfoDao;
@@ -194,6 +197,39 @@ public class AdminController {
 		}
 		return new ResponseEntity<String>("AAA", HttpStatus.OK);
 	}
+	
+	@ResponseBody
+	@PostMapping(value = "admin/pushAPNS")
+	public ResponseEntity<String> textPushAPNS(@RequestParam(value = "data", required = false) String data,
+			HttpServletRequest httpRequest) {
+		String accountUUID = httpRequest.getHeader("Authorization");
+		AccountInfoVo accountInfoVo = accountInfoService.getCacheBuilderByKey(accountUUID, false);
+		if (ObjectUtils.allNotNull(accountInfoVo)) {
+			if (Identity.ADMIN.equals(Identity.of(accountInfoVo.getIdentity()))) {
+
+//				List<NotificationVo> notificationVos = Lists.newArrayList();
+//				for (int i = 0; i < 10; i++) {
+//					NotificationVo notify = new NotificationVo();
+//					notify.setTo(data);
+//					Map<String, String> datas = Maps.newHashMap();
+//					datas.put("identity", Identity.NON_STUDENT.name());
+//					datas.put("title", "訂單信息" + i);
+//					datas.put("message", "測試中文內容" + i);
+//					notify.setData(datas);
+//					notificationVos.add(notify);
+//				}
+//
+//				androidPushService.pushs(notificationVos);
+				
+
+				anpsPushServcie.push(data, "mytest", "mymessage");
+			}
+			
+			
+		}
+		return new ResponseEntity<String>("AAA", HttpStatus.OK);
+	}
+	
 
 	@ResponseBody
 	@PostMapping(value = "admin/add/restaurant")
