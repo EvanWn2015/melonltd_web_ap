@@ -103,7 +103,8 @@ public class AccountController {
 		if (ObjectUtils.allNotNull(error)) {
 			map = RespData.of(Status.FALSE, error, null);
 		} else {
-			AccountInfoVo vo = accountInfoService.findByPhoneAndMail(req.getPhone(), req.getEmail());
+//			AccountInfoVo vo = accountInfoService.findByPhoneAndMail(req.getPhone(), req.getEmail());
+			AccountInfoVo vo = accountInfoService.findByPhone(req.getPhone());
 			if (!ObjectUtils.allNotNull(vo)) {
 				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
 			} else {
@@ -142,9 +143,9 @@ public class AccountController {
 				return ErrorType.INVALID_PASSWORD_REPEAT;
 			}
 		} else {
-			if (!ObjectUtils.allNotNull(req.getPhone(), req.getEmail())) {
-				return ErrorType.INVALID;
-			}
+//			if (!ObjectUtils.allNotNull(req.getPhone(), req.getEmail())) {
+//				return ErrorType.INVALID;
+//			}
 		}
 		return null;
 	}

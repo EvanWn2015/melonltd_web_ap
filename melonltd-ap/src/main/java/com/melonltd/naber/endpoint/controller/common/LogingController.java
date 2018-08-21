@@ -1,4 +1,4 @@
-package com.melonltd.naber.endpoint.controller;
+package com.melonltd.naber.endpoint.controller.common;
 
 import java.util.LinkedHashMap;
 
@@ -55,7 +55,8 @@ public class LogingController {
 		
 		LinkedHashMap<String, Object> map = null;
 		if (ObjectUtils.anyNotNull(vo)) {
-			 map = RespData.of(Status.TRUE, null, vo);	
+			 map = RespData.of(Status.TRUE, null, vo);
+			 LOGGER.info("login user Account: {}, AccountUUID: {}, Identity: {}, Device: {}, {}", vo.getAccount(), vo.getAccount_uuid(), vo.getIdentity(), vo.getDevice_token(), category );
 		}else {
 			 map = RespData.of(Status.FALSE, ErrorType.LOGIN_FAIL, vo);
 		}
@@ -72,6 +73,8 @@ public class LogingController {
 		accountInfoService.refreshLoginStatus(vo.getAccount_uuid());
 		mobileDeviceService.remove(vo);
 		
+		
+		LOGGER.info("logout user AccountUUID: {}, Device: {}, {}", vo.getAccount_uuid(), vo.getDevice_token(), vo.getDevice_category());
 		LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, "");
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);

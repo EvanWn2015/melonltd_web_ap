@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Strings;
+import com.melonltd.naber.constant.NaberConstant;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.VerifyPhoneLog;
 import com.melonltd.naber.rdbms.model.dao.VerifyPhoneLogDao;
@@ -28,7 +29,7 @@ public class VerifyPhoneLogService {
 	@Transactional(readOnly = false, rollbackFor = HibernateException.class)
 	public String sendSMS(String phoneNumber) {
 		String code = "";
-		while (code.length() != 6) {
+		while (code.length() != NaberConstant.SMS_CODE_LENGTH) {
 			code += (int) (Math.random() * 10);
 		}
 //		
@@ -40,13 +41,14 @@ public class VerifyPhoneLogService {
 		List<VerifyPhoneLog> logs = verifyPhoneLogDao.findByPhoneNumberAndBetweenDates(phoneNumber, start, end);
 		if (logs == null) {
 			return sendPhoneSMS(code, content, phoneNumber);
-		} else if (logs.size() < 2) {
+		} else if (logs.size() < NaberConstant.SMS_DAILY_SEND_MAX) {
 			return sendPhoneSMS(code, content, phoneNumber);
 		} else {
 			return null;
 		}
 	}
 
+	// 一天同一支手機號碼，可以請求三次SMS
 	@Transactional(readOnly = false, rollbackFor = HibernateException.class)
 	public String sendForgetPassword(String phone, String content) {
 		String start = Tools.getNowStartOfDayGMT();
@@ -54,7 +56,7 @@ public class VerifyPhoneLogService {
 		List<VerifyPhoneLog> logs = verifyPhoneLogDao.findByPhoneNumberAndBetweenDates(phone, start, end);
 		if (logs == null) {
 			return sendPhoneSMS("Forget", content, phone);
-		} else if (logs.size() < 2) {
+		} else if (logs.size() < NaberConstant.SMS_DAILY_SEND_MAX) {
 			return sendPhoneSMS("Forget", content, phone);
 		} else {
 			return null;

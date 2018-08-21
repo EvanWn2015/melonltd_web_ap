@@ -21,6 +21,7 @@ public class RestaurantInfoVo implements Serializable {
 	private String store_end;
 	private String is_store_now_open;
 	private String can_discount;
+	private List<String> delivery_types;
 	private List<String> not_business;
 	private List<DateRangeVo> can_store_range;
 	private String restaurant_category;
@@ -35,31 +36,6 @@ public class RestaurantInfoVo implements Serializable {
 	private String top;
 	
 	private String distance;
-
-	
-	public String getCreate_date() {
-		return create_date;
-	}
-
-	public void setCreate_date(String create_date) {
-		this.create_date = create_date;
-	}
-
-	public String getIs_store_now_open() {
-		return is_store_now_open;
-	}
-
-	public void setIs_store_now_open(String is_store_now_open) {
-		this.is_store_now_open = is_store_now_open;
-	}
-
-	public String getDistance() {
-		return distance;
-	}
-
-	public void setDistance(String distance) {
-		this.distance = distance;
-	}
 
 	public String getRestaurant_uuid() {
 		return restaurant_uuid;
@@ -99,6 +75,30 @@ public class RestaurantInfoVo implements Serializable {
 
 	public void setStore_end(String store_end) {
 		this.store_end = store_end;
+	}
+
+	public String getIs_store_now_open() {
+		return is_store_now_open;
+	}
+
+	public void setIs_store_now_open(String is_store_now_open) {
+		this.is_store_now_open = is_store_now_open;
+	}
+
+	public String getCan_discount() {
+		return can_discount;
+	}
+
+	public void setCan_discount(String can_discount) {
+		this.can_discount = can_discount;
+	}
+
+	public List<String> getDelivery_types() {
+		return delivery_types;
+	}
+
+	public void setDelivery_types(List<String> delivery_types) {
+		this.delivery_types = delivery_types;
 	}
 
 	public List<String> getNot_business() {
@@ -173,6 +173,14 @@ public class RestaurantInfoVo implements Serializable {
 		this.photo_type = photo_type;
 	}
 
+	public String getCreate_date() {
+		return create_date;
+	}
+
+	public void setCreate_date(String create_date) {
+		this.create_date = create_date;
+	}
+
 	public String getEnable() {
 		return enable;
 	}
@@ -188,38 +196,14 @@ public class RestaurantInfoVo implements Serializable {
 	public void setTop(String top) {
 		this.top = top;
 	}
-	
-	public String getCan_discount() {
-		return can_discount;
+
+	public String getDistance() {
+		return distance;
 	}
 
-	public void setCan_discount(String can_discount) {
-		this.can_discount = can_discount;
+	public void setDistance(String distance) {
+		this.distance = distance;
 	}
-	
-	
-//	public static RestaurantInfoVo valueOf (RestaurantInfo info) {
-//		RestaurantInfoVo vo = new RestaurantInfoVo(); 
-//		vo.restaurant_uuid = info.getRestaurantUUID();
-//		vo.name = info.getName();
-//		vo.address = info.getAddress();
-//		vo.store_start = info.getStoreStart();
-//		vo.store_end = info.getStoreEnd();
-//		vo.not_business = info.getNotBusiness();
-//		vo.can_store_range = info.getCanStoreRange();
-//		vo.restaurant_category = info.getRestaurantCategory();
-//		vo.latitude = info.getLatitude();
-//		vo.longitude = info.getLongitude();
-//		vo.bulletin = info.getBulletin();
-//		vo.photo = info.getPhoto();
-//		vo.background_photo = info.getBackgroundPhoto();
-//		vo.photo_type = info.getPhotoType();
-//		vo.enable = info.getEnable();
-//		vo.top = info.getTop();
-//		return vo;
-//	}
-
-
 
 	public static RestaurantInfoVo valueOf(RestaurantInfo info, boolean hasStoreRange) {
 		RestaurantInfoVo vo = checkIsStoreOpen(info);
@@ -229,6 +213,7 @@ public class RestaurantInfoVo implements Serializable {
 		vo.store_start = info.getStoreStart();
 		vo.store_end = info.getStoreEnd();
 		vo.can_discount = info.getCanDiscount();
+		vo.delivery_types = JsonHelper.jsonArray(info.getDeliveryTypes(),String[].class);
 //		vo.is_store_now_open = checkIsStoreOpen(info) + "";
 //		vo.not_business = JsonHelper.jsonArray(info.getNotBusiness(), String[].class);
 		if (hasStoreRange) {
@@ -309,11 +294,12 @@ public class RestaurantInfoVo implements Serializable {
 				.add("store_end", store_end)
 				.add("not_business", not_business)
 				.add("can_store_range", can_store_range)
+				.add("can_discount", can_discount)
+				.add("delivery_types", delivery_types)
 				.add("restaurant_category", restaurant_category)
 				.add("latitude", latitude)
 				.add("longitude", longitude)
 				.add("bulletin", bulletin)
-				.add("can_discount", can_discount)
 				.add("photo", photo)
 				.add("background_photo", background_photo)
 				.add("photo_type", photo_type)

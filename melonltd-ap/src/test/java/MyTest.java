@@ -30,6 +30,7 @@ import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
 import com.melonltd.naber.rdbms.model.req.vo.DemandsItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
+import com.melonltd.naber.rdbms.model.type.Delivery;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
@@ -566,15 +567,12 @@ public class MyTest {
 	
 	@Test
 	public void dsds () {
-//		Tools.buildDateRange(30, 2400);
-//		Tools.buildDateRange(0, 2400);
-		List<DateRangeVo> list = Tools.buildCanStoreRange(0, 0);
-		list.stream().forEach(r -> {
-			System.out.println(r.toString());
-		});
+		String[] array = Delivery.getEnumValues().stream().map(d -> d.name()).toArray(String[] :: new);
+		String str = String.join(",", array);
+		System.out.println(JsonHelper.jsonArray(null,String[].class));
 		
-		
-		System.out.println(list);
+		String ss = "[\"SEND\",\"IN\",\"OUT\"]";
+		System.out.println(ss.length());
 	}
 }
 

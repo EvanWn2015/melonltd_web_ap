@@ -14,6 +14,7 @@ public class OredeSubimtReq {
 	private String user_name;
 	private String user_phone;
 	private String use_bonus;
+	private String can_discount;
 	
 	private List<OrderData> orders;
 
@@ -89,6 +90,14 @@ public class OredeSubimtReq {
 		this.use_bonus = use_bonus;
 	}
 
+	public String getCan_discount() {
+		return can_discount;
+	}
+
+	public void setCan_discount(String can_discount) {
+		this.can_discount = can_discount;
+	}
+
 	public static OredeSubimtReq ofOrders(List<OrderData> orders) {
 		OredeSubimtReq data = new OredeSubimtReq();
 		data.orders = orders;
@@ -99,6 +108,7 @@ public class OredeSubimtReq {
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())
 				.add("restaurant_uuid", restaurant_uuid)
+				.add("can_discount", can_discount)
 				.add("fetch_date", fetch_date)
 				.add("user_message", user_message)
 				.add("use_bonus", use_bonus)

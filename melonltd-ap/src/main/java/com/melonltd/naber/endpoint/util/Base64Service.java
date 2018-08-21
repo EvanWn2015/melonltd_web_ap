@@ -22,6 +22,7 @@ public class Base64Service {
 			if (NaberConstant.IS_DEBUG) {
 				return key;
 			}else {
+//				return Base64.getEncoder().encodeToString(key.getBytes("UTF-8"));
 				return Base64.getEncoder().encodeToString(URLEncoder.encode(key, "UTF-8").getBytes("UTF-8"));	
 			}
 		} catch (UnsupportedEncodingException e) {
@@ -35,6 +36,7 @@ public class Base64Service {
 			if (NaberConstant.IS_DEBUG) {
 				return key;
 			}else {
+//				return new String(Base64.getDecoder().decode(key), "UTF-8");	
 				return URLDecoder.decode(new String(Base64.getDecoder().decode(key), "UTF-8"), "UTF-8");	
 			}
 		} catch (UnsupportedEncodingException e) {

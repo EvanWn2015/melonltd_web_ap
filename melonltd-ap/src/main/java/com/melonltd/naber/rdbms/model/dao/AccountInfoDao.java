@@ -23,6 +23,9 @@ public interface AccountInfoDao extends JpaRepository<AccountInfo, String> {
 	@Query("SELECT a FROM AccountInfo a WHERE a.phone=?1 AND a.email=?2 AND a.enable='Y'")	
 	public AccountInfo findByPhoneAndMail(String phone, String email);
 	
+	@Query("SELECT a FROM AccountInfo a WHERE a.phone=?1 AND a.enable='Y'")	
+	public AccountInfo findByPhone(String phone);
+	
 	@Query("SELECT a FROM AccountInfo a WHERE a.accountUUID IN(?1) AND a.enable='Y'")	
 	public List<AccountInfo> findByAccountUUIDs(List<String> accountUUIDs);
 	

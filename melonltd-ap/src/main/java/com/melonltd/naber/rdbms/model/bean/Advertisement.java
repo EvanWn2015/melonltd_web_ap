@@ -18,10 +18,12 @@ public class Advertisement implements Serializable{
 	private String title;
 	private String contentText;
 	private String photo;
+	private String padPhoto;
 	private String photoType;
 	private String enable;
 	private String createDate;
-	
+
+
 	@Id
 	@Column(name = "ad_uuid", unique = true, nullable = false)
 	public String getAdUUID() {
@@ -41,6 +43,11 @@ public class Advertisement implements Serializable{
 	@Column(name = "photo")
 	public String getPhoto() {
 		return photo;
+	}
+	
+	@Column(name = "pad_photo")
+	public String getPadPhoto() {
+		return padPhoto;
 	}
 	
 	@Column(name = "photo_type")
@@ -74,6 +81,10 @@ public class Advertisement implements Serializable{
 		this.photo = photo;
 	}
 
+	public void setPadPhoto(String padPhoto) {
+		this.padPhoto = padPhoto;
+	}
+	
 	public void setPhotoType(String photoType) {
 		this.photoType = photoType;
 	}
@@ -93,6 +104,7 @@ public class Advertisement implements Serializable{
 				.add("title", title)
 				.add("contentText", contentText)
 				.add("photo", photo)
+				.add("padPhoto", padPhoto)
 				.add("photoType", photoType)
 				.add("createDate", createDate)
 				.add("enable", enable)

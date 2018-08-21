@@ -35,6 +35,7 @@ public class LoginService {
 				mobileDeviceService.save(m);
 			}
 			accountInfoService.changeLoginStatus(vo.getAccount_uuid());
+			vo.setDevice_token(deviceToken);
 			return vo;
 		}
 		return null;

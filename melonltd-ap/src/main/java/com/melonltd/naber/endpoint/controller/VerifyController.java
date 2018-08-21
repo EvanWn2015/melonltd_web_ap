@@ -28,7 +28,6 @@ public class VerifyController {
 	@Autowired
 	VerifyPhoneLogService verifyPhoneLogService;
 
-	// req="0987654321" phone number
 	@ResponseBody
 	@PostMapping(value = "sms/get/code")
 	public ResponseEntity<String> sendSMSGetVerifyCode(@RequestParam(value = "data", required = false) String data) {

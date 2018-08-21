@@ -77,11 +77,11 @@ public class ChangeOrdarController {
 					if (OrderStatus.CANCEL.equals(changeStatus)) {
 						datas.put("message", String.format(OrderStatus.CANCEL.getMssage(), req.getMessage()));
 						notificationVo.setData(datas);
-						pudhSellerService.pushOrderToUser(accountUUID,notificationVo);
+						pudhSellerService.pushOrderToUser(accountUUID, notificationVo);
 					}else {
 						datas.put("message", changeStatus.getMssage());
 						notificationVo.setData(datas);
-						pudhSellerService.pushOrderToUser(accountUUID,notificationVo);
+						pudhSellerService.pushOrderToUser(accountUUID, notificationVo);
 					}
 					
 				}

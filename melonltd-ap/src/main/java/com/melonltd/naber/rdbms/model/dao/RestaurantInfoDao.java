@@ -30,4 +30,7 @@ public interface RestaurantInfoDao extends JpaRepository<RestaurantInfo, String>
 	
 	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable = 'Y' AND a.restaurantCategory=?1")
 	public Page<RestaurantInfo> findByCategory(String category, Pageable pageable);
+	
+	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable='Y' AND a.name LIKE %?1% ")
+	public Page<RestaurantInfo> findByAdd(String area, Pageable pageable);
 }

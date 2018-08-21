@@ -83,6 +83,19 @@ public class RestaurantInfoService {
 		return Lists.<RestaurantInfoVo>newArrayList();
 	}
 	
+	public List<RestaurantInfoVo> findByAdd(String address, int page) {
+		if (page > 0) {
+			page --;
+		}
+		Sort sort = new Sort(Direction.DESC, "createDate");
+		Pageable pageable = new PageRequest(page, 10, sort);
+		Page<RestaurantInfo> pages = restaurantInfoDao.findByAdd(address, pageable);
+		if (pages.hasContent()) {
+			return RestaurantInfoVo.valueOfArray(pages.getContent());
+		}
+		return Lists.<RestaurantInfoVo>newArrayList();
+	}
+	
 	
 	public List<RestaurantInfoVo> findByUUIDs(List<String> uuids) {
 		if (CollectionUtils.isNotEmpty(uuids)) {

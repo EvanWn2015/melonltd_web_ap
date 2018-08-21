@@ -52,6 +52,15 @@ public class AccountInfoService {
 		}
 		return null;
 	}
+	
+	public AccountInfoVo findByPhone(String phone) {
+		AccountInfo info = accountInfoDao.findByPhone(phone);
+		if (ObjectUtils.allNotNull(info)) {
+			cacheBuilder.invalidate(info.getAccountUUID());
+			return AccountInfoVo.of(info, true);
+		}
+		return null;
+	}
 
 	public AccountInfoVo findByPhoneAndAccount(String account, String password) {
 		AccountInfo info = accountInfoDao.findByPhoneAndAccount(account, password);

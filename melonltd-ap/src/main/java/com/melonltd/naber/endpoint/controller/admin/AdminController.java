@@ -1,11 +1,11 @@
 package com.melonltd.naber.endpoint.controller.admin;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,18 +25,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.api.client.util.Lists;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Maps;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
+import com.melonltd.naber.rdbms.model.bean.AccountInfo;
 import com.melonltd.naber.rdbms.model.bean.CategoryRel;
 import com.melonltd.naber.rdbms.model.bean.FoodInfo;
-import com.melonltd.naber.rdbms.model.bean.MobileDevice;
 import com.melonltd.naber.rdbms.model.bean.OrderInfo;
 import com.melonltd.naber.rdbms.model.bean.RestaurantInfo;
 import com.melonltd.naber.rdbms.model.bean.RestaurantLocationTemplate;
 import com.melonltd.naber.rdbms.model.bean.SellerRegistered;
+import com.melonltd.naber.rdbms.model.dao.AccountInfoDao;
 import com.melonltd.naber.rdbms.model.dao.CategoryRelDao;
 import com.melonltd.naber.rdbms.model.dao.FoodInfoDao;
 import com.melonltd.naber.rdbms.model.dao.MobileDeviceDao;
@@ -46,13 +46,13 @@ import com.melonltd.naber.rdbms.model.dao.RestaurantLocationTemplateDao;
 import com.melonltd.naber.rdbms.model.dao.SellerRegisteredDao;
 import com.melonltd.naber.rdbms.model.facade.service.ScheduleOrderService;
 import com.melonltd.naber.rdbms.model.push.service.AndroidPushService;
-import com.melonltd.naber.rdbms.model.push.service.AnpsPushServcie;
 import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
-import com.melonltd.naber.rdbms.model.type.DeviceCategory;
+import com.melonltd.naber.rdbms.model.type.Delivery;
 import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.Identity;
+import com.melonltd.naber.rdbms.model.type.Level;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
@@ -74,77 +74,66 @@ public class AdminController {
 
 	@Autowired
 	private AndroidPushService androidPushService;
-	@Autowired
-	private AnpsPushServcie anpsPushServcie;
+//	@Autowired
+//	private APNSPushServcie anpsPushServcie;
 
+	
+	@Autowired
+	private AccountInfoDao accountInfoDao;
 	@Autowired
 	private RestaurantInfoDao restaurantInfoDao;
-
 	@Autowired
 	private FoodInfoDao foodInfoDao;
-
 	@Autowired
 	private RestaurantLocationTemplateDao restaurantLocationTemplateDao;
-
 	@Autowired
 	private CategoryRelDao categoryRelDao;
-
 	@Autowired
 	private SellerRegisteredDao sellerRegisteredDao;
-
 	@Autowired
 	private MobileDeviceDao mobileDeviceDao;
-	
 	@Autowired
 	private OrderInfoDao orderInfoDao;
 
+	
+	
+	private static List<DateRangeVo> checkCanStoreRanges(Integer start, Integer end, List<DateRangeVo> oldRanges) {
+		List<DateRangeVo> ranges = Tools.buildCanStoreRange(start, end);
+		List<DateRangeVo> newRanges = Lists.<DateRangeVo>newArrayList();
+		for (DateRangeVo r : ranges) {
+			DateRangeVo vo = r;
+			for (DateRangeVo o : oldRanges) {
+				if (StringUtils.equals(r.getDate(), o.getDate())) {
+					vo = o;
+					break;
+				}
+			}
+			newRanges.add(vo);
+		}
+		return newRanges;
+	}
+	
+	
 	@ResponseBody
-	@PostMapping(value = "admin/processing/dsevice")
-	public ResponseEntity<String> processingDevice(HttpServletRequest httpRequest) {
+	@PostMapping(value = "admin/process/restaurant/and/order/delivery/types")
+	public ResponseEntity<String> processRestaurantAndOrderDeliveryTypes(HttpServletRequest httpRequest) {
 		String accountUUID = httpRequest.getHeader("Authorization");
 		AccountInfoVo accountInfoVo = accountInfoService.getCacheBuilderByKey(accountUUID, false);
-		String resp = "";
 		if (ObjectUtils.allNotNull(accountInfoVo)) {
+			String d = JsonHelper.toJson(Arrays.asList(Delivery.OUT.name()));
 			if (Identity.ADMIN.equals(Identity.of(accountInfoVo.getIdentity()))) {
-
-				List<MobileDevice> list = mobileDeviceDao.findAll();
-				HashMultimap<String, String> multimap = HashMultimap.create();
-				Comparator<MobileDevice> comparator = Comparator.comparing(MobileDevice ::getCreateDate, (d1, d2) -> d2.compareTo(d1));
-				List<MobileDevice> userlist = list.stream().filter(m -> StringUtils.contains(m.getAccountUUID(),"USER")).sorted(comparator).collect(Collectors.toList());
-				
-				userlist.forEach(u ->{
-					if (multimap.get(u.getAccountUUID()).isEmpty()) {
-						System.out.println("set : "+ u.getAccountUUID() + ":"+ u.getCreateDate());
-						multimap.put(u.getAccountUUID(), u.getDeviceToken());
-					}else {
-						System.out.println(u.getAccountUUID() + ":"+ u.getCreateDate());
-					}
-				});
-
-				List<String> accounts = list.stream().map(a -> a.getAccountUUID()).distinct().collect(Collectors.toList());
-				List<MobileDevice> entities = accounts.stream().map(a -> {
-					MobileDevice device = new MobileDevice();
-					Set<String> tokens = multimap.get(a);
-					device.setAccountUUID(a);
-					device.setDeviceCategory(DeviceCategory.ANDROID.name());
-					device.setCreateDate(Tools.getNowGMT());
-					device.setDeviceUUID(Tools.buildUUID(UUIDType.DEVICE));
-					device.setDeviceToken(JsonHelper.toJson(tokens));
-					System.out.println("account: " + a + "  ->>> " + tokens.toString());
-					return device;
-				}).collect(Collectors.toList());
-				List<MobileDevice> r_entities = mobileDeviceDao.save(entities);
-				mobileDeviceDao.delete(list);
-				Map<String, Object> map = Maps.newHashMap();
-				 map.put("old", list);
-				 map.put("new", r_entities);
-				LinkedHashMap<String, Object> maps = RespData.of(Status.TRUE, null, map);
-				resp = JsonHelper.toJson(maps);
+				List<RestaurantInfo> restaurantInfos = restaurantInfoDao.findAll();
+				restaurantInfos.stream().forEach(r -> r.setDeliveryTypes(d));
+				System.out.println(restaurantInfos.toString());
+				restaurantInfoDao.save(restaurantInfos);
 			}
 		}
-		return new ResponseEntity<String>(resp, HttpStatus.OK);
-	}
 
+		// System.out.println(smsHttpService.getCreditValue() + "");
+		return new ResponseEntity<String>("AAA", HttpStatus.OK);
+	}
+	
+	
 	@ResponseBody
 	@GetMapping(value = "admin/order/job")
 	public ResponseEntity<String> textOrderJob(HttpServletRequest httpRequest) {
@@ -182,8 +171,12 @@ public class AdminController {
 
 				List<NotificationVo> notificationVos = Lists.newArrayList();
 				for (int i = 0; i < 10; i++) {
+					
+					
+//					NotificationVo notify = NotificationVo.newInstance(data, new NotificationVo.Notify("TEST", "MESSAGE",null));
 					NotificationVo notify = new NotificationVo();
 					notify.setTo(data);
+					
 					Map<String, String> datas = Maps.newHashMap();
 					datas.put("identity", Identity.NON_STUDENT.name());
 					datas.put("title", "訂單信息" + i);
@@ -192,7 +185,7 @@ public class AdminController {
 					notificationVos.add(notify);
 				}
 
-				androidPushService.pushs(notificationVos);
+				androidPushService.pushForAndroids(notificationVos);
 			}
 		}
 		return new ResponseEntity<String>("AAA", HttpStatus.OK);
@@ -207,24 +200,23 @@ public class AdminController {
 		if (ObjectUtils.allNotNull(accountInfoVo)) {
 			if (Identity.ADMIN.equals(Identity.of(accountInfoVo.getIdentity()))) {
 
-//				List<NotificationVo> notificationVos = Lists.newArrayList();
-//				for (int i = 0; i < 10; i++) {
-//					NotificationVo notify = new NotificationVo();
-//					notify.setTo(data);
-//					Map<String, String> datas = Maps.newHashMap();
-//					datas.put("identity", Identity.NON_STUDENT.name());
-//					datas.put("title", "訂單信息" + i);
-//					datas.put("message", "測試中文內容" + i);
-//					notify.setData(datas);
-//					notificationVos.add(notify);
-//				}
-//
-//				androidPushService.pushs(notificationVos);
+				List<NotificationVo> notificationVos = Lists.newArrayList();
+				for (int i = 0; i < 10; i++) {
+					NotificationVo notify = new NotificationVo();
+					notify.setTo(data);
+					Map<String, String> datas = Maps.newHashMap();
+					datas.put("identity", Identity.SELLERS.name());
+					datas.put("title", "訂單信息" + i);
+					datas.put("message", "測試中文內容" + i);
+					notify.setData(datas);
+					notificationVos.add(notify);
+				}
 				
-
-				anpsPushServcie.push(data, "mytest", "mymessage");
+//				{"title":"訂單信息0","message":"測試中文內容0","aps":{"alert":{"title":"訂單信息0","body":"測試中文內容0"},"sound":"default"},"identity":"SELLERS"}
+//				anpsPushServcie.pushs(notificationVos);
+				
+				androidPushService.pushForIOSAPNs(notificationVos);
 			}
-			
 			
 		}
 		return new ResponseEntity<String>("AAA", HttpStatus.OK);
@@ -234,7 +226,9 @@ public class AdminController {
 	@ResponseBody
 	@PostMapping(value = "admin/add/restaurant")
 	public ResponseEntity<String> textAddRestaurant(@RequestParam(value = "data", required = false) String data,
-			@RequestParam(value = "array", required = false) String array, HttpServletRequest httpRequest) {
+			@RequestParam(value = "array", required = false) String array,
+			@RequestParam(value = "account", required = false) String accountInfo,
+			HttpServletRequest httpRequest) {
 		String accountUUID = httpRequest.getHeader("Authorization");
 		AccountInfoVo accountInfoVo = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 
@@ -280,7 +274,29 @@ public class AdminController {
 				List<CategoryRel> newCategoryRels = categoryRelDao.save(categoryRels);
 				LOGGER.info("new CategoryRels : --> {}", newCategoryRels.toString());
 
+				
+				AccountInfoVo aVo = JsonHelper.json(accountInfo, AccountInfoVo.class);
+				AccountInfo info = new AccountInfo();
+				info.setAccount(aVo.getAccount());
+				info.setPassword("a123456");
+				info.setAccountUUID(Tools.buildUUID(UUIDType.SELLER));
+				info.setRestaurantUUID(restaurantUUID);
+				info.setName(newInfo.getName());
+				info.setEmail(aVo.getAccount() + "@gmail.com");
+				info.setAddress(newInfo.getAddress());
+				info.setPhone("1");
+				info.setIdentity(Identity.SELLERS.name());
+				info.setLevel(Level.MANAGE.name());
+				info.setBonus("0");
+				info.setEnable(Enable.Y.name());
+				info.setIsLogin(Enable.N.name());
+				info.setUseBonus("0");
+				info.setCreateDate(now);
+				AccountInfo newAccount = accountInfoDao.save(info);
+				
+				
 				Map<String, Object> map = Maps.newHashMap();
+				map.put("帳號", newAccount);
 				map.put("餐館", newInfo);
 				map.put("餐館模板", newTemplate);
 				map.put("餐館系列", newCategoryRels);

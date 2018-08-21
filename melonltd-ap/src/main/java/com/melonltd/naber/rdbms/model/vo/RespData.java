@@ -46,7 +46,7 @@ public class RespData {
 		RANGE_STORE_IS_CLOSE("3000", "該商家不接單時段$split"),
 		STORE_IS_CLOSE("3001", "%s"),
 		FOOD_ITEM_CLOSE("3002", "目前品項處於關閉狀態。"),
-		FOOD_ITEM_IS_CHANGE("3003", "目前品項內容有所改變，$split請刪除此購物車內訂單重新下訂"),
+		FOOD_ITEM_IS_CHANGE("3003", "目前商品內容店家有所調整，$split請刪除此購物車訂單，$split再重新下訂單，謝謝"),
 		CATEGORY_IS_CLOSE("3004", "目前種類處於關閉狀態。"),
 		LOGIN_FAIL("4001", "查無此帳戶或帳戶已失效"),
 		ORDER_MAX_PRICE("5001", "訂單種金額超過 5000"),

@@ -15,6 +15,7 @@ public class AdvertisementVo implements Serializable{
 	private String title;
 	private String content_text;
 	private String photo;
+	private String pad_photo;
 	private String photo_type;
 	private String enable;
 	private String create_date;
@@ -69,6 +70,7 @@ public class AdvertisementVo implements Serializable{
 				.add("title", title)
 				.add("content_text", content_text)
 				.add("photo", photo)
+				.add("pad_photo", pad_photo)
 				.add("photo_type", photo_type)
 				.add("create_date", create_date)
 				.add("enable", enable)
@@ -81,6 +83,7 @@ public class AdvertisementVo implements Serializable{
 		vo.title = info.getTitle();
 		vo.content_text = info.getContentText();
 		vo.photo = info.getPhoto();
+		vo.pad_photo = info.getPadPhoto();
 //		vo.photo_type = info.getPhotoType();
 //		vo.enable = info.getEnable();
 //		vo.create_date = info.getCreateDate();

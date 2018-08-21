@@ -23,6 +23,7 @@ public class RestaurantInfo implements Serializable {
 	private String canStoreRange;
 	private String restaurantCategory;
 	private String canDiscount;
+	private String deliveryTypes;
 	private String latitude;
 	private String longitude;
 	private String bulletin;
@@ -32,8 +33,7 @@ public class RestaurantInfo implements Serializable {
 	private String photoType;
 	private String enable;
 	private String top;
-	
-	
+
 	@Id
 	@Column(name = "restaurant_uuid", unique = true, nullable = false)
 	public String getRestaurantUUID() {
@@ -114,7 +114,12 @@ public class RestaurantInfo implements Serializable {
 	public String getCanDiscount() {
 		return canDiscount;
 	}
-
+	
+	@Column(name = "delivery_types")
+	public String getDeliveryTypes() {
+		return deliveryTypes;
+	}
+	
 	@Column(name = "enable")
 	public String getEnable() {
 		return enable;
@@ -152,9 +157,17 @@ public class RestaurantInfo implements Serializable {
 	public void setCanStoreRange(String canStoreRange) {
 		this.canStoreRange = canStoreRange;
 	}
-	
+
 	public void setRestaurantCategory(String restaurantCategory) {
 		this.restaurantCategory = restaurantCategory;
+	}
+
+	public void setCanDiscount(String canDiscount) {
+		this.canDiscount = canDiscount;
+	}
+	
+	public void setDeliveryTypes(String deliveryTypes) {
+		this.deliveryTypes = deliveryTypes;
 	}
 
 	public void setLatitude(String latitude) {
@@ -173,31 +186,26 @@ public class RestaurantInfo implements Serializable {
 		this.photo = photo;
 	}
 
-	public void setBackgroundPhoto(String backgroundPhoto) {
-		this.backgroundPhoto = backgroundPhoto;
-	}
-	
-	public void setPhotoType(String photoType) {
-		this.photoType = photoType;
-	}
-	
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
-	
-	public void setCanDiscount(String canDiscount) {
-		this.canDiscount = canDiscount;
+
+	public void setBackgroundPhoto(String backgroundPhoto) {
+		this.backgroundPhoto = backgroundPhoto;
+	}
+
+	public void setPhotoType(String photoType) {
+		this.photoType = photoType;
 	}
 
 	public void setEnable(String enable) {
 		this.enable = enable;
 	}
-	
+
 	public void setTop(String top) {
 		this.top = top;
 	}
-	
-	
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())
@@ -209,6 +217,7 @@ public class RestaurantInfo implements Serializable {
 				.add("notBusiness",notBusiness)
 				.add("canStoreRange",canStoreRange)
 				.add("canDiscount", canDiscount)
+				.add("deliveryTypes", deliveryTypes)
 				.add("restaurantCategory", restaurantCategory)
 				.add("latitude",latitude)
 				.add("longitude",longitude)

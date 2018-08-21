@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.mchange.lang.IntegerUtils;
 import com.melonltd.naber.constant.NaberConstant;
@@ -147,8 +148,9 @@ public class UserOrderController {
 						// 限制單筆訂單不可超過 5000 或 單筆菜單數量錯誤
 						if (price > NaberConstant.ORDER_PRICE_MAX || !status) {
 							map = status ? RespData.of(Status.FALSE, ErrorType.ORDER_MAX_PRICE, null) : RespData.of(Status.FALSE, ErrorType.ORDER_MAX_COUNT, null);
-						} else {
-							String bonus = ((int) Math.floor(price / 10d) + "");
+						} else {	 
+							// 如果該店家不提供紅利，將計算紅利歸零。
+							String bonus = vo.getCan_discount().equals("Y") ? ((int) Math.floor(price / 10d) + "") : "0";
 							String orders = JsonHelper.toJson(req);
 							OrderVo result = submitOrderService.submitOrder(account, Tools.buildUUID(UUIDType.ORDER), vo, req, String.valueOf(price), bonus, orders);
 							if (!ObjectUtils.anyNotNull(result)) {
@@ -189,7 +191,7 @@ public class UserOrderController {
 		if (notCanSize > 0) {
 			String msg = "";
 			for (int i = 0; i < notCanStoreRangeList.size(); i++) {
-				msg += "[ " + notCanStoreRangeList.get(i).getDate() + " ]$split";
+				msg += "[" + notCanStoreRangeList.get(i).getDate() + "]$split";
 			}
 			return "您所選的取餐時間，該商家無法接單，$split該商家下列的時間不接單:$split" + msg;
 		}
@@ -204,6 +206,17 @@ public class UserOrderController {
 		boolean status = Range.<String>between(Tools.getNowGMT(), Tools.getPlusDayGMT(3)).contains(req.getFetch_date());
 		if (!status) {
 			return "無法接受此訂單。";
+		}
+		
+		// TODO Android 
+		// 確認送來之訂單 與商家 可否計算紅利功能 一致
+		if (Strings.isNullOrEmpty(req.getCan_discount())) {
+			return "";	
+		}
+		
+		// 確認送來之訂單 與商家 可否計算紅利功能 一致
+		if (!vo.getCan_discount().equals(req.getCan_discount()) ) {
+			return "商家已經改變品項內容，無法接受此訂單。";
 		}
 
 		return "";

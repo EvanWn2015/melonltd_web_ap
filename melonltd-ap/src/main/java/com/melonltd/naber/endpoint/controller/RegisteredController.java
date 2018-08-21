@@ -55,7 +55,7 @@ public class RegisteredController {
 			if (ObjectUtils.allNotNull(info)) {
 				map = RespData.of(Status.TRUE, null, null);
 			} else {
-				LOGGER.error("save user error : phone: {}, name: {}", vo.getPhone(), vo.getName());
+				LOGGER.warn("save user error : phone: {}, name: {}", vo.getPhone(), vo.getName());
 				map = RespData.of(Status.FALSE, ErrorType.ACCOUNT_ERROR, null);
 			}
 		} else {
@@ -80,7 +80,7 @@ public class RegisteredController {
 			if (ObjectUtils.allNotNull(info)) {
 				map = RespData.of(Status.TRUE, null, null);
 			} else {
-				LOGGER.error("save seller error, seller name : {}, device id : {}", vo.getSeller_name(), vo.getDevice_id());
+				LOGGER.warn("save seller error, seller name : {}, device id : {}", vo.getSeller_name(), vo.getDevice_id());
 				map = RespData.of(Status.FALSE, ErrorType.SAVE_ERROR, null);
 			}
 		} else {

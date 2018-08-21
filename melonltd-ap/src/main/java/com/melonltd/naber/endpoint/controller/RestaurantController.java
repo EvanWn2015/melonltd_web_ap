@@ -30,7 +30,7 @@ import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class RestaurantController {
-//
+
 	@Autowired
 	private RestaurantLocationTemplateService restaurantLocationTemplateService;
 	
@@ -41,7 +41,7 @@ public class RestaurantController {
 	private CategoryRelService categoryRelService;
 
 	private enum SearchType {
-		TOP("TOP"), AREA("AREA"), CATEGORY("CATEGORY"), DISTANCE("DISTANCE"), NUKNOWN("NUKNOWN");
+		TOP("TOP"), AREA("AREA"), CATEGORY("CATEGORY"), DISTANCE("DISTANCE"), STORE_NAME("STORE_NAME"), NUKNOWN("NUKNOWN");
 		private String name;
 
 		SearchType(String name) {
@@ -116,6 +116,8 @@ public class RestaurantController {
 			return restaurantInfoService.findByArea(req.getArea(), req.getPage());
 		case CATEGORY:
 			return restaurantInfoService.findByCategory(req.getCategory(), req.getPage());
+		case STORE_NAME:
+			return restaurantInfoService.findByAdd(req.getName(), req.getPage());
 		case DISTANCE:
 			return restaurantInfoService.findByUUIDs(req.getUuids());
 		case NUKNOWN:
@@ -133,20 +135,14 @@ public class RestaurantController {
 		}
 		
 		switch (SearchType.of(req.getSearch_type())) {
-//		case TOP:
-//			if (StringUtils.isBlank(req.getLongitude()) || StringUtils.isBlank(req.getLatitude())) {
-//				error = ErrorType.INVALID;
-//			}
-//			break;
 		case AREA:
-			if (StringUtils.isBlank(req.getArea())) {
-				error = ErrorType.INVALID;
-			}
+			error = StringUtils.isBlank(req.getArea()) ? ErrorType.INVALID : null;
 			break;
 		case CATEGORY:
-			if (StringUtils.isBlank(req.getCategory())) {
-				error = ErrorType.INVALID;
-			}
+			error = StringUtils.isBlank(req.getCategory()) ? ErrorType.INVALID : null;
+			break;
+		case STORE_NAME:
+			error = StringUtils.isBlank(req.getName()) ? ErrorType.INVALID : null;
 			break;
 //		case DISTANCE:
 //			if (StringUtils.isBlank(req.getLongitude()) || StringUtils.isBlank(req.getLatitude())) {

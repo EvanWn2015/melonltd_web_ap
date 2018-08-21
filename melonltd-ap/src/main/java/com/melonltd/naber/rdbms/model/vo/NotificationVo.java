@@ -1,10 +1,12 @@
 package com.melonltd.naber.rdbms.model.vo;
 
+import java.util.Map;
+
 public class NotificationVo {
 	private String to;
-	private Object data;
+	private Notify notification;
+	private Map<String, String> data;
 	private AndroidPriority android = new AndroidPriority("1");
-	private IOSPriority apns = new IOSPriority();
 
 	public String getTo() {
 		return to;
@@ -14,26 +16,61 @@ public class NotificationVo {
 		this.to = to;
 	}
 
-	public Object getData() {
+	public Map<String, String> getData() {
 		return data;
 	}
 
-	public void setData(Object data) {
+	public void setData(Map<String, String> data) {
 		this.data = data;
 	}
-	
+
+	public Notify getNotification() {
+		return notification;
+	}
+
+	public void setNotification(Notify notification) {
+		this.notification = notification;
+	}
+
+	public AndroidPriority getAndroid() {
+		return android;
+	}
+
+	public void setAndroid(AndroidPriority android) {
+		this.android = android;
+	}
+
+
 	public static NotificationVo newInstance (String to ,NotificationVo vo) {
 		NotificationVo notify = new NotificationVo();
 		notify.to = to;
 		notify.data = vo.getData();
 		return notify;
 	}
-
-	public class Notify {
+	
+	public static NotificationVo newInstance (String to ,Notify vo) {
+		NotificationVo notify = new NotificationVo();
+		notify.to = to;
+		notify.notification = vo;
+		return notify;
+	}
+	
+	public static class Notify {
 		private String body;
 		private String title;
 		private String icon;
+		private String sound = "default";
 
+		public Notify(String title, String body){
+			this.title = title;
+			this.body = body;
+		}
+		
+		public Notify(String title, String body, String icon){
+			this(title, body);
+			this.icon = icon;
+		}
+		
 		public String getBody() {
 			return body;
 		}
@@ -57,7 +94,16 @@ public class NotificationVo {
 		public void setIcon(String icon) {
 			this.icon = icon;
 		}
+
+		public String getSound() {
+			return sound;
+		}
+
+		public void setSound(String sound) {
+			this.sound = sound;
+		}
 	}
+	
 }
 
 class AndroidPriority{
@@ -67,6 +113,5 @@ class AndroidPriority{
 	} 
 }
 
-class IOSPriority {
-	String headers = "{\"apns-priority\":\"1\"}"; 
-}
+
+
