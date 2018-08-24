@@ -5,9 +5,9 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 // 餐館訂單可接受類型
-//外送 send
-//內用 eat_in
-//外帶 take_out
+//外送 SEND
+//內用 IN
+//外帶 OUT
 // 
 public enum Delivery {
 	SEND("SEND"), 

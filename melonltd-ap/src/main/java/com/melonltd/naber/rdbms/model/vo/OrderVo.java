@@ -12,16 +12,18 @@ import com.melonltd.naber.rdbms.model.bean.UserOrderInfo;
 
 public class OrderVo {
 
-	private String order_uuid;
-	private String account_uuid;
 	private String account_name;
 	private String account_phone;
-	private String restaurant_uuid;
 	private String restaurant_name;
 	private String restaurant_address;
+	
+	private String order_uuid;
+	private String account_uuid;
+	private String restaurant_uuid;
 	private String user_message;
 	private String create_date;
 	private String update_date;
+	private String order_type;
 	private String order_price;
 	private String use_bonus;
 	private String order_bonus;
@@ -30,22 +32,6 @@ public class OrderVo {
 	private String status;
 	private String enable;
 
-
-	public String getOrder_uuid() {
-		return order_uuid;
-	}
-
-	public void setOrder_uuid(String order_uuid) {
-		this.order_uuid = order_uuid;
-	}
-
-	public String getAccount_uuid() {
-		return account_uuid;
-	}
-
-	public void setAccount_uuid(String account_uuid) {
-		this.account_uuid = account_uuid;
-	}
 
 	public String getAccount_name() {
 		return account_name;
@@ -63,14 +49,6 @@ public class OrderVo {
 		this.account_phone = account_phone;
 	}
 
-	public String getRestaurant_uuid() {
-		return restaurant_uuid;
-	}
-
-	public void setRestaurant_uuid(String restaurant_uuid) {
-		this.restaurant_uuid = restaurant_uuid;
-	}
-
 	public String getRestaurant_name() {
 		return restaurant_name;
 	}
@@ -85,6 +63,30 @@ public class OrderVo {
 
 	public void setRestaurant_address(String restaurant_address) {
 		this.restaurant_address = restaurant_address;
+	}
+
+	public String getOrder_uuid() {
+		return order_uuid;
+	}
+
+	public void setOrder_uuid(String order_uuid) {
+		this.order_uuid = order_uuid;
+	}
+
+	public String getAccount_uuid() {
+		return account_uuid;
+	}
+
+	public void setAccount_uuid(String account_uuid) {
+		this.account_uuid = account_uuid;
+	}
+
+	public String getRestaurant_uuid() {
+		return restaurant_uuid;
+	}
+
+	public void setRestaurant_uuid(String restaurant_uuid) {
+		this.restaurant_uuid = restaurant_uuid;
 	}
 
 	public String getUser_message() {
@@ -111,6 +113,14 @@ public class OrderVo {
 		this.update_date = update_date;
 	}
 
+	public String getOrder_type() {
+		return order_type;
+	}
+
+	public void setOrder_type(String order_type) {
+		this.order_type = order_type;
+	}
+
 	public String getOrder_price() {
 		return order_price;
 	}
@@ -118,15 +128,15 @@ public class OrderVo {
 	public void setOrder_price(String order_price) {
 		this.order_price = order_price;
 	}
-	
-	public String getUse_Bonus() {
+
+	public String getUse_bonus() {
 		return use_bonus;
 	}
-	
-	public void setUse_Bonus(String use_bonus) {
+
+	public void setUse_bonus(String use_bonus) {
 		this.use_bonus = use_bonus;
 	}
-	
+
 	public String getOrder_bonus() {
 		return order_bonus;
 	}
@@ -175,6 +185,7 @@ public class OrderVo {
 		vo.user_message = info.getUserMessage();
 		vo.create_date = info.getCreateDate();
 		vo.update_date = info.getUpdateDate();
+		vo.order_type = info.getOrderType();
 		vo.order_price = info.getOrderPrice();
 		vo.use_bonus = info.getUseBonus();
 		vo.order_bonus = info.getOrderBonus();
@@ -195,6 +206,7 @@ public class OrderVo {
 		vo.user_message = info.getUserMessage();
 		vo.create_date = info.getCreateDate();
 		vo.update_date = info.getUpdateDate();
+		vo.order_type = info.getOrderType();
 		vo.order_price = info.getOrderPrice();
 		vo.use_bonus = info.getUseBonus();
 		vo.order_bonus = info.getOrderBonus();
@@ -213,6 +225,7 @@ public class OrderVo {
 		vo.user_message = info.getUserMessage();
 		vo.create_date = info.getCreateDate();
 		vo.update_date = info.getUpdateDate();
+		vo.order_type = info.getOrderType();
 		vo.order_price = info.getOrderPrice();
 		vo.use_bonus = info.getUseBonus();
 		vo.order_bonus = info.getOrderBonus();
@@ -231,6 +244,7 @@ public class OrderVo {
 		vo.user_message = info.getUserMessage();
 		vo.create_date = info.getCreateDate();
 		vo.update_date = info.getUpdateDate();
+		vo.order_type = info.getOrderType();
 		vo.order_price = info.getOrderPrice();
 		vo.use_bonus = info.getUseBonus();
 		vo.order_bonus = info.getOrderBonus();
@@ -262,16 +276,19 @@ public class OrderVo {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())
+				.add("account_name", account_name)
+				.add("account_phone", account_phone)
+				.add("restaurant_name", restaurant_name)
+				.add("restaurant_address", restaurant_address)
 				.add("order_uuid", order_uuid)
 				.add("account_uuid", account_uuid)
 				.add("restaurant_uuid", restaurant_uuid)
-				.add("restaurant_name", restaurant_name)
-				.add("restaurant_address", restaurant_address)
 				.add("user_message", user_message)
-				.add("use_bonus", use_bonus)
 				.add("create_date", create_date)
 				.add("update_date", update_date)
+				.add("order_type", order_type)
 				.add("order_price", order_price)
+				.add("use_bonus", use_bonus)
 				.add("order_bonus", order_bonus)
 				.add("fetch_date", fetch_date)
 				.add("order_data", order_data)

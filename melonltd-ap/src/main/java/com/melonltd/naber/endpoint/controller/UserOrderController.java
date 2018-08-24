@@ -43,6 +43,7 @@ import com.melonltd.naber.rdbms.model.service.CategoryRelService;
 import com.melonltd.naber.rdbms.model.service.FoodInfoSerice;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.service.UserOrderInfoService;
+import com.melonltd.naber.rdbms.model.type.BillingType;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
@@ -62,7 +63,6 @@ public class UserOrderController {
 	//
 	@Autowired
 	private AccountInfoService accountInfoService;
-
 	@Autowired
 	private FoodInfoSerice foodInfoSerice;
 	@Autowired
@@ -100,6 +100,9 @@ public class UserOrderController {
 				// TODO test account
 				int price = getPrice(req);
 				String bonus = ((int) Math.floor(price / 10d) + "");
+				if (!ObjectUtils.allNotNull(req.getOrder_type())) {
+					req.setOrder_type(OredeSubimtReq.setDefault());
+				}
 				String orders = JsonHelper.toJson(req);
 				OrderVo resultOrder = submitOrderService.submitTestOrder(account, Tools.buildUUID(UUIDType.ORDER), vo, req, String.valueOf(price), bonus, orders);
 				if (!ObjectUtils.anyNotNull(resultOrder)) {
@@ -151,6 +154,18 @@ public class UserOrderController {
 						} else {	 
 							// 如果該店家不提供紅利，將計算紅利歸零。
 							String bonus = vo.getCan_discount().equals("Y") ? ((int) Math.floor(price / 10d) + "") : "0";
+							// 判斷訂單類型結算方式 (兼容為使用此功能的app)
+							// TODO
+							if (!ObjectUtils.allNotNull(req.getOrder_type())) {
+								req.setOrder_type(OredeSubimtReq.setDefault());
+							}
+							// 如果單為兌換，紅利歸零
+							BillingType billingType = JsonHelper.json(req.getOrder_type().getBilling(), BillingType.class);
+							if (BillingType.COUPON.equals(billingType)) {
+								bonus = "0";
+							}else if (BillingType.DISCOUNT.equals(billingType)) {
+								// TODO 使用折價 需要扣除使用者紅利
+							}
 							String orders = JsonHelper.toJson(req);
 							OrderVo result = submitOrderService.submitOrder(account, Tools.buildUUID(UUIDType.ORDER), vo, req, String.valueOf(price), bonus, orders);
 							if (!ObjectUtils.anyNotNull(result)) {

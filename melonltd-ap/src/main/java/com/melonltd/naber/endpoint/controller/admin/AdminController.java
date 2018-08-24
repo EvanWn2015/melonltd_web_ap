@@ -24,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.api.client.util.Lists;
 import com.google.common.collect.Maps;
+import com.melonltd.naber.constant.NaberConstant;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.endpoint.util.Tools.UUIDType;
@@ -74,9 +76,6 @@ public class AdminController {
 
 	@Autowired
 	private AndroidPushService androidPushService;
-//	@Autowired
-//	private APNSPushServcie anpsPushServcie;
-
 	
 	@Autowired
 	private AccountInfoDao accountInfoDao;
@@ -113,6 +112,93 @@ public class AdminController {
 		return newRanges;
 	}
 	
+	@ResponseBody
+	@PostMapping(value = "admin/revised/app/version")
+	public ResponseEntity<String> revisedAppVersion(HttpServletRequest httpRequest, 
+			@RequestParam(value = "app", required = false) String app,
+			@RequestParam(value = "version", required = false) String version) {
+		String accountUUID = httpRequest.getHeader("Authorization");
+		AccountInfoVo accountInfoVo = accountInfoService.getCacheBuilderByKey(accountUUID, false);
+		if (ObjectUtils.allNotNull(accountInfoVo)) {
+			if (Identity.ADMIN.equals(Identity.of(accountInfoVo.getIdentity()))) {
+
+				if (app.equals("IOS")) {
+					NaberConstant.IOS_APP_VERSION = version;
+				}else if (app.equals("ANDROID")){
+					NaberConstant.ANDROID_APP_VERSION = version;
+				}
+			}
+		}
+
+		// System.out.println(smsHttpService.getCreditValue() + "");
+		return new ResponseEntity<String>("AAA", HttpStatus.OK);
+	}
+	
+	
+	
+	// 複製內容到另一家餐館
+	@ResponseBody
+	@PostMapping(value = "admin/copy/restaurant/detail")
+	public ResponseEntity<String> copyRestaurantDetail(@RequestParam(value = "copy", required = false) String copy,
+			@RequestParam(value = "to", required = false) String to,
+			HttpServletRequest httpRequest) {
+		String accountUUID = httpRequest.getHeader("Authorization");
+		AccountInfoVo accountInfoVo = accountInfoService.getCacheBuilderByKey(accountUUID, false);
+		if (ObjectUtils.allNotNull(accountInfoVo)) {
+			if (Identity.ADMIN.equals(Identity.of(accountInfoVo.getIdentity()))) {
+				LOGGER.info(" copy: {}, to: {}" ,copy, to);
+				
+				// 先刪除複製到達對象下所有種類與品項資料
+				List<CategoryRel> toCatList = categoryRelDao.findAllByRestaurantUUID(to);
+				List<String> toCatUUIDs = toCatList.stream().map(c -> c.getCategoryUUID()).collect(Collectors.toList());
+				List<FoodInfo> toFoodList = foodInfoDao.findBycategoryUUIDs(toCatUUIDs.isEmpty() ? Arrays.asList("") : toCatUUIDs );
+				LOGGER.info("delete to CategoryRels: {}, FoodInfos :{}", toCatList.size(), toFoodList.size());
+				foodInfoDao.delete(toFoodList);
+				categoryRelDao.delete(toCatList);
+
+				
+				List<RestaurantInfo> resList = restaurantInfoDao.findUUIDs(Arrays.asList(copy, to));
+				RestaurantInfo copyRestaurant = resList.stream().filter(r -> r.getRestaurantUUID().equals(copy)).findAny().get();
+				RestaurantInfo toRestaurant = resList.stream().filter(r -> r.getRestaurantUUID().equals(to)).findAny().get();
+				
+				List<CategoryRel> copyCatList = categoryRelDao.findAllByRestaurantUUID(copy);
+				List<String> copyCatUUIDs = copyCatList.stream().map(c -> c.getCategoryUUID()).collect(Collectors.toList());
+				List<FoodInfo> copyFoodList = foodInfoDao.findBycategoryUUIDs(copyCatUUIDs.isEmpty() ? Arrays.asList("") : copyCatUUIDs);
+				
+				LOGGER.info("change copy data CategoryRels: {}, FoodInfos :{} ", copyCatList.size(), copyFoodList.size());
+				
+				copyCatList.stream()
+					.sorted((CategoryRel o1, CategoryRel o2) -> StringUtils.compare(o1.getCreateDate(), o2.getCreateDate()))
+					.peek(c -> System.out.println("\ncp: " + c.getRestaurantUUID() + " : " + c.getCategoryUUID()))
+					.forEach(c -> {
+						String newUUID = Tools.buildUUID(UUIDType.RESTAURANT_CATEGORY);
+						copyFoodList.stream()
+//							.sorted((FoodInfo o1, FoodInfo o2) -> StringUtils.compare(o1.getCreateDate(), o2.getCreateDate()))
+							.peek(e -> System.out.println("cp: " + e.getCategoryUUID() + " : " + e.getFoodUUID()))
+							.filter(f -> f.getCategoryUUID().equals(c.getCategoryUUID()))
+							.forEach(f -> {
+								f.setCategoryUUID(newUUID);
+								f.setFoodUUID(Tools.buildUUID(UUIDType.FOOD));
+//								f.setCreateDate(Tools.getNowGMT());
+								f.setPhoto(null);
+							});
+						c.setCategoryUUID(newUUID);
+						c.setRestaurantUUID(toRestaurant.getRestaurantUUID());
+						c.setCreateDate(Tools.getNowGMT());
+					});
+				
+				
+				List<FoodInfo> tonewFoodList = foodInfoDao.save(copyFoodList);
+				List<CategoryRel> tonewCatList = categoryRelDao.save(copyCatList);
+				
+				LOGGER.info("to data CategoryRels: {}, FoodInfos :{} ", tonewCatList.size(), tonewFoodList.size());
+				
+			}
+		}
+
+		// System.out.println(smsHttpService.getCreditValue() + "");
+		return new ResponseEntity<String>("AAA", HttpStatus.OK);
+	}
 	
 	@ResponseBody
 	@PostMapping(value = "admin/process/restaurant/and/order/delivery/types")
@@ -141,7 +227,7 @@ public class AdminController {
 		AccountInfoVo accountInfoVo = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 		if (ObjectUtils.allNotNull(accountInfoVo)) {
 			if (Identity.ADMIN.equals(Identity.of(accountInfoVo.getIdentity()))) {
-
+				
 				long now = System.currentTimeMillis();
 				LOGGER.info("Do Order Job start: --> {} , dataTime:{}", now, Tools.getNowGMT());
 
@@ -152,11 +238,8 @@ public class AdminController {
 
 				System.out.println();
 				LOGGER.info("Do Order Job end: --> {} ", (System.currentTimeMillis() - now) / 1000d);
-
 			}
 		}
-
-		// System.out.println(smsHttpService.getCreditValue() + "");
 		return new ResponseEntity<String>("AAA", HttpStatus.OK);
 	}
 
@@ -241,8 +324,9 @@ public class AdminController {
 				String now = Tools.getNowGMT();
 				req.setRestaurant_uuid(restaurantUUID);
 				req.setCreate_date(now);
-				req.setEnable(Enable.Y.name());
+				req.setEnable(Enable.N.name());
 				req.setTop("0");
+				req.setDelivery_types(Arrays.asList("OUT"));
 				Integer start = Integer.parseInt(new StringBuffer(req.getStore_start()).deleteCharAt(2).toString());
 				Integer end = Integer.parseInt(new StringBuffer(req.getStore_end()).deleteCharAt(2).toString());
 				List<DateRangeVo> dataRange = Tools.buildCanStoreRange(start, end);
@@ -255,7 +339,7 @@ public class AdminController {
 				template.setRestaurantUUID(restaurantUUID);
 				template.setLatitude(req.getLatitude());
 				template.setLongitude(req.getLongitude());
-				template.setEnable(Enable.Y.name());
+				template.setEnable(Enable.N.name());
 				RestaurantLocationTemplate newTemplate = restaurantLocationTemplateDao.save(template);
 				LOGGER.info("new Template : --> {}", newTemplate.toString());
 
@@ -553,6 +637,7 @@ public class AdminController {
 		info.setStoreStart(vo.getStore_start());
 		info.setStoreEnd(vo.getStore_end());
 		info.setNotBusiness("[]");
+		info.setDeliveryTypes(JsonHelper.toJson(vo.getDelivery_types()));
 		info.setCanStoreRange(JsonHelper.toJson(vo.getCan_store_range()));
 		info.setRestaurantCategory(vo.getRestaurant_category());
 		info.setLatitude(vo.getLatitude());

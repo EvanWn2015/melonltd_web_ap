@@ -3,6 +3,7 @@ package com.melonltd.naber.rdbms.model.facade.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.OrderInfo;
 import com.melonltd.naber.rdbms.model.bean.OrderLog;
@@ -66,6 +67,7 @@ public class SubmitOrderService {
 		info.setUserMessage(req.getUser_message());
 		info.setCreateDate(date);
 		info.setUpdateDate(date);
+		info.setOrderType(JsonHelper.toJson(req.getOrder_type()));
 		info.setOrderPrice(price);
 		info.setUseBonus("0");
 		info.setUseBonus(req.getUse_bonus());
@@ -86,6 +88,7 @@ public class SubmitOrderService {
 		info.setUserMessage(req.getUser_message());
 		info.setCreateDate(date);
 		info.setUpdateDate(date);
+		info.setOrderType(JsonHelper.toJson(req.getOrder_type()));
 		info.setOrderPrice(price);
 		info.setUseBonus("0");
 		info.setUseBonus(req.getUse_bonus());
@@ -106,6 +109,7 @@ public class SubmitOrderService {
 		info.setUserMessage(req.getUser_message());
 		info.setCreateDate(date);
 		info.setUpdateDate(date);
+		info.setOrderType(JsonHelper.toJson(req.getOrder_type()));
 		info.setOrderPrice(price);
 		info.setUseBonus("0");
 		info.setUseBonus(req.getUse_bonus());

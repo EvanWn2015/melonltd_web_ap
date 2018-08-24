@@ -11,7 +11,7 @@ import com.melonltd.naber.rdbms.model.bean.FoodInfo;
 
 public interface FoodInfoDao extends JpaRepository<FoodInfo, String> {
 
-	@Query("SELECT a FROM FoodInfo a WHERE a.enable='Y' AND a.status = ?1 AND a.categoryUUID = ?2")
+	@Query("SELECT a FROM FoodInfo a WHERE a.enable='Y' AND a.status = ?1 AND a.categoryUUID = ?2 ORDER BY a.createDate DESC")
 	public List<FoodInfo> findByStatusAndCategoryUUID(String status, String categoryUUID);
 	
 	@Query("SELECT a FROM FoodInfo a WHERE a.enable='Y' AND a.status = 'OPEN' AND a.foodUUID = ?1 ORDER BY a.createDate DESC")
@@ -22,6 +22,9 @@ public interface FoodInfoDao extends JpaRepository<FoodInfo, String> {
 	
 	@Query("SELECT a FROM FoodInfo a WHERE a.categoryUUID = ?1")
 	public List<FoodInfo> findBycategoryUUID (String categoryUUID);
+	
+	@Query("SELECT a FROM FoodInfo a WHERE a.categoryUUID IN (?1)")
+	public List<FoodInfo> findBycategoryUUIDs (List<String> categoryUUIDs);
 	
 	@Query("SELECT f FROM FoodInfo f, CategoryRel c WHERE c.categoryUUID=?1 AND c.restaurantUUID=?2 AND c.categoryUUID=f.categoryUUID AND c.enable='Y' AND f.enable='Y' ORDER BY f.createDate DESC ")
 	public List<FoodInfo> findBycategoryUUIDAndRestaurantUUID (String categoryUUID, String restaurantUUID);

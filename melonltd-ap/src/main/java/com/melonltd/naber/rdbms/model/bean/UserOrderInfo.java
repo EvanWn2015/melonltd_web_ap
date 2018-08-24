@@ -14,20 +14,18 @@ import com.melonltd.naber.rdbms.model.vo.OrderVo;
 @Entity
 @Table(name = "user_order_info")
 public class UserOrderInfo implements Serializable {
-
 	private static final long serialVersionUID = -7484434525019743183L;
 	
 	private String orderUUID;
-	private String accountUUID;
 	private String restaurantUUID;
-//	private String restaurantName;
-//	private String restaurantAddress;
+	private String accountUUID;
 	private String userMessage;
 	private String createDate;
 	private String updateDate;
+    private String orderType;
 	private String orderPrice;
-	private String useBonus;
 	private String orderBonus;
+	private String useBonus;
 	private String fetchDate;
 	private String orderData;
 	private String status;
@@ -40,25 +38,15 @@ public class UserOrderInfo implements Serializable {
 		return orderUUID;
 	}
 
-	@Column(name = "account_uuid")
-	public String getAccountUUID() {
-		return accountUUID;
-	}
-
 	@Column(name = "restaurant_uuid")
 	public String getRestaurantUUID() {
 		return restaurantUUID;
 	}
 	
-//	@Column(name = "restaurant_name")
-//	public String getRestaurantName() {
-//		return restaurantName;
-//	}
-//
-//	@Column(name = "restaurant_address")
-//	public String getRestaurantAddress() {
-//		return restaurantAddress;
-//	}
+	@Column(name = "account_uuid")
+	public String getAccountUUID() {
+		return accountUUID;
+	}
 
 	@Column(name = "user_message")
 	public String getUserMessage() {
@@ -74,20 +62,25 @@ public class UserOrderInfo implements Serializable {
 	public String getUpdateDate() {
 		return updateDate;
 	}
+	
+	@Column(name = "order_type")
+	public String getOrderType () {
+		return orderType;
+	}
 
 	@Column(name = "order_price")
 	public String getOrderPrice() {
 		return orderPrice;
 	}
+
+	@Column(name = "order_bonus")
+	public String getOrderBonus() {
+		return orderBonus;
+	}
 	
 	@Column(name = "use_bonus")
 	public String getUseBonus() {
 		return useBonus;
-	}
-	
-	@Column(name = "order_bonus")
-	public String getOrderBonus() {
-		return orderBonus;
 	}
 
 	@Column(name = "fetch_date")
@@ -110,25 +103,18 @@ public class UserOrderInfo implements Serializable {
 		return enable;
 	}
 
+
 	public void setOrderUUID(String orderUUID) {
 		this.orderUUID = orderUUID;
-	}
-
-	public void setAccountUUID(String accountUUID) {
-		this.accountUUID = accountUUID;
 	}
 
 	public void setRestaurantUUID(String restaurantUUID) {
 		this.restaurantUUID = restaurantUUID;
 	}
-	
-//	public void setRestaurantName(String restaurantName) {
-//		this.restaurantName = restaurantName;
-//	}
-//
-//	public void setRestaurantAddress(String restaurantAddress) {
-//		this.restaurantAddress = restaurantAddress;
-//	}
+
+	public void setAccountUUID(String accountUUID) {
+		this.accountUUID = accountUUID;
+	}
 
 	public void setUserMessage(String userMessage) {
 		this.userMessage = userMessage;
@@ -142,16 +128,20 @@ public class UserOrderInfo implements Serializable {
 		this.updateDate = updateDate;
 	}
 
+	public void setOrderType(String orderType) {
+		this.orderType = orderType;
+	}
+
 	public void setOrderPrice(String orderPrice) {
 		this.orderPrice = orderPrice;
-	}
-	
-	public void setUseBonus(String useBonus) {
-		this.useBonus = useBonus;
 	}
 
 	public void setOrderBonus(String orderBonus) {
 		this.orderBonus = orderBonus;
+	}
+
+	public void setUseBonus(String useBonus) {
+		this.useBonus = useBonus;
 	}
 
 	public void setFetchDate(String fetchDate) {
@@ -170,25 +160,6 @@ public class UserOrderInfo implements Serializable {
 		this.enable = enable;
 	}
 	
-	public static UserOrderInfo of (OrderVo vo) {
-		UserOrderInfo info = new UserOrderInfo();
-		info.orderUUID = vo.getOrder_uuid();
-		info.accountUUID = vo.getAccount_uuid();
-		info.restaurantUUID = vo.getRestaurant_uuid();
-//		info.restaurantName = vo.getRestaurant_name();
-//		info.restaurantAddress = vo.getRestaurant_address();
-		info.userMessage = vo.getUser_message();
-		info.createDate = vo.getCreate_date();
-		info.updateDate = vo.getUpdate_date();
-		info.orderPrice = vo.getOrder_price();
-		info.useBonus = vo.getUse_Bonus();
-		info.orderBonus = vo.getOrder_bonus();
-		info.fetchDate = vo.getFetch_date();
-		info.orderData = vo.getOrder_data();
-		info.status = vo.getStatus();
-		info.enable = vo.getEnable();
-		return info;
-	}
 	
 	@Override
 	public String toString() {
@@ -196,11 +167,10 @@ public class UserOrderInfo implements Serializable {
 				.add("orderUUID", orderUUID)
 				.add("accountUUID", accountUUID)
 				.add("restaurantUUID", restaurantUUID)
-//				.add("restaurantName", restaurantName)
-//				.add("restaurantAddress", restaurantAddress)
 				.add("userMessage", userMessage)
 				.add("createDate", createDate)
 				.add("updateDate", updateDate)
+				.add("orderType", orderType)
 				.add("orderPrice", orderPrice)
 				.add("orderBonus", orderBonus)
 				.add("fetchDate", fetchDate)
@@ -209,6 +179,26 @@ public class UserOrderInfo implements Serializable {
 				.add("enable", enable)
 				.add("useBonus", useBonus)
 				.toString();
+	}
+	
+	
+	public static UserOrderInfo of (OrderVo vo) {
+		UserOrderInfo info = new UserOrderInfo();
+		info.orderUUID = vo.getOrder_uuid();
+		info.accountUUID = vo.getAccount_uuid();
+		info.restaurantUUID = vo.getRestaurant_uuid();
+		info.userMessage = vo.getUser_message();
+		info.createDate = vo.getCreate_date();
+		info.updateDate = vo.getUpdate_date();
+		info.orderType = vo.getOrder_type();
+		info.orderPrice = vo.getOrder_price();
+		info.useBonus = vo.getUse_bonus();
+		info.orderBonus = vo.getOrder_bonus();
+		info.fetchDate = vo.getFetch_date();
+		info.orderData = vo.getOrder_data();
+		info.status = vo.getStatus();
+		info.enable = vo.getEnable();
+		return info;
 	}
 
 }

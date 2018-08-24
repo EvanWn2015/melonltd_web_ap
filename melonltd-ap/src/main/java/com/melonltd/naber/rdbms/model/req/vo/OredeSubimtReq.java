@@ -15,7 +15,7 @@ public class OredeSubimtReq {
 	private String user_phone;
 	private String use_bonus;
 	private String can_discount;
-	
+	private OrderType order_type;
 	private List<OrderData> orders;
 
 	public String getRestaurant_uuid() {
@@ -74,14 +74,6 @@ public class OredeSubimtReq {
 		this.user_phone = user_phone;
 	}
 
-	public List<OrderData> getOrders() {
-		return orders;
-	}
-
-	public void setOrders(List<OrderData> orders) {
-		this.orders = orders;
-	}
-
 	public String getUse_bonus() {
 		return use_bonus;
 	}
@@ -98,11 +90,22 @@ public class OredeSubimtReq {
 		this.can_discount = can_discount;
 	}
 
-	public static OredeSubimtReq ofOrders(List<OrderData> orders) {
-		OredeSubimtReq data = new OredeSubimtReq();
-		data.orders = orders;
-		return data;
+	public OrderType getOrder_type() {
+		return order_type;
 	}
+
+	public void setOrder_type(OrderType order_type) {
+		this.order_type = order_type;
+	}
+
+	public List<OrderData> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<OrderData> orders) {
+		this.orders = orders;
+	}
+
 
 	@Override
 	public String toString() {
@@ -116,6 +119,54 @@ public class OredeSubimtReq {
 				.toString();
 	}
 
+	
+	public static OredeSubimtReq ofOrders(List<OrderData> orders) {
+		OredeSubimtReq data = new OredeSubimtReq();
+		data.orders = orders;
+		return data;
+	}
+	
+	public static OrderType setDefault() {
+		return new OrderType("ORIGINAL","OUT");
+	}
+	
+	
+	public static class OrderType {
+		private String billing;
+		private String delivery;
+		
+		OrderType () { }
+		
+		OrderType (String billing, String delivery){
+			this.billing = billing;
+			this.delivery = delivery;
+		}
+		
+		public String getBilling() {
+			return billing;
+		}
+		public void setBilling(String billing) {
+			this.billing = billing;
+		}
+		public String getDelivery() {
+			return delivery;
+		}
+		public void setDelivery(String delivery) {
+			this.delivery = delivery;
+		}
+		
+		@Override
+		public String toString() {
+			return MoreObjects.toStringHelper(this.getClass())
+					.add("billing", billing)
+					.add("delivery", delivery)
+					.toString();
+		}
+		
+	
+
+	}
+	
 	public class OrderData {
 		private String category_uuid;
 		private String user_name;
@@ -183,8 +234,15 @@ public class OredeSubimtReq {
 
 		@Override
 		public String toString() {
-			return MoreObjects.toStringHelper(this.getClass()).add("category_uuid", category_uuid).add("count", count)
-					.add("item", item).toString();
+			return MoreObjects.toStringHelper(this.getClass())
+					.add("category_uuid", category_uuid)
+					.add("user_name", user_name)
+					.add("user_phone", user_phone)
+					.add("restaurant_name", restaurant_name)
+					.add("restaurant_address", restaurant_address)
+					.add("count", count)
+					.add("item",item)
+					.toString();
 		}
 
 	}
