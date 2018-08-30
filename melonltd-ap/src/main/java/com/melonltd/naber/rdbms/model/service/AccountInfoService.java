@@ -14,9 +14,9 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.melonltd.naber.endpoint.util.Tools;
-import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.bean.AccountInfo;
 import com.melonltd.naber.rdbms.model.dao.AccountInfoDao;
+import com.melonltd.naber.rdbms.model.type.UUIDType;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 
 @Service("accountInfoService")

@@ -19,13 +19,13 @@ import com.google.common.collect.Maps;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.facade.service.ChangeOrdarService;
-import com.melonltd.naber.rdbms.model.push.service.PudhSellerService;
+import com.melonltd.naber.rdbms.model.push.service.PushService;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
-import com.melonltd.naber.rdbms.model.vo.NotificationVo;
+import com.melonltd.naber.rdbms.model.vo.PushFCMVo;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
@@ -41,7 +41,7 @@ public class ChangeOrdarController {
 	private ChangeOrdarService changeOrdarService;
 	
 	@Autowired
-	private PudhSellerService pudhSellerService;
+	private PushService pushService;
 
 	@Autowired
 	private AccountInfoService accountInfoService;
@@ -68,20 +68,22 @@ public class ChangeOrdarController {
 					String accountUUID = vo.getAccount_uuid();
 					AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 					
-					NotificationVo notificationVo = new NotificationVo();
-					Map<String, String> datas = Maps.newHashMap();
+					PushFCMVo pushFCMVo = new PushFCMVo();
+					Map<String, Object> datas = Maps.newHashMap();
 					datas.put("identity", Identity.of(account.getIdentity()).name());
 					datas.put("title", "訂單信息");
-					notificationVo.setData(datas);
+					pushFCMVo.setData(datas);
 					
 					if (OrderStatus.CANCEL.equals(changeStatus)) {
 						datas.put("message", String.format(OrderStatus.CANCEL.getMssage(), req.getMessage()));
-						notificationVo.setData(datas);
-						pudhSellerService.pushOrderToUser(accountUUID, notificationVo);
+						pushFCMVo.setData(datas);
+						pushFCMVo.setNotification(new PushFCMVo.Notify("訂單信息", String.format(OrderStatus.CANCEL.getMssage(), req.getMessage())));
+						pushService.pushRemoteMessage(accountUUID, pushFCMVo, true);
 					}else {
 						datas.put("message", changeStatus.getMssage());
-						notificationVo.setData(datas);
-						pudhSellerService.pushOrderToUser(accountUUID, notificationVo);
+						pushFCMVo.setData(datas);
+						pushFCMVo.setNotification(new PushFCMVo.Notify("訂單信息", changeStatus.getMssage()));
+						pushService.pushRemoteMessage(accountUUID, pushFCMVo, true);
 					}
 					
 				}

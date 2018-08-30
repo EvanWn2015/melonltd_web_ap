@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
-import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.bean.FoodInfo;
 import com.melonltd.naber.rdbms.model.dao.FoodInfoDao;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
+import com.melonltd.naber.rdbms.model.type.UUIDType;
 import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
 
 @Service("foodInfoSerice")

@@ -20,9 +20,10 @@ public class Advertisement implements Serializable{
 	private String photo;
 	private String padPhoto;
 	private String photoType;
+	private String linkType;
+	private String linkTo;
 	private String enable;
 	private String createDate;
-
 
 	@Id
 	@Column(name = "ad_uuid", unique = true, nullable = false)
@@ -55,6 +56,15 @@ public class Advertisement implements Serializable{
 		return photoType;
 	}
 	
+	@Column(name = "link_type")
+	public String getLinkType() {
+		return linkType;
+	}
+	
+	@Column(name = "link_to")
+	public String getLinkTo() {
+		return linkTo;
+	}
 	@Column(name = "enable")
 	public String getEnable() {
 		return enable;
@@ -88,6 +98,14 @@ public class Advertisement implements Serializable{
 	public void setPhotoType(String photoType) {
 		this.photoType = photoType;
 	}
+	
+	public void setLinkType(String linkType) {
+		this.linkType = linkType;
+	}
+
+	public void setLinkTo(String linkTo) {
+		this.linkTo = linkTo;
+	}
 
 	public void setEnable(String enable) {
 		this.enable = enable;
@@ -106,6 +124,8 @@ public class Advertisement implements Serializable{
 				.add("photo", photo)
 				.add("padPhoto", padPhoto)
 				.add("photoType", photoType)
+				.add("linkType", linkType)
+				.add("linkTo", linkTo)
 				.add("createDate", createDate)
 				.add("enable", enable)
 				.toString();

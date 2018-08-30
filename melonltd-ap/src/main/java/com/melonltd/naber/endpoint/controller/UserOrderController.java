@@ -29,9 +29,8 @@ import com.melonltd.naber.constant.NaberConstant;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
-import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.facade.service.SubmitOrderService;
-import com.melonltd.naber.rdbms.model.push.service.PudhSellerService;
+import com.melonltd.naber.rdbms.model.push.service.PushService;
 import com.melonltd.naber.rdbms.model.req.vo.DemandsItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
@@ -46,11 +45,12 @@ import com.melonltd.naber.rdbms.model.service.UserOrderInfoService;
 import com.melonltd.naber.rdbms.model.type.BillingType;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
+import com.melonltd.naber.rdbms.model.type.UUIDType;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
 import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
-import com.melonltd.naber.rdbms.model.vo.NotificationVo;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
+import com.melonltd.naber.rdbms.model.vo.PushFCMVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
@@ -72,7 +72,7 @@ public class UserOrderController {
 	@Autowired
 	private RestaurantInfoService restaurantInfoService;
 	@Autowired
-	private PudhSellerService pudhSellerService;
+	private PushService pushService;
 	@Autowired
 	private CategoryRelService restaurantCategoryRelService;
 
@@ -110,13 +110,14 @@ public class UserOrderController {
 					map = RespData.of(Status.FALSE, ErrorType.ORDER_UNFINISH_MAX, null);
 				} else {
 					// push to seller
-					NotificationVo notificationVo = new NotificationVo();
-					Map<String, String> datas = Maps.newHashMap();
+					PushFCMVo pushFCMVo = new PushFCMVo();
+					pushFCMVo.setNotification(new PushFCMVo.Notify("訂單信息", "您有新訂單！請前往訂單查看！"));
+					Map<String, Object> datas = Maps.newHashMap();
 					datas.put("identity", Identity.SELLERS.name());
 					datas.put("title", "訂單信息");
 					datas.put("message", "您有新訂單！請前往訂單查看！");
-					notificationVo.setData(datas);
-					pudhSellerService.pushOrderToSeller(resultOrder.getRestaurant_uuid(), notificationVo);
+					pushFCMVo.setData(datas);
+					pushService.pushRemoteMessage(resultOrder.getRestaurant_uuid(), pushFCMVo, false);
 					map = RespData.of(Status.TRUE, null, resultOrder);
 				}
 //				map = RespData.of(Status.TRUE, null, resultOrder);
@@ -173,13 +174,14 @@ public class UserOrderController {
 								map = RespData.of(Status.FALSE, ErrorType.ORDER_UNFINISH_MAX, null);
 							} else {
 								// push to seller
-								NotificationVo notificationVo = new NotificationVo();
-								Map<String, String> datas = Maps.newHashMap();
+								PushFCMVo notificationVo = new PushFCMVo();
+								notificationVo.setNotification(new PushFCMVo.Notify("訂單信息", "您有新訂單！請前往訂單查看！"));
+								Map<String, Object> datas = Maps.newHashMap();
 								datas.put("identity", Identity.SELLERS.name());
 								datas.put("title", "訂單信息");
 								datas.put("message", "您有新訂單！請前往訂單查看！");
 								notificationVo.setData(datas);
-								pudhSellerService.pushOrderToSeller(result.getRestaurant_uuid(), notificationVo);
+								pushService.pushRemoteMessage(result.getRestaurant_uuid(), notificationVo, false);
 								map = RespData.of(Status.TRUE, null, result);
 							}
 						}

@@ -9,34 +9,30 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.context.annotation.PropertySource;
 
 import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.api.client.util.Maps;
-import com.google.api.client.util.Sets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
-import com.mchange.v2.sql.filter.SynchronizedFilterDataSource;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
-import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
 import com.melonltd.naber.rdbms.model.req.vo.DemandsItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.type.Delivery;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
+import com.melonltd.naber.rdbms.model.type.UUIDType;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
-import com.melonltd.naber.rdbms.model.vo.AdvertisementVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
-import com.melonltd.naber.rdbms.model.vo.NotificationVo;
+import com.melonltd.naber.rdbms.model.vo.MobileDeviceVo;
+import com.melonltd.naber.rdbms.model.vo.PushFCMVo;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 
 @PropertySource("classpath:/config.properties")
@@ -46,10 +42,10 @@ public class MyTest {
 	public void mytest() {
 		try {
 
-			NotificationVo notificationVo = new NotificationVo();
+			PushFCMVo notificationVo = new PushFCMVo();
 			notificationVo.setTo(
 					"dWEmZVyp0tY:APA91bG6V0Rk0D3A4ihIY-iZV3vWovcwtM0RpN6Eaak7nWPewI1Y68MLaLwu_5EQs6didSxbBAFwliN8vGBfh--sR5qbdF2bkHYM7lqKVT0S8ZeWbpLNIc1OtNDspL6Xb_tb4FGvs8PLN6fJGQD2vbBAcdPZaTa2-g");
-			Map<String, String> map = Maps.newHashMap();
+			Map<String, Object> map = Maps.newHashMap();
 			map.put("identity", Identity.SELLERS.name());
 			map.put("title", "訂單信息");
 			map.put("message", "你的訂單");
@@ -567,12 +563,24 @@ public class MyTest {
 	
 	@Test
 	public void dsds () {
-		String[] array = Delivery.getEnumValues().stream().map(d -> d.name()).toArray(String[] :: new);
-		String str = String.join(",", array);
-		System.out.println(JsonHelper.jsonArray(null,String[].class));
+		List<MobileDeviceVo> list = Lists.newArrayList();
+		for (int i=1; i< 4; i++) {
+			MobileDeviceVo vo = new MobileDeviceVo();
+			List<String> tokens = Lists.newArrayList();
+			for(int j=1; j< i; j++ ) {
+				tokens.add(j + "13aDSASDSA" + i * 8);
+			}
+			vo.setDevice_token(JsonHelper.toJson(tokens));
+			list.add(vo);
+		}
 		
-		String ss = "[\"SEND\",\"IN\",\"OUT\"]";
-		System.out.println(ss.length());
+		String[] tt = list.stream().flatMap(a -> JsonHelper.jsonArray(a.getDevice_token(), String[].class).stream()).toArray(String[] :: new);
+		
+		System.out.println(tt);
+		
+		System.out.println(tt);
+		
+		
 	}
 }
 

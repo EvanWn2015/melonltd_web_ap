@@ -34,7 +34,7 @@
 			<mvc:exclude-mapping path="/common/**" />
 			<mvc:exclude-mapping path="/login/**" />
 			<mvc:exclude-mapping path="/test/**" />
-			<mvc:exclude-mapping path="/naber/privac/policy/**" />
+			<mvc:exclude-mapping path="/naber/privac/**" />
 			<mvc:exclude-mapping path="/account/forget/password/**" />
 			<mvc:exclude-mapping path="/registered/**" />
 			<bean

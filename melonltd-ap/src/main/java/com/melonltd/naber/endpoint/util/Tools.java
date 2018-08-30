@@ -17,6 +17,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
+import com.melonltd.naber.rdbms.model.type.UUIDType;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
 import com.melonltd.naber.rdbms.model.vo.LatLngVo;
 
@@ -26,9 +27,6 @@ public class Tools {
 	private static final ZoneId ZONEID_GMT = ZoneId.of("Asia/Kuala_Lumpur");
 	private static final DateTimeFormatter yyyy_MM_dd_T_HH_mm_ss_SSSS_Z = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
 
-	public static enum UUIDType {
-		ADMIN, USER, SELLER, NABER_BULLETIN, RESTAURANT, RESTAURANT_CATEGORY, DEVICE, AD, FOOD, ORDER
-	}
 
 	/**
 	 * pattern="yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"

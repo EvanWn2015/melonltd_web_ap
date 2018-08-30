@@ -19,16 +19,29 @@ public class MobileDeviceService {
 	@Autowired
 	private MobileDeviceDao mobileDeviceDao;
 
-	public List<MobileDeviceVo> findByAccountUUID(String accountUUID) {
-		List<MobileDevice> list = mobileDeviceDao.findByAccountUUID(accountUUID);
-		if (CollectionUtils.isEmpty(list)) {
-			return Lists.newArrayList();
+//	public List<MobileDeviceVo> findByAccountUUID(String accountUUID) {
+//		List<MobileDevice> list = mobileDeviceDao.findByAccountUUID(accountUUID);
+//		if (CollectionUtils.isEmpty(list)) {
+//			return Lists.newArrayList();
+//		}
+//		return MobileDeviceVo.valueOfArray(list);
+//	}
+//
+//	public List<MobileDeviceVo> findByRestaurantUUID(String restaurantUUID) {
+//		List<MobileDevice> list = mobileDeviceDao.findByRestaurantUUID(restaurantUUID);
+//		if (CollectionUtils.isEmpty(list)) {
+//			return Lists.newArrayList();
+//		}
+//		return MobileDeviceVo.valueOfArray(list);
+//	}
+	
+	public List<MobileDeviceVo> findByAccountOrRestaurantUUID(String uuid, boolean isUser) {
+		List<MobileDevice> list = Lists.<MobileDevice>newArrayList();
+		if (isUser) {
+			list = mobileDeviceDao.findByAccountUUID(uuid);
+		}else {
+			list = mobileDeviceDao.findByRestaurantUUID(uuid);
 		}
-		return MobileDeviceVo.valueOfArray(list);
-	}
-
-	public List<MobileDeviceVo> findByRestaurantUUID(String restaurantUUID) {
-		List<MobileDevice> list = mobileDeviceDao.findByRestaurantUUID(restaurantUUID);
 		if (CollectionUtils.isEmpty(list)) {
 			return Lists.newArrayList();
 		}

@@ -24,13 +24,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.api.client.util.Lists;
 import com.google.common.collect.Maps;
 import com.melonltd.naber.constant.NaberConstant;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
-import com.melonltd.naber.endpoint.util.Tools.UUIDType;
 import com.melonltd.naber.rdbms.model.bean.AccountInfo;
 import com.melonltd.naber.rdbms.model.bean.CategoryRel;
 import com.melonltd.naber.rdbms.model.bean.FoodInfo;
@@ -52,14 +50,16 @@ import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.type.Delivery;
+import com.melonltd.naber.rdbms.model.type.DeviceCategory;
 import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.Level;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
+import com.melonltd.naber.rdbms.model.type.UUIDType;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
 import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
-import com.melonltd.naber.rdbms.model.vo.NotificationVo;
+import com.melonltd.naber.rdbms.model.vo.PushFCMVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
@@ -251,24 +251,18 @@ public class AdminController {
 		AccountInfoVo accountInfoVo = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 		if (ObjectUtils.allNotNull(accountInfoVo)) {
 			if (Identity.ADMIN.equals(Identity.of(accountInfoVo.getIdentity()))) {
-
-				List<NotificationVo> notificationVos = Lists.newArrayList();
-				for (int i = 0; i < 10; i++) {
-					
-					
-//					NotificationVo notify = NotificationVo.newInstance(data, new NotificationVo.Notify("TEST", "MESSAGE",null));
-					NotificationVo notify = new NotificationVo();
-					notify.setTo(data);
-					
-					Map<String, String> datas = Maps.newHashMap();
-					datas.put("identity", Identity.NON_STUDENT.name());
-					datas.put("title", "訂單信息" + i);
-					datas.put("message", "測試中文內容" + i);
-					notify.setData(datas);
-					notificationVos.add(notify);
-				}
-
-				androidPushService.pushForAndroids(notificationVos);
+				String[] tokens = JsonHelper.jsonArray(data, String[].class).stream().toArray(String[] :: new);
+//				List<String> tokenDatas = JsonHelper.jsonArray(data, String[].class);
+				PushFCMVo pushFCMVo = new PushFCMVo();
+				pushFCMVo.setNotification(new PushFCMVo.Notify("ttt title","mmm mseage"));
+				pushFCMVo.setRegistration_ids(tokens);
+				
+				Map<String, Object> datas = Maps.newHashMap();
+				datas.put("identity", Identity.NON_STUDENT.name());
+				datas.put("title", "訂單信息");
+				datas.put("message", "測試中文內容");
+				pushFCMVo.setData(datas);
+				androidPushService.push(pushFCMVo, DeviceCategory.ANDROID);
 			}
 		}
 		return new ResponseEntity<String>("AAA", HttpStatus.OK);
@@ -282,23 +276,17 @@ public class AdminController {
 		AccountInfoVo accountInfoVo = accountInfoService.getCacheBuilderByKey(accountUUID, false);
 		if (ObjectUtils.allNotNull(accountInfoVo)) {
 			if (Identity.ADMIN.equals(Identity.of(accountInfoVo.getIdentity()))) {
-
-				List<NotificationVo> notificationVos = Lists.newArrayList();
-				for (int i = 0; i < 10; i++) {
-					NotificationVo notify = new NotificationVo();
-					notify.setTo(data);
-					Map<String, String> datas = Maps.newHashMap();
-					datas.put("identity", Identity.SELLERS.name());
-					datas.put("title", "訂單信息" + i);
-					datas.put("message", "測試中文內容" + i);
-					notify.setData(datas);
-					notificationVos.add(notify);
-				}
 				
-//				{"title":"訂單信息0","message":"測試中文內容0","aps":{"alert":{"title":"訂單信息0","body":"測試中文內容0"},"sound":"default"},"identity":"SELLERS"}
-//				anpsPushServcie.pushs(notificationVos);
-				
-				androidPushService.pushForIOSAPNs(notificationVos);
+				List<String> devidTokens = JsonHelper.jsonArray(data, String[].class);
+				PushFCMVo pushFCMVo = new PushFCMVo();
+				pushFCMVo.setTo(data);
+				pushFCMVo.setRegistration_ids(devidTokens.stream().map(t -> t).toArray(String[] :: new));
+				Map<String, Object> datas = Maps.newHashMap();
+				datas.put("identity", Identity.SELLERS.name());
+				datas.put("title", "訂單信息");
+				datas.put("message", "測試中文內容");
+				pushFCMVo.setData(datas);
+				androidPushService.push(pushFCMVo,DeviceCategory.IOS);
 			}
 			
 		}

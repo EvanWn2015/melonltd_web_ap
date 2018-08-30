@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
-import com.melonltd.naber.rdbms.model.vo.NotificationVo;
+import com.melonltd.naber.rdbms.model.vo.PushFCMVo;
 import com.notnoop.apns.APNS;
 import com.notnoop.apns.ApnsNotification;
 import com.notnoop.apns.ApnsService;
@@ -37,25 +37,25 @@ public class APNSPushServcie {
 		return SERVICE;
 	}
 	
-	public void push(String device_token, NotificationVo notificationVo) {
-		Map<String, String> data = notificationVo.getData();
+	public void push(String device_token, PushFCMVo pushFCMVo) {
+		Map<String, Object> data = pushFCMVo.getData();
 		String payload = APNS.newPayload()
 							.sound("default")
-							.alertTitle(data.get("title"))
-							.alertBody(data.get("message"))
+							.alertTitle(data.get("title").toString())
+							.alertBody(data.get("message").toString())
 							.customFields(data)
 							.build();
 			ApnsNotification notify = getInstance().push(device_token, payload);
 			LOGGER.info("The message has been hopefully sent..., notify:{}", notify);
 	}
 	
-	public void pushs(List<NotificationVo> notificationVos) {
-		for (NotificationVo a : notificationVos) {
-			try {
-				push(a.getTo(), a);
-			}catch (RuntimeException e) {
-				LOGGER.info("The message sent error... token:{}", a.getTo());
-			}
-		}		
-	}
+//	public void pushs(List<PushFCMVo> pushFCMVos) {
+//		for (PushFCMVo a : pushFCMVos) {
+//			try {
+//				push(a.getTo(), a);
+//			}catch (RuntimeException e) {
+//				LOGGER.info("The message sent error... token:{}", a.getTo());
+//			}
+//		}		
+//	}
 }
