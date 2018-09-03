@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
+import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 
 @Entity
 @Table(name = "restaurant_info")

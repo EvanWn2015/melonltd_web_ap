@@ -10,7 +10,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.JsonHelper;
@@ -26,10 +29,27 @@ public class RestaurantInfoService {
 	private RestaurantInfoDao restaurantInfoDao;
 
 	
-//	public RestaurantInfoVo save(RestaurantInfo info) {
-//		restaurantInfoDao.save(info);
-//		return null;
-//	}
+	// for Admin
+	public RestaurantInfoVo save(RestaurantInfoVo vo) {
+		RestaurantInfo info = restaurantInfoDao.save(newRestaurantInfo(vo)); 
+		return RestaurantInfoVo.valueOf(info, true);
+	}
+	
+	public void updateCanDiscount(String canDiscount, String restaurantUUID) {
+		restaurantInfoDao.updateCanDiscount(canDiscount, restaurantUUID);
+	}
+
+	public void updateEnable(String enable, String restaurantUUID) {
+		restaurantInfoDao.updateEnable(enable, restaurantUUID);
+	}
+	
+	public List<RestaurantInfoVo> findAll() {
+		List<RestaurantInfo> list = restaurantInfoDao.findAll();
+		if (CollectionUtils.isNotEmpty(list)) {
+			return RestaurantInfoVo.valueOfArray(list);
+		}
+		return Lists.<RestaurantInfoVo>newArrayList();
+	}
 	
 	public RestaurantInfoVo changeCanStoreRange(RestaurantInfoVo vo, List<DateRangeVo> canStoreRange) {
 		RestaurantInfo info = restaurantInfoDao.save(newRestaurantInfo(vo, canStoreRange));

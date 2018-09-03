@@ -2,10 +2,13 @@ package com.melonltd.naber.rdbms.model.service;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.logging.log4j.core.appender.rolling.action.IfAccumulatedFileCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.api.client.util.Lists;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.CategoryRel;
 import com.melonltd.naber.rdbms.model.dao.CategoryRelDao;
@@ -93,6 +96,14 @@ public class CategoryRelService {
 			return CategoryRelVo.valueOf(newInfo);
 		}
 		return null;
+	}
+	
+	public List<CategoryRelVo> save(List<CategoryRel> entities) {
+		List<CategoryRel> newInfos = categoryRelDao.save(entities);
+		if (CollectionUtils.isNotEmpty(newInfos)) {
+			return CategoryRelVo.valueOfArray(newInfos);
+		}
+		return Lists.<CategoryRelVo>newArrayList();
 	}
 
 }

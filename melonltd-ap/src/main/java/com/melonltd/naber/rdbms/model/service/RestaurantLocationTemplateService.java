@@ -2,6 +2,7 @@ package com.melonltd.naber.rdbms.model.service;
 
 import java.util.List;
 
+import org.apache.poi.util.TempFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,14 @@ public class RestaurantLocationTemplateService {
 	
 	@Autowired
 	private RestaurantLocationTemplateDao restaurantLocationTemplateDao;
+	
+	public RestaurantLocationTemplate save(RestaurantLocationTemplate entity) {
+		return restaurantLocationTemplateDao.save(entity);
+	}
+	
+	public void updateEnable(String enable, String restaurantUUID) {
+		restaurantLocationTemplateDao.updateEnable(enable, restaurantUUID);
+	}
 	
 	public List<RestaurantInfoVo> findAll() {
 		 List<RestaurantLocationTemplate> list = restaurantLocationTemplateDao.findAllByEnable();

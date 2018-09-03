@@ -7,7 +7,9 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.melonltd.naber.rdbms.model.bean.RestaurantInfo;
 
@@ -33,4 +35,18 @@ public interface RestaurantInfoDao extends JpaRepository<RestaurantInfo, String>
 	
 	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable='Y' AND a.name LIKE %?1% ")
 	public Page<RestaurantInfo> findByAdd(String area, Pageable pageable);
+	
+	
+	
+	// for Admin
+	@Transactional
+	@Modifying
+	@Query("UPDATE RestaurantInfo a SET a.canDiscount=?1 WHERE a.restaurantUUID=?2")	
+	public void updateCanDiscount(String canDiscount, String restaurantUUID);
+	
+	
+	@Transactional
+	@Modifying
+	@Query("UPDATE RestaurantInfo a SET a.enable=?1 WHERE a.restaurantUUID=?2")	
+	public void updateEnable(String enable, String restaurantUUID);
 }

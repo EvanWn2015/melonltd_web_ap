@@ -16,6 +16,7 @@ import com.google.common.cache.LoadingCache;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.AccountInfo;
 import com.melonltd.naber.rdbms.model.dao.AccountInfoDao;
+import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.UUIDType;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 
@@ -79,8 +80,12 @@ public class AccountInfoService {
 		}
 		return null;
 	}
+	
+	public AccountInfo save(AccountInfo entity) {
+		return accountInfoDao.save(entity);
+	}
 
-	public AccountInfo save(AccountInfoVo vo, UUIDType type) {
+	public AccountInfo save(AccountInfoVo vo, UUIDType type, Enable enable) {
 		AccountInfo oldInfo = accountInfoDao.findByAccount(vo.getAccount());
 		if (ObjectUtils.allNotNull(oldInfo)) {
 			return null;
@@ -101,7 +106,7 @@ public class AccountInfoService {
 		info.setCreateDate(Tools.getNowGMT());
 		info.setUseBonus("0");
 		info.setBonus("0");
-		info.setEnable("Y");
+		info.setEnable(enable.name());
 		info.setIsLogin("N");
 		return accountInfoDao.save(info);
 	}

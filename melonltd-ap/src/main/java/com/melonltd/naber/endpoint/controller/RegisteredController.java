@@ -22,6 +22,7 @@ import com.melonltd.naber.rdbms.model.bean.AccountInfo;
 import com.melonltd.naber.rdbms.model.bean.SellerRegistered;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.SellerRegisteredService;
+import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.UUIDType;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
@@ -51,7 +52,7 @@ public class RegisteredController {
 		LinkedHashMap<String, Object> map = null;
 		if (error == null) {
 			vo.setAccount(vo.getPhone());
-			AccountInfo info = accountInfoService.save(vo, UUIDType.USER);
+			AccountInfo info = accountInfoService.save(vo, UUIDType.USER, Enable.Y);
 			if (ObjectUtils.allNotNull(info)) {
 				map = RespData.of(Status.TRUE, null, null);
 			} else {
