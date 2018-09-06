@@ -122,16 +122,16 @@ public class AdvertisementVo implements Serializable{
 	
 	public static AdvertisementVo valueOf (Advertisement info) {
 		AdvertisementVo vo = new AdvertisementVo ();
-//		vo.ad_uuid = info.getAdUUID();
+		vo.ad_uuid = info.getAdUUID();
 		vo.title = info.getTitle();
 		vo.content_text = info.getContentText();
 		vo.photo = info.getPhoto();
 		vo.pad_photo = info.getPadPhoto();
 		vo.link_type = info.getLinkType();
 		vo.link_to = info.getLinkTo();
-//		vo.photo_type = info.getPhotoType();
-//		vo.enable = info.getEnable();
-//		vo.create_date = info.getCreateDate();
+		vo.photo_type = info.getPhotoType();
+		vo.enable = info.getEnable();
+		vo.create_date = info.getCreateDate();
 		return vo;
 	}
 	

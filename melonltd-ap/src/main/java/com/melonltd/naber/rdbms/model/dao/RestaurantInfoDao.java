@@ -39,6 +39,10 @@ public interface RestaurantInfoDao extends JpaRepository<RestaurantInfo, String>
 	
 	
 	// for Admin
+	
+	@Query("SELECT a FROM RestaurantInfo a WHERE a.restaurantUUID = ?1")
+	public RestaurantInfo findUUIDForAdmin(String uuid);
+	
 	@Transactional
 	@Modifying
 	@Query("UPDATE RestaurantInfo a SET a.canDiscount=?1 WHERE a.restaurantUUID=?2")	
@@ -49,4 +53,5 @@ public interface RestaurantInfoDao extends JpaRepository<RestaurantInfo, String>
 	@Modifying
 	@Query("UPDATE RestaurantInfo a SET a.enable=?1 WHERE a.restaurantUUID=?2")	
 	public void updateEnable(String enable, String restaurantUUID);
+	
 }

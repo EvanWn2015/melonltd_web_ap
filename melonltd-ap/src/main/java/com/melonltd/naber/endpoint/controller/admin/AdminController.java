@@ -112,30 +112,7 @@ public class AdminController {
 		return newRanges;
 	}
 	
-	@ResponseBody
-	@PostMapping(value = "admin/revised/app/version")
-	public ResponseEntity<String> revisedAppVersion(HttpServletRequest httpRequest, 
-			@RequestParam(value = "app", required = false) String app,
-			@RequestParam(value = "version", required = false) String version) {
-		String accountUUID = httpRequest.getHeader("Authorization");
-		AccountInfoVo accountInfoVo = accountInfoService.getCacheBuilderByKey(accountUUID, false);
-		if (ObjectUtils.allNotNull(accountInfoVo)) {
-			if (Identity.ADMIN.equals(Identity.of(accountInfoVo.getIdentity()))) {
 
-				if (app.equals("IOS")) {
-					NaberConstant.IOS_APP_VERSION = version;
-				}else if (app.equals("ANDROID")){
-					NaberConstant.ANDROID_APP_VERSION = version;
-				}
-			}
-		}
-
-		// System.out.println(smsHttpService.getCreditValue() + "");
-		return new ResponseEntity<String>("AAA", HttpStatus.OK);
-	}
-	
-	
-	
 	// 複製內容到另一家餐館
 	@ResponseBody
 	@PostMapping(value = "admin/copy/restaurant/detail")

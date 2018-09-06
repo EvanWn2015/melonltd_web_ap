@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
-import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 
 @Entity
 @Table(name = "restaurant_info")
@@ -186,7 +185,7 @@ public class RestaurantInfo implements Serializable {
 	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
-
+	
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}

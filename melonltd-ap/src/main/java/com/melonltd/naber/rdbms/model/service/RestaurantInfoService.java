@@ -1,19 +1,18 @@
 package com.melonltd.naber.rdbms.model.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.JsonHelper;
@@ -35,6 +34,14 @@ public class RestaurantInfoService {
 		return RestaurantInfoVo.valueOf(info, true);
 	}
 	
+	public RestaurantInfoVo findUUIDForAdmin(String uuid) {
+		RestaurantInfo info = restaurantInfoDao.findUUIDForAdmin(uuid);
+		if (ObjectUtils.anyNotNull(info)) {
+			return RestaurantInfoVo.valueOf(info, true);
+		}
+		return null;
+	}
+	
 	public void updateCanDiscount(String canDiscount, String restaurantUUID) {
 		restaurantInfoDao.updateCanDiscount(canDiscount, restaurantUUID);
 	}
@@ -46,7 +53,8 @@ public class RestaurantInfoService {
 	public List<RestaurantInfoVo> findAll() {
 		List<RestaurantInfo> list = restaurantInfoDao.findAll();
 		if (CollectionUtils.isNotEmpty(list)) {
-			return RestaurantInfoVo.valueOfArray(list);
+			List<RestaurantInfoVo> restaurantInfos = list.stream().map(a -> RestaurantInfoVo.valueOf(a, true)).collect(Collectors.toList());
+			return restaurantInfos;
 		}
 		return Lists.<RestaurantInfoVo>newArrayList();
 	}
@@ -181,10 +189,12 @@ public class RestaurantInfoService {
 		info.setAddress(vo.getAddress());
 		info.setStoreStart(vo.getStore_start());
 		info.setStoreEnd(vo.getStore_end());
-		info.setCanDiscount("Y");
+		// 可否使用紅利開關
+		info.setCanDiscount(StringUtils.isBlank(vo.getCan_discount()) ? "Y" : vo.getCan_discount());
 		info.setNotBusiness(JsonHelper.toJson(vo.getNot_business()));
 		info.setCanStoreRange(JsonHelper.toJson(vo.getCan_store_range()));
 		info.setRestaurantCategory(vo.getRestaurant_category());
+		info.setDeliveryTypes(JsonHelper.toJson(vo.getDelivery_types()));
 		info.setLatitude(vo.getLatitude());
 		info.setLongitude(vo.getLongitude());
 		info.setBulletin(vo.getBulletin());

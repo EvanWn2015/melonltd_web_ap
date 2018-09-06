@@ -1,10 +1,10 @@
 package com.melonltd.naber.rdbms.model.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.logging.log4j.core.appender.rolling.action.IfAccumulatedFileCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,9 +34,30 @@ public class CategoryRelService {
 		return CategoryRelVo.valueOfArray(list);
 	}
 
-	public int getStatusByCategoryUUIDs(List<String> categoryUUIDs) {
-		List<CategoryRel> list = categoryRelDao.findByCategoryUUIDs(categoryUUIDs);
+	public int getStatusByCategoryUUIDs(List<String> categoryUUIDs, Enable enable, List<SwitchStatus> status) {
+		List<CategoryRel> list = findByUUIDs(categoryUUIDs, enable, status);
 		return list.size();
+	}
+	
+	public List<CategoryRelVo> findByCategoryUUIDs(List<String> categoryUUIDs, Enable enable, List<SwitchStatus> status) {
+		List<CategoryRel> list = findByUUIDs(categoryUUIDs, enable, status);
+		return CategoryRelVo.valueOfArray(list);
+	}
+	
+	
+	public List<CategoryRelVo> saves(List<CategoryRelVo> categoryRelVos) {
+		List<CategoryRel> entities = CategoryRel.valueOfArray(categoryRelVos);
+		List<CategoryRel> infos = categoryRelDao.save(entities);
+		return CategoryRelVo.valueOfArray(infos);
+	}
+	
+	private List<CategoryRel> findByUUIDs(List<String> categoryUUIDs, Enable enable, List<SwitchStatus> status) {
+		List<String> inStatus = status.stream().map(s -> s.name()).collect(Collectors.toList());
+		List<CategoryRel> list = categoryRelDao.findByCategoryUUIDs(categoryUUIDs, enable.name(), inStatus);
+		if (CollectionUtils.isNotEmpty(list)) {
+			return list;
+		}
+		return Lists.<CategoryRel>newArrayList();
 	}
 
 	public CategoryRelVo saveCategoryRel(String restaurantUUID, String name) {
@@ -45,6 +66,7 @@ public class CategoryRelService {
 		info.setCategoryName(name);
 		info.setRestaurantUUID(restaurantUUID);
 		info.setCreateDate(Tools.getNowGMT());
+		info.setTop("0");
 		info.setEnable(Enable.Y.name());
 		info.setStatus(SwitchStatus.OPEN.name());
 

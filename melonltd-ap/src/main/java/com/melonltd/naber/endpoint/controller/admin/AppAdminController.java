@@ -3,14 +3,12 @@ package com.melonltd.naber.endpoint.controller.admin;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.aspectj.lang.annotation.Around;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +26,6 @@ import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.AccountInfo;
 import com.melonltd.naber.rdbms.model.bean.CategoryRel;
-import com.melonltd.naber.rdbms.model.bean.RestaurantInfo;
 import com.melonltd.naber.rdbms.model.bean.RestaurantLocationTemplate;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
@@ -196,7 +193,6 @@ public class AppAdminController {
 				List<CategoryRelVo> newCategoryRels = categoryRelService.save(categoryRels);
 				LOGGER.info("new CategoryRels : --> {}", newCategoryRels.toString());
 				
-				
 				req.account.setRestaurant_uuid(restaurantUUID);
 				req.account.setName(newInfo.getName());
 				req.account.setPassword("a123456");
@@ -217,6 +213,40 @@ public class AppAdminController {
 		}
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
+	
+	
+	
+	/**
+	 * 商家更新，種類、TOP、PHOTO、背景圖 
+	 */
+	@ResponseBody
+	@PostMapping(value = "app/admin/restaurant/update")
+	public ResponseEntity<String> updateRestaurant (@RequestParam(value = "data", required = false) String data, HttpServletRequest httpRequest){
+		String result = "";
+		if (checkAdminAccount(httpRequest)) {
+			String request = Base64Service.decode(data);
+			RestaurantInfoVo req = JsonHelper.json(request, RestaurantInfoVo.class);
+			RestaurantInfoVo vo = restaurantInfoService.findUUIDForAdmin(req.getRestaurant_uuid());
+			LinkedHashMap<String, Object> map = null;
+			if (ObjectUtils.allNotNull(vo)) {
+				vo.setTop(req.getTop());
+				vo.setPhoto(req.getPhoto());
+				vo.setRestaurant_category(req.getRestaurant_category());
+				vo.setBackground_photo(req.getBackground_photo());
+				RestaurantInfoVo newVo = restaurantInfoService.update(vo);
+				if (ObjectUtils.allNotNull(newVo)) {
+					map = RespData.of(Status.TRUE, null, newVo);
+				}else {
+					map = RespData.of(Status.FALSE,  ErrorType.UPDATE_ERROR, null);	
+				}
+			}else {
+				map = RespData.of(Status.FALSE,  ErrorType.UPDATE_ERROR, null);
+			}
+			result = Base64Service.encode(JsonHelper.toJson(map));
+		}
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
 	
 	/**
 	 * 刪除DEMO訂單 

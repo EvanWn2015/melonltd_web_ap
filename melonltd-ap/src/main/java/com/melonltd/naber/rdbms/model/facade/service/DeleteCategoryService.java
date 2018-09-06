@@ -40,7 +40,7 @@ public class DeleteCategoryService {
 				a.setStatus(SwitchStatus.CLOSE.name());
 				return a;
 			}).collect(Collectors.toList());
-			foodInfoSerice.saves(cfoodInfos);
+			foodInfoSerice.save(cfoodInfos);
 		} else {
 			return null;
 		}

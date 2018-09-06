@@ -20,8 +20,10 @@ public class FoodInfoVo implements Serializable{
 	private String photo;
 	private String photo_type;
 	private FoodItemVo food_data;
+	private String top;
 	private String status;
 	private String enable;
+	private String create_date;
 
 	public String getFood_uuid() {
 		return food_uuid;
@@ -79,6 +81,14 @@ public class FoodInfoVo implements Serializable{
 		this.food_data = food_data;
 	}
 
+	public String getTop() {
+		return top;
+	}
+
+	public void setTop(String top) {
+		this.top = top;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -95,6 +105,14 @@ public class FoodInfoVo implements Serializable{
 		this.enable = enable;
 	}
 
+	public String getCreate_date() {
+		return create_date;
+	}
+
+	public void setCreate_date(String create_date) {
+		this.create_date = create_date;
+	}
+
 	@Override
 	public String toString() {
 		return MoreObjects
@@ -106,8 +124,10 @@ public class FoodInfoVo implements Serializable{
 				.add("photo",photo)
 				.add("photo_type",photo_type)
 				.add("food_data",food_data)
+				.add("top",top)
 				.add("status",status)
 				.add("enable",enable)
+				.add("create_date", create_date)
 				.toString();
 	}
 	
@@ -118,18 +138,15 @@ public class FoodInfoVo implements Serializable{
 		vo.food_name = info.getFoodName();
 		vo.default_price = info.getDefaultPrice();
 		vo.photo = info.getPhoto();
-//		vo.photo_type = info.getPhotoType();
+		vo.top = info.getTop();
 		
 		if (isDetail) {
 			vo.food_data =JsonHelper.json(info.getFoodData(), FoodItemVo.class);
-//			vo.food_uuid = vo.food_data.getFood_uuid();
-//			vo.food_name = vo.food_data.getFood_name();
-//			vo.default_price = vo.food_data.getPrice();
+			vo.photo_type = info.getPhotoType();
 			vo.status = info.getStatus();
+			vo.enable = info.getEnable();
+			vo.create_date = info.getCreateDate();
 		}
-		
-//		vo.status = info.getStatus();
-//		vo.enable = info.getEnable();
 		return vo;
 	}
 	
@@ -141,6 +158,7 @@ public class FoodInfoVo implements Serializable{
 		vo.default_price = info.getDefaultPrice();
 		vo.photo = info.getPhoto();
 		vo.food_data =JsonHelper.json(info.getFoodData(), FoodItemVo.class);
+		vo.top = info.getTop();
 		vo.status = info.getStatus();
 //		vo.enable = info.getEnable();
 		return vo;

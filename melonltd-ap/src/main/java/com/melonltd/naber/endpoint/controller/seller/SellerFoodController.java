@@ -2,6 +2,7 @@ package com.melonltd.naber.endpoint.controller.seller;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,6 +27,7 @@ import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.CategoryRelService;
 import com.melonltd.naber.rdbms.model.service.FoodInfoSerice;
+import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
@@ -189,6 +191,36 @@ public class SellerFoodController {
 				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
 			}
 		}
+		String result = Base64Service.encode(JsonHelper.toJson(map));
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "seller/food/sort")
+	public ResponseEntity<String> sortCategoryList(HttpServletRequest httpRequest, 
+			@RequestParam(value = "data", required = false) String data) {
+		String accountUUID = httpRequest.getHeader("Authorization");
+		AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);
+		String request = Base64Service.decode(data);
+		List<FoodInfoVo> req = JsonHelper.jsonArray(request, FoodInfoVo[].class);
+		LinkedHashMap<String, Object> map = null;
+		if (ObjectUtils.allNotNull(account)) {
+			List<String> foodUUIDs = req.stream().map(a -> a.getFood_uuid()).collect(Collectors.toList());
+			List<FoodInfoVo> foodVos = foodInfoSerice.findByFoodUUIDs(foodUUIDs);
+			if (foodVos.size() == req.size()) {
+				foodVos.forEach(c -> {
+					String top = req.stream().filter(r -> r.getFood_uuid().equals(c.getFood_uuid())).findFirst().get().getTop();
+					c.setTop(top);
+				});
+				List<FoodInfoVo> foodInfoVos = foodInfoSerice.saves(foodVos);
+				map = RespData.of(Status.TRUE, null, foodInfoVos);	
+			} else {
+				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
+			}
+		} else {
+			map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
+		}
+
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}

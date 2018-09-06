@@ -11,14 +11,17 @@ import com.melonltd.naber.rdbms.model.bean.FoodInfo;
 
 public interface FoodInfoDao extends JpaRepository<FoodInfo, String> {
 
-	@Query("SELECT a FROM FoodInfo a WHERE a.enable='Y' AND a.status = ?1 AND a.categoryUUID = ?2 ORDER BY a.createDate DESC")
+	@Query("SELECT a FROM FoodInfo a WHERE a.enable='Y' AND a.status = ?1 AND a.categoryUUID = ?2 ORDER BY a.top DESC")
 	public List<FoodInfo> findByStatusAndCategoryUUID(String status, String categoryUUID);
 	
-	@Query("SELECT a FROM FoodInfo a WHERE a.enable='Y' AND a.status = 'OPEN' AND a.foodUUID = ?1 ORDER BY a.createDate DESC")
+	@Query("SELECT a FROM FoodInfo a WHERE a.enable='Y' AND a.status = 'OPEN' AND a.foodUUID = ?1")
 	public FoodInfo findByFoodUUID(String foodUUID);
 
 	@Query("SELECT f FROM FoodInfo f, CategoryRel r WHERE f.foodUUID IN(?1) AND f.status='OPEN' AND f.enable='Y' AND r.status='OPEN' AND r.enable='Y' AND f.categoryUUID=r.categoryUUID")
 	public List<FoodInfo> findStatusByFoodUUIDs(List<String> foodUUIDs);
+	
+	@Query("SELECT a FROM FoodInfo a WHERE a.enable='Y' AND a.foodUUID IN (?1)")
+	public List<FoodInfo> findByFoodUUIDs(List<String> foodUUIDs);
 	
 	@Query("SELECT a FROM FoodInfo a WHERE a.categoryUUID = ?1")
 	public List<FoodInfo> findBycategoryUUID (String categoryUUID);

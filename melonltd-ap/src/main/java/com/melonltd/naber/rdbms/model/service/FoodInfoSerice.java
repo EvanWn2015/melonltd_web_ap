@@ -15,12 +15,14 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
+import com.melonltd.naber.rdbms.model.bean.CategoryRel;
 import com.melonltd.naber.rdbms.model.bean.FoodInfo;
 import com.melonltd.naber.rdbms.model.dao.FoodInfoDao;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.type.UUIDType;
+import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
 import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
 
 @Service("foodInfoSerice")
@@ -38,6 +40,11 @@ public class FoodInfoSerice {
 	public FoodInfoVo findByFoodUUID(String foodUUID) {
 		FoodInfo info = foodInfoDao.findByFoodUUID(foodUUID);
 		return FoodInfoVo.valueOf(info, true);
+	}
+	
+	public List<FoodInfoVo> findByFoodUUIDs(List<String> foodUUIDs) {
+		List<FoodInfo> infos = foodInfoDao.findByFoodUUIDs(foodUUIDs);
+		return FoodInfoVo.valueOfArray(infos, true);
 	}
 
 	public boolean updatePhoto(FoodInfoVo vo) {
@@ -63,8 +70,19 @@ public class FoodInfoSerice {
 		return list;
 	}
 
-	public void saves(List<FoodInfo> infos) {
+	
+	public void save(FoodInfo info) {
+		foodInfoDao.save(info);
+	}
+	
+	public void save(List<FoodInfo> infos) {
 		foodInfoDao.save(infos);
+	}
+	
+	public List<FoodInfoVo> saves(List<FoodInfoVo> infoVos) {
+		List<FoodInfo> entities = FoodInfo.valueOfArray(infoVos);
+		List<FoodInfo> infos = foodInfoDao.save(entities);
+		return FoodInfoVo.valueOfArray(infos,true);
 	}
 
 	public FoodInfoVo save(FoodInfoVo vo) {
@@ -74,6 +92,7 @@ public class FoodInfoSerice {
 		info.setFoodName(vo.getFood_name());
 		info.setDefaultPrice(vo.getDefault_price());
 		info.setFoodData(JsonHelper.toJson(vo.getFood_data()));
+		info.setTop("0");
 		info.setStatus(SwitchStatus.OPEN.name());
 		info.setEnable(Enable.Y.name());
 		info.setCreateDate(Tools.getNowGMT());
@@ -104,7 +123,8 @@ public class FoodInfoSerice {
 		info.setFoodName(vo.getFood_name());
 		info.setFoodData(JsonHelper.toJson(vo.getFood_data()));
 		info.setStatus(vo.getStatus());
-
+		info.setTop(vo.getTop());
+		
 		FoodInfo newInfo = foodInfoDao.save(info);
 		if (ObjectUtils.allNotNull(newInfo)) {
 			return FoodInfoVo.valueOf(newInfo);

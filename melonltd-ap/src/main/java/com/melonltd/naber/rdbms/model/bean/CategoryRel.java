@@ -1,13 +1,17 @@
 package com.melonltd.naber.rdbms.model.bean;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.google.api.client.util.Lists;
 import com.google.common.base.MoreObjects;
+import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
 
 @Entity
 @Table(name = "category_rel")
@@ -17,6 +21,7 @@ public class CategoryRel implements Serializable {
 	private String categoryUUID;
 	private String restaurantUUID;
 	private String categoryName;
+	private String top;
 	private String status;
 	private String enable;
 	private String createDate;
@@ -35,6 +40,11 @@ public class CategoryRel implements Serializable {
 	@Column(name = "category_name")
 	public String getCategoryName() {
 		return categoryName;
+	}
+
+	@Column(name = "top")
+	public String getTop() {
+		return top;
 	}
 
 	@Column(name = "status")
@@ -63,7 +73,11 @@ public class CategoryRel implements Serializable {
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
-
+	
+	public void setTop(String top) {
+		this.top = top;
+	}
+	
 	public void setStatus(String status) {
 		this.status = status;
 	}
@@ -75,7 +89,26 @@ public class CategoryRel implements Serializable {
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
-
+	
+	public static CategoryRel valueOf (CategoryRelVo vo) {
+		CategoryRel info = new CategoryRel();
+		info.categoryUUID = vo.getCategory_uuid();
+		info.restaurantUUID = vo.getRestaurant_uuid();
+		info.categoryName = vo.getCategory_name();
+		info.top = vo.getTop();
+		info.status = vo.getStatus();
+		info.enable = vo.getEnable();
+		info.createDate = vo.getCreate_date();
+		return info;
+	}
+	
+	public static List<CategoryRel> valueOfArray (List<CategoryRelVo> vos) {
+		List<CategoryRel> infos = Lists.<CategoryRel>newArrayList();
+		infos.addAll(vos.stream().map(a -> valueOf(a)).collect(Collectors.toList()));
+		return infos;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())

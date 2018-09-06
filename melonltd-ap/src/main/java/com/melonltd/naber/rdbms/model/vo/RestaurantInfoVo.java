@@ -213,6 +213,7 @@ public class RestaurantInfoVo implements Serializable {
 		vo.store_start = info.getStoreStart();
 		vo.store_end = info.getStoreEnd();
 		vo.can_discount = info.getCanDiscount();
+
 		vo.delivery_types = JsonHelper.jsonArray(info.getDeliveryTypes(),String[].class);
 //		vo.is_store_now_open = checkIsStoreOpen(info) + "";
 //		vo.not_business = JsonHelper.jsonArray(info.getNotBusiness(), String[].class);
@@ -220,6 +221,7 @@ public class RestaurantInfoVo implements Serializable {
 			vo.can_store_range = JsonHelper.jsonArray(info.getCanStoreRange(),DateRangeVo[].class);
 			vo.not_business = JsonHelper.jsonArray(info.getNotBusiness(), String[].class);
 		}
+		
 		vo.restaurant_category = info.getRestaurantCategory();
 		vo.latitude = info.getLatitude();
 		vo.longitude = info.getLongitude();
@@ -229,10 +231,6 @@ public class RestaurantInfoVo implements Serializable {
 		vo.background_photo = info.getBackgroundPhoto();
 		vo.create_date = info.getCreateDate();
 		vo.top = info.getTop();
-//		if (ObjectUtils.allNotNull(start)) {
-//			double distance = Tools.getGoogleDistance(start, LatLngVo.of(info.getLatitude(), info.getLongitude()));
-//			vo.distance = conversionFrom(distance);
-//		}
 		return vo;
 	}
 	

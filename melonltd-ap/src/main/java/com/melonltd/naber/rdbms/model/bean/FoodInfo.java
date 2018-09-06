@@ -1,6 +1,8 @@
 package com.melonltd.naber.rdbms.model.bean;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.Lists;
+import com.melonltd.naber.endpoint.util.JsonHelper;
+import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
+import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
 
 @Entity
 @Table(name = "food_info")
@@ -21,6 +27,7 @@ public class FoodInfo implements Serializable {
 	private String photo;
 	private String photoType;
 	private String foodData;
+	private String top;
 	private String status;
 	private String enable;
 	private String createDate;
@@ -61,6 +68,11 @@ public class FoodInfo implements Serializable {
 		return foodData;
 	}
 
+	@Column(name = "top")
+	public String getTop() {
+		return top;
+	}
+	
 	@Column(name = "status")
 	public String getStatus() {
 		return status;
@@ -104,7 +116,11 @@ public class FoodInfo implements Serializable {
 	public void setFoodData(String foodData) {
 		this.foodData = foodData;
 	}
-
+	
+	public void setTop(String top) {
+		this.top = top;
+	}
+	
 	public void setStatus(String status) {
 		this.status = status;
 	}
@@ -117,6 +133,29 @@ public class FoodInfo implements Serializable {
 		this.createDate = createDate;
 	}
 
+	
+	public static FoodInfo valueOf(FoodInfoVo vo) {
+		FoodInfo info = new FoodInfo();
+		info.foodUUID = vo.getFood_uuid();
+		info.categoryUUID = vo.getCategory_uuid();
+		info.foodName = vo.getFood_name();
+		info.defaultPrice = vo.getDefault_price();
+		info.photo = vo.getPhoto();
+		info.photoType = vo.getPhoto_type();
+		info.foodData = JsonHelper.toJson(vo.getFood_data());
+		info.top = vo.getTop();
+		info.status = vo.getStatus();
+		info.enable = vo.getEnable();
+		info.createDate = vo.getCreate_date();
+		return info;
+	}
+	
+	public static List<FoodInfo> valueOfArray(List<FoodInfoVo> vos) {
+		List<FoodInfo> infos = Lists.<FoodInfo>newArrayList();
+		infos.addAll(vos.stream().map(a -> valueOf(a)).collect(Collectors.toList()));
+		return infos;
+	}
+	
 	@Override
 	public String toString() {
 		return MoreObjects

@@ -9,8 +9,4 @@ public class NaberConstant {
 	public static int SMS_CODE_LENGTH = 6;
 	public static int SMS_DAILY_SEND_MAX = 3;
 	
-	
-	// APP 版本
-	public static String ANDROID_APP_VERSION = "1.0.0";
-	public static String IOS_APP_VERSION = "1.0.0";
 }

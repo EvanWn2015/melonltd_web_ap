@@ -1,5 +1,6 @@
 package com.melonltd.naber.endpoint.controller;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.api.client.repackaged.com.google.common.base.Strings;
+import com.google.api.client.util.Lists;
 import com.google.common.collect.Maps;
 import com.mchange.lang.IntegerUtils;
 import com.melonltd.naber.constant.NaberConstant;
@@ -43,6 +45,7 @@ import com.melonltd.naber.rdbms.model.service.FoodInfoSerice;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.service.UserOrderInfoService;
 import com.melonltd.naber.rdbms.model.type.BillingType;
+import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.type.UUIDType;
@@ -133,7 +136,7 @@ public class UserOrderController {
 					List<String> categoryUUIDs = req.getOrders().stream().map(a -> a.getCategory_uuid()).distinct().collect(Collectors.toList());
 					List<FoodInfoVo> foodList = foodInfoSerice.getFoodStatusOpenByUUIDs(foodUUIDs);
 					boolean isItemChange = checkLiveItemData(req.getOrders(), foodList);
-					int categoryOpens = restaurantCategoryRelService.getStatusByCategoryUUIDs(categoryUUIDs);
+					int categoryOpens = restaurantCategoryRelService.getStatusByCategoryUUIDs(categoryUUIDs, Enable.Y, Arrays.asList(SwitchStatus.OPEN));
 					if (StringUtils.isNoneBlank(hasMsg)) {
 						LOGGER.info("Store is close account : {}, uuid:{} ", accountUUID, req.getRestaurant_uuid());
 						map = RespData.of(Status.FALSE, ErrorType.STORE_IS_CLOSE, hasMsg, null);
