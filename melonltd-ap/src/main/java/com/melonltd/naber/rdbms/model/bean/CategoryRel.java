@@ -9,8 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.google.api.client.util.Lists;
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.Lists;
 import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
 
 @Entity

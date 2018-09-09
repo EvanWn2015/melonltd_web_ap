@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.api.client.util.Lists;
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.Lists;
 import com.melonltd.naber.rdbms.model.bean.MobileDevice;
 
 public class MobileDeviceVo implements Serializable {

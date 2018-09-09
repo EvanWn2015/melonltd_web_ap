@@ -13,9 +13,10 @@
 	<modules>
 		<module>melonltd-web</module>
 		<module>melonltd-ap</module>
+		<module>melonltd-firebase-admin</module>
 	</modules>
-	
-	
+
+
 	<dependencies>
 		<dependency>
 			<groupId>com.google.guava</groupId>

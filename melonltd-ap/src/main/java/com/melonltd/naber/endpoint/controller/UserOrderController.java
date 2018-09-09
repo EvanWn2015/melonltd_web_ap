@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.api.client.repackaged.com.google.common.base.Strings;
-import com.google.api.client.util.Lists;
 import com.google.common.collect.Maps;
 import com.mchange.lang.IntegerUtils;
 import com.melonltd.naber.constant.NaberConstant;
@@ -230,7 +228,7 @@ public class UserOrderController {
 		
 		// TODO Android 
 		// 確認送來之訂單 與商家 可否計算紅利功能 一致
-		if (Strings.isNullOrEmpty(req.getCan_discount())) {
+		if (StringUtils.isBlank(req.getCan_discount())) {
 			return "";	
 		}
 		

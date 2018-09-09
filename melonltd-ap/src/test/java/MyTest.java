@@ -12,12 +12,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.context.annotation.PropertySource;
 
-import com.google.api.client.repackaged.com.google.common.base.Strings;
-import com.google.api.client.util.Maps;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Range;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
@@ -25,13 +25,11 @@ import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.push.service.SMSHttpService;
 import com.melonltd.naber.rdbms.model.req.vo.DemandsItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
-import com.melonltd.naber.rdbms.model.type.Delivery;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.type.UUIDType;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
-import com.melonltd.naber.rdbms.model.vo.MobileDeviceVo;
 import com.melonltd.naber.rdbms.model.vo.PushFCMVo;
 import com.melonltd.naber.rdbms.model.vo.SellerRegisteredVo;
 
@@ -508,7 +506,7 @@ public class MyTest {
 	// 全形字長度
 	public static int strLength(final String value) {
 		int length = 0;
-		if (Strings.isNullOrEmpty(value)) {
+		if (StringUtils.isBlank(value)) {
 			return length;
 		}
 		for (int i = 0; i < value.length(); i++) {
@@ -563,22 +561,11 @@ public class MyTest {
 	
 	@Test
 	public void dsds () {
-		List<MobileDeviceVo> list = Lists.newArrayList();
-		for (int i=1; i< 4; i++) {
-			MobileDeviceVo vo = new MobileDeviceVo();
-			List<String> tokens = Lists.newArrayList();
-			for(int j=1; j< i; j++ ) {
-				tokens.add(j + "13aDSASDSA" + i * 8);
-			}
-			vo.setDevice_token(JsonHelper.toJson(tokens));
-			list.add(vo);
-		}
+		List<String> array = Lists.newArrayList("早午餐","冰飲","西式/牛排","中式","日式","學餐");
 		
-		String[] tt = list.stream().flatMap(a -> JsonHelper.jsonArray(a.getDevice_token(), String[].class).stream()).toArray(String[] :: new);
+		System.out.println(JsonHelper.toJson(array));
 		
-		System.out.println(tt);
-		
-		System.out.println(tt);
+		System.out.println(Base64Service.encode(JsonHelper.toJson(array)));
 		
 		
 	}

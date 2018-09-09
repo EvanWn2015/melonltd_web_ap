@@ -42,7 +42,7 @@ public class BulletinController {
 	@ResponseBody
 	@PostMapping(value = "naber/advertisement")
 	public ResponseEntity<String> naberAdvertisement() {
-		List<AdvertisementVo> list = advertisementService.findAll();
+		List<AdvertisementVo> list = advertisementService.findAllByEnable();
 		LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, list);
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);

@@ -20,15 +20,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.api.client.util.Lists;
+import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.bean.AccountInfo;
+import com.melonltd.naber.rdbms.model.bean.BasisContent;
 import com.melonltd.naber.rdbms.model.bean.CategoryRel;
 import com.melonltd.naber.rdbms.model.bean.RestaurantLocationTemplate;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
+import com.melonltd.naber.rdbms.model.service.AdvertisementService;
+import com.melonltd.naber.rdbms.model.service.BasisContentService;
 import com.melonltd.naber.rdbms.model.service.CategoryRelService;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.service.RestaurantLocationTemplateService;
@@ -38,6 +41,7 @@ import com.melonltd.naber.rdbms.model.type.Level;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.type.UUIDType;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
+import com.melonltd.naber.rdbms.model.vo.AdvertisementVo;
 import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
@@ -66,6 +70,9 @@ public class AppAdminController {
 	private AccountInfoService accountInfoService;
 	
 	@Autowired
+	private AdvertisementService advertisementService;
+	
+	@Autowired
 	private RestaurantInfoService restaurantInfoService;
 	
 	@Autowired
@@ -74,6 +81,8 @@ public class AppAdminController {
 	@Autowired
 	private CategoryRelService categoryRelService;
 	
+	@Autowired
+	private BasisContentService basisContentService;
 	
 	/**
 	 * 取得全部商家列表 
@@ -89,7 +98,6 @@ public class AppAdminController {
 		}
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
-	
 	
 	/**
 	 * 商家隱藏開關
@@ -214,8 +222,6 @@ public class AppAdminController {
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 	
-	
-	
 	/**
 	 * 商家更新，種類、TOP、PHOTO、背景圖 
 	 */
@@ -247,6 +253,154 @@ public class AppAdminController {
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 	
+
+	/**
+	 * 取得餐館種類列表 
+	 */
+	@ResponseBody
+	@PostMapping(value = "app/admin/store/category/list")
+	public ResponseEntity<String> getStoreCategorys(HttpServletRequest httpRequest) {
+		String result = "";
+		if (checkAdminAccount(httpRequest)) {
+			BasisContent info = basisContentService.getStoreCategorys();
+			List<String> categorys = JsonHelper.jsonArray(info.getContent(), String[].class);
+			LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, categorys);
+			result = Base64Service.encode(JsonHelper.toJson(map));
+		}
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+
+	
+	/**
+	 *更新商店種類列表 
+	 */
+	@ResponseBody
+	@PostMapping(value = "app/admin/store/categorys/update")
+	public ResponseEntity<String> updateStoreCategorys(HttpServletRequest httpRequest, @RequestParam(value = "data", required = false) String data){
+		String result = "";
+		if (checkAdminAccount(httpRequest)) {
+			String request = Base64Service.decode(data);
+			List<String> req = JsonHelper.jsonArray(request, String[].class);
+			List<String> categorys = req.stream().filter(a -> !StringUtils.isBlank(a)).distinct().collect(Collectors.toList());
+			LinkedHashMap<String, Object> map = null;
+			BasisContent info = basisContentService.updateStoreCategorys(JsonHelper.toJson(categorys));
+			if (ObjectUtils.allNotNull(info)) {
+				List<String> resultArray  = JsonHelper.jsonArray(info.getContent(), String[].class);
+				map = RespData.of(Status.TRUE, null, resultArray);
+			}else {
+				map = RespData.of(Status.FALSE,  ErrorType.UPDATE_ERROR, null);
+			}
+			result = Base64Service.encode(JsonHelper.toJson(map));
+		}
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 *  取得餐館區域列表
+	 */
+	@ResponseBody
+	@PostMapping(value = "app/admin/store/area/list")
+	public ResponseEntity<String> getStoreAreas(HttpServletRequest httpRequest) {
+		String result = "";
+		if (checkAdminAccount(httpRequest)) {
+			BasisContent info = basisContentService.getStoreAreas();
+			List<String> areas = JsonHelper.jsonArray(info.getContent(), String[].class);
+			LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, areas);
+			result = Base64Service.encode(JsonHelper.toJson(map));
+		}
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 *更新商店區域列表 
+	 */
+	@ResponseBody
+	@PostMapping(value = "app/admin/store/areas/update")
+	public ResponseEntity<String> updateStoreAreas(HttpServletRequest httpRequest, @RequestParam(value = "data", required = false) String data){
+		String result = "";
+		if (checkAdminAccount(httpRequest)) {
+			String request = Base64Service.decode(data);
+			List<String> req = JsonHelper.jsonArray(request, String[].class);
+			List<String> areas = req.stream().filter(a -> !StringUtils.isBlank(a)).distinct().collect(Collectors.toList());
+			LinkedHashMap<String, Object> map = null;
+			BasisContent info = basisContentService.updateStoreAreas(JsonHelper.toJson(areas));
+			if (ObjectUtils.allNotNull(info)) {
+				List<String> resultArray  = JsonHelper.jsonArray(info.getContent(), String[].class);
+				map = RespData.of(Status.TRUE, null, resultArray);
+			}else {
+				map = RespData.of(Status.FALSE,  ErrorType.UPDATE_ERROR, null);
+			}
+			result = Base64Service.encode(JsonHelper.toJson(map));
+		}
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	
+	
+	/**
+	 * 取得全部輪播廣告列表 
+	 */
+	@ResponseBody
+	@PostMapping(value = "app/admin/ad/list")
+	public ResponseEntity<String> getAllAds(HttpServletRequest httpRequest){
+		String result = ""; 
+		if (checkAdminAccount(httpRequest)) {
+			List<AdvertisementVo> list = advertisementService.findAll();
+			LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, list);
+			result = Base64Service.encode(JsonHelper.toJson(map));
+		}
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 * 輪播廣告新增
+	 */
+	@ResponseBody
+	@PostMapping(value = "app/admin/ad/add")
+	public ResponseEntity<String> saveAds(HttpServletRequest httpRequest, @RequestParam(value = "data", required = false) String data){
+		String result = ""; 
+		if (checkAdminAccount(httpRequest)) {
+			String request = Base64Service.decode(data);
+			AdvertisementVo req = JsonHelper.json(request, AdvertisementVo.class);
+			AdvertisementVo vo = advertisementService.save(req);
+			LinkedHashMap<String, Object> map = null;
+			if (ObjectUtils.allNotNull(vo)) {
+				map = RespData.of(Status.TRUE, null, vo);
+			}else {
+				map = RespData.of(Status.FALSE,  ErrorType.UPDATE_ERROR, null);
+			}
+			result = Base64Service.encode(JsonHelper.toJson(map));
+		}
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 * 輪播廣告更新 
+	 */
+	@ResponseBody
+	@PostMapping(value = "app/admin/ad/update")
+	public ResponseEntity<String> updateAds(HttpServletRequest httpRequest, @RequestParam(value = "data", required = false) String data){
+		String result = ""; 
+		if (checkAdminAccount(httpRequest)) {
+			String request = Base64Service.decode(data);
+			AdvertisementVo req = JsonHelper.json(request, AdvertisementVo.class);
+			AdvertisementVo vo = advertisementService.update(req);
+			LinkedHashMap<String, Object> map = null;
+			if (ObjectUtils.allNotNull(vo)) {
+				map = RespData.of(Status.TRUE, null, vo);
+			}else {
+				map = RespData.of(Status.FALSE,  ErrorType.UPDATE_ERROR, null);
+			}
+			result = Base64Service.encode(JsonHelper.toJson(map));
+		}
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * 刪除DEMO訂單 
@@ -259,6 +413,10 @@ public class AppAdminController {
 		}
 		return new ResponseEntity<String>("AAA", HttpStatus.OK);
 	}
+	
+	
+	
+	
 	
 	
 	/**
