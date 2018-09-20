@@ -32,6 +32,7 @@ public class GlobalExceptionController {
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 	
+	
 	@ExceptionHandler(MalformedJsonException.class)
 	public ResponseEntity<String> handleJsonCustomException(HttpServletRequest req, MalformedJsonException ex) {
 		LOGGER.error("JSON RESOLVE Error , {}", ex.getMessage());

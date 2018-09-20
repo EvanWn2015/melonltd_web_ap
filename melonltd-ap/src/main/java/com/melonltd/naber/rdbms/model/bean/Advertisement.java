@@ -11,7 +11,7 @@ import com.google.common.base.MoreObjects;
 
 @Entity
 @Table(name = "advertisement")
-public class Advertisement implements Serializable{ 
+public class Advertisement implements Serializable { 
 	private static final long serialVersionUID = -8066578462454308401L;
 	
 	private String adUUID;

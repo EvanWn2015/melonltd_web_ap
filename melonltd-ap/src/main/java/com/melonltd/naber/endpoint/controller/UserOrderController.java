@@ -149,12 +149,14 @@ public class UserOrderController {
 						map = RespData.of(Status.FALSE, ErrorType.CATEGORY_IS_CLOSE, null);
 					} else {
 						int price = getPrice(req);
+						int useBonus = 0;
 						boolean status = checkCount(req);
 						// 限制單筆訂單不可超過 5000 或 單筆菜單數量錯誤
 						if (price > NaberConstant.ORDER_PRICE_MAX || !status) {
 							map = status ? RespData.of(Status.FALSE, ErrorType.ORDER_MAX_PRICE, null) : RespData.of(Status.FALSE, ErrorType.ORDER_MAX_COUNT, null);
 						} else {	 
 							// 如果該店家不提供紅利，將計算紅利歸零。
+							// TODO 應得紅利 需依照使用紅利後總金額 再次計算
 							String bonus = vo.getCan_discount().equals("Y") ? ((int) Math.floor(price / 10d) + "") : "0";
 							// 判斷訂單類型結算方式 (兼容為使用此功能的app)
 							// TODO
@@ -167,6 +169,9 @@ public class UserOrderController {
 								bonus = "0";
 							}else if (BillingType.DISCOUNT.equals(billingType)) {
 								// TODO 使用折價 需要扣除使用者紅利
+								useBonus = IntegerUtils.parseInt(req.getUse_bonus(), 0);
+								bonus = ((int) Math.floor((price - (useBonus / 10 * 3)) / 10d) + "");
+								System.out.println(bonus);
 							}
 							String orders = JsonHelper.toJson(req);
 							OrderVo result = submitOrderService.submitOrder(account, Tools.buildUUID(UUIDType.ORDER), vo, req, String.valueOf(price), bonus, orders);
@@ -174,6 +179,11 @@ public class UserOrderController {
 								LOGGER.error("submit order save fail account : {}, uuid:{} ", accountUUID, req.getRestaurant_uuid());
 								map = RespData.of(Status.FALSE, ErrorType.ORDER_UNFINISH_MAX, null);
 							} else {
+								if (useBonus != 0) {
+									AccountInfoVo accout = accountInfoService.getCacheBuilderByKey(accountUUID,false);
+									int bonusSum = IntegerUtils.parseInt(accout.getUse_bonus() ,0) + useBonus;
+									status = accountInfoService.updateUseBonus(String.valueOf(bonusSum), accout.getAccount_uuid());
+								}
 								// push to seller
 								PushFCMVo notificationVo = new PushFCMVo();
 								notificationVo.setNotification(new PushFCMVo.Notify("訂單信息", "您有新訂單！請前往訂單查看！"));

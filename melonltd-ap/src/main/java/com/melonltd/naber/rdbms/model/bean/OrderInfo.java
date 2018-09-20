@@ -9,7 +9,11 @@ import javax.persistence.Table;
 
 import com.google.common.base.MoreObjects;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
-
+/**
+ * status; 'UNFINISH','PROCESSING','CAN_FETCH','CANCEL','FAIL','FINISH'
+ * @author evan
+ *
+ */
 @Entity
 @Table(name = "order_info")
 public class OrderInfo implements Serializable {
@@ -27,7 +31,7 @@ public class OrderInfo implements Serializable {
 	private String useBonus;
 	private String fetchDate;
 	private String orderData;
-	private String status;
+	private String status; 
 	private String enable;
 	
 

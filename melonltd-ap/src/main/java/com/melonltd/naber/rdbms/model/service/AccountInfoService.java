@@ -143,6 +143,17 @@ public class AccountInfoService {
 			return false;
 		}
 	}
+	
+	public boolean updateUseBonus(String bonus, String accountUUID) {
+		try {
+			accountInfoDao.updateUseBonus(bonus, accountUUID);
+			clearCacheBuilderByKey(accountUUID);
+			return true;
+		} catch (Exception e) {
+			LOGGER.error("update password fail account: {}, msg:{}",accountUUID, e.getMessage());
+			return false;
+		}
+	}
 
 	public void refreshLoginStatus(String uuid) {
 		AccountInfo info = accountInfoDao.findByAccountUUID(uuid);

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -26,7 +27,7 @@ public class Tools {
 	private static DecimalFormat DF = new DecimalFormat();
 	private static final ZoneId ZONEID_GMT = ZoneId.of("Asia/Kuala_Lumpur");
 	private static final DateTimeFormatter yyyy_MM_dd_T_HH_mm_ss_SSSS_Z = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
-
+	private static final DateTimeFormatter yyyy_MM_dd = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	/**
 	 * pattern="yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"
@@ -105,6 +106,23 @@ public class Tools {
 	public static String getNowStartOfMonthGMT(int minus) {
 		return LocalDateTime.now(ZONEID_GMT).withDayOfMonth(1).plusMonths(minus).with(LocalTime.MIN)
 				.format(yyyy_MM_dd_T_HH_mm_ss_SSSS_Z);
+	}
+	
+	public static String getDateEndOfMonthGMT(String date) {
+		LocalDate localDate = LocalDate.parse(date, yyyy_MM_dd);
+		return localDate.withDayOfMonth(localDate.getMonth().maxLength()).atTime(LocalTime.MAX).format(yyyy_MM_dd_T_HH_mm_ss_SSSS_Z);
+	}
+	
+	public static String getDateStartOfMonthGMT(String date) {
+		return LocalDate.parse(date, yyyy_MM_dd).withDayOfMonth(1).atTime(LocalTime.MIN).format(yyyy_MM_dd_T_HH_mm_ss_SSSS_Z);
+	}
+	
+	public static String getStartOfNowMinutes(int plusMinutes) {
+		return LocalDateTime.now(ZONEID_GMT).plusMinutes(plusMinutes).with(ChronoField.SECOND_OF_MINUTE, 0).with(ChronoField.MICRO_OF_SECOND, 0).format(yyyy_MM_dd_T_HH_mm_ss_SSSS_Z);
+	}
+	
+	public static String getEndOfNowMinutes(int plusMinutes) {
+		return LocalDateTime.now(ZONEID_GMT).plusMinutes(plusMinutes).with(ChronoField.SECOND_OF_MINUTE, 59).with(ChronoField.MICRO_OF_SECOND, 999_999).format(yyyy_MM_dd_T_HH_mm_ss_SSSS_Z);
 	}
 
 	/**

@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Lists;
-
+// TODO 增加使用者取消訂單 狀態 USER_CANCEL, USER_UNFINISH
 public enum OrderStatus {
 	UNFINISH("UNFINISH", "訂單未處理"), 
 	PROCESSING("PROCESSING", "商家已接收到您的訂單並且開始製作囉!"), 

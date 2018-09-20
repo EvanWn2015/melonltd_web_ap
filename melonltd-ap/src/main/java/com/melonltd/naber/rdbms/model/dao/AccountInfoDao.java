@@ -44,4 +44,10 @@ public interface AccountInfoDao extends JpaRepository<AccountInfo, String> {
 	@Query("UPDATE AccountInfo a SET a.bonus=?1 WHERE a.accountUUID=?2")	
 	public void updateBonus(String bonus, String accountUUID);
 	
+	
+	@Transactional
+	@Modifying
+	@Query("UPDATE AccountInfo a SET a.useBonus=?1 WHERE a.accountUUID=?2")	
+	public void updateUseBonus(String useBonus, String accountUUID);
+	
 }

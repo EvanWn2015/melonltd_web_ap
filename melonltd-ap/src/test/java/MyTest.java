@@ -4,9 +4,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ValueRange;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -489,20 +493,19 @@ public class MyTest {
 	// 11:30~15:00,16:30~19:45(一~五)
 	@Test
 	public void myttt() {
-		
+
 		AccountInfoVo infoVo = new AccountInfoVo();
 		infoVo.setAccount("0928297076");
 		infoVo.setPassword("s123456");
 		String json = JsonHelper.toJson(infoVo);
 		System.out.println(json);
 		System.out.println(Base64Service.testEncode(json));
-		
-		
-		System.out.println(Base64Service.decode("JTdCJTIyc3RhdHVzJTIyJTNBJTIyZmFsc2UlMjIlMkMlMjJlcnJfY29kZSUyMiUzQSUyMjQwMDElMjIlMkMlMjJlcnJfbXNnJTIyJTNBJTIyJUU2JTlGJUE1JUU3JTg0JUExJUU2JUFEJUE0JUU1JUI4JUIzJUU2JTg4JUI2KyVFNiU4OCU5NislRTUlQjglQjMlRTYlODglQjYlRTUlQjclQjIlRTUlQTQlQjElRTYlOTUlODglMjIlN0Q="));
-		
+
+		System.out.println(Base64Service.decode(
+				"JTdCJTIyc3RhdHVzJTIyJTNBJTIyZmFsc2UlMjIlMkMlMjJlcnJfY29kZSUyMiUzQSUyMjQwMDElMjIlMkMlMjJlcnJfbXNnJTIyJTNBJTIyJUU2JTlGJUE1JUU3JTg0JUExJUU2JUFEJUE0JUU1JUI4JUIzJUU2JTg4JUI2KyVFNiU4OCU5NislRTUlQjglQjMlRTYlODglQjYlRTUlQjclQjIlRTUlQTQlQjElRTYlOTUlODglMjIlN0Q="));
+
 	}
 
-	
 	// 全形字長度
 	public static int strLength(final String value) {
 		int length = 0;
@@ -510,7 +513,8 @@ public class MyTest {
 			return length;
 		}
 		for (int i = 0; i < value.length(); i++) {
-			if (Character.UnicodeBlock.of(value.charAt(i)) != Character.UnicodeBlock.BASIC_LATIN || !isHalfWidth(value.charAt(i))) {
+			if (Character.UnicodeBlock.of(value.charAt(i)) != Character.UnicodeBlock.BASIC_LATIN
+					|| !isHalfWidth(value.charAt(i))) {
 				length++;
 			}
 			length++;
@@ -522,54 +526,43 @@ public class MyTest {
 		return '\u0000' <= c && c <= '\u00FF' || '\uFF61' <= c && c <= '\uFFDC' || '\uFFE8' <= c && c <= '\uFFEE';
 
 	}
-	
+
 	@Test
 	public void tttt() {
-		
-		
-		String jj = "{\n" + 
-					"  \"enable\": \"Y\",\n" + 
-					"  \"password\":\"a123456\",\n" + 
-					"  \"identity\": \"SELLERS\",\n" + 
-					"  \"phone\": \"1\",\n" + 
-					"  \"is_login\": \"Y\",\n" + 
-					"  \"account_uuid\": \"SELLER_20180703_175534_325_2f3fc8cc-4ec2-4669-be06-b745ce389f47\",\n" + 
-					"  \"login_date\": \"2018-08-03T12:40:22.6160Z\",\n" + 
-					"  \"level\": \"MANAGE\",\n" + 
-					"  \"address\": \"320桃園市中壢區民族路二段130號\",\n" + 
-					"  \"restaurant_uuid\": \"RESTAURANT_20180703_175534_327_f252aaec-8dec-48b8-826d-5197add44686\",\n" + 
-					"  \"account\": \"NER-18X1X14\",\n" + 
-					"  \"email\": \"NER-18X1X14@gmail.com\",\n" + 
-					"  \"name\": \"清玉-民族店\",\n" + 
-					"  \"bonus\": \"0\"\n" + 
-					"}";
-		
+
+		String jj = "{\n" + "  \"enable\": \"Y\",\n" + "  \"password\":\"a123456\",\n"
+				+ "  \"identity\": \"SELLERS\",\n" + "  \"phone\": \"1\",\n" + "  \"is_login\": \"Y\",\n"
+				+ "  \"account_uuid\": \"SELLER_20180703_175534_325_2f3fc8cc-4ec2-4669-be06-b745ce389f47\",\n"
+				+ "  \"login_date\": \"2018-08-03T12:40:22.6160Z\",\n" + "  \"level\": \"MANAGE\",\n"
+				+ "  \"address\": \"320桃園市中壢區民族路二段130號\",\n"
+				+ "  \"restaurant_uuid\": \"RESTAURANT_20180703_175534_327_f252aaec-8dec-48b8-826d-5197add44686\",\n"
+				+ "  \"account\": \"NER-18X1X14\",\n" + "  \"email\": \"NER-18X1X14@gmail.com\",\n"
+				+ "  \"name\": \"清玉-民族店\",\n" + "  \"bonus\": \"0\"\n" + "}";
+
 		AccountInfoVo info = JsonHelper.json(jj, AccountInfoVo.class);
-//		AccountInfoVo info = new AccountInfoVo();
+		// AccountInfoVo info = new AccountInfoVo();
 		System.out.println(info.toString().getBytes().length / 1024.0);
 		System.out.println(JsonHelper.toJson(info).getBytes().length);
-		
+
 		double one = 0.5546875;
-		
+
 		System.out.println(one * 1000 / 1024);
 		System.out.println(one * 2000 / 1024);
 		System.out.println(one * 10000 / 1024);
 		System.out.println(one * 20000 / 1024);
 		System.out.println(one * 30000 / 1024);
-		
+
 	}
-	
+
 	@Test
-	public void dsds () {
-		List<String> array = Lists.newArrayList("早午餐","冰飲","西式/牛排","中式","日式","學餐");
-		
-		System.out.println(JsonHelper.toJson(array));
-		
-		System.out.println(Base64Service.encode(JsonHelper.toJson(array)));
-		
-		
+	public void dsds() {
+
+		for (int i = 0; i < 10; i++) {
+			System.out.println(Tools.buildUUID(UUIDType.ACT));
+		}
+		System.out.println(Tools.getNowGMT());
+		 System.out.println(Tools.getStartOfNowMinutes(-5));
+		// System.out.println(Tools.getEndOfNowMinutes(-5));
+
 	}
 }
-
-
-

@@ -3,6 +3,7 @@ package com.melonltd.naber.rdbms.model.service;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -61,7 +62,7 @@ public class SellerOrderFinishService {
 
 	public SellerStatVo findSellerStat(String restaurantUUID) {
 		long now = System.currentTimeMillis();
-		System.out.println(now);
+//		System.out.println(now);
 		String statStart = Tools.getStartOfYearGMT(0, 0);
 		String statEnd = Tools.getNowGMT();
 		// TODO 起迄時間改變
@@ -96,11 +97,29 @@ public class SellerOrderFinishService {
 		long canFetchCount = orderLive.parallelStream().filter(equalCanFetch).count();
 		long cancelCount = orderLive.parallelStream().filter(equalCancel).count();
 
+		// TODO 要使用格用計算還是日計算
+//		long bonus = list.parallelStream().filter(isNumber.and(containsDay).and(finishPred)).mapToInt(a -> IntegerUtils.parseInt(a.getOrderBonus(), 0)).sum();
+//		long useBonus = list.parallelStream().filter(isNumber.and(containsDay).and(finishPred)).mapToInt(a -> IntegerUtils.parseInt(a.getUseBonus(), 0)).sum();
+//		System.out.println(bonus + ": " + useBonus);
+		
 		System.out.println((System.currentTimeMillis() - now) / 1000d);
 		
 		return SellerStatVo
 				.of(yearIncome, monthIncome, dayIncome, finishCount)
 				.ofStatus(new String[]{statusStart, statusEnd} , unFinishCount, processingCount, canFetchCount, cancelCount);
+	}
+	
+	
+	public List<OrderVo> findFinishByBetweenDate(String restaurantUUID, String month){
+		String start = Tools.getDateStartOfMonthGMT(month);
+		String end = Tools.getDateEndOfMonthGMT(month);
+		
+		List<SellerOrderFinish> list = sellerOrderFinishDao.findFinishByBetweenDate(restaurantUUID, start, end);
+		if(CollectionUtils.isNotEmpty(list)) {
+			return OrderVo.valueOrderFinishOfArray(list);
+		}
+		return Lists.newArrayList();
+		
 	}
 
 }

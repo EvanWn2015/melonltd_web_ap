@@ -170,7 +170,9 @@ public class RestaurantInfoService {
 		info.setRestaurantCategory(vo.getRestaurant_category());
 		info.setLatitude(vo.getLatitude());
 		info.setLongitude(vo.getLongitude());
-		info.setCanDiscount("Y");
+//		info.setCanDiscount("Y");
+		// 可否使用紅利開關
+		info.setCanDiscount(StringUtils.isBlank(vo.getCan_discount()) ? "Y" : vo.getCan_discount());
 		info.setBulletin(vo.getBulletin());
 		info.setPhoto(vo.getPhoto());
 		info.setCreateDate(vo.getCreate_date());

@@ -130,6 +130,22 @@ public class AccountInfoVo implements Serializable{
 		this.bonus = bonus;
 	}
 
+	public String getUse_bonus() {
+		return use_bonus;
+	}
+
+	public void setUse_bonus(String use_bonus) {
+		this.use_bonus = use_bonus;
+	}
+
+	public String getCreate_date() {
+		return create_date;
+	}
+
+	public void setCreate_date(String create_date) {
+		this.create_date = create_date;
+	}
+
 	public String getLevel() {
 		return level;
 	}

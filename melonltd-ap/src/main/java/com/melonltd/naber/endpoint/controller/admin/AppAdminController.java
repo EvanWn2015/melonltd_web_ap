@@ -35,6 +35,7 @@ import com.melonltd.naber.rdbms.model.service.BasisContentService;
 import com.melonltd.naber.rdbms.model.service.CategoryRelService;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.service.RestaurantLocationTemplateService;
+import com.melonltd.naber.rdbms.model.service.SellerOrderFinishService;
 import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.Level;
@@ -44,6 +45,7 @@ import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.AdvertisementVo;
 import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
 import com.melonltd.naber.rdbms.model.vo.DateRangeVo;
+import com.melonltd.naber.rdbms.model.vo.OrderVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
@@ -83,6 +85,8 @@ public class AppAdminController {
 	
 	@Autowired
 	private BasisContentService basisContentService;
+	@Autowired
+	private SellerOrderFinishService sellerOrderFinishService;
 	
 	/**
 	 * 取得全部商家列表 
@@ -397,7 +401,22 @@ public class AppAdminController {
 	}
 	
 	
-	
+	/**
+	 *分析月單位 
+	 */
+	@ResponseBody
+	@PostMapping(value = "app/admin/statistics/by/month")
+	public ResponseEntity<String> statisticsByMonth(HttpServletRequest httpRequest, @RequestParam(value = "data", required = false) String data){
+		LinkedHashMap<String, Object> map = RespData.of(Status.FALSE,  ErrorType.SERVER_ERROR, null);
+		if (checkAdminAccount(httpRequest)) {
+			String request = Base64Service.decode(data);
+			ReqData req = JsonHelper.json(request, ReqData.class);
+			List<OrderVo> vos = sellerOrderFinishService.findFinishByBetweenDate(req.getUuid(), req.getDate());
+			map = RespData.of(Status.TRUE, null, vos);
+		}
+		String result = Base64Service.encode(JsonHelper.toJson(map));
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
 	
 	
 	
@@ -419,17 +438,7 @@ public class AppAdminController {
 	
 	
 	
-	/**
-	 *分析月單位 
-	 */
-	@ResponseBody
-	@PostMapping(value = "app/admin/statistics/by/month")
-	public ResponseEntity<String> statisticsByMonth(HttpServletRequest httpRequest){
-		if (checkAdminAccount(httpRequest)) {
-			
-		}
-		return new ResponseEntity<String>("AAA", HttpStatus.OK);
-	}
+	
 	
 
 	// 檢查Admin權限 
