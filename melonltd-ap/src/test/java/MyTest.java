@@ -2,19 +2,19 @@
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ValueRange;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -557,12 +557,38 @@ public class MyTest {
 	@Test
 	public void dsds() {
 
-		for (int i = 0; i < 10; i++) {
-			System.out.println(Tools.buildUUID(UUIDType.ACT));
-		}
-		System.out.println(Tools.getNowGMT());
-		 System.out.println(Tools.getStartOfNowMinutes(-5));
-		// System.out.println(Tools.getEndOfNowMinutes(-5));
+		List<String> array = Lists.newArrayList("A","b","C","D", "D");
+		
+		Predicate<String> p = (a) ->  ("B".equals(a.toUpperCase()) || "b".equals(a));
+		String restul = array.stream().filter(p).distinct().findAny().get();
+//		
+		
+		
+	}
 
+	public static String md5(String str) {
+		String md5 = null;
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] barr = md.digest(str.getBytes()); // 將 byte 陣列加密
+			StringBuffer sb = new StringBuffer(); // 將 byte 陣列轉成 16 進制
+			for (int i = 0; i < barr.length; i++) {
+				sb.append(byte2Hex(barr[i]));
+			}
+			String hex = sb.toString();
+			md5 = hex.toUpperCase(); // 一律轉成大寫
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return md5;
+	}
+
+	public static String byte2Hex(byte b) {
+		String[] h = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
+		int i = b;
+		if (i < 0) {
+			i += 256;
+		}
+		return h[i / 16] + h[i % 16];
 	}
 }

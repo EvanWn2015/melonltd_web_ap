@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.melonltd.naber.constant.NaberConstant;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.bean.RestaurantInfo;
 import com.melonltd.naber.rdbms.model.dao.RestaurantInfoDao;
@@ -102,8 +103,20 @@ public class RestaurantInfoService {
 		if (page > 0) {
 			page --;
 		}
-		Sort sort = new Sort(Direction.DESC, "createDate");
+//		Sort sort = new Sort(Direction.DESC, "createDate");
+		Sort sort = new Sort(Direction.DESC, "top");
 		Pageable pageable = new PageRequest(page, 10, sort);
+		
+		// TODO 預留
+//		Page<RestaurantInfo> pages = null;
+//		if ("學餐".equals(category)) {
+//			// top值 對應學校名稱
+		// name = 學校名稱
+//		String top = NaberConstant.TOP_MAPPING.get("name");
+//		pages = restaurantInfoDao.findByCategoryAndTop(category, top, pageable);
+//		}
+		
+		
 		Page<RestaurantInfo> pages = restaurantInfoDao.findByCategory(category, pageable);
 		if (pages.hasContent()) {
 			return RestaurantInfoVo.valueOfArray(pages.getContent());

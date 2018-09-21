@@ -38,7 +38,7 @@ public class OrderNotifyJob implements Job {
 		LOGGER.info("range : {} : {}", Tools.getStartOfNowMinutes(-5), Tools.getEndOfNowMinutes(-5));
 		String start =  Tools.getStartOfNowMinutes(-5);
 		String end = Tools.getEndOfNowMinutes(-5);
-		OrderStatus.getSellerSearchType();
+		
 		List<String> statusIn = Lists.newArrayList();
 		statusIn = OrderStatus.getSellerSearchType().stream().map(s -> s.name()).collect(Collectors.toList());
 		

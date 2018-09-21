@@ -52,7 +52,6 @@ public class SellerCategoryController {
 		LinkedHashMap<String, Object> map = null;
 		if (ObjectUtils.allNotNull(account)) {
 			List<CategoryRelVo> list = categoryRelService.findAllByRestaurantUUID(account.getRestaurant_uuid());
-			System.out.println(JsonHelper.toJson(list));
 			map = RespData.of(Status.TRUE, null, list);
 		} else {
 			map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
@@ -86,7 +85,6 @@ public class SellerCategoryController {
 			}
 		}
 		String result = Base64Service.encode(JsonHelper.toJson(map));
-		System.out.println(result);
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
@@ -114,7 +112,6 @@ public class SellerCategoryController {
 		}
 
 		String result = Base64Service.encode(JsonHelper.toJson(map));
-		System.out.println(result);
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
@@ -162,9 +159,7 @@ public class SellerCategoryController {
 					String top = req.stream().filter(r -> r.getCategory_uuid().equals(c.getCategory_uuid())).findFirst().get().getTop();
 					c.setTop(top);
 				});
-				System.out.println(JsonHelper.toJson(categoryRelVos));
 				List<CategoryRelVo> categoryRels = categoryRelService.saves(categoryRelVos);
-				System.out.println(JsonHelper.toJson(categoryRels));
 				map = RespData.of(Status.TRUE, null, categoryRels);	
 			} else {
 				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);

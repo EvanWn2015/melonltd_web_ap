@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mchange.v2.encounter.StrongEqualityEncounterCounter;
 import com.melonltd.naber.rdbms.model.bean.RestaurantInfo;
 
 public interface RestaurantInfoDao extends JpaRepository<RestaurantInfo, String> {
@@ -32,6 +33,10 @@ public interface RestaurantInfoDao extends JpaRepository<RestaurantInfo, String>
 	
 	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable = 'Y' AND a.restaurantCategory=?1")
 	public Page<RestaurantInfo> findByCategory(String category, Pageable pageable);
+	
+	// TODO 預留 依照學餐且依照學校名稱查詢，名稱需對應 top值
+	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable = 'Y' AND a.restaurantCategory=?1 AND a.top=?2")
+	public Page<RestaurantInfo> findByCategoryAndTop(String category, String top, Pageable pageable);
 	
 	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable='Y' AND a.name LIKE %?1% ")
 	public Page<RestaurantInfo> findByAdd(String area, Pageable pageable);
