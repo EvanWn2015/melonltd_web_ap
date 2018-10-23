@@ -68,9 +68,7 @@ public class OrderInfoService {
 		return Lists.newArrayList();
 	}
 	
-	
-	
-	
+
 	public List<OrderVo> findByOrderStatusAndBetweenDate(String accountUUID, String status, String date, int page){
 		if (page > 0) {
 			page --;
@@ -94,6 +92,15 @@ public class OrderInfoService {
 		Page<OrderInfo> pages = orderInfoDao.findByOrderStatusAndBetweenDate(accountUUID, "UNFINISH", startDate, endDate, pageable);
 		if(pages.hasContent()) {
 			return OrderVo.valueInfoOfArray(pages.getContent());
+		}
+		return Lists.<OrderVo>newArrayList();
+	}
+	
+	
+	public List<OrderVo> findByUnfinshAndMoreThanNowOrders(){
+		List<OrderInfo> list = orderInfoDao.findByUnfinshAndMoreThanNowOrders(Tools.getNowGMT() ,new Sort(Direction.ASC, "fetchDate"));
+		if (CollectionUtils.isNotEmpty(list)) {
+			return OrderVo.valueInfoOfArray(list);
 		}
 		return Lists.<OrderVo>newArrayList();
 	}

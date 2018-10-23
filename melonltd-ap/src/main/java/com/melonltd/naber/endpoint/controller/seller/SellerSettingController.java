@@ -135,9 +135,9 @@ public class SellerSettingController {
 			RestaurantInfoVo restaurant = restaurantInfoService.findByAccountUUID(accountUUID);
 			if (ObjectUtils.allNotNull(restaurant)) {
 				String start = Tools.getNowStartOfDayGMT();
-				String end = Tools.getEndOfPlusDayGMT(2);
-				Range<String> check3day = Range.<String>between(start, end);
-				boolean check = !check3day.contains(req.getDate());
+				String end = Tools.getEndOfPlusDayGMT(30);
+				Range<String> check30day = Range.<String>between(start, end);
+				boolean check = !check30day.contains(req.getDate());
 				if (check) {
 					map = RespData.of(Status.FALSE, ErrorType.UPDATE_ERROR, null);
 				} else {
@@ -145,7 +145,7 @@ public class SellerSettingController {
 					// 加入不接單時間
 					if (SwitchStatus.CLOSE.equals(SwitchStatus.of(req.getStatus()))) {
 						restaurant.getNot_business().add(req.getDate());
-						newNotBusiness = restaurant.getNot_business().stream().filter(a -> check3day.contains(a)).distinct().collect(Collectors.toList());
+						newNotBusiness = restaurant.getNot_business().stream().filter(a -> check30day.contains(a)).distinct().collect(Collectors.toList());
 						restaurant.setNot_business(newNotBusiness);
 					// 刪除不接單時間
 					}else if (SwitchStatus.OPEN.equals(SwitchStatus.of(req.getStatus()))) {

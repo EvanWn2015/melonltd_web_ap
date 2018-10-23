@@ -40,8 +40,9 @@ public class RestaurantController {
 	@Autowired
 	private CategoryRelService categoryRelService;
 
+	// 增加 NOT_SCHOOL, SCHOOL_DIVIDED
 	private enum SearchType {
-		TOP("TOP"), AREA("AREA"), CATEGORY("CATEGORY"), DISTANCE("DISTANCE"), STORE_NAME("STORE_NAME"), NUKNOWN("NUKNOWN");
+		TOP("TOP"), AREA("AREA"), CATEGORY("CATEGORY"), DISTANCE("DISTANCE"), STORE_NAME("STORE_NAME"), NOT_SCHOOL("NOT_SCHOOL"),SCHOOL_DIVIDED("SCHOOL_DIVIDED"), NUKNOWN("NUKNOWN");
 		private String name;
 
 		SearchType(String name) {
@@ -110,6 +111,10 @@ public class RestaurantController {
 
 	private List<RestaurantInfoVo> getRestaurantsByType(ReqData req) {
 		switch (SearchType.of(req.getSearch_type())) {
+		case SCHOOL_DIVIDED:
+			return restaurantInfoService.findByAreaAndName(req.getArea(), req.getName(), req.getPage());
+		case NOT_SCHOOL:
+			return restaurantInfoService.findByNotSchool(req.getPage());
 		case TOP:
 			return restaurantInfoService.findByTop(30);
 		case AREA:
@@ -135,6 +140,9 @@ public class RestaurantController {
 		}
 		
 		switch (SearchType.of(req.getSearch_type())) {
+		case SCHOOL_DIVIDED:
+			error = StringUtils.isAnyBlank(req.getArea(),req.getName()) ? ErrorType.INVALID : null;
+			break;
 		case AREA:
 			error = StringUtils.isBlank(req.getArea()) ? ErrorType.INVALID : null;
 			break;

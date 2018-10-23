@@ -27,7 +27,7 @@ public class AppVersionLogService {
 		Page<AppVersionLog> infos = appVersionLogDao.findOneByCategory(JsonHelper.json(category, DeviceCategory.class), pageable);
 
 		if (infos.hasContent()) {
-			return AppVersionLogVo.of(infos.getContent().get(0));
+			return AppVersionLogVo.valueOf(infos.getContent().get(0));
 		}
 		return null;
 	}

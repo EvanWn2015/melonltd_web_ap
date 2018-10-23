@@ -53,7 +53,12 @@ public class RespData {
 		ORDER_UNFINISH_MAX("5003", "未完成訂單數量已經滿3筆"),
 		ORDER_FAIL_MAX("5005", "由於您跑單次數過多，$split無法再下任何一筆訂單如有疑問，$split請洽詢NABER客服"),
 		FOOD_ITEM_DATA_ERROR("5002", "菜單資料結構錯誤"),
-		ORDER_MAX_COUNT("5004", "單筆菜單數量錯誤(1~50)");
+		ORDER_MAX_COUNT("5004", "單筆菜單數量錯誤(1~50)"),
+		INSUFFICIENT_BALANCE("6001","餘額不足"),
+		ACT_SEND_MAX("7001", "兌換項目已兌換完畢。"),
+		ACT_GET_MAX("7003", "您已經兌換過該活動，無法再次兌換。"),
+		ACT_XPIRED("7002", "兌換活動已經結束。"),
+		ACT_EXCHANGE_ERROR("7000", "兌換活動已經結束。");
 
 		ErrorType(String code, String msg) {
 			this.code = code;

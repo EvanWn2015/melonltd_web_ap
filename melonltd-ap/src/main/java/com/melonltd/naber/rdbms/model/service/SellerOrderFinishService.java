@@ -96,7 +96,21 @@ public class SellerOrderFinishService {
 		long processingCount = orderLive.parallelStream().filter(equalProcessing).count();
 		long canFetchCount = orderLive.parallelStream().filter(equalCanFetch).count();
 		long cancelCount = orderLive.parallelStream().filter(equalCancel).count();
+		
+		// 收入統計需減去被使用紅利折抵
+		long yearUseBonus = list.parallelStream().filter(isNumber.and(containsYear).and(finishPred)).mapToInt(a -> IntegerUtils.parseInt(a.getUseBonus(), 0)).sum();
+		long monthUseBonus = list.parallelStream().filter(isNumber.and(containsMonth).and(finishPred)).mapToInt(a -> IntegerUtils.parseInt(a.getUseBonus(), 0)).sum();
+		long dayUseBonus = list.parallelStream().filter(isNumber.and(containsDay).and(finishPred)).mapToInt(a -> IntegerUtils.parseInt(a.getUseBonus(), 0)).sum();
 
+		long yI = yearIncome - (yearUseBonus / 10 * 3);
+		long mI = monthIncome - (monthUseBonus / 10 * 3);
+		long dI = dayIncome - (dayUseBonus / 10 * 3);
+		
+//		System.out.println("Y: " + yearIncome + ", " + yearUseBonus + ", " + yI);
+//		System.out.println("M: " + monthIncome + ", " + monthUseBonus + ", " + mI);
+//		System.out.println("D: " + dayIncome + ", " + dayUseBonus + ", " + dI);
+//		System.out.println();
+		
 		// TODO 要使用格用計算還是日計算
 //		long bonus = list.parallelStream().filter(isNumber.and(containsDay).and(finishPred)).mapToInt(a -> IntegerUtils.parseInt(a.getOrderBonus(), 0)).sum();
 //		long useBonus = list.parallelStream().filter(isNumber.and(containsDay).and(finishPred)).mapToInt(a -> IntegerUtils.parseInt(a.getUseBonus(), 0)).sum();
@@ -105,7 +119,8 @@ public class SellerOrderFinishService {
 		System.out.println((System.currentTimeMillis() - now) / 1000d);
 		
 		return SellerStatVo
-				.of(yearIncome, monthIncome, dayIncome, finishCount)
+				.of(yI, mI, dI, finishCount)
+				.ofUseBonus(yearUseBonus, monthUseBonus, dayUseBonus)
 				.ofStatus(new String[]{statusStart, statusEnd} , unFinishCount, processingCount, canFetchCount, cancelCount);
 	}
 	

@@ -3,9 +3,8 @@ package com.melonltd.naber.rdbms.model.service;
 import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,12 @@ import org.springframework.stereotype.Service;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.bean.BasisContent;
 import com.melonltd.naber.rdbms.model.dao.BasisContentDao;
+import com.melonltd.naber.rdbms.model.vo.AdministrativeRegionsVo;
+import com.melonltd.naber.rdbms.model.vo.SchoolDividedVo;
 
 @Service("basisContentService")
 public class BasisContentService {
@@ -101,7 +103,27 @@ public class BasisContentService {
 		BasisContentId id = BasisContentId.of("CATEGORY", "LIST");
 		return findByCacheId(id);
 	}
-
+	
+	public List<AdministrativeRegionsVo> findSubjectionRegions() {
+		BasisContentId id = BasisContentId.of("SUBJECTION", "REGIONS");
+		BasisContent content = findByCacheId(id);
+		if (ObjectUtils.anyNotNull(content)) {
+			return JsonHelper.jsonArray(content.getContent(), AdministrativeRegionsVo[].class);
+		}
+		return Lists.<AdministrativeRegionsVo>newArrayList();
+	}
+	
+	public List<SchoolDividedVo> findSchoolDivided() {
+		BasisContentId id = BasisContentId.of("SCHOOL", "DIVIDED");
+		BasisContent content = findByCacheId(id);
+		if (ObjectUtils.anyNotNull(content)) {
+			return JsonHelper.jsonArray(content.getContent(), SchoolDividedVo[].class);
+		}
+		return Lists.<SchoolDividedVo>newArrayList();
+	}
+	
+	
+	
 	public BasisContent updateStoreAreas(String content) {
 		BasisContentId id = BasisContentId.of("AREA", "LIST");
 		cacheBuilder.invalidate(id);
@@ -120,12 +142,36 @@ public class BasisContentService {
 		return findByCacheId(id);
 	}
 
+	// SubjectionRegions
+	public BasisContent updateSubjectionRegions(String content) {
+		BasisContentId id = BasisContentId.of("SUBJECTION", "REGIONS");
+		cacheBuilder.invalidate(id);
+		BasisContent info = basisContentDao.findByTypeAndFunction(id.getType(), id.getFunction());
+		info.setContent(content);
+		cacheBuilder.put(id, basisContentDao.save(info));
+		return findByCacheId(id);
+	}
+	
+	
+	public BasisContent updateSchoolDivided(String content) {
+		BasisContentId id = BasisContentId.of("SCHOOL", "DIVIDED");
+		cacheBuilder.invalidate(id);
+		BasisContent info = basisContentDao.findByTypeAndFunction(id.getType(), id.getFunction());
+		info.setContent(content);
+		cacheBuilder.put(id, basisContentDao.save(info));
+		return findByCacheId(id);
+	}
+
+	
 	public BasisContent findByCacheId(BasisContentId id) {
 		try {
 			return cacheBuilder.get(id);
 		} catch (ExecutionException e) {
+			e.printStackTrace();
 			BasisContent info = basisContentDao.findByTypeAndFunction(id.getType(), id.getFunction());
-			cacheBuilder.put(id, info);
+			if (ObjectUtils.allNotNull(info)) {
+				cacheBuilder.put(id, info);	
+			}
 			return info;
 		}
 	}

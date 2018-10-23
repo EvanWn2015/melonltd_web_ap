@@ -130,7 +130,13 @@ public class OredeSubimtReq {
 		return new OrderType("ORIGINAL","OUT");
 	}
 	
-	
+	/**
+	 * billing : ORIGINAL, DISCOUNT, COUPON
+	 * delivery : IN, OUT, SEND
+	 * 
+	 * @author evan
+	 *
+	 */
 	public static class OrderType {
 		private String billing;
 		private String delivery;

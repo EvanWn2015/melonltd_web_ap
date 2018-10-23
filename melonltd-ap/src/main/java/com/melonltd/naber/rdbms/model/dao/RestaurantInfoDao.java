@@ -34,12 +34,20 @@ public interface RestaurantInfoDao extends JpaRepository<RestaurantInfo, String>
 	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable = 'Y' AND a.restaurantCategory=?1")
 	public Page<RestaurantInfo> findByCategory(String category, Pageable pageable);
 	
+	// new in 2018/10/05 
+	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable='Y' AND a.restaurantCategory NOT IN (?1) ")
+	public Page<RestaurantInfo> findByNotInCategory(List<String> notIn, Pageable pageable);
+
+	// new in 2018/10/05
+	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable='Y' AND a.address LIKE %?1% AND a.name LIKE %?2% ")
+	public Page<RestaurantInfo> findByAreaAndName(String area, String name, Pageable pageable);
+	
 	// TODO 預留 依照學餐且依照學校名稱查詢，名稱需對應 top值
 	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable = 'Y' AND a.restaurantCategory=?1 AND a.top=?2")
 	public Page<RestaurantInfo> findByCategoryAndTop(String category, String top, Pageable pageable);
 	
 	@Query("SELECT a FROM RestaurantInfo a WHERE a.enable='Y' AND a.name LIKE %?1% ")
-	public Page<RestaurantInfo> findByAdd(String area, Pageable pageable);
+	public Page<RestaurantInfo> findByAdd(String name, Pageable pageable);
 	
 	
 	

@@ -1,5 +1,6 @@
 package com.melonltd.naber.endpoint.controller;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class BulletinController {
 	@PostMapping(value = "naber/advertisement")
 	public ResponseEntity<String> naberAdvertisement() {
 		List<AdvertisementVo> list = advertisementService.findAllByEnable();
+		Collections.shuffle(list);
 		LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, list);
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);

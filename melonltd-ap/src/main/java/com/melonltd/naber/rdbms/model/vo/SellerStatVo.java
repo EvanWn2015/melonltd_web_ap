@@ -1,5 +1,7 @@
 package com.melonltd.naber.rdbms.model.vo;
 
+import com.google.thirdparty.publicsuffix.PublicSuffixPatterns;
+
 public class SellerStatVo {
 
 	private String year_income;
@@ -12,6 +14,10 @@ public class SellerStatVo {
 	private String processing_count;
 	private String can_fetch_count;
 	private String cancel_count;
+
+	private String year_use_bonus;
+	private String month_use_bonus;
+	private String day_use_bonus;
 
 	public String getYear_income() {
 		return year_income;
@@ -85,6 +91,30 @@ public class SellerStatVo {
 		this.cancel_count = cancel_count;
 	}
 
+	public String getYear_use_bonus() {
+		return year_use_bonus;
+	}
+
+	public void setYear_use_bonus(String year_use_bonus) {
+		this.year_use_bonus = year_use_bonus;
+	}
+
+	public String getMonth_use_bonus() {
+		return month_use_bonus;
+	}
+
+	public void setMonth_use_bonus(String month_use_bonus) {
+		this.month_use_bonus = month_use_bonus;
+	}
+
+	public String getDay_use_bonus() {
+		return day_use_bonus;
+	}
+
+	public void setDay_use_bonus(String day_use_bonus) {
+		this.day_use_bonus = day_use_bonus;
+	}
+
 	public static SellerStatVo of(long yearIncome, long monthIncome, long dayIncome, long finishCount) {
 		SellerStatVo vo = new SellerStatVo();
 		vo.year_income = String.valueOf(yearIncome);
@@ -93,8 +123,16 @@ public class SellerStatVo {
 		vo.finish_count = String.valueOf(finishCount);
 		return vo;
 	}
-	
-	public SellerStatVo ofStatus(String[] statusDates,long unFinishCount,long processingCount,long canFetchCount,long cancelCount) {
+
+	public SellerStatVo ofUseBonus(long yearUseBonus, long monthUseBonus, long dayUseBonus) {
+		this.year_use_bonus = String.valueOf(yearUseBonus);
+		this.month_use_bonus = String.valueOf(monthUseBonus);
+		this.day_use_bonus = String.valueOf(dayUseBonus);
+		return this;
+	}
+
+	public SellerStatVo ofStatus(String[] statusDates, long unFinishCount, long processingCount, long canFetchCount,
+			long cancelCount) {
 		this.status_dates = statusDates;
 		this.unfinish_count = String.valueOf(unFinishCount);
 		this.processing_count = String.valueOf(processingCount);

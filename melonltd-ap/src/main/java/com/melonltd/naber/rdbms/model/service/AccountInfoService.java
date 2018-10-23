@@ -102,6 +102,8 @@ public class AccountInfoService {
 		info.setAddress(StringUtils.isBlank(vo.getAddress()) ? "":vo.getAddress());
 		info.setIdentity(vo.getIdentity());
 		info.setSchoolName(vo.getSchool_name());
+		// 2018/09/27 新增性別需求
+		info.setGender(StringUtils.isBlank(vo.getGender()) ? "" : vo.getGender());
 		info.setLevel(vo.getLevel());
 		info.setCreateDate(Tools.getNowGMT());
 		info.setUseBonus("0");

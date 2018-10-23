@@ -33,6 +33,7 @@ import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.AdvertisementService;
 import com.melonltd.naber.rdbms.model.service.BasisContentService;
 import com.melonltd.naber.rdbms.model.service.CategoryRelService;
+import com.melonltd.naber.rdbms.model.service.OrderInfoService;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.service.RestaurantLocationTemplateService;
 import com.melonltd.naber.rdbms.model.service.SellerOrderFinishService;
@@ -87,6 +88,10 @@ public class AppAdminController {
 	private BasisContentService basisContentService;
 	@Autowired
 	private SellerOrderFinishService sellerOrderFinishService;
+	
+	@Autowired
+	private OrderInfoService orderInfoService;
+	
 	
 	/**
 	 * 取得全部商家列表 
@@ -419,8 +424,21 @@ public class AppAdminController {
 	}
 	
 	
-	
-	
+	/**
+	 * 最新訂單 
+	 */
+	@ResponseBody
+	@PostMapping(value = "app/admin/order/list")
+	public ResponseEntity<String> orderList(HttpServletRequest httpRequest){
+		LinkedHashMap<String, Object> map = RespData.of(Status.FALSE,  ErrorType.SERVER_ERROR, null);
+		if (checkAdminAccount(httpRequest)) {
+			List<OrderVo> vos = orderInfoService.findByUnfinshAndMoreThanNowOrders();
+			map = RespData.of(Status.TRUE, null, vos);
+		}
+		String result = Base64Service.encode(JsonHelper.toJson(map));
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+
 	/**
 	 * 刪除DEMO訂單 
 	 */
@@ -432,13 +450,6 @@ public class AppAdminController {
 		}
 		return new ResponseEntity<String>("AAA", HttpStatus.OK);
 	}
-	
-	
-	
-	
-	
-	
-	
 	
 
 	// 檢查Admin權限 

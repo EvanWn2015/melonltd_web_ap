@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -30,6 +31,10 @@ public interface OrderInfoDao extends JpaRepository<OrderInfo, String> {
 	
 	@Query("SELECT o FROM OrderInfo o WHERE o.enable IN('Y','N') AND (o.fetchDate BETWEEN ?1 AND ?2)")
 	public List<OrderInfo> findByBetweenDate(String startDate, String endDate);
+	
+	@Query("SELECT o FROM OrderInfo o WHERE o.status='UNFINISH' AND o.fetchDate>?1")
+	public List<OrderInfo> findByUnfinshAndMoreThanNowOrders(String date, Sort sort);
+	
 	
 	@Transactional
 	@Modifying

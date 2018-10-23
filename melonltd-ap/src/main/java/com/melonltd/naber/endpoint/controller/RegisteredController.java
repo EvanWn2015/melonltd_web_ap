@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.base.Strings;
 import com.melonltd.naber.constant.RegexConstant;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
@@ -54,12 +56,13 @@ public class RegisteredController {
 			vo.setAccount(vo.getPhone());
 			AccountInfo info = accountInfoService.save(vo, UUIDType.USER, Enable.Y);
 			if (ObjectUtils.allNotNull(info)) {
-				map = RespData.of(Status.TRUE, null, null);
+				map = RespData.of(Status.TRUE, null, AccountInfoVo.of(info, false));
 			} else {
 				LOGGER.warn("save user error : phone: {}, name: {}", vo.getPhone(), vo.getName());
 				map = RespData.of(Status.FALSE, ErrorType.ACCOUNT_ERROR, null);
 			}
 		} else {
+			LOGGER.warn("save user error account vo : {}", vo.toString());
 			map = RespData.of(Status.FALSE, error, null);
 		}
 
@@ -118,9 +121,25 @@ public class RegisteredController {
 //		if (!vo.getEmail().matches(RegexConstant.REGEX_EMAIL)) {
 //			return ErrorType.INVALID_EMAIL;
 //		}
+		
 //		if (!ObjectUtils.allNotNull(vo.getAddress())) {
 //			return ErrorType.INVALID;
 //		}
+		
+		// 驗證 手機號、生日、性別 不為空
+//		if (StringUtils.isAnyEmpty(vo.getPhone(), vo.getBirth_day(), vo.getGender())) {
+//			return ErrorType.INVALID;
+//		}
+		
+		if (StringUtils.isBlank(vo.getPhone())) {
+			return ErrorType.INVALID;
+		}
+		
+		// 驗證 手機格式
+		if (!vo.getPhone().matches(RegexConstant.REGEX_PHONE)) {
+			return ErrorType.INVALID;
+		}
+		
 		if (!ObjectUtils.allNotNull(vo.getIdentity())) {
 			return ErrorType.INVALID;
 		}

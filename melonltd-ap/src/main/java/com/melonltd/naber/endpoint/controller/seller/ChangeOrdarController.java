@@ -36,6 +36,7 @@ import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 public class ChangeOrdarController {
 
 	private static List<OrderStatus> CAN_NOTIFY_TYPE = OrderStatus.getNotifyToUserType();
+	private static List<OrderStatus> SELLER_CANCEL = OrderStatus.getSellerCancelType();
 	
 	@Autowired
 	private ChangeOrdarService changeOrdarService;

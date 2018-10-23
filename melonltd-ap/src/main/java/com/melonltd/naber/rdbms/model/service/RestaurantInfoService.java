@@ -124,6 +124,35 @@ public class RestaurantInfoService {
 		return Lists.<RestaurantInfoVo>newArrayList();
 	}
 	
+	// 2018/10/05 新增查詢學區劃分餐館列表
+	public List<RestaurantInfoVo> findByAreaAndName(String area, String name ,int page) {
+		if (page > 0) {
+			page --;
+		}
+		Sort sort = new Sort(Direction.DESC, "createDate");
+		Pageable pageable = new PageRequest(page, 10, sort);
+		Page<RestaurantInfo> pages = restaurantInfoDao.findByAreaAndName(area, name, pageable);
+		if (pages.hasContent()) {
+			return RestaurantInfoVo.valueOfArray(pages.getContent());
+		}
+		return Lists.<RestaurantInfoVo>newArrayList();
+	}
+	
+	
+	// 2018/10/05 新增查詢非學餐 餐館列表
+	public List<RestaurantInfoVo> findByNotSchool(int page) {
+		if (page > 0) {
+			page --;
+		}
+		Sort sort = new Sort(Direction.DESC, "createDate");
+		Pageable pageable = new PageRequest(page, 10, sort);
+		Page<RestaurantInfo> pages = restaurantInfoDao.findByNotInCategory(Lists.newArrayList("學餐","菸酒"), pageable);
+		if (pages.hasContent()) {
+			return RestaurantInfoVo.valueOfArray(pages.getContent());
+		}
+		return Lists.<RestaurantInfoVo>newArrayList();
+	}
+	
 	public List<RestaurantInfoVo> findByAdd(String address, int page) {
 		if (page > 0) {
 			page --;

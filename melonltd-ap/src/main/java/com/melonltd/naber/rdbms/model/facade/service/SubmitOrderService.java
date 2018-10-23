@@ -29,10 +29,10 @@ public class SubmitOrderService {
 	private OrderLogService orderLogService;
 
 	public OrderVo submitOrder(AccountInfoVo account, String orderUUID, RestaurantInfoVo vo, OredeSubimtReq req,
-			String price, String bonus, String orders) {
+			String price, String bonus, String orders, boolean needUnFinish) {
 		int unfinish_count = userOrderInfoService.findByOrderStatusAccountUUID(account.getAccount_uuid());
 		// 限制未完成訂單數量三筆，不可再提交訂單
-		if (unfinish_count >= 3) {
+		if (unfinish_count >= 3 && needUnFinish) {
 			return null;
 		} else {
 			String date = Tools.getNowGMT();

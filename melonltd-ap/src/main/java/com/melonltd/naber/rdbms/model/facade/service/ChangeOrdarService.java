@@ -30,7 +30,7 @@ public class ChangeOrdarService {
 	
 	private static List<OrderStatus> FINISH_TYPE = OrderStatus.getSellerFinishType();
 	private static List<OrderStatus> UPDATE_TYPE = OrderStatus.getSellerUpdateType();
-
+	private static List<OrderStatus> SELLER_CANCEL = OrderStatus.getSellerCancelType();
 	
 	@Autowired
 	private AccountInfoService accountInfoService;
@@ -64,16 +64,25 @@ public class ChangeOrdarService {
 				
 				boolean status = true;
 				if (OrderStatus.FINISH.equals(changeStatus)) {
-					// TODO 如果是完成訂單必須計算紅利給user
+					// TODO 如果是完成訂單必須計算紅利給USER  
 					int bonusSum = IntegerUtils.parseInt(infoVo.getOrder_bonus(), 0) + IntegerUtils.parseInt(accout.getBonus(), 0);
 					status = accountInfoService.updateBonus(String.valueOf(bonusSum), accout.getAccount_uuid());
-					LOGGERO.debug("處理訂單處於完成，計算紅利更新使用者紅利 ,user uuid {}, user bonus sum {}, order status:{}, change status:{}, order uuid:{}, date:{}", accout.getAccount_uuid(), bonusSum, orderStatus, changeStatus, orderUUID, date);
+					LOGGERO.debug("processing order FINISH update user bonus ,user uuid {}, user bonus sum {}, order status:{}, change status:{}, order uuid:{}, date:{}", accout.getAccount_uuid(), bonusSum, orderStatus, changeStatus, orderUUID, date);
+				}else if (SELLER_CANCEL.contains(changeStatus)) {
+					// 取消或跑單，還回紅利給 USER
+					int userUse = IntegerUtils.parseInt(accout.getUse_bonus(), 0);
+					int oresrUse = IntegerUtils.parseInt(infoVo.getUse_bonus(), 0);
+					if (oresrUse != 0 || oresrUse <= userUse) {
+						int useBonusSum = userUse - oresrUse;
+						status = accountInfoService.updateUseBonus(String.valueOf(useBonusSum),  accout.getAccount_uuid());
+						LOGGERO.debug("processing order CANCEL, FAIL update user use bonus ,user uuid {}, user use bonus sum {}, order status:{}, change status:{}, order uuid:{}, date:{}", accout.getAccount_uuid(), useBonusSum, orderStatus, changeStatus, orderUUID, date);
+					}
 				}
 				
 				if (status) {
 					OrderInfo orderInfo = newOrderInfo(infoVo, changeStatus, date, Enable.N);
 					SellerOrderFinish finish = newOrderFinish(infoVo, changeStatus, date, Enable.Y);
-					LOGGERO.debug("處理結束的訂單 , order status:{}, change status:{}, order uuid:{}, date:{}",orderStatus,changeStatus,orderUUID, date);
+					LOGGERO.debug("Processing order FINISH , order status:{}, change status:{}, order uuid:{}, date:{}",orderStatus,changeStatus,orderUUID, date);
 					orderInfoService.save(orderInfo);
 					userOrderInfoService.save(userOrderLog);
 					orderLogService.save(orderLog);

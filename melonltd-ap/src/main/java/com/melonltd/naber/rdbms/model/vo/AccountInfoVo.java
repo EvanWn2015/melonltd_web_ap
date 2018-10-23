@@ -17,6 +17,7 @@ public class AccountInfoVo implements Serializable{
 	private String phone;
 	private String address;
 	private String birth_day;
+	private String gender;
 	private String identity;
 	private String school_name;
 	private String bonus;
@@ -34,20 +35,13 @@ public class AccountInfoVo implements Serializable{
 	private String device_category;
 	
 	
+
 	public String getAccount() {
 		return account;
 	}
 
 	public void setAccount(String account) {
 		this.account = account;
-	}
-
-	public String getBirth_day() {
-		return birth_day;
-	}
-
-	public void setBirth_day(String birth_day) {
-		this.birth_day = birth_day;
 	}
 
 	public String getAccount_uuid() {
@@ -106,6 +100,22 @@ public class AccountInfoVo implements Serializable{
 		this.address = address;
 	}
 
+	public String getBirth_day() {
+		return birth_day;
+	}
+
+	public void setBirth_day(String birth_day) {
+		this.birth_day = birth_day;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 	public String getIdentity() {
 		return identity;
 	}
@@ -128,22 +138,6 @@ public class AccountInfoVo implements Serializable{
 
 	public void setBonus(String bonus) {
 		this.bonus = bonus;
-	}
-
-	public String getUse_bonus() {
-		return use_bonus;
-	}
-
-	public void setUse_bonus(String use_bonus) {
-		this.use_bonus = use_bonus;
-	}
-
-	public String getCreate_date() {
-		return create_date;
-	}
-
-	public void setCreate_date(String create_date) {
-		this.create_date = create_date;
 	}
 
 	public String getLevel() {
@@ -194,6 +188,22 @@ public class AccountInfoVo implements Serializable{
 		this.photo_type = photo_type;
 	}
 
+	public String getUse_bonus() {
+		return use_bonus;
+	}
+
+	public void setUse_bonus(String use_bonus) {
+		this.use_bonus = use_bonus;
+	}
+
+	public String getCreate_date() {
+		return create_date;
+	}
+
+	public void setCreate_date(String create_date) {
+		this.create_date = create_date;
+	}
+
 	public String getDevice_token() {
 		return device_token;
 	}
@@ -222,6 +232,7 @@ public class AccountInfoVo implements Serializable{
 				.add("phone",phone)
 				.add("address",address)
 				.add("birth_day",birth_day)
+				.add("gender", gender)
 				.add("identity",identity)
 				.add("school_name",school_name)
 				.add("bonus",bonus)
@@ -249,6 +260,7 @@ public class AccountInfoVo implements Serializable{
 		vo.phone = info.getPhone();
 		vo.address = info.getAddress();
 		vo.birth_day = info.getBirthDay();
+		vo.gender = info.getGender();
 		vo.identity = info.getIdentity();
 		vo.school_name = info.getSchoolName();
 		vo.bonus = info.getBonus();

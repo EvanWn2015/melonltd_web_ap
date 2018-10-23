@@ -22,6 +22,7 @@ public class AccountInfo implements Serializable {
 	private String phone;
 	private String address;
 	private String birthDay;
+	private String gender;
 	private String identity;
 	private String restaurantUUID;
 	private String schoolName;
@@ -74,6 +75,11 @@ public class AccountInfo implements Serializable {
 	@Column(name = "birth_day")
 	public String getBirthDay() {
 		return birthDay;
+	}
+	
+	@Column(name = "gender")
+	public String getGender() {
+		return gender;
 	}
 	
 	@Column(name = "identity")
@@ -169,6 +175,10 @@ public class AccountInfo implements Serializable {
 		this.birthDay = birthDay;
 	}
 	
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
 	public void setIdentity(String identity) {
 		this.identity = identity;
 	}
@@ -220,24 +230,27 @@ public class AccountInfo implements Serializable {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass())
-				.add("account", account)
-				.add("accountUUID", accountUUID)
-				.add("name", name)
-				.add("password", password)
-				.add("email", email)
+				.add("account",account)
+				.add("accountUUID",accountUUID)
+				.add("name",name)
+				.add("password",password)
+				.add("email",email)
+				.add("phone",phone)
+				.add("address",address)
+				.add("birthDay",birthDay)
+				.add("gender",gender)
+				.add("identity",identity)
+				.add("restaurantUUID",restaurantUUID)
+				.add("schoolName",schoolName)
+				.add("bonus",bonus)
+				.add("level",level)
+				.add("enable",enable)
+				.add("isLogin",isLogin)
+				.add("loginDate",loginDate)
+				.add("photo",photo)
+				.add("photoType",photoType)
+				.add("useBonus",useBonus)
 				.add("createDate",createDate)
-				.add("useBonus", useBonus)
-				.add("phone", phone)
-				.add("address", address)
-				.add("identity", identity)
-				.add("schoolName", schoolName)
-				.add("bonus", bonus)
-				.add("level", level)
-				.add("enable", enable)
-				.add("isLogin", isLogin)
-				.add("loginDate", loginDate)
-				.add("photo", photo)
-				.add("photoType", photoType)
 				.toString();
 	}
 }

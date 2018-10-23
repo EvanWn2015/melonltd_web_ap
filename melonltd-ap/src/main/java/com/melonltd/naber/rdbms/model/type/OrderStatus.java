@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 // TODO 增加使用者取消訂單 狀態 USER_CANCEL, USER_UNFINISH
 public enum OrderStatus {
 	UNFINISH("UNFINISH", "訂單未處理"), 
-	PROCESSING("PROCESSING", "商家已接收到您的訂單並且開始製作囉!"), 
+	PROCESSING("PROCESSING", "老闆已經接到你的訂單囉！取餐時間到記得去取餐哦！"), // 原：商家已接收到您的訂單並且開始製作囉! 
 	CAN_FETCH("CAN_FETCH", "商家已經完成製作您的餐點，可以前往領取囉!"), 
 	CANCEL("CANCEL", "不好意思，因為%s，所以商家無法製作您這訂單的餐點，並且取消此訂單了！可以看看別的商家或是別的餐點哦！"), 
 	FAIL("FAIL", "由於您沒去拿餐點，被記錄跑單一次！這會影響您使用ＮＡＢＥＲ的權利，之後送單前請特別留意。"), 
@@ -54,4 +54,7 @@ public enum OrderStatus {
 		return Lists.<OrderStatus>newArrayList(PROCESSING, CAN_FETCH, CANCEL, FAIL);
 	}
 
+	public static List<OrderStatus> getSellerCancelType(){
+		return Lists.<OrderStatus>newArrayList(CANCEL, FAIL);
+	}
 }

@@ -1,6 +1,11 @@
 package com.melonltd.naber.rdbms.model.vo;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.Lists;
+import com.melonltd.naber.rdbms.model.bean.Activities;
 import com.melonltd.naber.rdbms.model.bean.AppVersionLog;
 
 public class AppVersionLogVo {
@@ -53,7 +58,7 @@ public class AppVersionLogVo {
 				.toString();	
 	}
 
-	public static AppVersionLogVo of(AppVersionLog info) {
+	public static AppVersionLogVo valueOf(AppVersionLog info) {
 		AppVersionLogVo vo = new AppVersionLogVo();
 		vo.version = info.getVersion();
 		vo.category = info.getCategory().name();
@@ -61,5 +66,5 @@ public class AppVersionLogVo {
 		vo.create_date = info.getCreateDate();
 		return vo;
 	}
-
+	
 }
