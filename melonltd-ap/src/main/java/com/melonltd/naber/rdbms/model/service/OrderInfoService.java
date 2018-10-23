@@ -51,23 +51,23 @@ public class OrderInfoService {
 		return OrderVo.valueInfoOfArray(list);
 	}
 	
-	public List<OrderVo> findUnfinishProcessingCanFetchByBetweenDate(String status, String end){
-		List<OrderInfo> list = orderInfoDao.findUnfinishProcessingCanFetchByBetweenDate(status, end);
-		if (!CollectionUtils.isEmpty(list)) {
-			return OrderVo.valueInfoOfArray(list);	
-		}
-		return Lists.newArrayList();
-	}
-	
-	
-	public List<OrderVo> findByBetweenCreateDateAndStatusIn(String start, String end, List<String> statusIn){
-		List<OrderInfo> list = orderInfoDao.findByBetweenCreateDateAndStatusIn(start, end, statusIn);
-		if (!CollectionUtils.isEmpty(list)) {
-			return OrderVo.valueInfoOfArray(list);	
-		}
-		return Lists.newArrayList();
-	}
-	
+//	public List<OrderVo> findUnfinishProcessingCanFetchByBetweenDate(String status, String end){
+//		List<OrderInfo> list = orderInfoDao.findUnfinishProcessingCanFetchByBetweenDate(status, end);
+//		if (!CollectionUtils.isEmpty(list)) {
+//			return OrderVo.valueInfoOfArray(list);	
+//		}
+//		return Lists.newArrayList();
+//	}
+//	
+//	
+//	public List<OrderVo> findByBetweenCreateDateAndStatusIn(String start, String end, List<String> statusIn){
+//		List<OrderInfo> list = orderInfoDao.findByBetweenCreateDateAndStatusIn(start, end, statusIn);
+//		if (!CollectionUtils.isEmpty(list)) {
+//			return OrderVo.valueInfoOfArray(list);	
+//		}
+//		return Lists.newArrayList();
+//	}
+//	
 
 	public List<OrderVo> findByOrderStatusAndBetweenDate(String accountUUID, String status, String date, int page){
 		if (page > 0) {

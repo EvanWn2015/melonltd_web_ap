@@ -27,7 +27,6 @@ import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 
 
-// 
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class LogingController {
@@ -42,7 +41,6 @@ public class LogingController {
 	@Autowired
 	private MobileDeviceService mobileDeviceService;
 
-	// 
 	@ResponseBody
 	@PostMapping(value = "login")
 	public ResponseEntity<String> login(@RequestParam(value = "data", required = false) String data) {
@@ -72,7 +70,6 @@ public class LogingController {
 		MobileDeviceVo vo = JsonHelper.json(request, MobileDeviceVo.class);
 		accountInfoService.refreshLoginStatus(vo.getAccount_uuid());
 		mobileDeviceService.remove(vo);
-		
 		
 		LOGGER.info("logout user AccountUUID: {}, Device: {}, {}", vo.getAccount_uuid(), vo.getDevice_token(), vo.getDevice_category());
 		LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, "");

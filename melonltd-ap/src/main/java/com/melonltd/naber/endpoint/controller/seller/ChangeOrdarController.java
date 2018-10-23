@@ -25,8 +25,8 @@ import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.type.Identity;
 import com.melonltd.naber.rdbms.model.type.OrderStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
-import com.melonltd.naber.rdbms.model.vo.PushFCMVo;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
+import com.melonltd.naber.rdbms.model.vo.PushFCMVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
@@ -64,7 +64,6 @@ public class ChangeOrdarController {
 			
 			if (ObjectUtils.allNotNull(vo)) {
 				map = RespData.of(Status.TRUE, null, vo);	
-				// TODO notify to user
 				if (CAN_NOTIFY_TYPE.contains(changeStatus)) {
 					String accountUUID = vo.getAccount_uuid();
 					AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);

@@ -12,7 +12,6 @@ import javax.persistence.Table;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.JsonHelper;
-import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
 import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
 
 @Entity

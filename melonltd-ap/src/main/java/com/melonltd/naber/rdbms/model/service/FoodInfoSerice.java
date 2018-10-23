@@ -16,14 +16,12 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
-import com.melonltd.naber.rdbms.model.bean.CategoryRel;
 import com.melonltd.naber.rdbms.model.bean.FoodInfo;
 import com.melonltd.naber.rdbms.model.dao.FoodInfoDao;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.type.UUIDType;
-import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
 import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
 
 @Service("foodInfoSerice")
@@ -70,11 +68,10 @@ public class FoodInfoSerice {
 		List<FoodInfo> list = foodInfoDao.findBycategoryUUID(categoryUUID);
 		return list;
 	}
-
-	
-	public void save(FoodInfo info) {
-		foodInfoDao.save(info);
-	}
+//	
+//	public void save(FoodInfo info) {
+//		foodInfoDao.save(info);
+//	}
 	
 	public void save(List<FoodInfo> infos) {
 		foodInfoDao.save(infos);
@@ -115,7 +112,6 @@ public class FoodInfoSerice {
 	}
 
 	public FoodInfoVo update(FoodInfoVo vo, FoodInfo info) {
-		// info.setCategoryUUID(vo.getCategory_uuid());
 		Optional<ItemVo> minPriceItem = vo.getFood_data().getScopes().stream()
 				.collect(Collectors.minBy(Comparator.comparingInt(a -> Integer.parseInt(a.getPrice()))));
 

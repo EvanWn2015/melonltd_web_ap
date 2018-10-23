@@ -71,12 +71,9 @@ public class NaberBulletinVo implements Serializable{
 	
 	public static NaberBulletinVo valueOf (NaberBulletin info) {
 		NaberBulletinVo vo = new NaberBulletinVo();
-//		vo.bulletin_uuid = info.getBulletinUUID();
 		vo.title = info.getTitle();
 		vo.content_text = info.getContentText();
 		vo.bulletin_category = info.getBulletinCategory();
-//		vo.enable = info.getEnable();
-//		vo.create_date = info.getCreateDate();
 		return vo;
 	}
 	

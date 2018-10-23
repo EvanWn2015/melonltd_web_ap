@@ -22,14 +22,14 @@ public class ActivitiesService {
 	@Autowired
 	private ActivitiesDao activitiesDao;
 
-	public List<ActivitiesVo> findAll() {
-		List<Activities> infos = activitiesDao.findAll(new Sort(ASC, "needBonus"));
-		if (CollectionUtils.isNotEmpty(infos)) {
-			return ActivitiesVo.valueOfArray(infos);
-		}
-		return Lists.<ActivitiesVo>newArrayList();
-	}
-	
+//	public List<ActivitiesVo> findAll() {
+//		List<Activities> infos = activitiesDao.findAll(new Sort(ASC, "needBonus"));
+//		if (CollectionUtils.isNotEmpty(infos)) {
+//			return ActivitiesVo.valueOfArray(infos);
+//		}
+//		return Lists.<ActivitiesVo>newArrayList();
+//	}
+//	
 	
 	public List<ActivitiesVo> findByActCategoryAnfFunc(String actCategory, String func){
 		List<Activities> infos = activitiesDao.findByActCategoryAnfFunc(actCategory, func, new Sort(ASC, "needBonus"));

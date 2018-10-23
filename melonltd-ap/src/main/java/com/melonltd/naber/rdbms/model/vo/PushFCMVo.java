@@ -9,8 +9,6 @@ public class PushFCMVo {
 	private String[] registration_ids;
 	private Notify notification;
 	private Map<String, Object> data = Maps.newHashMap();
-//	private int ttl = 3600;
-//	private AndroidPriority android = new AndroidPriority("1");
 
 	
 	
@@ -46,14 +44,6 @@ public class PushFCMVo {
 		this.notification = notification;
 	}
 
-//	public AndroidPriority getAndroid() {
-//		return android;
-//	}
-//
-//	public void setAndroid(AndroidPriority android) {
-//		this.android = android;
-//	}
-
 	public static PushFCMVo newInstance(String[] registration_ids, PushFCMVo pushFCMVo ) {
 		PushFCMVo vo = new PushFCMVo();
 		vo.registration_ids = registration_ids;
@@ -69,13 +59,6 @@ public class PushFCMVo {
 		vo.notification = pushFCMVo.getNotification();
 		return vo;
 	}
-	
-//	public static PushVo newInstance (String to ,Notify notify) {
-//		PushVo vo = new PushVo();
-//		vo.to = to;
-//		vo.notification = notify;
-//		return vo;
-//	}
 	
 	public static class Notify {
 		private String body;

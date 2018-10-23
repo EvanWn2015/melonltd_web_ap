@@ -71,24 +71,18 @@ public class AppAdminController {
 	
 	@Autowired
 	private AccountInfoService accountInfoService;
-	
 	@Autowired
 	private AdvertisementService advertisementService;
-	
 	@Autowired
 	private RestaurantInfoService restaurantInfoService;
-	
 	@Autowired
 	private RestaurantLocationTemplateService  restaurantLocationTemplateService;
-	
 	@Autowired
 	private CategoryRelService categoryRelService;
-	
 	@Autowired
 	private BasisContentService basisContentService;
 	@Autowired
 	private SellerOrderFinishService sellerOrderFinishService;
-	
 	@Autowired
 	private OrderInfoService orderInfoService;
 	
@@ -439,20 +433,7 @@ public class AppAdminController {
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
-	/**
-	 * 刪除DEMO訂單 
-	 */
-	@ResponseBody
-	@PostMapping(value = "app/admin/demo/order/data/delete")
-	public ResponseEntity<String> deleteDemoOrderData (HttpServletRequest httpRequest){
-		if (checkAdminAccount(httpRequest)) {
-			
-		}
-		return new ResponseEntity<String>("AAA", HttpStatus.OK);
-	}
 	
-
-	// 檢查Admin權限 
 	private boolean checkAdminAccount(HttpServletRequest httpRequest) {
 		String accountUUID = httpRequest.getHeader("Authorization");
 		AccountInfoVo accountInfoVo = accountInfoService.getCacheBuilderByKey(accountUUID, false);

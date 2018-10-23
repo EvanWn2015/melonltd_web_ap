@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,11 +56,8 @@ public class AdvertisementService {
 		return null;	
 	}
 	
-	
 	public AdvertisementVo update (AdvertisementVo vo){
 		Advertisement entity = advertisementDao.findByUUID(vo.getAd_uuid());
-//		entity.setAdUUID(Tools.buildUUID(UUIDType.AD));
-//		entity.setCreateDate(Tools.getNowGMT());
 		if (ObjectUtils.allNotNull(entity)) {
 			entity.setEnable(vo.getEnable());
 			entity.setTitle(vo.getTitle());

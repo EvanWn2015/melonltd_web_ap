@@ -1,16 +1,13 @@
 package com.melonltd.naber.endpoint.controller;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.core.Is;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.tags.form.AbstractDataBoundFormElementTag;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Range;
@@ -38,17 +34,12 @@ import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.ActivitiesLogService;
 import com.melonltd.naber.rdbms.model.service.ActivitiesService;
-import com.melonltd.naber.rdbms.model.service.CategoryRelService;
-import com.melonltd.naber.rdbms.model.service.FoodInfoSerice;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
-import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.Identity;
-import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.type.UUIDType;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.ActivitiesLogVo;
 import com.melonltd.naber.rdbms.model.vo.ActivitiesVo;
-import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
 import com.melonltd.naber.rdbms.model.vo.PushFCMVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
@@ -63,25 +54,16 @@ public class UserActivitiesController {
 
 	@Autowired
 	private AccountInfoService accountInfoService;
-	
 	@Autowired
 	private ActivitiesService activitiesService;
-	
 	@Autowired
 	private ActivitiesLogService activitiesLogService;
-	@Autowired
-	private FoodInfoSerice foodInfoSerice;
 	@Autowired
 	private RestaurantInfoService restaurantInfoService;
 	@Autowired
 	private PushService pushService;
 	@Autowired
 	private SubmitOrderService submitOrderService;
-	@Autowired
-	private CategoryRelService restaurantCategoryRelService;
-	
-//	@Autowired
-//	private UserOrderInfoService userOrderInfoService;
 	
 	// 提交兌換信息
 	@ResponseBody
@@ -222,23 +204,9 @@ public class UserActivitiesController {
 					map = RespData.of(Status.FALSE, restrictError, null);
 				} else {
 					String hasMsg = OrderCheckHelper.checkCanOrderTime(oredeData, restaurantVo);
-//					List<String> foodUUIDs = oredeData.getOrders().stream().map(a -> a.getItem().getFood_uuid()).distinct().collect(Collectors.toList());
-//					List<String> categoryUUIDs = oredeData.getOrders().stream().map(a -> a.getCategory_uuid()).distinct().collect(Collectors.toList());
-//					List<FoodInfoVo> foodList = foodInfoSerice.getFoodStatusOpenByUUIDs(foodUUIDs);
-//					boolean isItemChange = OrderCheckHelper.checkLiveItemData(oredeData.getOrders(), foodList);
-//					int categoryOpens = restaurantCategoryRelService.getStatusByCategoryUUIDs(categoryUUIDs, Enable.Y, Arrays.asList(SwitchStatus.OPEN));
 					if (StringUtils.isNoneBlank(hasMsg)) {
 						LOGGER.info("Store is close account : {}, uuid:{} ", accountUUID, oredeData.getRestaurant_uuid());
 						map = RespData.of(Status.FALSE, ErrorType.STORE_IS_CLOSE, hasMsg, null);
-//					} else if (!isItemChange) {
-//						LOGGER.info("Store item is change account : {}, uuid:{} ", accountUUID, oredeData.getRestaurant_uuid());
-//						map = RespData.of(Status.FALSE, ErrorType.FOOD_ITEM_IS_CHANGE, null);
-//					} else if (foodUUIDs.size() != foodList.size()) {
-//						LOGGER.info("food item status is close account : {}, food_uuid:{} ", accountUUID, foodUUIDs);
-//						map = RespData.of(Status.FALSE, ErrorType.FOOD_ITEM_CLOSE, null);
-//					} else if (categoryUUIDs.size() != categoryOpens) {
-//						LOGGER.info("category status is close account : {}, food_uuid:{} ", accountUUID, foodUUIDs);
-//						map = RespData.of(Status.FALSE, ErrorType.CATEGORY_IS_CLOSE, null);
 					} else {
 						String orders = JsonHelper.toJson(oredeData);
 						OrderVo result = submitOrderService.submitOrder(account, Tools.buildUUID(UUIDType.ORDER), restaurantVo, oredeData, "0", "0", orders, false);

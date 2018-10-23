@@ -107,16 +107,6 @@ public class ChangedDateRangeController {
 			return ErrorType.INVALID;
 		}
 
-		// try {
-		// List<DateRangeVo> rangeVos = JsonHelper.jsonArray(req.getDate(),
-		// DateRangeVo[].class);
-		// if (rangeVos.size() == 0) {
-		// return ErrorType.INVALID;
-		// }
-		// }catch (Exception e) {
-		// return ErrorType.INVALID;
-		// }
-
 		return null;
 	}
 }

@@ -221,9 +221,6 @@ public class SellerCategoryController {
 		if (StringUtils.isAnyBlank(account.getRestaurant_uuid(), req.getUuid())) {
 			return ErrorType.DATABASE_NULL;
 		}
-//		if (req.getPage() == 0) {
-//			return ErrorType.DATABASE_NULL;
-//		}
 		return null;
 	}
 

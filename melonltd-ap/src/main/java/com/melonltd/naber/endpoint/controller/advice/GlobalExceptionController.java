@@ -18,8 +18,6 @@ import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 
-
-// 全局錯誤處理
 @ControllerAdvice
 public class GlobalExceptionController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionController.class);

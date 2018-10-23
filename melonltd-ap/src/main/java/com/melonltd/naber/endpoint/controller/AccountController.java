@@ -6,8 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,12 +29,10 @@ import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class AccountController {
-	private static final Logger LOGGERO = LoggerFactory.getLogger(AccountController.class);
+//	private static final Logger LOGGERO = LoggerFactory.getLogger(AccountController.class);
 
 	@Autowired
 	private AccountInfoService accountInfoService;
-//	@Autowired
-//	private MailSendService mailSendService;
 
 	@Autowired
 	private VerifyPhoneLogService verifyPhoneLogService;
@@ -103,7 +99,6 @@ public class AccountController {
 		if (ObjectUtils.allNotNull(error)) {
 			map = RespData.of(Status.FALSE, error, null);
 		} else {
-//			AccountInfoVo vo = accountInfoService.findByPhoneAndMail(req.getPhone(), req.getEmail());
 			AccountInfoVo vo = accountInfoService.findByPhone(req.getPhone());
 			if (!ObjectUtils.allNotNull(vo)) {
 				map = RespData.of(Status.FALSE, ErrorType.DATABASE_NULL, null);
@@ -142,11 +137,7 @@ public class AccountController {
 			if (StringUtils.equals(req.getPassword(), req.getOld_password())) {
 				return ErrorType.INVALID_PASSWORD_REPEAT;
 			}
-		} else {
-//			if (!ObjectUtils.allNotNull(req.getPhone(), req.getEmail())) {
-//				return ErrorType.INVALID;
-//			}
-		}
+		} 
 		return null;
 	}
 

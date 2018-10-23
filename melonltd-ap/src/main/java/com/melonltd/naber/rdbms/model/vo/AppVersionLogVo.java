@@ -1,11 +1,6 @@
 package com.melonltd.naber.rdbms.model.vo;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.Lists;
-import com.melonltd.naber.rdbms.model.bean.Activities;
 import com.melonltd.naber.rdbms.model.bean.AppVersionLog;
 
 public class AppVersionLogVo {

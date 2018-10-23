@@ -84,9 +84,6 @@ public class SellerSettingController {
 				RestaurantInfoVo newVo = null;
 				if (!StringUtils.isAnyBlank(req.getStore_start(), req.getStore_end())
 						&& !StringUtils.equals(req.getStore_start(), req.getStore_end())) {
-//						&& (!StringUtils.equals(req.getStore_start(), restaurant.getStore_start())
-//								|| !StringUtils.equals(req.getStore_end(), restaurant.getStore_end()))) {
-					// TODO update Bulletin --> Store start & end --> build can_store_range
 					Integer start = Integer.parseInt(new StringBuffer(req.getStore_start()).deleteCharAt(2).toString());
 					Integer end = Integer.parseInt(new StringBuffer(req.getStore_end()).deleteCharAt(2).toString());
 					List<DateRangeVo> canStoreRanges = checkCanStoreRanges(start, end, restaurant.getCan_store_range());
@@ -100,11 +97,6 @@ public class SellerSettingController {
 					}
 					newVo = restaurantInfoService.update(restaurant);
 					map = RespData.of(Status.TRUE, null, newVo);
-//				} else if (StringUtils.isNotBlank(req.getBulletin())) {
-//					// TODO update Bulletin
-//					restaurant.setBulletin(req.getBulletin());
-//					newVo = restaurantInfoService.update(restaurant);
-//					map = RespData.of(Status.TRUE, null, newVo);
 				} else {
 					map = RespData.of(Status.FALSE, ErrorType.UPDATE_ERROR, null);
 				}

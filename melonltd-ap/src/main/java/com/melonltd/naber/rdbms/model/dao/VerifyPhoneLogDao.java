@@ -9,9 +9,6 @@ import com.melonltd.naber.rdbms.model.bean.VerifyPhoneLog;
 
 public interface VerifyPhoneLogDao extends JpaRepository<VerifyPhoneLog, String> {
 
-	@Query("SELECT a FROM VerifyPhoneLog a WHERE a.phone = ?1")
-	public List<VerifyPhoneLog> findByPhoneNumber(String phoneNumber);
-
 	@Query("SELECT a FROM VerifyPhoneLog a WHERE a.phone = ?1 AND (a.verifyDate BETWEEN ?2 AND ?3)")
 	public List<VerifyPhoneLog> findByPhoneNumberAndBetweenDates(String phoneNumber, String start, String end);
 

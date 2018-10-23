@@ -230,7 +230,5 @@ public class OrderLog implements Serializable {
 		info.enable = vo.getEnable();
 		return info;
 	}
-	
-	
 
 }
