@@ -27,7 +27,6 @@ import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.CategoryRelService;
 import com.melonltd.naber.rdbms.model.service.FoodInfoSerice;
-import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
@@ -264,8 +263,6 @@ public class SellerFoodController {
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
-
-//	change
 
 	private static ErrorType checkReqData(ReqData req, AccountInfoVo account) {
 		if (!ObjectUtils.allNotNull(req)) {

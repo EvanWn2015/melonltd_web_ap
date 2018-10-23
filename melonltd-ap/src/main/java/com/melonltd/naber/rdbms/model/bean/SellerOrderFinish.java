@@ -200,6 +200,4 @@ public class SellerOrderFinish implements Serializable {
 		return info;
 	}
 
-	
-
 }

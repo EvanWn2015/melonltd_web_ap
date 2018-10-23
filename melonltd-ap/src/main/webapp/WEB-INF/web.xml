@@ -17,14 +17,6 @@
 		<listener-class>com.melonltd.naber.background.job.ScheduleListener</listener-class>
 	</listener>
 	
-	<!-- Order Notify Job -->
-	<listener>
-		<listener-class>org.quartz.ee.servlet.QuartzInitializerListener</listener-class>
-	</listener>
-	<listener>
-		<listener-class>com.melonltd.naber.background.job.OrderNotifyListener</listener-class>
-	</listener>
-
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:spring/naber-app.xml</param-value>

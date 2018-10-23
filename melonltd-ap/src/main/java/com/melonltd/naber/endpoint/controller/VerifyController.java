@@ -70,8 +70,6 @@ public class VerifyController {
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 	
-	
-	
 	private static ErrorType checkReqData(VerifyPhoneLogVo vo) {
 		if (!ObjectUtils.anyNotNull(vo)) {
 			return ErrorType.INVALID;

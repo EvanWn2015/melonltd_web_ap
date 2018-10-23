@@ -203,6 +203,4 @@ public class OrderInfo implements Serializable {
 		return info;
 	}
 
-	
-
 }

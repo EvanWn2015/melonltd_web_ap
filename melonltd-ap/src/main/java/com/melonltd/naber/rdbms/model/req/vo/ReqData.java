@@ -16,7 +16,6 @@ public class ReqData {
 	private String json_data;
 	private String date;
 	private String data;
-//	private List<String> datas;
 	private String start_date;
 	private String end_date;
 	private String message;
@@ -131,7 +130,5 @@ public class ReqData {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	
 
 }

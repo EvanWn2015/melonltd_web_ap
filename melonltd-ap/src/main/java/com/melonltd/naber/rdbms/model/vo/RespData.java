@@ -3,8 +3,6 @@ package com.melonltd.naber.rdbms.model.vo;
 import java.util.LinkedHashMap;
 
 import com.google.common.collect.Maps;
-import com.melonltd.naber.constant.NaberConstant;
-import com.melonltd.naber.endpoint.util.JsonHelper;
 
 public class RespData {
 	public enum Status {

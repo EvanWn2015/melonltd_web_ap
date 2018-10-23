@@ -33,16 +33,22 @@ public class RestaurantController {
 
 	@Autowired
 	private RestaurantLocationTemplateService restaurantLocationTemplateService;
-	
+
 	@Autowired
 	private RestaurantInfoService restaurantInfoService;
-	
+
 	@Autowired
 	private CategoryRelService categoryRelService;
 
-	// 增加 NOT_SCHOOL, SCHOOL_DIVIDED
 	private enum SearchType {
-		TOP("TOP"), AREA("AREA"), CATEGORY("CATEGORY"), DISTANCE("DISTANCE"), STORE_NAME("STORE_NAME"), NOT_SCHOOL("NOT_SCHOOL"),SCHOOL_DIVIDED("SCHOOL_DIVIDED"), NUKNOWN("NUKNOWN");
+		TOP("TOP"), 
+		AREA("AREA"), 
+		CATEGORY("CATEGORY"), 
+		DISTANCE("DISTANCE"), 
+		STORE_NAME("STORE_NAME"), 
+		NOT_SCHOOL("NOT_SCHOOL"), 
+		SCHOOL_DIVIDED("SCHOOL_DIVIDED"), 
+		NUKNOWN("NUKNOWN");
 		private String name;
 
 		SearchType(String name) {
@@ -68,8 +74,7 @@ public class RestaurantController {
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
-	
-	
+
 	@ResponseBody
 	@PostMapping(value = "restaurant/list")
 	public ResponseEntity<String> getRestaurantList(@RequestParam(value = "data", required = false) String data) {
@@ -88,8 +93,7 @@ public class RestaurantController {
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
-	
-	
+
 	@ResponseBody
 	@PostMapping(value = "restaurant/detail")
 	public ResponseEntity<String> getRestaurantDetail(@RequestParam(value = "data", required = false) String data) {
@@ -99,7 +103,7 @@ public class RestaurantController {
 		LinkedHashMap<String, Object> map = null;
 		if (StringUtils.isBlank(req.getUuid())) {
 			map = RespData.of(Status.FALSE, ErrorType.INVALID, null);
-		}else {
+		} else {
 			List<CategoryRelVo> list = categoryRelService.findByRestaurantUUID(req.getUuid());
 			map = RespData.of(Status.TRUE, null, list);
 		}
@@ -107,7 +111,6 @@ public class RestaurantController {
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
-	
 
 	private List<RestaurantInfoVo> getRestaurantsByType(ReqData req) {
 		switch (SearchType.of(req.getSearch_type())) {
@@ -134,14 +137,14 @@ public class RestaurantController {
 
 	private static ErrorType checkRequest(ReqData req) {
 		ErrorType error = null;
-		
+
 		if (StringUtils.isBlank(req.getSearch_type())) {
 			return ErrorType.INVALID;
 		}
-		
+
 		switch (SearchType.of(req.getSearch_type())) {
 		case SCHOOL_DIVIDED:
-			error = StringUtils.isAnyBlank(req.getArea(),req.getName()) ? ErrorType.INVALID : null;
+			error = StringUtils.isAnyBlank(req.getArea(), req.getName()) ? ErrorType.INVALID : null;
 			break;
 		case AREA:
 			error = StringUtils.isBlank(req.getArea()) ? ErrorType.INVALID : null;
@@ -152,11 +155,6 @@ public class RestaurantController {
 		case STORE_NAME:
 			error = StringUtils.isBlank(req.getName()) ? ErrorType.INVALID : null;
 			break;
-//		case DISTANCE:
-//			if (StringUtils.isBlank(req.getLongitude()) || StringUtils.isBlank(req.getLatitude())) {
-//				error = ErrorType.INVALID;
-//			}
-//			break;
 		case NUKNOWN:
 		default:
 			break;

@@ -29,12 +29,8 @@ import com.melonltd.naber.rdbms.model.vo.SchoolDividedVo;
 
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
-// @PropertySource("classpath:/base.properties")
 public class BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
-
-	// @Autowired
-	// private Environment env;
 
 	@Autowired
 	private BasisContentService basisContentService;
@@ -42,7 +38,6 @@ public class BaseController {
 	@Autowired
 	private AppVersionLogService appVersionLogService;
 
-	// 檢查 android & ios App 版本
 	@ResponseBody
 	@PostMapping(value = "common/check/app/version")
 	public ResponseEntity<String> checkAppVersion(@RequestParam(value = "data", required = false) String data) {
@@ -60,12 +55,10 @@ public class BaseController {
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
-	// 取得App進入公告圖
 	@ResponseBody
 	@PostMapping(value = "common/app/intro/bulletin")
 	public ResponseEntity<String> getAppIntroBulletin() {
 		BasisContent info = basisContentService.getAppIntro();
-//		List<String> categorys = JsonHelper.jsonArray(info.getContent(), String[].class);
 		LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, info.getContent());
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);

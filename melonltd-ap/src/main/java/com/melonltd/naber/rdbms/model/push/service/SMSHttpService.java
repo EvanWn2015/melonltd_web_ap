@@ -50,7 +50,7 @@ public class SMSHttpService {
 	}
 
 	public String sendSMS(String subject, String content, String mobile, String sendTime) {
-		boolean success = false;
+//		boolean success = false;
 		String batchID ="";
 		try {
 			StringBuilder postDataSb = new StringBuilder();
@@ -66,7 +66,7 @@ public class SMSHttpService {
 				String[] split = resultString.split(",");
 				this.credit = Double.parseDouble(split[0]);
 				batchID = split[4];
-				success = true;
+//				success = true;
 			} else {
 				this.processMsg = resultString;
 			}
