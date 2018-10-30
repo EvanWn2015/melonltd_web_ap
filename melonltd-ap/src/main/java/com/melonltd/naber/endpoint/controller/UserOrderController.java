@@ -147,7 +147,7 @@ public class UserOrderController {
 						map = RespData.of(Status.FALSE, ErrorType.CATEGORY_IS_CLOSE, null);
 					} else {
 						int price = getPrice(req);
-						int useBonus = 0;
+//						int useBonus = 0;
 						boolean status = checkCount(req);
 						// 限制單筆訂單不可超過 5000 或 單筆菜單數量錯誤
 						if (price > NaberConstant.ORDER_PRICE_MAX || !status) {
@@ -164,13 +164,17 @@ public class UserOrderController {
 							// 如果單為兌換，紅利歸零
 							BillingType billingType = JsonHelper.json(req.getOrder_type().getBilling(),
 									BillingType.class);
-							if (BillingType.COUPON.equals(billingType)) {
-								bonus = "0";
-							} else if (BillingType.DISCOUNT.equals(billingType)) {
-								useBonus = IntegerUtils.parseInt(req.getUse_bonus(), 0);
-								bonus = ((int) Math.floor((price - (useBonus / 10 * 3)) / 10d) + "");
-								System.out.println(bonus);
-							}
+//							if (BillingType.COUPON.equals(billingType)) {
+//								bonus = "0";
+//							} else if (BillingType.DISCOUNT.equals(billingType)) {
+//								useBonus = IntegerUtils.parseInt(req.getUse_bonus(), 0);
+//								bonus = ((int) Math.floor((price - (useBonus / 10 * 3)) / 10d) + "");
+//								System.out.println(bonus);
+//							}
+							
+							// TODO IOS 12 版本問題倍觸發紅利點數
+							req.getOrder_type().setBilling("ORIGINAL");
+							
 							String orders = JsonHelper.toJson(req);
 							OrderVo result = submitOrderService.submitOrder(account, Tools.buildUUID(UUIDType.ORDER),
 									vo, req, String.valueOf(price), bonus, orders, true);
@@ -179,12 +183,12 @@ public class UserOrderController {
 										req.getRestaurant_uuid());
 								map = RespData.of(Status.FALSE, ErrorType.ORDER_UNFINISH_MAX, null);
 							} else {
-								if (useBonus != 0) {
-									AccountInfoVo accout = accountInfoService.getCacheBuilderByKey(accountUUID, false);
-									int bonusSum = IntegerUtils.parseInt(accout.getUse_bonus(), 0) + useBonus;
-									status = accountInfoService.updateUseBonus(String.valueOf(bonusSum),
-											accout.getAccount_uuid());
-								}
+//								if (useBonus != 0) {
+//									AccountInfoVo accout = accountInfoService.getCacheBuilderByKey(accountUUID, false);
+//									int bonusSum = IntegerUtils.parseInt(accout.getUse_bonus(), 0) + useBonus;
+//									status = accountInfoService.updateUseBonus(String.valueOf(bonusSum),
+//											accout.getAccount_uuid());
+//								}
 								PushFCMVo notificationVo = new PushFCMVo();
 								notificationVo.setNotification(new PushFCMVo.Notify("訂單信息", "您有新訂單！請前往訂單查看！"));
 								Map<String, Object> datas = Maps.newHashMap();

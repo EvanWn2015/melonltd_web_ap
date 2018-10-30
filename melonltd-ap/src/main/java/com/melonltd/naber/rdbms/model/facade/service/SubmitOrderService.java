@@ -70,7 +70,7 @@ public class SubmitOrderService {
 		info.setOrderType(JsonHelper.toJson(req.getOrder_type()));
 		info.setOrderPrice(price);
 		info.setUseBonus("0");
-		info.setUseBonus(req.getUse_bonus());
+//		info.setUseBonus(req.getUse_bonus());
 		info.setOrderBonus(bonus);
 		info.setFetchDate(req.getFetch_date());
 		info.setOrderData(orders);
@@ -91,7 +91,7 @@ public class SubmitOrderService {
 		info.setOrderType(JsonHelper.toJson(req.getOrder_type()));
 		info.setOrderPrice(price);
 		info.setUseBonus("0");
-		info.setUseBonus(req.getUse_bonus());
+//		info.setUseBonus(req.getUse_bonus());
 		info.setOrderBonus(bonus);
 		info.setFetchDate(req.getFetch_date());
 		info.setOrderData(orders);
@@ -112,7 +112,7 @@ public class SubmitOrderService {
 		info.setOrderType(JsonHelper.toJson(req.getOrder_type()));
 		info.setOrderPrice(price);
 		info.setUseBonus("0");
-		info.setUseBonus(req.getUse_bonus());
+//		info.setUseBonus(req.getUse_bonus());
 //		info.setDiscount(req.getUse_discount());
 		info.setOrderBonus(bonus);
 		info.setFetchDate(req.getFetch_date());
