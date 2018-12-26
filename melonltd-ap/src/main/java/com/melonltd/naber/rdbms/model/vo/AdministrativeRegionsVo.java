@@ -2,34 +2,22 @@ package com.melonltd.naber.rdbms.model.vo;
 
 import java.util.List;
 
-import com.google.common.base.MoreObjects;
+import com.melonltd.naber.endpoint.util.JsonHelper;
 
+import lombok.Data;
+
+@Data
 public class AdministrativeRegionsVo {
 
 	private String city;
 	private List<AreaVo> areas;
 
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public List<AreaVo> getAreas() {
-		return areas;
-	}
-
-	public void setAreas(List<AreaVo> areas) {
-		this.areas = areas;
-	}
-
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass()).add("city", city).add("areas", areas).toString();
+		return JsonHelper.toJson(this);
 	}
 
+	@Data
 	public static class AreaVo {
 
 		private String area;
@@ -40,30 +28,13 @@ public class AdministrativeRegionsVo {
 			this.postal_code = postal_code;
 		}
 
-		public String getArea() {
-			return area;
-		}
-
-		public void setArea(String area) {
-			this.area = area;
-		}
-
-		public String getPostal_code() {
-			return postal_code;
-		}
-
-		public void setPostal_code(String postal_code) {
-			this.postal_code = postal_code;
-		}
-
 		public static AreaVo of(String area, String postal_code) {
 			return new AreaVo(area, String.valueOf(postal_code));
 		}
 
 		@Override
 		public String toString() {
-			return MoreObjects.toStringHelper(this.getClass()).add("area", area).add("postal_code", postal_code)
-					.toString();
+			return JsonHelper.toJson(this);
 		}
 	}
 

@@ -7,74 +7,31 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.google.common.base.MoreObjects;
+import com.melonltd.naber.endpoint.util.JsonHelper;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "mobile_device")
 public class MobileDevice implements Serializable {
 	private static final long serialVersionUID = 4703671514270687285L;
 
-	private String deviceUUID;
-	private String deviceToken;
-	private String accountUUID;
-	private String deviceCategory;
-	private String createDate;
-
 	@Id
 	@Column(name = "device_uuid", unique = true, nullable = false)
-	public String getDeviceUUID() {
-		return deviceUUID;
-	}
-
+	private String deviceUUID;
 	@Column(name = "device_token")
-	public String getDeviceToken() {
-		return deviceToken;
-	}
-
+	private String deviceToken;
 	@Column(name = "account_uuid")
-	public String getAccountUUID() {
-		return accountUUID;
-	}
-
+	private String accountUUID;
 	@Column(name = "device_category")
-	public String getDeviceCategory() {
-		return deviceCategory;
-	}
-
+	private String deviceCategory;
 	@Column(name = "create_date")
-	public String getCreateDate() {
-		return createDate;
-	}
+	private String createDate;
 
-	public void setDeviceUUID(String deviceUUID) {
-		this.deviceUUID = deviceUUID;
-	}
-	
-	public void setDeviceToken(String deviceToken) {
-		this.deviceToken = deviceToken;
-	}
-
-	public void setAccountUUID(String accountUUID) {
-		this.accountUUID = accountUUID;
-	}
-
-	public void setDeviceCategory(String deviceCategory) {
-		this.deviceCategory = deviceCategory;
-	}
-
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
-	}
-	
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass())
-				.add("deviceUUID", deviceUUID)
-				.add("deviceToken", deviceToken)
-				.add("accountUUID", accountUUID)
-				.add("deviceCategory", deviceCategory)
-				.add("createDate", createDate)
-				.toString();
+		return JsonHelper.toJson(this);
 	}
 
 }

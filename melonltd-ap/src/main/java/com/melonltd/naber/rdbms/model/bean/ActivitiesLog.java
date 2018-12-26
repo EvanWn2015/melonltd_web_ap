@@ -9,108 +9,36 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.google.common.base.MoreObjects;
+import com.melonltd.naber.endpoint.util.JsonHelper;
 
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "activities_log")
 public class ActivitiesLog implements Serializable {
 	private static final long serialVersionUID = 7294609723830911896L;
 
-	private Integer id;
-	private String actUUID;
-	private String accountUUID;
-	private String serial;
-	private String actCategory;
-	private String restrictFunc;
-	private String data;
-	private String createDate;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", unique = true, nullable = false)
-	public Integer getId() {
-		return id;
-	}
-
+	private Integer id;
 	@Column(name = "act_uuid")
-	public String getActUUID() {
-		return actUUID;
-	}
-
+	private String actUUID;
 	@Column(name = "account_uuid")
-	public String getAccountUUID() {
-		return accountUUID;
-	}
-
+	private String accountUUID;
 	@Column(name = "serial")
-	public String getSerial() {
-		return serial;
-	}
-
+	private String serial;
 	@Column(name = "act_category")
-	public String getActCategory() {
-		return actCategory;
-	}
-
+	private String actCategory;
 	@Column(name = "restrict_func")
-	public String getRestrictFunc() {
-		return restrictFunc;
-	}
-
+	private String restrictFunc;
 	@Column(name = "data")
-	public String getData() {
-		return data;
-	}
-
+	private String data;
 	@Column(name = "create_date")
-	public String getCreateDate() {
-		return createDate;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public void setActUUID(String actUUID) {
-		this.actUUID = actUUID;
-	}
-
-	public void setAccountUUID(String accountUUID) {
-		this.accountUUID = accountUUID;
-	}
-
-	public void setSerial(String serial) {
-		this.serial = serial;
-	}
-
-	public void setActCategory(String actCategory) {
-		this.actCategory = actCategory;
-	}
-
-	public void setRestrictFunc(String restrictFunc) {
-		this.restrictFunc = restrictFunc;
-	}
-
-	public void setData(String data) {
-		this.data = data;
-	}
-
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
-	}
+	private String createDate;
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass())
-				.add("id", id)
-				.add("actUUID", actUUID)
-				.add("serial", serial)
-				.add("actCategory", actCategory)
-				.add("accountUUID", accountUUID)
-				.add("data", data)
-				.add("restrictFunc", restrictFunc)
-				.add("createDate", createDate)
-				.toString();
+		return JsonHelper.toJson(this);
 	}
 }

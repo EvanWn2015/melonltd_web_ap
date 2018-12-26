@@ -122,6 +122,7 @@ public class FoodInfoSerice {
 		info.setDefaultPrice(minPriceItem.isPresent() ? minPriceItem.get().getPrice() : info.getDefaultPrice());
 		info.setFoodUUID(vo.getFood_uuid());
 		info.setFoodName(vo.getFood_name());
+		info.setFoodContent(StringUtils.isBlank(vo.getFood_content())? "" : vo.getFood_content());
 		info.setFoodData(JsonHelper.toJson(vo.getFood_data()));
 		info.setStatus(vo.getStatus());
 		info.setTop(StringUtils.isNotBlank(vo.getTop()) ? vo.getTop() : "0");

@@ -1,7 +1,10 @@
 package com.melonltd.naber.rdbms.model.vo;
 
-import com.google.thirdparty.publicsuffix.PublicSuffixPatterns;
+import com.melonltd.naber.endpoint.util.JsonHelper;
 
+import lombok.Data;
+
+@Data
 public class SellerStatVo {
 
 	private String year_income;
@@ -19,100 +22,9 @@ public class SellerStatVo {
 	private String month_use_bonus;
 	private String day_use_bonus;
 
-	public String getYear_income() {
-		return year_income;
-	}
-
-	public void setYear_income(String year_income) {
-		this.year_income = year_income;
-	}
-
-	public String getMonth_income() {
-		return month_income;
-	}
-
-	public void setMonth_income(String month_income) {
-		this.month_income = month_income;
-	}
-
-	public String getDay_income() {
-		return day_income;
-	}
-
-	public void setDay_income(String day_income) {
-		this.day_income = day_income;
-	}
-
-	public String getFinish_count() {
-		return finish_count;
-	}
-
-	public void setFinish_count(String finish_count) {
-		this.finish_count = finish_count;
-	}
-
-	public String[] getStatus_dates() {
-		return status_dates;
-	}
-
-	public void setStatus_dates(String[] status_dates) {
-		this.status_dates = status_dates;
-	}
-
-	public String getUnfinish_count() {
-		return unfinish_count;
-	}
-
-	public void setUnfinish_count(String unfinish_count) {
-		this.unfinish_count = unfinish_count;
-	}
-
-	public String getProcessing_count() {
-		return processing_count;
-	}
-
-	public void setProcessing_count(String processing_count) {
-		this.processing_count = processing_count;
-	}
-
-	public String getCan_fetch_count() {
-		return can_fetch_count;
-	}
-
-	public void setCan_fetch_count(String can_fetch_count) {
-		this.can_fetch_count = can_fetch_count;
-	}
-
-	public String getCancel_count() {
-		return cancel_count;
-	}
-
-	public void setCancel_count(String cancel_count) {
-		this.cancel_count = cancel_count;
-	}
-
-	public String getYear_use_bonus() {
-		return year_use_bonus;
-	}
-
-	public void setYear_use_bonus(String year_use_bonus) {
-		this.year_use_bonus = year_use_bonus;
-	}
-
-	public String getMonth_use_bonus() {
-		return month_use_bonus;
-	}
-
-	public void setMonth_use_bonus(String month_use_bonus) {
-		this.month_use_bonus = month_use_bonus;
-	}
-
-	public String getDay_use_bonus() {
-		return day_use_bonus;
-	}
-
-	public void setDay_use_bonus(String day_use_bonus) {
-		this.day_use_bonus = day_use_bonus;
+	@Override
+	public String toString() {
+		return JsonHelper.toJson(this);
 	}
 
 	public static SellerStatVo of(long yearIncome, long monthIncome, long dayIncome, long finishCount) {

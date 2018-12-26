@@ -4,40 +4,23 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.common.base.MoreObjects;
+import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 
+import lombok.Data;
 
-public class DateRangeVo implements Serializable{
+@Data
+public class DateRangeVo implements Serializable {
 	private static final long serialVersionUID = -7509315033343182791L;
-	
+
 	private String status;
 	private String date;
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass())
-				.add("status", status)
-				.add("date", date)
-				.toString();
+		return JsonHelper.toJson(this);
 	}
-	
+
 	public static DateRangeVo of(Integer start, Integer end, SwitchStatus status) {
 		DateRangeVo vo = new DateRangeVo();
 		vo.date = new StringBuffer(StringUtils.leftPad(start.toString(), 4, "0")).insert(2, ":").toString() + "-"

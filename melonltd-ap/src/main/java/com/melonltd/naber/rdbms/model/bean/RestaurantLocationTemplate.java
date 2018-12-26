@@ -7,51 +7,29 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.melonltd.naber.endpoint.util.JsonHelper;
+
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "restaurant_location_template")
 public class RestaurantLocationTemplate implements Serializable{
 	private static final long serialVersionUID = -3761800405209681381L;
 	
-	private String restaurantUUID;
-	private String latitude;
-	private String longitude;
-	private String enable;
-	
 	@Id
 	@Column(name = "restaurant_uuid", unique = true, nullable = false)
-	public String getRestaurantUUID() {
-		return restaurantUUID;
-	}
-	
+	private String restaurantUUID;
 	@Column(name = "latitude")
-	public String getLatitude() {
-		return latitude;
-	}
-
+	private String latitude;
 	@Column(name = "longitude")
-	public String getLongitude() {
-		return longitude;
-	}
-	
+	private String longitude;
 	@Column(name = "enable")
-	public String getEnable() {
-		return enable;
-	}
+	private String enable;
 	
-	public void setRestaurantUUID(String restaurantUUID) {
-		this.restaurantUUID = restaurantUUID;
-	}
-	
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
-	}
-
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
-	}
-
-	public void setEnable(String enable) {
-		this.enable = enable;
+	@Override
+	public String toString() {
+		return JsonHelper.toJson(this);
 	}
 
 }

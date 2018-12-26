@@ -7,180 +7,52 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.google.common.base.MoreObjects;
+import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
 
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "seller_order_finish")
 public class SellerOrderFinish implements Serializable {
 	private static final long serialVersionUID = -7662206313159475007L;
-	
-	private String orderUUID;
-	private String restaurantUUID;
-	private String accountUUID;
-	private String userMessage;
-	private String createDate;
-	private String updateDate;
-    private String orderType;
-	private String orderPrice;
-	private String orderBonus;
-	private String useBonus;
-	private String fetchDate;
-	private String orderData;
-	private String status;
-	private String enable;
-	
 
 	@Id
 	@Column(name = "order_uuid", unique = true, nullable = false)
-	public String getOrderUUID() {
-		return orderUUID;
-	}
-
+	private String orderUUID;
 	@Column(name = "restaurant_uuid")
-	public String getRestaurantUUID() {
-		return restaurantUUID;
-	}
-	
+	private String restaurantUUID;
 	@Column(name = "account_uuid")
-	public String getAccountUUID() {
-		return accountUUID;
-	}
-
+	private String accountUUID;
 	@Column(name = "user_message")
-	public String getUserMessage() {
-		return userMessage;
-	}
-
+	private String userMessage;
 	@Column(name = "create_date")
-	public String getCreateDate() {
-		return createDate;
-	}
-
+	private String createDate;
 	@Column(name = "update_date")
-	public String getUpdateDate() {
-		return updateDate;
-	}
-	
+	private String updateDate;
 	@Column(name = "order_type")
-	public String getOrderType () {
-		return orderType;
-	}
-
+	private String orderType;
 	@Column(name = "order_price")
-	public String getOrderPrice() {
-		return orderPrice;
-	}
-
+	private String orderPrice;
 	@Column(name = "order_bonus")
-	public String getOrderBonus() {
-		return orderBonus;
-	}
-	
+	private String orderBonus;
 	@Column(name = "use_bonus")
-	public String getUseBonus() {
-		return useBonus;
-	}
-
+	private String useBonus;
 	@Column(name = "fetch_date")
-	public String getFetchDate() {
-		return fetchDate;
-	}
-
+	private String fetchDate;
 	@Column(name = "order_data")
-	public String getOrderData() {
-		return orderData;
-	}
-
+	private String orderData;
 	@Column(name = "status")
-	public String getStatus() {
-		return status;
-	}
-
+	private String status;
 	@Column(name = "enable")
-	public String getEnable() {
-		return enable;
-	}
+	private String enable;
 
-
-	public void setOrderUUID(String orderUUID) {
-		this.orderUUID = orderUUID;
-	}
-
-	public void setRestaurantUUID(String restaurantUUID) {
-		this.restaurantUUID = restaurantUUID;
-	}
-
-	public void setAccountUUID(String accountUUID) {
-		this.accountUUID = accountUUID;
-	}
-
-	public void setUserMessage(String userMessage) {
-		this.userMessage = userMessage;
-	}
-
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
-	}
-
-	public void setUpdateDate(String updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	public void setOrderType(String orderType) {
-		this.orderType = orderType;
-	}
-
-	public void setOrderPrice(String orderPrice) {
-		this.orderPrice = orderPrice;
-	}
-
-	public void setOrderBonus(String orderBonus) {
-		this.orderBonus = orderBonus;
-	}
-
-	public void setUseBonus(String useBonus) {
-		this.useBonus = useBonus;
-	}
-
-	public void setFetchDate(String fetchDate) {
-		this.fetchDate = fetchDate;
-	}
-
-	public void setOrderData(String orderData) {
-		this.orderData = orderData;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public void setEnable(String enable) {
-		this.enable = enable;
-	}
-	
-	
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass())
-				.add("orderUUID", orderUUID)
-				.add("accountUUID", accountUUID)
-				.add("restaurantUUID", restaurantUUID)
-				.add("userMessage", userMessage)
-				.add("createDate", createDate)
-				.add("updateDate", updateDate)
-				.add("orderType", orderType)
-				.add("orderPrice", orderPrice)
-				.add("orderBonus", orderBonus)
-				.add("fetchDate", fetchDate)
-				.add("orderData", orderData)
-				.add("status", status)
-				.add("enable", enable)
-				.add("useBonus", useBonus)
-				.toString();
+		return JsonHelper.toJson(this);
 	}
-	
+
 	public static SellerOrderFinish valueOf(OrderVo vo) {
 		SellerOrderFinish info = new SellerOrderFinish();
 		info.orderUUID = vo.getOrder_uuid();
@@ -199,7 +71,5 @@ public class SellerOrderFinish implements Serializable {
 		info.enable = vo.getEnable();
 		return info;
 	}
-
-	
 
 }

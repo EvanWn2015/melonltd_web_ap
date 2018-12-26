@@ -2,8 +2,11 @@ package com.melonltd.naber.rdbms.model.req.vo;
 
 import java.util.List;
 
-import com.google.common.base.MoreObjects;
+import com.melonltd.naber.endpoint.util.JsonHelper;
 
+import lombok.Data;
+
+@Data
 public class OredeSubimtReq {
 
 	private String restaurant_uuid;
@@ -18,161 +21,47 @@ public class OredeSubimtReq {
 	private OrderType order_type;
 	private List<OrderData> orders;
 
-	public String getRestaurant_uuid() {
-		return restaurant_uuid;
-	}
-
-	public void setRestaurant_uuid(String restaurant_uuid) {
-		this.restaurant_uuid = restaurant_uuid;
-	}
-
-	public String getFetch_date() {
-		return fetch_date;
-	}
-
-	public void setFetch_date(String fetch_date) {
-		this.fetch_date = fetch_date;
-	}
-
-	public String getUser_message() {
-		return user_message;
-	}
-
-	public void setUser_message(String user_message) {
-		this.user_message = user_message;
-	}
-
-	public String getRestaurant_name() {
-		return restaurant_name;
-	}
-
-	public void setRestaurant_name(String restaurant_name) {
-		this.restaurant_name = restaurant_name;
-	}
-
-	public String getRestaurant_address() {
-		return restaurant_address;
-	}
-
-	public void setRestaurant_address(String restaurant_address) {
-		this.restaurant_address = restaurant_address;
-	}
-
-	public String getUser_name() {
-		return user_name;
-	}
-
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
-	}
-
-	public String getUser_phone() {
-		return user_phone;
-	}
-
-	public void setUser_phone(String user_phone) {
-		this.user_phone = user_phone;
-	}
-
-	public String getUse_bonus() {
-		return use_bonus;
-	}
-
-	public void setUse_bonus(String use_bonus) {
-		this.use_bonus = use_bonus;
-	}
-
-	public String getCan_discount() {
-		return can_discount;
-	}
-
-	public void setCan_discount(String can_discount) {
-		this.can_discount = can_discount;
-	}
-
-	public OrderType getOrder_type() {
-		return order_type;
-	}
-
-	public void setOrder_type(OrderType order_type) {
-		this.order_type = order_type;
-	}
-
-	public List<OrderData> getOrders() {
-		return orders;
-	}
-
-	public void setOrders(List<OrderData> orders) {
-		this.orders = orders;
-	}
-
-
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass())
-				.add("restaurant_uuid", restaurant_uuid)
-				.add("can_discount", can_discount)
-				.add("fetch_date", fetch_date)
-				.add("user_message", user_message)
-				.add("use_bonus", use_bonus)
-				.add("orders", orders)
-				.toString();
+		return JsonHelper.toJson(this);
 	}
 
-	
 	public static OredeSubimtReq ofOrders(List<OrderData> orders) {
 		OredeSubimtReq data = new OredeSubimtReq();
 		data.orders = orders;
 		return data;
 	}
-	
+
 	public static OrderType setDefault() {
-		return new OrderType("ORIGINAL","OUT");
+		return new OrderType("ORIGINAL", "OUT");
 	}
-	
+
 	/**
-	 * billing : ORIGINAL, DISCOUNT, COUPON
-	 * delivery : IN, OUT, SEND
+	 * billing : ORIGINAL, DISCOUNT, COUPON delivery : IN, OUT, SEND
 	 * 
 	 * @author evan
 	 *
 	 */
+	@Data
 	public static class OrderType {
 		private String billing;
 		private String delivery;
-		
-		OrderType () { }
-		
-		OrderType (String billing, String delivery){
+
+		OrderType() {
+		}
+
+		OrderType(String billing, String delivery) {
 			this.billing = billing;
 			this.delivery = delivery;
 		}
-		
-		public String getBilling() {
-			return billing;
-		}
-		public void setBilling(String billing) {
-			this.billing = billing;
-		}
-		public String getDelivery() {
-			return delivery;
-		}
-		public void setDelivery(String delivery) {
-			this.delivery = delivery;
-		}
-		
+
 		@Override
 		public String toString() {
-			return MoreObjects.toStringHelper(this.getClass())
-					.add("billing", billing)
-					.add("delivery", delivery)
-					.toString();
+			return JsonHelper.toJson(this);
 		}
-		
-	
-
 	}
-	
+
+	@Data
 	public class OrderData {
 		private String category_uuid;
 		private String user_name;
@@ -182,74 +71,9 @@ public class OredeSubimtReq {
 		private String count;
 		private FoodItemVo item;
 
-		public String getCategory_uuid() {
-			return category_uuid;
-		}
-
-		public void setCategory_uuid(String category_uuid) {
-			this.category_uuid = category_uuid;
-		}
-
-		public String getUser_name() {
-			return user_name;
-		}
-
-		public void setUser_name(String user_name) {
-			this.user_name = user_name;
-		}
-
-		public String getUser_phone() {
-			return user_phone;
-		}
-
-		public void setUser_phone(String user_phone) {
-			this.user_phone = user_phone;
-		}
-
-		public String getRestaurant_name() {
-			return restaurant_name;
-		}
-
-		public void setRestaurant_name(String restaurant_name) {
-			this.restaurant_name = restaurant_name;
-		}
-
-		public String getRestaurant_address() {
-			return restaurant_address;
-		}
-
-		public void setRestaurant_address(String restaurant_address) {
-			this.restaurant_address = restaurant_address;
-		}
-
-		public String getCount() {
-			return count;
-		}
-
-		public void setCount(String count) {
-			this.count = count;
-		}
-
-		public FoodItemVo getItem() {
-			return item;
-		}
-
-		public void setItem(FoodItemVo item) {
-			this.item = item;
-		}
-
 		@Override
 		public String toString() {
-			return MoreObjects.toStringHelper(this.getClass())
-					.add("category_uuid", category_uuid)
-					.add("user_name", user_name)
-					.add("user_phone", user_phone)
-					.add("restaurant_name", restaurant_name)
-					.add("restaurant_address", restaurant_address)
-					.add("count", count)
-					.add("item",item)
-					.toString();
+			return JsonHelper.toJson(this);
 		}
-
 	}
 }
