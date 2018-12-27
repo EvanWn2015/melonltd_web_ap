@@ -35,6 +35,7 @@ public class CheckAccountHandlerInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
+		// 如果限制的 RESTful API 沒帶入header
 		String uuid = request.getHeader("Authorization");
 		if (StringUtils.isAllBlank(uuid)) {
 			sendError(response);
@@ -43,27 +44,44 @@ public class CheckAccountHandlerInterceptor implements HandlerInterceptor {
 		
 		AccountInfoVo infoVo = accountInfoService.getCacheBuilderByKey(uuid,true);
 
+		// 如果沒有登入過使用API
 		if (!ObjectUtils.allNotNull(infoVo)) {
 			sendError(response);
 			return false;
 		}
 
+		// 如果已經登入過未登出。
 		if ("1".equals(infoVo.getIs_login()) && userIdentitys.contains(Identity.of(infoVo.getIdentity()))) {
 			sendError(response);
 			return false;
 		}
+
+		// 如果登入時間超過7天
+//		long now = Tools.getMinutes(Tools.getGMTDate("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'"));
+//		long loginDate = Tools.getMinutes(infoVo.getLogin_date());
+//		long day_7 = 1000 * 60 * 60 * 24 * 7L;
+//		if (now - loginDate > day_7) {
+//			sendError(response);
+//			return false;
+//		}
+
 		return true;
 	}
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("");
 
 	}
 
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("");
+
 	}
 
 	public void sendError(HttpServletResponse response) throws Exception {
@@ -74,5 +92,16 @@ public class CheckAccountHandlerInterceptor implements HandlerInterceptor {
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		response.getWriter().write(result);
 	}
+
+//	private static Map<String, String> getHeadersInfo(HttpServletRequest request) {
+//		Map<String, String> map = new HashMap<String, String>();
+//		Enumeration headerNames = request.getHeaderNames();
+//		while (headerNames.hasMoreElements()) {
+//			String key = (String) headerNames.nextElement();
+//			String value = request.getHeader(key);
+//			map.put(key, value);
+//		}
+//		return map;
+//	}
 
 }

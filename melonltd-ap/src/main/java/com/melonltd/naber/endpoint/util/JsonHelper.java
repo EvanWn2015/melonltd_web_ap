@@ -1,5 +1,6 @@
 package com.melonltd.naber.endpoint.util;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.base.Strings;
@@ -24,5 +25,14 @@ public class JsonHelper {
 		final T[] jsonToObject = GSON.fromJson(json, types);
 		return Lists.newArrayList(jsonToObject);
 	}
+	
+	
+//	public static <T> T[] jsonArrays(String json, Class<T[]> types)  {
+//		if (Strings.isNullOrEmpty(json)) {
+//			return types.newInstance();
+//		}
+//		final T[] jsonToObject = GSON.fromJson(json, types);
+//		return jsonToObject;
+//	}
 
 }

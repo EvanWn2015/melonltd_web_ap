@@ -12,49 +12,10 @@ public class PushFCMVo {
 	private String[] registration_ids;
 	private Notify notification;
 	private Map<String, Object> data = Maps.newHashMap();
-<<<<<<< HEAD
-
-	
-	
-	public String getTo() {
-		return to;
-	}
-
-	public String[] getRegistration_ids() {
-		return registration_ids;
-	}
-
-	public void setRegistration_ids(String[] registration_ids) {
-		this.registration_ids = registration_ids;
-	}
-
-	public void setTo(String to) {
-		this.to = to;
-	}
-
-	public Map<String, Object> getData() {
-		return data;
-	}
-
-	public void setData(Map<String, Object> data) {
-		this.data = data;
-	}
-
-	public Notify getNotification() {
-		return notification;
-	}
-
-	public void setNotification(Notify notification) {
-		this.notification = notification;
-	}
-
-	public static PushFCMVo newInstance(String[] registration_ids, PushFCMVo pushFCMVo ) {
-=======
 	// private int ttl = 3600;
 	// private AndroidPriority android = new AndroidPriority("1");
 
 	public static PushFCMVo newInstance(String[] registration_ids, PushFCMVo pushFCMVo) {
->>>>>>> feature/v1.0.2_developer_evan
 		PushFCMVo vo = new PushFCMVo();
 		vo.registration_ids = registration_ids;
 		vo.data = pushFCMVo.getData();
@@ -69,9 +30,6 @@ public class PushFCMVo {
 		vo.notification = pushFCMVo.getNotification();
 		return vo;
 	}
-<<<<<<< HEAD
-	
-=======
 
 	// public static PushVo newInstance (String to ,Notify notify) {
 	// PushVo vo = new PushVo();
@@ -81,7 +39,6 @@ public class PushFCMVo {
 	// }
 
 	@Data
->>>>>>> feature/v1.0.2_developer_evan
 	public static class Notify {
 		private String body;
 		private String title;

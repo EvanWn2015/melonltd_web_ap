@@ -65,16 +65,6 @@ public class AppAdminController {
 
 	@Autowired
 	private AccountInfoService accountInfoService;
-<<<<<<< HEAD
-	@Autowired
-	private AdvertisementService advertisementService;
-	@Autowired
-	private RestaurantInfoService restaurantInfoService;
-	@Autowired
-	private RestaurantLocationTemplateService  restaurantLocationTemplateService;
-	@Autowired
-	private CategoryRelService categoryRelService;
-=======
 
 	@Autowired
 	private AdvertisementService advertisementService;
@@ -88,16 +78,12 @@ public class AppAdminController {
 	@Autowired
 	private CategoryRelService categoryRelService;
 
->>>>>>> feature/v1.0.2_developer_evan
 	@Autowired
 	private BasisContentService basisContentService;
 
 	@Autowired
 	private SellerOrderFinishService sellerOrderFinishService;
-<<<<<<< HEAD
-=======
 
->>>>>>> feature/v1.0.2_developer_evan
 	@Autowired
 	private OrderInfoService orderInfoService;
 	
@@ -456,9 +442,6 @@ public class AppAdminController {
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
-<<<<<<< HEAD
-	
-=======
 	// 區域校園列表更新
 	@ResponseBody
 	@PostMapping(value = "app/admin/school/divided/change")
@@ -515,7 +498,6 @@ public class AppAdminController {
 	}
 
 	// 檢查Admin權限
->>>>>>> feature/v1.0.2_developer_evan
 	private boolean checkAdminAccount(HttpServletRequest httpRequest) {
 		String accountUUID = httpRequest.getHeader("Authorization");
 		AccountInfoVo accountInfoVo = accountInfoService.getCacheBuilderByKey(accountUUID, false);

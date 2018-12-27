@@ -26,10 +26,6 @@ import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> feature/v1.0.2_developer_evan
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class LogingController {
@@ -75,14 +71,9 @@ public class LogingController {
 		MobileDeviceVo vo = JsonHelper.json(request, MobileDeviceVo.class);
 		accountInfoService.refreshLoginStatus(vo.getAccount_uuid());
 		mobileDeviceService.remove(vo);
-<<<<<<< HEAD
-		
-		LOGGER.info("logout user AccountUUID: {}, Device: {}, {}", vo.getAccount_uuid(), vo.getDevice_token(), vo.getDevice_category());
-=======
 
 		LOGGER.info("logout user AccountUUID: {}, Device: {}, {}", vo.getAccount_uuid(), vo.getDevice_token(),
 				vo.getDevice_category());
->>>>>>> feature/v1.0.2_developer_evan
 		LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, "");
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,7 @@ import com.melonltd.naber.rdbms.model.vo.SchoolDividedVo;
 
 @Service("basisContentService")
 public class BasisContentService {
-//	private static final Logger LOGGER = LoggerFactory.getLogger(BasisContentService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BasisContentService.class);
 
 	@Autowired
 	private BasisContentDao basisContentDao;
@@ -120,6 +122,8 @@ public class BasisContentService {
 		return Lists.<SchoolDividedVo>newArrayList();
 	}
 	
+	
+	
 	public BasisContent updateStoreAreas(String content) {
 		BasisContentId id = BasisContentId.of("AREA", "LIST");
 		cacheBuilder.invalidate(id);
@@ -137,6 +141,27 @@ public class BasisContentService {
 		cacheBuilder.put(id, basisContentDao.save(info));
 		return findByCacheId(id);
 	}
+
+	// SubjectionRegions
+	public BasisContent updateSubjectionRegions(String content) {
+		BasisContentId id = BasisContentId.of("SUBJECTION", "REGIONS");
+		cacheBuilder.invalidate(id);
+		BasisContent info = basisContentDao.findByTypeAndFunction(id.getType(), id.getFunction());
+		info.setContent(content);
+		cacheBuilder.put(id, basisContentDao.save(info));
+		return findByCacheId(id);
+	}
+	
+	
+	public BasisContent updateSchoolDivided(String content) {
+		BasisContentId id = BasisContentId.of("SCHOOL", "DIVIDED");
+		cacheBuilder.invalidate(id);
+		BasisContent info = basisContentDao.findByTypeAndFunction(id.getType(), id.getFunction());
+		info.setContent(content);
+		cacheBuilder.put(id, basisContentDao.save(info));
+		return findByCacheId(id);
+	}
+
 	
 	public BasisContent findByCacheId(BasisContentId id) {
 		try {

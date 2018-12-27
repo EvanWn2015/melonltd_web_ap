@@ -25,7 +25,10 @@ public interface FoodInfoDao extends JpaRepository<FoodInfo, String> {
 	
 	@Query("SELECT a FROM FoodInfo a WHERE a.categoryUUID = ?1")
 	public List<FoodInfo> findBycategoryUUID (String categoryUUID);
-
+	
+	@Query("SELECT a FROM FoodInfo a WHERE a.categoryUUID IN (?1)")
+	public List<FoodInfo> findBycategoryUUIDs (List<String> categoryUUIDs);
+	
 	@Query("SELECT f FROM FoodInfo f, CategoryRel c WHERE c.categoryUUID=?1 AND c.restaurantUUID=?2 AND c.categoryUUID=f.categoryUUID AND c.enable='Y' AND f.enable='Y' ORDER BY f.createDate DESC ")
 	public List<FoodInfo> findBycategoryUUIDAndRestaurantUUID (String categoryUUID, String restaurantUUID);
 	

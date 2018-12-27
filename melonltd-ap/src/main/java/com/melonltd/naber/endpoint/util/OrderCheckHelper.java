@@ -77,10 +77,13 @@ public class OrderCheckHelper {
 			return "無法接受此訂單。";
 		}
 		
+		// TODO Android 
+		// 確認送來之訂單 與商家 可否計算紅利功能 一致
 		if (StringUtils.isBlank(req.getCan_discount())) {
 			return "";	
 		}
 		
+		// 確認送來之訂單 與商家 可否計算紅利功能 一致
 		if (!vo.getCan_discount().equals(req.getCan_discount()) ) {
 			return "商家已經改變品項內容，無法接受此訂單。";
 		}

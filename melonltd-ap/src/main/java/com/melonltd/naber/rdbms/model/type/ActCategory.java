@@ -11,8 +11,7 @@ public enum ActCategory {
 	TICKET("TICKET"), 
 	RES_EVENT("RES_EVENT");
 	
-	private String name;
-	
+private String name;
 	ActCategory(String name){
 		this.name = name;
 	}

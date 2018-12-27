@@ -1,0 +1,48 @@
+package com.melonltd.naber.rdbms.model.push.service;
+
+//
+//@Service("apnsPushServcie")
+//@PropertySource("classpath:/config.properties")
+public class APNSPushServcie {
+//	private static final Logger LOGGER = LoggerFactory.getLogger(APNSPushServcie.class);
+
+	// private static String DEVICE_TOKEN = "YOUR_DEVICE_TOKEN";
+//	@Value("${apns.certificate.file.path}")
+//	private  String PATH_TO_P12_CERT;
+
+//	@Value("${apns.certificate.password}")
+//	private  String CERT_PASSWORD;
+
+//	private static ApnsService SERVICE = null;
+//
+//	public  ApnsService getInstance() {
+//		if (SERVICE == null) {
+//			ClassLoader classLoader = getClass().getClassLoader();
+//			String certFile = classLoader.getResource(PATH_TO_P12_CERT).getFile();
+//			SERVICE = APNS.newService().withCert(certFile, CERT_PASSWORD).withSandboxDestination().build();
+//		}
+//		return SERVICE;
+//	}
+//	
+//	public void push(String device_token, PushFCMVo pushFCMVo) {
+//		Map<String, Object> data = pushFCMVo.getData();
+//		String payload = APNS.newPayload()
+//							.sound("default")
+//							.alertTitle(data.get("title").toString())
+//							.alertBody(data.get("message").toString())
+//							.customFields(data)
+//							.build();
+//			ApnsNotification notify = getInstance().push(device_token, payload);
+//			LOGGER.info("The message has been hopefully sent..., notify:{}", notify);
+//	}
+	
+//	public void pushs(List<PushFCMVo> pushFCMVos) {
+//		for (PushFCMVo a : pushFCMVos) {
+//			try {
+//				push(a.getTo(), a);
+//			}catch (RuntimeException e) {
+//				LOGGER.info("The message sent error... token:{}", a.getTo());
+//			}
+//		}		
+//	}
+}

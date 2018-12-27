@@ -64,10 +64,7 @@ public class FoodInfoVo implements Serializable {
 		vo.food_data = JsonHelper.json(info.getFoodData(), FoodItemVo.class);
 		vo.top = info.getTop();
 		vo.status = info.getStatus();
-<<<<<<< HEAD
-=======
 		// vo.enable = info.getEnable();
->>>>>>> feature/v1.0.2_developer_evan
 		return vo;
 	}
 

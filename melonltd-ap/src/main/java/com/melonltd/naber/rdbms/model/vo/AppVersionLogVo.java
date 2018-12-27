@@ -1,10 +1,6 @@
 package com.melonltd.naber.rdbms.model.vo;
 
-<<<<<<< HEAD
-import com.google.common.base.MoreObjects;
-=======
 import com.melonltd.naber.endpoint.util.JsonHelper;
->>>>>>> feature/v1.0.2_developer_evan
 import com.melonltd.naber.rdbms.model.bean.AppVersionLog;
 
 import lombok.Data;

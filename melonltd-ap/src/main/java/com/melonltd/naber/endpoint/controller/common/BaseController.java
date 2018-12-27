@@ -41,13 +41,10 @@ public class BaseController {
 	@Autowired
 	private AppVersionLogService appVersionLogService;
 
-<<<<<<< HEAD
-=======
 	@Autowired
 	private IdentityTableService identityTableService;
 
 	// 檢查 android & ios App 版本
->>>>>>> feature/v1.0.2_developer_evan
 	@ResponseBody
 	@PostMapping(value = "common/check/app/version")
 	public ResponseEntity<String> checkAppVersion(@RequestParam(value = "data", required = false) String data) {
@@ -65,15 +62,13 @@ public class BaseController {
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
+	// 取得App進入公告圖
 	@ResponseBody
 	@PostMapping(value = "common/app/intro/bulletin")
 	public ResponseEntity<String> getAppIntroBulletin() {
 		BasisContent info = basisContentService.getAppIntro();
-<<<<<<< HEAD
-=======
 		// List<String> categorys = JsonHelper.jsonArray(info.getContent(),
 		// String[].class);
->>>>>>> feature/v1.0.2_developer_evan
 		LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, info.getContent());
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);

@@ -11,12 +11,8 @@
 	</properties>
 	<modules>
 		<module>melonltd-ap</module>
-<<<<<<< HEAD
-	</modules>
-=======
     <module>melonltd-admin</module>
   </modules>
->>>>>>> feature/v1.0.2_developer_evan
 
 
 	<dependencies>

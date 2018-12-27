@@ -35,7 +35,10 @@ import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class QuickSearchController {
 	private static final Logger LOGGERO = LoggerFactory.getLogger(QuickSearchController.class);
-
+//
+//	@Autowired
+//	private AccountInfoService accountInfoService;
+//	
 	@Autowired
 	private OrderInfoService orderInfoService;
 	
@@ -134,6 +137,10 @@ public class QuickSearchController {
 		if (!ObjectUtils.allNotNull(req.getDate())) {
 			return ErrorType.INVALID;
 		}
+//
+//		if (!ObjectUtils.allNotNull(req.getUuid())) {
+//			return ErrorType.INVALID;
+//		}
 
 		if (!SELLER_SEARCH_TYPE.contains(OrderStatus.of(req.getSearch_type()))) {
 			return ErrorType.INVALID;

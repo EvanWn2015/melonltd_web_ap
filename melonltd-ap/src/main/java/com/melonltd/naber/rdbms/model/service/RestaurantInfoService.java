@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.melonltd.naber.constant.NaberConstant;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.bean.RestaurantInfo;
 import com.melonltd.naber.rdbms.model.dao.RestaurantInfoDao;
@@ -26,7 +27,9 @@ public class RestaurantInfoService {
 
 	@Autowired
 	private RestaurantInfoDao restaurantInfoDao;
- 
+
+	
+	// for Admin
 	public RestaurantInfoVo save(RestaurantInfoVo vo) {
 		RestaurantInfo info = restaurantInfoDao.save(newRestaurantInfo(vo)); 
 		return RestaurantInfoVo.valueOf(info, true);
@@ -100,8 +103,20 @@ public class RestaurantInfoService {
 		if (page > 0) {
 			page --;
 		}
+//		Sort sort = new Sort(Direction.DESC, "createDate");
 		Sort sort = new Sort(Direction.DESC, "top");
 		Pageable pageable = new PageRequest(page, 10, sort);
+		
+		// TODO 預留
+//		Page<RestaurantInfo> pages = null;
+//		if ("學餐".equals(category)) {
+//			// top值 對應學校名稱
+		// name = 學校名稱
+//		String top = NaberConstant.TOP_MAPPING.get("name");
+//		pages = restaurantInfoDao.findByCategoryAndTop(category, top, pageable);
+//		}
+		
+		
 		Page<RestaurantInfo> pages = restaurantInfoDao.findByCategory(category, pageable);
 		if (pages.hasContent()) {
 			return RestaurantInfoVo.valueOfArray(pages.getContent());
@@ -109,6 +124,7 @@ public class RestaurantInfoService {
 		return Lists.<RestaurantInfoVo>newArrayList();
 	}
 	
+	// 2018/10/05 新增查詢學區劃分餐館列表
 	public List<RestaurantInfoVo> findByAreaAndName(String area, String name ,int page) {
 		if (page > 0) {
 			page --;
@@ -122,6 +138,8 @@ public class RestaurantInfoService {
 		return Lists.<RestaurantInfoVo>newArrayList();
 	}
 	
+	
+	// 2018/10/05 新增查詢非學餐 餐館列表
 	public List<RestaurantInfoVo> findByNotSchool(int page) {
 		if (page > 0) {
 			page --;
@@ -148,6 +166,7 @@ public class RestaurantInfoService {
 		return Lists.<RestaurantInfoVo>newArrayList();
 	}
 	
+	
 	public List<RestaurantInfoVo> findByUUIDs(List<String> uuids) {
 		if (CollectionUtils.isNotEmpty(uuids)) {
 			List<RestaurantInfo> list = restaurantInfoDao.findUUIDs(uuids);
@@ -173,6 +192,14 @@ public class RestaurantInfoService {
 		return null;
 	}
 	
+//	public RestaurantInfo findNativeByAccountUUID(String accountUUID) {
+//		RestaurantInfo info = restaurantInfoDao.findByAccountUUID(accountUUID);
+//		if (ObjectUtils.allNotNull(info)) {
+//			return info;
+//		}
+//		return null;
+//	}
+	
 	private static RestaurantInfo newRestaurantInfo(RestaurantInfoVo vo,List<DateRangeVo> canStoreRange) {
 		RestaurantInfo info = new RestaurantInfo();
 		info.setRestaurantUUID(vo.getRestaurant_uuid());
@@ -185,6 +212,8 @@ public class RestaurantInfoService {
 		info.setRestaurantCategory(vo.getRestaurant_category());
 		info.setLatitude(vo.getLatitude());
 		info.setLongitude(vo.getLongitude());
+//		info.setCanDiscount("Y");
+		// 可否使用紅利開關
 		info.setCanDiscount(StringUtils.isBlank(vo.getCan_discount()) ? "Y" : vo.getCan_discount());
 		info.setBulletin(vo.getBulletin());
 		info.setPhoto(vo.getPhoto());
@@ -204,6 +233,7 @@ public class RestaurantInfoService {
 		info.setAddress(vo.getAddress());
 		info.setStoreStart(vo.getStore_start());
 		info.setStoreEnd(vo.getStore_end());
+		// 可否使用紅利開關
 		info.setCanDiscount(StringUtils.isBlank(vo.getCan_discount()) ? "Y" : vo.getCan_discount());
 		info.setNotBusiness(JsonHelper.toJson(vo.getNot_business()));
 		info.setCanStoreRange(JsonHelper.toJson(vo.getCan_store_range()));

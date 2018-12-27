@@ -21,6 +21,11 @@ public interface UserOrderInfoDao extends JpaRepository<UserOrderInfo, String> {
 	
 	@Query("SELECT a FROM UserOrderInfo a WHERE a.accountUUID = ?1 AND a.enable = 'Y' AND a.status='FAIL' ")
 	public List<UserOrderInfo> findByOrderFailByAccountUUID(String accountUUID);
+
+	@Transactional
+	@Modifying
+	@Query("UPDATE UserOrderInfo a SET a.status = ?2 WHERE a.orderUUID = ?1")	
+	public void updateOrderStatus(String orderUUID, String status);
 	
 	@Transactional
 	@Modifying

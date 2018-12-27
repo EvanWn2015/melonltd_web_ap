@@ -31,8 +31,12 @@ public class SellerOrderFinishService {
 
 	@Autowired
 	private SellerOrderFinishDao sellerOrderFinishDao;
+
 	@Autowired
 	private OrderInfoDao orderInfoDao;
+
+	// @Autowired
+	// private SellerOrderFinishDao sellerOrderFinishDao;
 
 	public OrderVo save(SellerOrderFinish info) {
 		SellerOrderFinish o = sellerOrderFinishDao.save(info);
@@ -42,6 +46,7 @@ public class SellerOrderFinishService {
 		return null;
 	}
 	
+	// TODO 
 	public List<OrderVo> findFinishByBetweenDate(String restaurantUUID, String statStart, String statEnd, int page){
 		if (page > 0) {
 			page --;
@@ -57,8 +62,10 @@ public class SellerOrderFinishService {
 
 	public SellerStatVo findSellerStat(String restaurantUUID) {
 		long now = System.currentTimeMillis();
+//		System.out.println(now);
 		String statStart = Tools.getStartOfYearGMT(0, 0);
 		String statEnd = Tools.getNowGMT();
+		// TODO 起迄時間改變
 		String statusStart = Tools.getStartOfDayGMT(1, 0);
 		String statusEnd = Tools.getEndOfPlusDayGMT(0);
 
@@ -99,10 +106,21 @@ public class SellerOrderFinishService {
 		long mI = monthIncome - (monthUseBonus / 10 * 3);
 		long dI = dayIncome - (dayUseBonus / 10 * 3);
 		
+//		System.out.println("Y: " + yearIncome + ", " + yearUseBonus + ", " + yI);
+//		System.out.println("M: " + monthIncome + ", " + monthUseBonus + ", " + mI);
+//		System.out.println("D: " + dayIncome + ", " + dayUseBonus + ", " + dI);
+//		System.out.println();
+		
+		// TODO 要使用格用計算還是日計算
+//		long bonus = list.parallelStream().filter(isNumber.and(containsDay).and(finishPred)).mapToInt(a -> IntegerUtils.parseInt(a.getOrderBonus(), 0)).sum();
+//		long useBonus = list.parallelStream().filter(isNumber.and(containsDay).and(finishPred)).mapToInt(a -> IntegerUtils.parseInt(a.getUseBonus(), 0)).sum();
+//		System.out.println(bonus + ": " + useBonus);
+		
 		System.out.println((System.currentTimeMillis() - now) / 1000d);
 		
 		return SellerStatVo
 				.of(yI, mI, dI, finishCount)
+				.ofUseBonus(yearUseBonus, monthUseBonus, dayUseBonus)
 				.ofStatus(new String[]{statusStart, statusEnd} , unFinishCount, processingCount, canFetchCount, cancelCount);
 	}
 	

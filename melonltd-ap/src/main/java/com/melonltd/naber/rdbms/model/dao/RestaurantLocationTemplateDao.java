@@ -14,6 +14,8 @@ public interface RestaurantLocationTemplateDao extends JpaRepository<RestaurantL
 	@Query("SELECT a FROM RestaurantLocationTemplate a WHERE a.enable = 'Y'")
 	public List<RestaurantLocationTemplate> findAllByEnable();
 
+	// for Admin
+	
 	@Transactional
 	@Modifying
 	@Query("UPDATE RestaurantLocationTemplate a SET a.enable=?1 WHERE a.restaurantUUID=?2")	

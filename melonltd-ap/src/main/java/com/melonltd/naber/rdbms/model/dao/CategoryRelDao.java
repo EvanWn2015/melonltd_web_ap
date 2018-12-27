@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.melonltd.naber.rdbms.model.bean.CategoryRel;
+import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 
 public interface CategoryRelDao extends JpaRepository<CategoryRel, String> {
 	

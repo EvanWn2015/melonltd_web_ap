@@ -1,13 +1,10 @@
 package com.melonltd.naber.rdbms.model.vo;
 
-<<<<<<< HEAD
-=======
 import com.melonltd.naber.endpoint.util.JsonHelper;
 
 import lombok.Data;
 
 @Data
->>>>>>> feature/v1.0.2_developer_evan
 public class SellerStatVo {
 
 	private String year_income;
@@ -21,80 +18,6 @@ public class SellerStatVo {
 	private String can_fetch_count;
 	private String cancel_count;
 
-<<<<<<< HEAD
-	public String getYear_income() {
-		return year_income;
-	}
-
-	public void setYear_income(String year_income) {
-		this.year_income = year_income;
-	}
-
-	public String getMonth_income() {
-		return month_income;
-	}
-
-	public void setMonth_income(String month_income) {
-		this.month_income = month_income;
-	}
-
-	public String getDay_income() {
-		return day_income;
-	}
-
-	public void setDay_income(String day_income) {
-		this.day_income = day_income;
-	}
-
-	public String getFinish_count() {
-		return finish_count;
-	}
-
-	public void setFinish_count(String finish_count) {
-		this.finish_count = finish_count;
-	}
-
-	public String[] getStatus_dates() {
-		return status_dates;
-	}
-
-	public void setStatus_dates(String[] status_dates) {
-		this.status_dates = status_dates;
-	}
-
-	public String getUnfinish_count() {
-		return unfinish_count;
-	}
-
-	public void setUnfinish_count(String unfinish_count) {
-		this.unfinish_count = unfinish_count;
-	}
-
-	public String getProcessing_count() {
-		return processing_count;
-	}
-
-	public void setProcessing_count(String processing_count) {
-		this.processing_count = processing_count;
-	}
-
-	public String getCan_fetch_count() {
-		return can_fetch_count;
-	}
-
-	public void setCan_fetch_count(String can_fetch_count) {
-		this.can_fetch_count = can_fetch_count;
-	}
-
-	public String getCancel_count() {
-		return cancel_count;
-	}
-
-	public void setCancel_count(String cancel_count) {
-		this.cancel_count = cancel_count;
-	}
-
-=======
 	private String year_use_bonus;
 	private String month_use_bonus;
 	private String day_use_bonus;
@@ -103,7 +26,6 @@ public class SellerStatVo {
 	public String toString() {
 		return JsonHelper.toJson(this);
 	}
->>>>>>> feature/v1.0.2_developer_evan
 
 	public static SellerStatVo of(long yearIncome, long monthIncome, long dayIncome, long finishCount) {
 		SellerStatVo vo = new SellerStatVo();
@@ -114,6 +36,12 @@ public class SellerStatVo {
 		return vo;
 	}
 
+	public SellerStatVo ofUseBonus(long yearUseBonus, long monthUseBonus, long dayUseBonus) {
+		this.year_use_bonus = String.valueOf(yearUseBonus);
+		this.month_use_bonus = String.valueOf(monthUseBonus);
+		this.day_use_bonus = String.valueOf(dayUseBonus);
+		return this;
+	}
 
 	public SellerStatVo ofStatus(String[] statusDates, long unFinishCount, long processingCount, long canFetchCount,
 			long cancelCount) {

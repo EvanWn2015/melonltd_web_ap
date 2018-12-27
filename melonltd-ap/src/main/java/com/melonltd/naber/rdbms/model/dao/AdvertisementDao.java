@@ -13,6 +13,7 @@ public interface AdvertisementDao extends JpaRepository<Advertisement, String> {
 	@Query("SELECT a FROM Advertisement a WHERE a.enable='Y'")
 	public List<Advertisement> findAllByEnable();
 	
+	
 	@Query("SELECT a FROM Advertisement a WHERE a.adUUID=?1")
 	public Advertisement findByUUID(String uid);
 }

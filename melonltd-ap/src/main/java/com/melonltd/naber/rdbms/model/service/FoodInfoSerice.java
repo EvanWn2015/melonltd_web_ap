@@ -68,12 +68,6 @@ public class FoodInfoSerice {
 		List<FoodInfo> list = foodInfoDao.findBycategoryUUID(categoryUUID);
 		return list;
 	}
-<<<<<<< HEAD
-//	
-//	public void save(FoodInfo info) {
-//		foodInfoDao.save(info);
-//	}
-=======
 
 	
 	public List<FoodInfo> findByRestaurantUUID(String restaurantUUID) {
@@ -88,7 +82,6 @@ public class FoodInfoSerice {
 	public void save(FoodInfo info) {
 		foodInfoDao.save(info);
 	}
->>>>>>> feature/v1.0.2_developer_evan
 	
 	public void save(List<FoodInfo> infos) {
 		foodInfoDao.save(infos);
@@ -129,6 +122,7 @@ public class FoodInfoSerice {
 	}
 
 	public FoodInfoVo update(FoodInfoVo vo, FoodInfo info) {
+		// info.setCategoryUUID(vo.getCategory_uuid());
 		Optional<ItemVo> minPriceItem = vo.getFood_data().getScopes().stream()
 				.collect(Collectors.minBy(Comparator.comparingInt(a -> Integer.parseInt(a.getPrice()))));
 

@@ -21,10 +21,7 @@ public class ReqData {
 	private String json_data;
 	private String date;
 	private String data;
-<<<<<<< HEAD
-=======
 	// private List<String> datas;
->>>>>>> feature/v1.0.2_developer_evan
 	private String start_date;
 	private String end_date;
 	private String message;
@@ -32,12 +29,9 @@ public class ReqData {
 	private String name;
 	private String status;
 
-<<<<<<< HEAD
-=======
 	@Override
 	public String toString() {
 		return JsonHelper.toJson(this);
 	}
 
->>>>>>> feature/v1.0.2_developer_evan
 }

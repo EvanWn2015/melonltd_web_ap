@@ -281,6 +281,8 @@ public class SellerFoodController {
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
+//	change
+
 	private static ErrorType checkReqData(ReqData req, AccountInfoVo account) {
 		if (!ObjectUtils.allNotNull(req)) {
 			return ErrorType.INVALID;
