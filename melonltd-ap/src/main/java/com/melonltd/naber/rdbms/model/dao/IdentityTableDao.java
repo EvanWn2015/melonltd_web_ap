@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.melonltd.naber.rdbms.model.bean.IdentityTable;
-import com.melonltd.naber.rdbms.model.bean.IdentityTable.Status;
+
 import com.melonltd.naber.rdbms.model.type.Enable;
+import com.melonltd.naber.rdbms.model.type.Status;
 
 public interface IdentityTableDao extends JpaRepository<IdentityTable, Long> {
 

@@ -8,9 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naber.rdbms.model.bean.IdentityTable;
-import com.melonltd.naber.rdbms.model.bean.IdentityTable.Status;
+
 import com.melonltd.naber.rdbms.model.dao.IdentityTableDao;
 import com.melonltd.naber.rdbms.model.type.Enable;
+import com.melonltd.naber.rdbms.model.type.Status;
 import com.melonltd.naber.rdbms.model.vo.IdentityTableVo;
 
 @Service

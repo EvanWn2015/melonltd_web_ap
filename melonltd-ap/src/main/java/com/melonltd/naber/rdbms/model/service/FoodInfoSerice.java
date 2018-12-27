@@ -16,14 +16,12 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
-import com.melonltd.naber.rdbms.model.bean.CategoryRel;
 import com.melonltd.naber.rdbms.model.bean.FoodInfo;
 import com.melonltd.naber.rdbms.model.dao.FoodInfoDao;
 import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.type.UUIDType;
-import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
 import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
 
 @Service("foodInfoSerice")
@@ -69,6 +67,15 @@ public class FoodInfoSerice {
 	public List<FoodInfo> findBycategoryUUID(String categoryUUID) {
 		List<FoodInfo> list = foodInfoDao.findBycategoryUUID(categoryUUID);
 		return list;
+	}
+
+	
+	public List<FoodInfo> findByRestaurantUUID(String restaurantUUID) {
+		List<FoodInfo> list = foodInfoDao.findByRestaurantUUID(restaurantUUID);
+		if (CollectionUtils.isNotEmpty(list)) {
+			return list;
+		}
+		return Lists.<FoodInfo>newArrayList();
 	}
 
 	

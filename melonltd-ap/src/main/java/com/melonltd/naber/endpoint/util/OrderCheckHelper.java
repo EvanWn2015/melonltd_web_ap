@@ -24,16 +24,21 @@ public class OrderCheckHelper {
 		List<FoodItemVo> items = orders.stream().map(a -> a.getItem()).collect(Collectors.toList());
 		long count = items.stream().filter(o -> {
 			Predicate<FoodInfoVo> equalfoodUUID = (a) -> a.getFood_uuid().equals(o.getFood_uuid());
+			
 			List<ItemVo> foodScopes = foodList.stream().filter(equalfoodUUID)
 					.flatMap(r -> r.getFood_data().getScopes().stream()).collect(Collectors.toList());
+			
 			List<ItemVo> foodOpts = foodList.stream().filter(equalfoodUUID)
 					.flatMap(r -> r.getFood_data().getOpts().stream()).collect(Collectors.toList());
+			
 			List<DemandsItemVo> foodDemands = foodList.stream().filter(equalfoodUUID)
 					.flatMap(r -> r.getFood_data().getDemands().stream()).collect(Collectors.toList());
+			
 			long c = o.getDemands().stream()
 					.filter(d -> foodDemands.stream().filter(b -> StringUtils.equals(b.getName(), d.getName()))
 							.flatMap(b -> b.getDatas().stream()).collect(Collectors.toList()).containsAll(d.getDatas()))
 					.count();
+			
 			return c == foodDemands.size() && foodScopes.containsAll(o.getScopes())
 					&& foodOpts.containsAll(o.getOpts());
 		}).count();

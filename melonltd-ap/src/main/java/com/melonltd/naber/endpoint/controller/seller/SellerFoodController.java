@@ -22,12 +22,12 @@ import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.rdbms.model.bean.FoodInfo;
+import com.melonltd.naber.rdbms.model.req.vo.DemandsItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.CategoryRelService;
 import com.melonltd.naber.rdbms.model.service.FoodInfoSerice;
-import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
@@ -92,7 +92,7 @@ public class SellerFoodController {
 			accountInfoService.clearCacheBuilderByKey(accountUUID);
 		}
 		AccountInfoVo account = accountInfoService.getCacheBuilderByKey(accountUUID, false);
-
+		
 		ErrorType errorType = checkAddReqData(req, account);
 		LinkedHashMap<String, Object> map = null;
 		
@@ -101,6 +101,8 @@ public class SellerFoodController {
 		}else {
 			CategoryRelVo category = categoryRelService.findByRestaurantUUIDAndCategoryRelUUID(account.getRestaurant_uuid(), req.getCategory_uuid());
 			if (ObjectUtils.allNotNull(category)) {
+				// process demands price
+				processDemandsPrice(req.getFood_data().getDemands());
 				FoodInfoVo vo = foodInfoSerice.save(req);
 				if (ObjectUtils.allNotNull(vo)) {
 					map = RespData.of(Status.TRUE, null, vo);
@@ -114,6 +116,16 @@ public class SellerFoodController {
 		
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	private static void processDemandsPrice (List<DemandsItemVo> demands) {
+		demands.stream().forEach(d -> {
+			d.getDatas().stream().forEach(dd -> {
+				if (StringUtils.isBlank(dd.getPrice())) {
+					dd.setPrice("0");
+				}
+			});
+		});
 	}
 	
 	@ResponseBody
@@ -140,6 +152,8 @@ public class SellerFoodController {
 			if (ObjectUtils.allNotNull(category)) {
 				FoodInfo food = foodInfoSerice.findByFoodUUIDAndRestaurantUUID(req.getFood_uuid(), account.getRestaurant_uuid());
 				if (ObjectUtils.allNotNull(food)) {
+					// process demands price
+					processDemandsPrice(req.getFood_data().getDemands());
 					FoodInfoVo vo = foodInfoSerice.update(req,food);
 					if (ObjectUtils.allNotNull(vo)) {
 						map = RespData.of(Status.TRUE, null, vo);
@@ -210,6 +224,8 @@ public class SellerFoodController {
 			if (foodVos.size() == req.size()) {
 				foodVos.forEach(c -> {
 					String top = req.stream().filter(r -> r.getFood_uuid().equals(c.getFood_uuid())).findFirst().get().getTop();
+					// process demands price
+					processDemandsPrice(c.getFood_data().getDemands());
 					c.setTop(top);
 				});
 				List<FoodInfoVo> foodInfoVos = foodInfoSerice.saves(foodVos);

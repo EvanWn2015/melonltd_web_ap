@@ -32,6 +32,16 @@ public interface FoodInfoDao extends JpaRepository<FoodInfo, String> {
 	@Query("SELECT f FROM FoodInfo f, CategoryRel c WHERE c.categoryUUID=?1 AND c.restaurantUUID=?2 AND c.categoryUUID=f.categoryUUID AND c.enable='Y' AND f.enable='Y' ORDER BY f.createDate DESC ")
 	public List<FoodInfo> findBycategoryUUIDAndRestaurantUUID (String categoryUUID, String restaurantUUID);
 	
+	
+	
+	// ADMIN
+	@Query("SELECT f FROM FoodInfo f WHERE f.enable=?1 AND f.status IN (?2)")
+	public List<FoodInfo> findByEnableANDStatuss (String enable, List<String> statuss);
+	
+	// TODO 
+	@Query("SELECT f FROM FoodInfo f, CategoryRel c WHERE c.restaurantUUID=?1 AND f.photo IS NOT NULL AND c.categoryUUID=f.categoryUUID AND c.enable='Y' AND f.enable='Y' ORDER BY f.createDate DESC ")
+	public List<FoodInfo> findByRestaurantUUID (String restaurantUUID);
+	
 	@Query("SELECT f FROM FoodInfo f, CategoryRel c WHERE f.categoryUUID=c.categoryUUID AND f.foodUUID =?1 AND c.restaurantUUID=?2 AND c.enable='Y' AND f.enable='Y'")
 	public FoodInfo findByFoodUUIDAndRestaurantUUID(String foodUUID, String restaurantUUID);
 	

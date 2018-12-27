@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import javax.enterprise.deploy.model.DDBean;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -285,10 +286,13 @@ public class UserOrderController {
 					.mapToInt(o -> o.getPrice() != null ? Integer.parseInt(o.getPrice()) : 0).sum();
 			int scopes = a.getItem().getScopes().stream()
 					.mapToInt(s -> s.getPrice() != null ? Integer.parseInt(s.getPrice()) : 0).sum();
+			// TODO 計算需求金額
+			int demands = a.getItem().getDemands().stream().flatMapToInt(d -> d.getDatas().stream().mapToInt(dd -> dd.getPrice() != null ? Integer.parseInt(dd.getPrice()) : 0)).sum();
+				
 			if (scopes > 0) {
-				return (scopes + opt) * count;
+				return (scopes + opt + demands) * count;
 			}
-			return (price + opt + scopes) * count;
+			return (price + opt + scopes + demands) * count;
 		}).sum();
 		return result;
 	}

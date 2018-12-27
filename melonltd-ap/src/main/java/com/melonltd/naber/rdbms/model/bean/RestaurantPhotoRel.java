@@ -19,32 +19,27 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "identity_table")
-public class IdentityTable implements Serializable {
-	private static final long serialVersionUID = 1262986052280602141L;
-
-//	public enum Status {
-//		OPEN, CLOSE
-//	}
+@Table(name = "restaurant_photo_rel")
+public class RestaurantPhotoRel implements Serializable {
+	private static final long serialVersionUID = 6048907334864801154L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
 	private Long id;
-	@Column(name = "area")
-	private String area;
-	@Column(name = "identity_list")
-	private String identityList;
-	@Column(name = "create_date")
-	private String createDate;
-	@Column(name = "update_date")
-	private String updateDate;
+	
+	@Column(name = "restaurant_uuid")
+	private String restaurantUUID;
+	@Column(name = "photo")
+	private String photo;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "enable")
 	private Enable enable;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
 	private Status status;
+	@Column(name = "create_date")
+	private String createDate;
 
 	@Override
 	public String toString() {

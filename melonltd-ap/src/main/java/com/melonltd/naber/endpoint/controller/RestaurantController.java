@@ -1,7 +1,9 @@
 package com.melonltd.naber.endpoint.controller;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,15 +19,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.Base64Service;
 import com.melonltd.naber.endpoint.util.JsonHelper;
+import com.melonltd.naber.rdbms.model.bean.FoodInfo;
+import com.melonltd.naber.rdbms.model.bean.RestaurantPhotoRel;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.CategoryRelService;
+import com.melonltd.naber.rdbms.model.service.FoodInfoSerice;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.service.RestaurantLocationTemplateService;
+import com.melonltd.naber.rdbms.model.service.RestaurantPhotoRelService;
 import com.melonltd.naber.rdbms.model.vo.CategoryRelVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
+import com.melonltd.naber.rdbms.model.vo.StorePhotoVo;
+import com.melonltd.naber.rdbms.model.vo.StorePhotoVo.Type;
 
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
@@ -39,6 +47,12 @@ public class RestaurantController {
 	
 	@Autowired
 	private CategoryRelService categoryRelService;
+	
+	@Autowired
+	private RestaurantPhotoRelService restaurantPhotoRelService;
+	
+	@Autowired
+	private FoodInfoSerice foodInfoSerice;
 
 	// 增加 NOT_SCHOOL, SCHOOL_DIVIDED
 	private enum SearchType {
@@ -101,6 +115,38 @@ public class RestaurantController {
 			map = RespData.of(Status.FALSE, ErrorType.INVALID, null);
 		}else {
 			List<CategoryRelVo> list = categoryRelService.findByRestaurantUUID(req.getUuid());
+			map = RespData.of(Status.TRUE, null, list);
+		}
+
+		String result = Base64Service.encode(JsonHelper.toJson(map));
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	// TODO
+	//　餐館圖片集合
+	@ResponseBody
+	@PostMapping(value = "restaurant/photo/list")
+	public ResponseEntity<String> getRestaurantPhotoDetail(@RequestParam(value = "data", required = false) String data) {
+		String request = Base64Service.decode(data);
+		ReqData req = JsonHelper.json(request, ReqData.class);
+
+		LinkedHashMap<String, Object> map = null;
+		if (StringUtils.isBlank(req.getUuid())) {
+			map = RespData.of(Status.FALSE, ErrorType.INVALID, null);
+		}else {
+			List<RestaurantPhotoRel> restaurantPhotoList = restaurantPhotoRelService.findByRestaurantUUID(req.getUuid());
+			List<FoodInfo> foodList = foodInfoSerice.findByRestaurantUUID(req.getUuid());
+			
+			List<StorePhotoVo> list = Lists.newArrayList();
+			list.addAll(restaurantPhotoList.stream()
+				.map(a -> StorePhotoVo.newInstance(Type.STORE, a.getPhoto(), ""))
+				.collect(Collectors.toList()));
+			
+			list.addAll(foodList.stream()
+				.filter(a -> StringUtils.isNotBlank(a.getPhoto()))
+				.map(a -> StorePhotoVo.newInstance(Type.FOOD, a.getPhoto(), a.getFoodUUID()))
+				.collect(Collectors.toList()));
+			Collections.shuffle(list);
 			map = RespData.of(Status.TRUE, null, list);
 		}
 
