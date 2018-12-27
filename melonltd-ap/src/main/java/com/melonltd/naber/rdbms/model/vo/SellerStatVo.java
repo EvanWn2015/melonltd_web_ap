@@ -1,5 +1,13 @@
 package com.melonltd.naber.rdbms.model.vo;
 
+<<<<<<< HEAD
+=======
+import com.melonltd.naber.endpoint.util.JsonHelper;
+
+import lombok.Data;
+
+@Data
+>>>>>>> feature/v1.0.2_developer_evan
 public class SellerStatVo {
 
 	private String year_income;
@@ -13,6 +21,7 @@ public class SellerStatVo {
 	private String can_fetch_count;
 	private String cancel_count;
 
+<<<<<<< HEAD
 	public String getYear_income() {
 		return year_income;
 	}
@@ -85,6 +94,16 @@ public class SellerStatVo {
 		this.cancel_count = cancel_count;
 	}
 
+=======
+	private String year_use_bonus;
+	private String month_use_bonus;
+	private String day_use_bonus;
+
+	@Override
+	public String toString() {
+		return JsonHelper.toJson(this);
+	}
+>>>>>>> feature/v1.0.2_developer_evan
 
 	public static SellerStatVo of(long yearIncome, long monthIncome, long dayIncome, long finishCount) {
 		SellerStatVo vo = new SellerStatVo();

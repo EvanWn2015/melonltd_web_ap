@@ -68,10 +68,27 @@ public class FoodInfoSerice {
 		List<FoodInfo> list = foodInfoDao.findBycategoryUUID(categoryUUID);
 		return list;
 	}
+<<<<<<< HEAD
 //	
 //	public void save(FoodInfo info) {
 //		foodInfoDao.save(info);
 //	}
+=======
+
+	
+	public List<FoodInfo> findByRestaurantUUID(String restaurantUUID) {
+		List<FoodInfo> list = foodInfoDao.findByRestaurantUUID(restaurantUUID);
+		if (CollectionUtils.isNotEmpty(list)) {
+			return list;
+		}
+		return Lists.<FoodInfo>newArrayList();
+	}
+
+	
+	public void save(FoodInfo info) {
+		foodInfoDao.save(info);
+	}
+>>>>>>> feature/v1.0.2_developer_evan
 	
 	public void save(List<FoodInfo> infos) {
 		foodInfoDao.save(infos);
@@ -118,6 +135,7 @@ public class FoodInfoSerice {
 		info.setDefaultPrice(minPriceItem.isPresent() ? minPriceItem.get().getPrice() : info.getDefaultPrice());
 		info.setFoodUUID(vo.getFood_uuid());
 		info.setFoodName(vo.getFood_name());
+		info.setFoodContent(StringUtils.isBlank(vo.getFood_content())? "" : vo.getFood_content());
 		info.setFoodData(JsonHelper.toJson(vo.getFood_data()));
 		info.setStatus(vo.getStatus());
 		info.setTop(StringUtils.isNotBlank(vo.getTop()) ? vo.getTop() : "0");

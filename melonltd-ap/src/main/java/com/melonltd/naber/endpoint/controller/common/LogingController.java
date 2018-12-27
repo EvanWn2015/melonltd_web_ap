@@ -26,7 +26,10 @@ import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.ErrorType;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> feature/v1.0.2_developer_evan
 @Controller
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class LogingController {
@@ -34,10 +37,10 @@ public class LogingController {
 
 	@Autowired
 	private AccountInfoService accountInfoService;
-	
+
 	@Autowired
 	private LoginService loginService;
-	
+
 	@Autowired
 	private MobileDeviceService mobileDeviceService;
 
@@ -49,20 +52,22 @@ public class LogingController {
 		DeviceCategory category = DeviceCategory.of(vo.getDevice_category());
 
 		vo.setAccount(vo.getPhone());
-		vo = loginService.checkLoginAndChangeStatusAndIntoDeviceToken(vo.getAccount(), vo.getPassword(),vo.getDevice_token(), category);
-		
+		vo = loginService.checkLoginAndChangeStatusAndIntoDeviceToken(vo.getAccount(), vo.getPassword(),
+				vo.getDevice_token(), category);
+
 		LinkedHashMap<String, Object> map = null;
 		if (ObjectUtils.anyNotNull(vo)) {
-			 map = RespData.of(Status.TRUE, null, vo);
-			 LOGGER.info("login user Account: {}, AccountUUID: {}, Identity: {}, Device: {}, {}", vo.getAccount(), vo.getAccount_uuid(), vo.getIdentity(), vo.getDevice_token(), category );
-		}else {
-			 map = RespData.of(Status.FALSE, ErrorType.LOGIN_FAIL, vo);
+			map = RespData.of(Status.TRUE, null, vo);
+			LOGGER.info("login user Account: {}, AccountUUID: {}, Identity: {}, Device: {}, {}", vo.getAccount(),
+					vo.getAccount_uuid(), vo.getIdentity(), vo.getDevice_token(), category);
+		} else {
+			map = RespData.of(Status.FALSE, ErrorType.LOGIN_FAIL, vo);
 		}
-		
+
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
-	
+
 	@ResponseBody
 	@PostMapping(value = "logout")
 	public ResponseEntity<String> logout(@RequestParam(value = "data", required = false) String data) {
@@ -70,8 +75,14 @@ public class LogingController {
 		MobileDeviceVo vo = JsonHelper.json(request, MobileDeviceVo.class);
 		accountInfoService.refreshLoginStatus(vo.getAccount_uuid());
 		mobileDeviceService.remove(vo);
+<<<<<<< HEAD
 		
 		LOGGER.info("logout user AccountUUID: {}, Device: {}, {}", vo.getAccount_uuid(), vo.getDevice_token(), vo.getDevice_category());
+=======
+
+		LOGGER.info("logout user AccountUUID: {}, Device: {}, {}", vo.getAccount_uuid(), vo.getDevice_token(),
+				vo.getDevice_category());
+>>>>>>> feature/v1.0.2_developer_evan
 		LinkedHashMap<String, Object> map = RespData.of(Status.TRUE, null, "");
 		String result = Base64Service.encode(JsonHelper.toJson(map));
 		return new ResponseEntity<String>(result, HttpStatus.OK);

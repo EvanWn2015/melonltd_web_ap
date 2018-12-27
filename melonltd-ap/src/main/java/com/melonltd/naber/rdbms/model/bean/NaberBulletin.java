@@ -7,86 +7,33 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.google.common.base.MoreObjects;
+import com.melonltd.naber.endpoint.util.JsonHelper;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "naber_bulletin")
 public class NaberBulletin implements Serializable {
 	private static final long serialVersionUID = 6082665371149846602L;
 
-	private String bulletinUUID;
-	private String title;
-	private String contentText;
-	private String bulletinCategory;
-	private String enable;
-	private String createDate;
-	
 	@Id
 	@Column(name = "bulletin_uuid", unique = true, nullable = false)
-	public String getBulletinUUID() {
-		return bulletinUUID;
-	}
-	
+	private String bulletinUUID;
 	@Column(name = "title")
-	public String getTitle() {
-		return title;
-	}
-	
+	private String title;
 	@Column(name = "content_text")
-	public String getContentText() {
-		return contentText;
-	}
-	
+	private String contentText;
 	@Column(name = "bulletin_category")
-	public String getBulletinCategory() {
-		return bulletinCategory;
-	}
-	
+	private String bulletinCategory;
 	@Column(name = "enable")
-	public String getEnable() {
-		return enable;
-	}
-	
+	private String enable;
 	@Column(name = "create_date")
-	public String getCreateDate() {
-		return createDate;
-	}
+	private String createDate;
 	
-	public void setBulletinUUID(String bulletinUUID) {
-		this.bulletinUUID = bulletinUUID;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public void setContentText(String contentText) {
-		this.contentText = contentText;
-	}
-
-	public void setBulletinCategory(String bulletinCategory) {
-		this.bulletinCategory = bulletinCategory;
-	}
-
-	public void setEnable(String enable) {
-		this.enable = enable;
-	}
-
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
-	}
-
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass())
-				.add("bulletinUUID",bulletinUUID)
-				.add("title",title)
-				.add("contentText",contentText)
-				.add("bulletinCategory",bulletinCategory)
-				.add("enable",enable)
-				.add("createDate",createDate)
-				.toString();
+		return JsonHelper.toJson(this);
 	}
-	
 
 }

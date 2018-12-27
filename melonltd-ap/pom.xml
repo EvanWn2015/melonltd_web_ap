@@ -28,15 +28,12 @@
 	</properties>
 
 	<dependencies>
-
-		<!-- servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${javax.servlet-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -54,8 +51,6 @@
 			<version>7.0</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -66,8 +61,6 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-
-		<!-- springframewor -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
@@ -88,16 +81,12 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-
-		<!-- mysql -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.connector.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- Spring MVC adopt apache common file upload implement mvc file upload -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
@@ -120,21 +109,16 @@
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>${com.google.code.gson.version}</version>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>${apache.common.lang3.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
@@ -157,14 +141,26 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+<<<<<<< HEAD
 
 		<!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz -->
+=======
+>>>>>>> feature/v1.0.2_developer_evan
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 			<version>${org.quartz.version}</version>
 		</dependency>
 
+<<<<<<< HEAD
+=======
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.2</version>
+		</dependency>
+		
+>>>>>>> feature/v1.0.2_developer_evan
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

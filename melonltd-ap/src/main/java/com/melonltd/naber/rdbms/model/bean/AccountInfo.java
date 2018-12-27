@@ -7,250 +7,62 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.google.common.base.MoreObjects;
+import com.melonltd.naber.endpoint.util.JsonHelper;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "account_info")
 public class AccountInfo implements Serializable {
 	private static final long serialVersionUID = 1002107104893197472L;
-	
-	private String account;
-	private String accountUUID;
-	private String name;
-	private String password;
-	private String email;
-	private String phone;
-	private String address;
-	private String birthDay;
-	private String gender;
-	private String identity;
-	private String restaurantUUID;
-	private String schoolName;
-	private String bonus;
-	private String level;
-	private String enable;
-	private String isLogin;
-	private String loginDate;
-	private String photo;
-	private String photoType;
-	private String useBonus;
-	private String createDate;
 
 	@Id
 	@Column(name = "account", unique = true, nullable = false)
-	public String getAccount() {
-		return account;
-	}
-	
+	private String account;
 	@Column(name = "phone")
-	public String getPhone() {
-		return phone;
-	}
-
+	private String phone;
 	@Column(name = "account_uuid")
-	public String getAccountUUID() {
-		return accountUUID;
-	}
-
+	private String accountUUID;
 	@Column(name = "name")
-	public String getName() {
-		return name;
-	}
-
+	private String name;
 	@Column(name = "password")
-	public String getPassword() {
-		return password;
-	}
-
+	private String password;
 	@Column(name = "email")
-	public String getEmail() {
-		return email;
-	}
-
+	private String email;
 	@Column(name = "address")
-	public String getAddress() {
-		return address;
-	}
-
+	private String address;
 	@Column(name = "birth_day")
-	public String getBirthDay() {
-		return birthDay;
-	}
-	
+	private String birthDay;
 	@Column(name = "gender")
-	public String getGender() {
-		return gender;
-	}
-	
+	private String gender;
 	@Column(name = "identity")
-	public String getIdentity() {
-		return identity;
-	}
-	
+	private String identity;
 	@Column(name = "restaurant_uuid")
-	public String getRestaurantUUID() {
-		return restaurantUUID;
-	}
-	
+	private String restaurantUUID;
 	@Column(name = "school_name")
-	public String getSchoolName() {
-		return schoolName;
-	}
-
+	private String schoolName;
 	@Column(name = "bonus")
-	public String getBonus() {
-		return bonus;
-	}
-
+	private String bonus;
 	@Column(name = "level")
-	public String getLevel() {
-		return level;
-	}
-
+	private String level;
 	@Column(name = "enable")
-	public String getEnable() {
-		return enable;
-	}
-
+	private String enable;
 	@Column(name = "is_login")
-	public String getIsLogin() {
-		return isLogin;
-	}
-
+	private String isLogin;
 	@Column(name = "login_date")
-	public String getLoginDate() {
-		return loginDate;
-	}
-
+	private String loginDate;
 	@Column(name = "photo")
-	public String getPhoto() {
-		return photo;
-	}
-
+	private String photo;
 	@Column(name = "photo_type")
-	public String getPhotoType() {
-		return photoType;
-	}
-	
+	private String photoType;
 	@Column(name = "use_bonus")
-	public String getUseBonus() {
-		return useBonus;
-	}
-	
+	private String useBonus;
 	@Column(name = "create_date")
-	public String getCreateDate() {
-		return createDate;
-	}
-
-	
-	public void setAccount(String account) {
-		this.account = account;
-	}
-	
-	public void setAccountUUID(String accountUUID) {
-		this.accountUUID = accountUUID;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	
-	public void setBirthDay(String birthDay) {
-		this.birthDay = birthDay;
-	}
-	
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-	
-	public void setIdentity(String identity) {
-		this.identity = identity;
-	}
-	
-	public void setRestaurantUUID(String restaurantUUID) {
-		this.restaurantUUID = restaurantUUID;
-	}
-
-	public void setSchoolName(String schoolName) {
-		this.schoolName = schoolName;
-	}
-
-	public void setBonus(String bonus) {
-		this.bonus = bonus;
-	}
-
-	public void setLevel(String level) {
-		this.level = level;
-	}
-
-	public void setEnable(String enable) {
-		this.enable = enable;
-	}
-
-	public void setIsLogin(String isLogin) {
-		this.isLogin = isLogin;
-	}
-
-	public void setLoginDate(String loginDate) {
-		this.loginDate = loginDate;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
-
-	public void setPhotoType(String photoType) {
-		this.photoType = photoType;
-	}
-
-	public void setUseBonus(String useBonus) {
-		this.useBonus = useBonus;
-	}
-
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
-	}
+	private String createDate;
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass())
-				.add("account",account)
-				.add("accountUUID",accountUUID)
-				.add("name",name)
-				.add("password",password)
-				.add("email",email)
-				.add("phone",phone)
-				.add("address",address)
-				.add("birthDay",birthDay)
-				.add("gender",gender)
-				.add("identity",identity)
-				.add("restaurantUUID",restaurantUUID)
-				.add("schoolName",schoolName)
-				.add("bonus",bonus)
-				.add("level",level)
-				.add("enable",enable)
-				.add("isLogin",isLogin)
-				.add("loginDate",loginDate)
-				.add("photo",photo)
-				.add("photoType",photoType)
-				.add("useBonus",useBonus)
-				.add("createDate",createDate)
-				.toString();
+		return JsonHelper.toJson(this);
 	}
 }
