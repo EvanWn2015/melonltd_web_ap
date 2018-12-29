@@ -3,18 +3,16 @@ package com.melonltd.naber.rdbms.model.service;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naber.endpoint.util.Tools;
-import com.melonltd.naber.rdbms.model.bean.Activities;
 import com.melonltd.naber.rdbms.model.bean.ActivitiesLog;
 import com.melonltd.naber.rdbms.model.dao.ActivitiesLogDao;
 import com.melonltd.naber.rdbms.model.vo.ActivitiesLogVo;
 import com.melonltd.naber.rdbms.model.vo.ActivitiesVo;
-import com.melonltd.naber.rdbms.model.vo.AppVersionLogVo;
 
 @Service("activitiesLogService")
 public class ActivitiesLogService {

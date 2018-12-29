@@ -1,16 +1,13 @@
 package com.melonltd.naber.endpoint.controller;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.core.Is;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.tags.form.AbstractDataBoundFormElementTag;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Range;
@@ -41,14 +37,11 @@ import com.melonltd.naber.rdbms.model.service.ActivitiesService;
 import com.melonltd.naber.rdbms.model.service.CategoryRelService;
 import com.melonltd.naber.rdbms.model.service.FoodInfoSerice;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
-import com.melonltd.naber.rdbms.model.type.Enable;
 import com.melonltd.naber.rdbms.model.type.Identity;
-import com.melonltd.naber.rdbms.model.type.SwitchStatus;
 import com.melonltd.naber.rdbms.model.type.UUIDType;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
 import com.melonltd.naber.rdbms.model.vo.ActivitiesLogVo;
 import com.melonltd.naber.rdbms.model.vo.ActivitiesVo;
-import com.melonltd.naber.rdbms.model.vo.FoodInfoVo;
 import com.melonltd.naber.rdbms.model.vo.OrderVo;
 import com.melonltd.naber.rdbms.model.vo.PushFCMVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
@@ -69,16 +62,16 @@ public class UserActivitiesController {
 	
 	@Autowired
 	private ActivitiesLogService activitiesLogService;
-	@Autowired
-	private FoodInfoSerice foodInfoSerice;
+//	@Autowired
+//	private FoodInfoSerice foodInfoSerice;
 	@Autowired
 	private RestaurantInfoService restaurantInfoService;
 	@Autowired
 	private PushService pushService;
 	@Autowired
 	private SubmitOrderService submitOrderService;
-	@Autowired
-	private CategoryRelService restaurantCategoryRelService;
+//	@Autowired
+//	private CategoryRelService restaurantCategoryRelService;
 	
 //	@Autowired
 //	private UserOrderInfoService userOrderInfoService;

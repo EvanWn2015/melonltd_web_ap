@@ -35,8 +35,6 @@ public class AccountController {
 
 	@Autowired
 	private AccountInfoService accountInfoService;
-//	@Autowired
-//	private MailSendService mailSendService;
 
 	@Autowired
 	private VerifyPhoneLogService verifyPhoneLogService;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" monitorInterval="5">
 	<Properties>
-		<Property name="api_log">${sys:catalina.base}/logs/naber_test</Property>
+		<Property name="api_log">${sys:catalina.base}/logs/naber</Property>
 	</Properties>
 	<Appenders>
 		<Console name="console" target="SYSTEM_OUT">

@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 public class ReqData {
 
+	private String id;
 	private String uuid;
 	private List<String> uuids;
 	private String search_type;

@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mchange.v2.encounter.StrongEqualityEncounterCounter;
 import com.melonltd.naber.rdbms.model.bean.RestaurantInfo;
 
 public interface RestaurantInfoDao extends JpaRepository<RestaurantInfo, String> {

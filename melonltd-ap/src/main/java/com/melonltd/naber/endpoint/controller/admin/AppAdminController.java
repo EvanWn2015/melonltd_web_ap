@@ -33,7 +33,6 @@ import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.AdvertisementService;
 import com.melonltd.naber.rdbms.model.service.BasisContentService;
 import com.melonltd.naber.rdbms.model.service.CategoryRelService;
-import com.melonltd.naber.rdbms.model.service.IdentityTableService;
 import com.melonltd.naber.rdbms.model.service.OrderInfoService;
 import com.melonltd.naber.rdbms.model.service.RestaurantInfoService;
 import com.melonltd.naber.rdbms.model.service.RestaurantLocationTemplateService;
@@ -87,8 +86,8 @@ public class AppAdminController {
 	@Autowired
 	private OrderInfoService orderInfoService;
 	
-	@Autowired
-	private IdentityTableService identityTableService;
+//	@Autowired
+//	private IdentityTableService identityTableService;
 
 	/**
 	 * 取得全部商家列表

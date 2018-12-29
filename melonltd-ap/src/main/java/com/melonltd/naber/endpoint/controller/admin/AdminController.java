@@ -1,12 +1,8 @@
 package com.melonltd.naber.endpoint.controller.admin;
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,30 +23,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.melonltd.naber.endpoint.util.JsonHelper;
 import com.melonltd.naber.endpoint.util.Tools;
-import com.melonltd.naber.rdbms.model.bean.CategoryRel;
 import com.melonltd.naber.rdbms.model.bean.FoodInfo;
 import com.melonltd.naber.rdbms.model.bean.OrderInfo;
-import com.melonltd.naber.rdbms.model.bean.RestaurantInfo;
-import com.melonltd.naber.rdbms.model.bean.SellerRegistered;
-import com.melonltd.naber.rdbms.model.dao.AccountInfoDao;
-import com.melonltd.naber.rdbms.model.dao.CategoryRelDao;
 import com.melonltd.naber.rdbms.model.dao.FoodInfoDao;
-import com.melonltd.naber.rdbms.model.dao.MobileDeviceDao;
 import com.melonltd.naber.rdbms.model.dao.OrderInfoDao;
-import com.melonltd.naber.rdbms.model.dao.RestaurantInfoDao;
-import com.melonltd.naber.rdbms.model.dao.RestaurantLocationTemplateDao;
-import com.melonltd.naber.rdbms.model.dao.SellerRegisteredDao;
-import com.melonltd.naber.rdbms.model.facade.service.ScheduleOrderService;
-import com.melonltd.naber.rdbms.model.push.service.AndroidPushService;
 import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
-import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
-import com.melonltd.naber.rdbms.model.type.Delivery;
-import com.melonltd.naber.rdbms.model.type.DeviceCategory;
 import com.melonltd.naber.rdbms.model.type.Identity;
-import com.melonltd.naber.rdbms.model.type.UUIDType;
 import com.melonltd.naber.rdbms.model.vo.AccountInfoVo;
-import com.melonltd.naber.rdbms.model.vo.PushFCMVo;
 import com.melonltd.naber.rdbms.model.vo.RespData;
 import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 
@@ -59,29 +38,26 @@ import com.melonltd.naber.rdbms.model.vo.RespData.Status;
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class AdminController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
-	@Autowired
-	private ScheduleOrderService scheduleOrderService;
-
+//	@Autowired
+//	private ScheduleOrderService scheduleOrderService;
 	@Autowired
 	private AccountInfoService accountInfoService;
-
-	@Autowired
-	private AndroidPushService androidPushService;
-	
-	@Autowired
-	private AccountInfoDao accountInfoDao;
-	@Autowired
-	private RestaurantInfoDao restaurantInfoDao;
+//	@Autowired
+//	private AndroidPushService androidPushService;
+//	@Autowired
+//	private AccountInfoDao accountInfoDao;
+//	@Autowired
+//	private RestaurantInfoDao restaurantInfoDao;
 	@Autowired
 	private FoodInfoDao foodInfoDao;
-	@Autowired
-	private RestaurantLocationTemplateDao restaurantLocationTemplateDao;
-	@Autowired
-	private CategoryRelDao categoryRelDao;
-	@Autowired
-	private SellerRegisteredDao sellerRegisteredDao;
-	@Autowired
-	private MobileDeviceDao mobileDeviceDao;
+//	@Autowired
+//	private RestaurantLocationTemplateDao restaurantLocationTemplateDao;
+//	@Autowired
+//	private CategoryRelDao categoryRelDao;
+//	@Autowired
+//	private SellerRegisteredDao sellerRegisteredDao;
+//	@Autowired
+//	private MobileDeviceDao mobileDeviceDao;
 	@Autowired
 	private OrderInfoDao orderInfoDao;
 

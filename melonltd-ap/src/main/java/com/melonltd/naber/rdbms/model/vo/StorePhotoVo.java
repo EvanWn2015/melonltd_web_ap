@@ -16,6 +16,7 @@ public class StorePhotoVo {
 	private Type type;
 	private String photo;
 	private String uuid;
+	
 	public static StorePhotoVo newInstance(Type type, String photo, String uuid) {
 		return new StorePhotoVo(type, photo, uuid);
 	}

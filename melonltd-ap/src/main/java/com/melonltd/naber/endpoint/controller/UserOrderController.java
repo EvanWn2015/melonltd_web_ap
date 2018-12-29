@@ -4,10 +4,8 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import javax.enterprise.deploy.model.DDBean;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -33,11 +31,7 @@ import com.melonltd.naber.endpoint.util.OrderCheckHelper;
 import com.melonltd.naber.endpoint.util.Tools;
 import com.melonltd.naber.rdbms.model.facade.service.SubmitOrderService;
 import com.melonltd.naber.rdbms.model.push.service.PushService;
-import com.melonltd.naber.rdbms.model.req.vo.DemandsItemVo;
-import com.melonltd.naber.rdbms.model.req.vo.FoodItemVo;
-import com.melonltd.naber.rdbms.model.req.vo.ItemVo;
 import com.melonltd.naber.rdbms.model.req.vo.OredeSubimtReq;
-import com.melonltd.naber.rdbms.model.req.vo.OredeSubimtReq.OrderData;
 import com.melonltd.naber.rdbms.model.req.vo.ReqData;
 import com.melonltd.naber.rdbms.model.service.AccountInfoService;
 import com.melonltd.naber.rdbms.model.service.CategoryRelService;
@@ -63,7 +57,7 @@ import com.melonltd.naber.rdbms.model.vo.RestaurantInfoVo;
 @RequestMapping(value = { "" }, produces = "application/x-www-form-urlencoded;charset=UTF-8;")
 public class UserOrderController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserOrderController.class);
-	//
+
 	@Autowired
 	private AccountInfoService accountInfoService;
 	@Autowired
